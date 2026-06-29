@@ -37,6 +37,14 @@ async function start() {
     // diagnostic server instead of crashing silently into a blank 503.
     const app = require('./app');
     const knex = require('./config/db');
+    // A boot that gets interrupted mid-migration can leave the migration lock
+    // stuck, which makes every later boot fail with "Migration table is already
+    // locked". Clear any stale lock before migrating so a deploy self-heals.
+    try {
+      await knex.migrate.forceFreeMigrationsLock();
+    } catch (e) {
+      // No lock table yet (fresh database) — nothing to free.
+    }
     // Run any pending migrations on boot so a fresh deploy is ready to serve.
     await knex.migrate.latest();
     // eslint-disable-next-line no-console
