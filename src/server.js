@@ -31,30 +31,41 @@ function startDiagnosticServer(err) {
 }
 
 async function start() {
+  let app;
+  let knex;
   try {
     // Require here (not at module top) so that a load-time failure — e.g. the
     // database module throwing while it connects — is caught and shown by the
     // diagnostic server instead of crashing silently into a blank 503.
-    const app = require('./app');
-    const knex = require('./config/db');
-    // A boot that gets interrupted mid-migration can leave the migration lock
-    // stuck, which makes every later boot fail with "Migration table is already
-    // locked". Clear any stale lock before migrating so a deploy self-heals.
+    app = require('./app');
+    knex = require('./config/db');
+  } catch (err) {
+    startDiagnosticServer(err);
+    return;
+  }
+
+  // Open the port FIRST, then migrate. The hosting platform restarts the app if
+  // it doesn't start listening quickly; building 32 tables on boot took longer
+  // than that grace period, so the app was killed and restarted mid-migration —
+  // re-running an add-column step and failing with "duplicate column". Binding
+  // the port immediately keeps the platform happy while migrations finish.
+  const server = app.listen(PORT, () => {
+    appStarted = true;
+    // eslint-disable-next-line no-console
+    console.log(`✓ GDCU listening on ${PORT} — running migrations…`);
+  });
+
+  try {
+    // A boot that was interrupted mid-migration can leave the migration lock
+    // stuck ("Migration table is already locked"); clear any stale lock first.
     try {
       await knex.migrate.forceFreeMigrationsLock();
     } catch (e) {
       // No lock table yet (fresh database) — nothing to free.
     }
-    // Run any pending migrations on boot so a fresh deploy is ready to serve.
     await knex.migrate.latest();
     // eslint-disable-next-line no-console
     console.log('✓ Database migrations are up to date');
-
-    app.listen(PORT, () => {
-      appStarted = true;
-      // eslint-disable-next-line no-console
-      console.log(`✓ GDCU running at ${process.env.APP_URL || `http://localhost:${PORT}`}`);
-    });
 
     // Daily attendance sweep: escalating warning emails to inactive students.
     if (process.env.NODE_ENV !== 'test') {
@@ -68,7 +79,12 @@ async function start() {
       setInterval(sweep, 24 * 60 * 60 * 1000); // then daily
     }
   } catch (err) {
-    startDiagnosticServer(err);
+    // Migrations failed after the port was bound — tear the server down and
+    // surface the real error through the diagnostic page.
+    // eslint-disable-next-line no-console
+    console.error('Migration failed:', err);
+    appStarted = false;
+    server.close(() => startDiagnosticServer(err));
   }
 }
 
