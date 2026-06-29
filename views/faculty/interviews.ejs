@@ -1,0 +1,45 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Admissions</p><h1 class="font-headline text-headline-md text-primary">My Interviews</h1></div>
+
+<% const outcomeBadge = { recommend:'paid', hold:'sent', decline:'declined', pending:'new' }; %>
+
+<h2 class="font-headline text-headline-sm text-primary mb-3">Upcoming</h2>
+<% if (!upcoming.length) { %><p class="text-on-surface-variant text-sm mb-8">No upcoming interviews.</p><% } %>
+<div class="space-y-3 mb-8">
+  <% upcoming.forEach(function(iv){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
+    <div>
+      <p class="font-bold text-primary"><%= iv.first_name %> <%= iv.last_name %> <span class="font-mono text-xs text-on-surface-variant">(<%= iv.reference %>)</span></p>
+      <p class="text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base align-middle">schedule</span> <%= formatDateTime(iv.scheduled_at) %> · <%= iv.mode==='online'?'Online':'In person' %></p>
+    </div>
+    <% if (iv.mode==='online' && iv.location && /^https?:/.test(iv.location)) { %><a href="<%= iv.location %>" target="_blank" rel="noopener" class="bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm">Join</a><% } %>
+  </div>
+  <% }) %>
+</div>
+
+<h2 class="font-headline text-headline-sm text-primary mb-3">Completed &amp; past</h2>
+<% if (!past.length) { %><p class="text-on-surface-variant text-sm">None yet.</p><% } %>
+<div class="space-y-3">
+  <% past.forEach(function(iv){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="font-bold text-primary"><%= iv.first_name %> <%= iv.last_name %></p>
+        <p class="text-sm text-on-surface-variant"><%= formatDateTime(iv.scheduled_at) %></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <% if (iv.outcome && iv.outcome !== 'pending') { %><%- include('../admin/_badge', { status: outcomeBadge[iv.outcome] }) %><span class="text-xs text-on-surface-variant"><%= iv.rating ? iv.rating+'/5' : '' %></span><% } %>
+        <button type="button" class="text-secondary font-bold text-sm" onclick="document.getElementById('o-<%= iv.id %>').classList.toggle('hidden')">Record outcome</button>
+      </div>
+    </div>
+    <% if (iv.outcome_notes) { %><p class="text-sm text-on-surface-variant italic mt-1">"<%= iv.outcome_notes %>"</p><% } %>
+    <form id="o-<%= iv.id %>" action="/faculty/interviews/<%= iv.id %>/outcome" method="post" class="hidden mt-3 bg-surface-container-low rounded p-3 space-y-2">
+      <div class="grid grid-cols-2 gap-2">
+        <select name="outcome" class="text-sm px-2 py-1.5 rounded border border-outline"><% ['pending','recommend','hold','decline'].forEach(function(o){ %><option value="<%= o %>" <%= iv.outcome===o?'selected':'' %>><%= o %></option><% }) %></select>
+        <select name="rating" class="text-sm px-2 py-1.5 rounded border border-outline"><option value="">Rating…</option><% [1,2,3,4,5].forEach(function(n){ %><option value="<%= n %>" <%= iv.rating===n?'selected':'' %>><%= n %>/5</option><% }) %></select>
+      </div>
+      <textarea name="outcome_notes" rows="2" placeholder="Your recommendation and notes" class="w-full text-sm px-2 py-1.5 rounded border border-outline"><%= iv.outcome_notes || '' %></textarea>
+      <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Save outcome</button>
+    </form>
+  </div>
+  <% }) %>
+</div>

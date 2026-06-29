@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Library & Research Repository | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary-container": "#fdc355",
+                        "primary": "#00030c",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "surface-dim": "#dcdad4",
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-container": "#7386a8",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-tint": "#4c5f7f",
+                        "surface-variant": "#e5e2dc",
+                        "on-surface-variant": "#44474d",
+                        "outline": "#74777e",
+                        "surface-container-high": "#ebe8e2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fcf9f3",
+                        "on-tertiary-fixed": "#001a40",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-container": "#f0eee8",
+                        "on-primary-fixed": "#051b38",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-secondary-container": "#725000",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#31312d",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "primary-container": "#071d3a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-background": "#1c1c18",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "secondary": "#7d5800",
+                        "background": "#fcf9f3",
+                        "tertiary-container": "#001c43",
+                        "tertiary": "#00030d",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-primary-fixed-variant": "#354766",
+                        "outline-variant": "#c4c6ce",
+                        "surface": "#fcf9f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .text-shadow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .ivory-gradient { background: linear-gradient(to bottom, #FFFFFF, #F8F5EF); }
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+        .academic-border { border-bottom: 1px solid rgba(0, 3, 12, 0.1); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">GDU</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md text-body-md" href="#">Academics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md text-body-md" href="#">Research</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md text-body-md" href="#">Faith</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md text-body-md" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-low border border-outline-variant px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md ml-2 w-48" placeholder="Global Repository Search..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-primary p-2" data-icon="account_balance">account_balance</button>
+<button class="material-symbols-outlined text-primary p-2" data-icon="language">language</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-body-md text-body-md rounded-lg hover:opacity-90 transition-opacity">Apply Now</button>
+</div>
+</nav>
+</header>
+<main class="pt-24 pb-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Hero Search Section -->
+<section class="py-12 md:py-20 text-center space-y-8 border-b border-outline-variant">
+<div class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-tagline text-tagline rounded-sm">
+                SCHOLARLY REPOSITORY
+            </div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary max-w-4xl mx-auto leading-tight">
+                Deepening Global Understanding Through Sacred & Academic Inquiry
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto italic">
+                "For the earth will be filled with the knowledge of the glory of the Lord." — Habakkuk 2:14
+            </p>
+<div class="max-w-3xl mx-auto relative mt-8">
+<div class="flex items-center bg-white border-2 border-primary p-1 shadow-sm">
+<div class="flex-grow flex items-center px-4">
+<span class="material-symbols-outlined text-outline" data-icon="menu_book">menu_book</span>
+<input class="w-full py-4 px-3 border-none focus:ring-0 font-body-lg text-body-lg" placeholder="Search 4.2 million journals, manuscripts, and dissertations..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-10 py-4 font-body-md text-body-md flex items-center gap-2 hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+                        Search Archive
+                    </button>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mt-4 text-label-sm font-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span> Peer Reviewed Only</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span> Full Text Available</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span> Theological Manuscripts</span>
+</div>
+</div>
+</section>
+<!-- Main Layout: Sidebar + Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16">
+<!-- Sidebar -->
+<aside class="lg:col-span-3 space-y-10">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+                        Repository
+                    </h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface-variant">
+<li><a class="flex items-center justify-between hover:text-secondary transition-colors font-semibold text-primary" href="#"><span>Biblical Studies</span><span class="text-label-sm opacity-50">1.2k</span></a></li>
+<li><a class="flex items-center justify-between hover:text-secondary transition-colors" href="#"><span>Leadership & Diplomacy</span><span class="text-label-sm opacity-50">842</span></a></li>
+<li><a class="flex items-center justify-between hover:text-secondary transition-colors" href="#"><span>Diaspora Research</span><span class="text-label-sm opacity-50">2.1k</span></a></li>
+<li><a class="flex items-center justify-between hover:text-secondary transition-colors" href="#"><span>Ethics & Technology</span><span class="text-label-sm opacity-50">430</span></a></li>
+<li><a class="flex items-center justify-between hover:text-secondary transition-colors" href="#"><span>Global Missions</span><span class="text-label-sm opacity-50">1.5k</span></a></li>
+</ul>
+</div>
+<div class="p-6 bg-surface-container-low border border-outline-variant">
+<h3 class="font-tagline text-tagline text-secondary mb-4">LIBRARY RESOURCES</h3>
+<nav class="space-y-3">
+<a class="flex items-center gap-3 p-2 -mx-2 hover:bg-white transition-all rounded" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="link">link</span>
+<span class="font-label-sm text-label-sm">Access JSTOR Digital Library</span>
+</a>
+<a class="flex items-center gap-3 p-2 -mx-2 hover:bg-white transition-all rounded" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="import_contacts">import_contacts</span>
+<span class="font-label-sm text-label-sm">Inter-Library Loan Request</span>
+</a>
+<a class="flex items-center gap-3 p-2 -mx-2 hover:bg-white transition-all rounded" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<span class="font-label-sm text-label-sm">Chicago/SBL Citation Guides</span>
+</a>
+<a class="flex items-center gap-3 p-2 -mx-2 hover:bg-white transition-all rounded" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="support_agent">support_agent</span>
+<span class="font-label-sm text-label-sm">Contact Research Librarian</span>
+</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h3 class="font-tagline text-tagline text-on-surface-variant">LATEST DISSERTATIONS</h3>
+<div class="space-y-4">
+<div class="border-l-2 border-secondary pl-4">
+<p class="font-label-sm text-label-sm text-secondary font-bold">MAY 2024</p>
+<h4 class="font-body-md text-body-md font-semibold text-primary leading-tight">Digital Ecclesiology in Post-Pandemic Lagos</h4>
+<p class="text-[12px] text-on-surface-variant italic">Okonkwo, A. | Theology Dept.</p>
+</div>
+<div class="border-l-2 border-outline pl-4">
+<p class="font-label-sm text-label-sm text-outline font-bold">APR 2024</p>
+<h4 class="font-body-md text-body-md font-semibold text-primary leading-tight">Diplomatic Resilience: A Case Study of Diaspora Leaders</h4>
+<p class="text-[12px] text-on-surface-variant italic">Chen, L. | International Relations</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="lg:col-span-9 space-y-12">
+<!-- Featured Research -->
+<section>
+<div class="flex items-end justify-between mb-8 pb-2 border-b-2 border-primary">
+<h2 class="font-headline-md text-headline-md text-primary">Featured Research</h2>
+<a class="font-tagline text-tagline text-secondary hover:underline pb-1" href="#">VIEW ALL JOURNALS</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Paper 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-surface-container mb-4 border border-outline-variant relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A macro photograph of an antique, leather-bound scholarly book with intricate gold foil detailing on the spine. The book rests on a dark mahogany desk in a dimly lit, historic university library. The lighting is soft and warm, highlighting the texture of the aged paper and the dust motes dancing in a single beam of light. The overall mood is one of profound academic heritage and silent prestige." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwrqTS5I4cITAQHG5RidV6C7XgK1tv3AnRTvBjbaoNvqqNY7rgvDGZQfDnOOb1Hngqs179muqqqeuQEDIvP0HyiLG0mrw2HI7PTJeomcZFd8OZudFoqzL42XnIkMIomaPWzjKZlwQd7bskKey4Bk6U62-BitZjy7bzwppWtIYDqaD2wYfuohGm6ZgvR4TeMipq4Ar7HBFOFA425RZjnANZv-s5j2LfHKWKInXtO3wG_tgzIAAta8m7lT_HXsC4yBmeY2ytX9ddVHg"/>
+<div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 font-tagline text-[10px]">PEER REVIEWED</div>
+</div>
+<p class="font-tagline text-tagline text-secondary mb-2">VOLUME 24 • ISSUE 2</p>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors mb-3">Reclaiming the Exile Narrative: Socio-Economic Impact of the Global Diaspora</h3>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-3 mb-4">
+                                This comprehensive study analyzes the shift from brain drain to brain gain within diaspora communities, utilizing a new theological framework for economic stewardship in trans-national contexts...
+                            </p>
+<div class="flex items-center gap-4 text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span> Dr. Ephraim Mwangi</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span> 2024</span>
+</div>
+</div>
+<!-- Paper 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-surface-container mb-4 border border-outline-variant relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A focused high-angle shot of a researcher's hands wearing white archival gloves, carefully turning a delicate parchment page of a Greek manuscript. The setting is a clean, modern conservation lab with bright, cool laboratory lighting. The background is a sterile, light ivory color, emphasizing a clinical yet reverent atmosphere. The palette consists of crisp whites, soft greys, and the aged yellow of the manuscript." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbYy1OJY2YdaOLHM2FVdwWvw1azqHDPYVMc32RfGmTp3rrYmKyT1tWufSZR3OSKZO4QLHeMV7uhrHFxwNM5jnuUUX5LYsv2iycxDJoBm8akn6wg8lPqt4L7GiUbGcco7PQZr8e4y30Q710ovBTDcgDyz9HyonW31RtAwfR9AYhSXtn0izmAoVvPTcq2VYMKUpdyzG-7HM4cLmL-JGxQ0nP0l7qVVrrL1AKpFA_goUtoOSmQz-DpyJRhFmLpnvh416RjB2Y_8JWXJ4"/>
+<div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 font-tagline text-[10px]">ARCHIVAL MS</div>
+</div>
+<p class="font-tagline text-tagline text-secondary mb-2">MANUSCRIPT SERIES VII</p>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors mb-3">The Codices of the Nile: Unearthing 4th Century Diaspora Epistles</h3>
+<p class="text-on-surface-variant font-body-md text-body-md line-clamp-3 mb-4">
+                                A critical examination of recently discovered correspondence between early Christian communities in Northern Africa and Southern Europe, shedding light on ancient networking strategies...
+                            </p>
+<div class="flex items-center gap-4 text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span> Prof. Sarah Jenkins</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span> 2023</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Scripture Callout -->
+<section class="py-12 border-y border-outline-variant text-center">
+<div class="w-24 h-px bg-secondary-container mx-auto mb-6"></div>
+<p class="font-headline-md italic text-primary max-w-2xl mx-auto px-4">
+                        "The pursuit of truth is not merely an academic exercise, but a spiritual pilgrimage toward the heart of the Creator."
+                    </p>
+<div class="w-24 h-px bg-secondary-container mx-auto mt-6"></div>
+<p class="font-tagline text-[12px] text-secondary mt-4 uppercase tracking-widest">Chancellor's Address, 2024</p>
+</section>
+<!-- Categorized Research Grid -->
+<section>
+<h2 class="font-headline-md text-headline-md text-primary mb-8">Subject Areas</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-8 bg-white border border-outline-variant hover:border-secondary transition-all group">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-secondary transition-colors mb-4" data-icon="church">church</span>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Biblical Studies</h4>
+<p class="text-on-surface-variant text-body-md mb-6">Exegesis, Hermeneutics, and Ancient Near Eastern historical context.</p>
+<a class="font-label-sm text-label-sm font-bold text-secondary flex items-center gap-2" href="#">EXPLORE ARCHIVE <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<div class="p-8 bg-white border border-outline-variant hover:border-secondary transition-all group">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-secondary transition-colors mb-4" data-icon="public">public</span>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Leadership</h4>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2 -mt-2">& Diplomacy</h4>
+<p class="text-on-surface-variant text-body-md mb-6">Global governance, ethical statecraft, and diaspora political influence.</p>
+<a class="font-label-sm text-label-sm font-bold text-secondary flex items-center gap-2" href="#">EXPLORE ARCHIVE <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<div class="p-8 bg-white border border-outline-variant hover:border-secondary transition-all group">
+<span class="material-symbols-outlined text-4xl text-primary group-hover:text-secondary transition-colors mb-4" data-icon="groups">groups</span>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Diaspora Research</h4>
+<p class="text-on-surface-variant text-body-md mb-6">Migration patterns, identity formation, and trans-national economics.</p>
+<a class="font-label-sm text-label-sm font-bold text-secondary flex items-center gap-2" href="#">EXPLORE ARCHIVE <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary w-full py-16 px-margin-mobile md:px-margin-desktop mt-auto border-t border-on-primary-fixed-variant/20">
+<div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="md:col-span-2 space-y-6">
+<span class="font-display-lg text-display-lg text-on-primary">Global Diaspora University</span>
+<p class="font-body-md text-body-md text-on-primary-fixed-variant max-w-md opacity-80">
+                    A premier research institution dedicated to the integration of high-level scholarship and Christian service, empowering the global diaspora to lead with integrity.
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-secondary-fixed cursor-pointer" data-icon="facebook">face_nod</span>
+<span class="material-symbols-outlined text-secondary-fixed cursor-pointer" data-icon="share">share</span>
+<span class="material-symbols-outlined text-secondary-fixed cursor-pointer" data-icon="mail">mail</span>
+</div>
+</div>
+<div>
+<h4 class="font-tagline text-tagline text-secondary-fixed mb-6">QUICK LINKS</h4>
+<ul class="space-y-3 font-body-md text-body-md opacity-80">
+<li><a class="hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-secondary-fixed transition-colors" href="#">Accreditation</a></li>
+<li><a class="hover:text-secondary-fixed transition-colors" href="#">Institutional Equity</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-tagline text-tagline text-secondary-fixed mb-6">CONTACT</h4>
+<ul class="space-y-3 font-body-md text-body-md opacity-80">
+<li>Main Library, Campus A</li>
+<li>1200 Academic Way</li>
+<li>Global City, GC 4001</li>
+<li>library@gdu.edu</li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="font-body-md text-body-md opacity-60">© 2024 Global Diaspora University. All Rights Reserved. Commissioned for a Higher Purpose.</p>
+<div class="flex gap-8 text-[12px] font-tagline uppercase tracking-widest opacity-60">
+<a class="hover:opacity-100 transition-opacity" href="#">Accessibility</a>
+<a class="hover:opacity-100 transition-opacity" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for search bar focusing
+        const searchInput = document.querySelector('input[type="text"]');
+        const searchContainer = searchInput?.parentElement?.parentElement;
+        
+        searchInput?.addEventListener('focus', () => {
+            if(searchContainer) searchContainer.classList.add('ring-4', 'ring-secondary-container/30', 'border-secondary');
+        });
+        
+        searchInput?.addEventListener('blur', () => {
+            if(searchContainer) searchContainer.classList.remove('ring-4', 'ring-secondary-container/30', 'border-secondary');
+        });
+
+        // Simple scroll reveal for cards
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.group').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

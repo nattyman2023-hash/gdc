@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academic Programs | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#354766",
+                        "on-primary-container": "#7386a8",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#6a85bb",
+                        "surface-bright": "#fcf9f3",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "background": "#fcf9f3",
+                        "surface-container-high": "#ebe8e2",
+                        "on-tertiary-fixed": "#001a40",
+                        "tertiary-container": "#001c43",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e5e2dc",
+                        "inverse-on-surface": "#f3f0ea",
+                        "secondary": "#7d5800",
+                        "inverse-primary": "#b4c7ec",
+                        "outline-variant": "#c4c6ce",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#00030d",
+                        "surface-container": "#f0eee8",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#31312d",
+                        "surface-tint": "#4c5f7f",
+                        "surface": "#fcf9f3",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "surface-container-low": "#f6f3ed",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "primary": "#00030c",
+                        "outline": "#74777e",
+                        "on-surface-variant": "#44474d",
+                        "tertiary-fixed": "#d7e2ff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-secondary-container": "#725000",
+                        "secondary-fixed": "#ffdea9",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-background": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "on-secondary-fixed": "#271900",
+                        "surface-dim": "#dcdad4",
+                        "primary-container": "#071d3a",
+                        "surface-container-highest": "#e5e2dc",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary-container": "#fdc355",
+                        "on-surface": "#1c1c18"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "tagline": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .program-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(7, 29, 58, 0.08);
+        }
+        .scripture-divider {
+            height: 1px;
+            width: 80px;
+            background-color: #f6bd50;
+            margin: 16px auto;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<nav class="bg-surface-container-lowest dark:bg-primary-container border-b border-outline-variant dark:border-on-primary-container sticky top-0 z-50 shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-surface-bright">Global Diaspora University</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Home</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">About GDU</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-secondary font-bold pb-1 font-label-sm text-label-sm" href="#">Academic Programs</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Student Life</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Contact</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="font-label-sm text-label-sm text-primary hover:text-secondary transition-colors font-semibold">Student Login</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded hover:opacity-90 active:scale-95 transition-all font-label-sm text-label-sm uppercase tracking-wider">Apply Now</button>
+</div>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-desktop py-20">
+<header class="text-center mb-24 max-w-3xl mx-auto">
+<div class="inline-block px-4 py-1 mb-6 bg-secondary-fixed text-on-secondary-fixed rounded-sm">
+<span class="font-tagline text-tagline uppercase">Academic Directory</span>
+</div>
+<h1 class="font-display-lg text-display-lg mb-6 text-primary">Nurturing Leaders for Global Impact</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Explore our diverse academic offerings designed to equip you with the knowledge and spiritual foundations necessary for transformative global leadership.</p>
+<div class="mt-10 scripture-divider"></div>
+<p class="font-headline-sm text-headline-sm italic font-serif text-on-surface-variant opacity-80">"Go therefore and make disciples of all nations..."</p>
+<div class="scripture-divider"></div>
+</header>
+<section class="mb-24">
+<div class="flex items-center gap-4 mb-12">
+<h2 class="font-headline-md text-headline-md text-primary flex-shrink-0">Undergraduate Diplomas</h2>
+<div class="h-[1px] bg-outline-variant w-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-8 transition-all duration-300 program-card-hover group">
+<div class="text-secondary mb-6">
+<span class="material-symbols-outlined text-4xl" data-icon="groups">groups</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4 text-primary">Community Leadership</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">Develop practical skills for grassroot development and sustainable social transformation through a servant-leadership lens.</p>
+<a class="inline-flex items-center text-secondary font-bold font-label-sm text-label-sm group-hover:gap-3 transition-all duration-300" href="#">
+                        LEARN MORE <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="bg-surface-container-lowest border border-secondary p-8 transition-all duration-300 program-card-hover relative overflow-hidden group">
+<div class="absolute top-0 right-0 bg-secondary px-3 py-1">
+<span class="text-white text-[10px] font-bold uppercase tracking-widest">Featured</span>
+</div>
+<div class="text-secondary mb-6">
+<span class="material-symbols-outlined text-4xl" data-icon="church">church</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4 text-primary">Church Leadership</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">A comprehensive program focusing on biblical stewardship, ministry administration, and effective pastoral care practices.</p>
+<a class="inline-flex items-center text-secondary font-bold font-label-sm text-label-sm group-hover:gap-3 transition-all duration-300" href="#">
+                        LEARN MORE <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-8 transition-all duration-300 program-card-hover group">
+<div class="text-secondary mb-6">
+<span class="material-symbols-outlined text-4xl" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4 text-primary">Business Leadership</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">Bridging ethical principles with modern management strategies for leaders in corporate and non-profit sectors.</p>
+<a class="inline-flex items-center text-secondary font-bold font-label-sm text-label-sm group-hover:gap-3 transition-all duration-300" href="#">
+                        LEARN MORE <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<section class="mb-24">
+<div class="flex items-center gap-4 mb-12">
+<h2 class="font-headline-md text-headline-md text-primary flex-shrink-0">Postgraduate Masters</h2>
+<div class="h-[1px] bg-outline-variant w-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col md:flex-row bg-surface-container border border-outline-variant group">
+<div class="md:w-1/2 overflow-hidden">
+<img alt="Academic study space" class="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110" data-alt="A sophisticated academic study room with high ceilings and rows of dark wood bookshelves filled with books. A lone student sits at a large oak desk under a warm brass lamp, deeply focused on their work. The lighting is soft and moody, reflecting a high-end academic environment with deep navy and gold highlights. The scene is elegant and peaceful, symbolizing scholarly dedication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8H8CD3hRXbNBoS7s8SDpzrMHAlHbEXXdslcf_gWl8uiAI-lbGbgWjxXwecRnDPDJkPqEjzp4WzASa66_I5lEqcCF_-kkN8EcR36j_hO1x-e2BB_vLMJ6jfyMPFOutURXfHh7VunKocCUqot-UxFsWcp3EHG7ayE6xZ07dJ0h-uZ6VuZ1pYEyPU27YZsz68Zh9IvL1yn_ie65_Wdr1po7EJE6VcZO3uOwbQvP2pLnncUsv8jMzvIu71TMb58pZrkFeq2GrPA1me3U"/>
+</div>
+<div class="md:w-1/2 p-10 flex flex-col justify-center">
+<span class="font-tagline text-[11px] text-secondary font-bold uppercase tracking-widest mb-2">MA Program</span>
+<h3 class="font-headline-sm text-headline-sm mb-4 text-primary">Transformational Leadership</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Advanced training for seasoned leaders seeking to influence systemic change across global cultural landscapes.</p>
+<a class="inline-flex items-center text-primary font-bold font-label-sm text-label-sm border-b border-primary self-start pb-1 hover:text-secondary hover:border-secondary transition-all" href="#">
+                            EXPLORE CURRICULUM
+                        </a>
+</div>
+</div>
+<div class="flex flex-col md:flex-row bg-surface-container border border-outline-variant group">
+<div class="md:w-1/2 overflow-hidden">
+<img alt="Global collaboration" class="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110" data-alt="A diverse group of professional leaders from various ethnic backgrounds gathered around a large glass conference table in a modern, light-filled university board room. They are engaged in a serious but collaborative discussion, with maps and digital data displayed on wall-mounted screens. The aesthetic is clean, professional, and corporate, emphasizing global unity and academic excellence. Warm sunlight streams through floor-to-ceiling windows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpc9TPbrccW5gxZSvzCB6lskTbTDk65fJo1KNVp1FhaMNX_YHe3kMdF9x85v2ZHUQCGWOMtg7pg-lTLmN2kPwGZyUZ3k1z_wmmi8ljHVKdAk0cMt0Tozr4JpkaXY-DE4XzqZULJYkrY-Is5U1OoQIrHm1MBYROxetpZmm3l57VEGxgwD6vgcbg8gMouOr9OO3Nsr44aNHHMK1wPRBHwuG4--CIaPRp8vs2eN4nmvDYp94sAMKL6ge2Ugv6OUTIau2TGUh3iX1SKXo"/>
+</div>
+<div class="md:w-1/2 p-10 flex flex-col justify-center">
+<span class="font-tagline text-[11px] text-secondary font-bold uppercase tracking-widest mb-2">MA Program</span>
+<h3 class="font-headline-sm text-headline-sm mb-4 text-primary">Diaspora Care & Mission</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Understanding the unique spiritual and social needs of displaced populations within the global diaspora.</p>
+<a class="inline-flex items-center text-primary font-bold font-label-sm text-label-sm border-b border-primary self-start pb-1 hover:text-secondary hover:border-secondary transition-all" href="#">
+                            EXPLORE CURRICULUM
+                        </a>
+</div>
+</div>
+<div class="md:col-span-2 flex flex-col md:flex-row bg-primary-container text-on-primary group">
+<div class="md:w-1/3 p-12 flex flex-col justify-center bg-primary">
+<h3 class="font-headline-md text-headline-md mb-4 text-secondary-fixed">Missional Leadership</h3>
+<p class="font-body-md text-body-md text-primary-fixed opacity-90 mb-8">Our premier Masters program designed for those called to frontline ministry in cross-cultural and international contexts.</p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm">24 Months Residency</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm">International Field Study</span>
+</div>
+</div>
+</div>
+<div class="md:w-2/3 overflow-hidden relative">
+<img alt="Graduation excellence" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700" data-alt="A grand graduation ceremony inside a traditional gothic cathedral with high vaulted arches. Students in deep navy and gold academic regalia are walking down the aisle, holding diplomas. The atmosphere is prestigious, sacred, and celebratory, with light filtering through stained-glass windows creating a spiritual aura. The focus is on the dignity of academic achievement and the mission of global service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC85PuCtOQES5JW8aXRCREAAEkcNa-rJukxS82G5qqIr3MokCx5u4Fg2jMogQ445iMZeI-XhJMS8rk1SJ3UEJMLc4B6aZQBU247rgh1LmtthC9As7VMUZVRvBwxgM5OPLWssP6h1vbE6Z0DSNg2ludIWB1-trutebTK1aYWf8Qedrj-C62u8nRzVmM7EEUAsJZTS7w8EUlYZzZ0R3DvwPXKJQ6JcmbMvMAbMZpIXpjqnowy3_bXiKs0k3LfKlw55HB7DgEa1uLCP5c"/>
+<div class="absolute bottom-12 right-12">
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 font-bold font-label-sm text-label-sm rounded shadow-xl hover:scale-105 transition-transform active:scale-95">DOWNLOAD SYLLABUS</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-low border border-outline-variant p-16 text-center relative overflow-hidden">
+<div class="absolute -top-20 -left-20 opacity-5">
+<span class="material-symbols-outlined text-[200px]" data-icon="school">school</span>
+</div>
+<div class="relative z-10">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Unsure which path is for you?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">Our academic advisors are ready to help you discern your calling and select the program that best fits your ministry goals.</p>
+<div class="flex flex-col md:flex-row gap-6 justify-center">
+<button class="px-10 py-4 bg-primary text-on-primary rounded font-bold hover:bg-on-primary-fixed-variant transition-colors">Book an Advising Session</button>
+<button class="px-10 py-4 border border-secondary text-secondary rounded font-bold hover:bg-secondary-fixed transition-colors">Request Brochure</button>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto">
+<div class="flex flex-col justify-between">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-primary-fixed dark:text-primary-fixed mb-4">Global Diaspora University</h4>
+<p class="font-tagline text-tagline text-surface-variant dark:text-outline-variant italic">Educate. Equip. Empower. Impact the World.</p>
+</div>
+<p class="font-body-md text-body-md mt-8 opacity-60">© 2024 Global Diaspora University. All Rights Reserved.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+<div>
+<h5 class="font-label-sm text-label-sm font-bold uppercase tracking-widest mb-6 opacity-80">Quick Links</h5>
+<ul class="flex flex-col gap-4 font-body-md text-body-md">
+<li><a class="text-surface-variant dark:text-outline-variant hover:text-secondary-fixed-dim transition-colors" href="#">News & Insights</a></li>
+<li><a class="text-surface-variant dark:text-outline-variant hover:text-secondary-fixed-dim transition-colors" href="#">FAQs</a></li>
+<li><a class="text-surface-variant dark:text-outline-variant hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-surface-variant dark:text-outline-variant hover:text-secondary-fixed-dim transition-colors" href="#">Terms & Conditions</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-sm text-label-sm font-bold uppercase tracking-widest mb-6 opacity-80">Connect</h5>
+<div class="flex gap-4">
+<a class="w-10 h-10 border border-outline-variant flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="share">share</span>
+</a>
+<a class="w-10 h-10 border border-outline-variant flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="alternate_email">alternate_email</span>
+</a>
+<a class="w-10 h-10 border border-outline-variant flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="location_on">location_on</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.program-card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.borderColor = '#7d5800';
+                });
+                card.addEventListener('mouseleave', () => {
+                    if (!card.classList.contains('border-secondary')) {
+                        card.style.borderColor = '#c4c6ce';
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

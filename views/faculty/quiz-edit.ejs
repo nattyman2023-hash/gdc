@@ -1,0 +1,53 @@
+<a href="/faculty/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
+<h1 class="font-headline text-headline-md text-primary mb-6">Quiz Builder</h1>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <!-- Quiz meta + add question -->
+  <div class="lg:col-span-1 space-y-5">
+    <form action="/faculty/quizzes/<%= quiz.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3">
+      <h2 class="font-headline text-headline-sm text-primary">Quiz details</h2>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Title</label><input name="title" value="<%= quiz.title %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Description</label><textarea name="description" rows="2" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= quiz.description || '' %></textarea></div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Pass mark (%)</label><input name="pass_mark" type="number" value="<%= quiz.pass_mark %>" min="1" max="100" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+      <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold w-full">Save details</button>
+    </form>
+
+    <form action="/faculty/quizzes/<%= quiz.id %>/questions" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3">
+      <h2 class="font-headline text-headline-sm text-primary">Add a question</h2>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Question *</label><textarea name="prompt" required rows="2" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea></div>
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase">Options (select the correct one)</p>
+      <% for (var i=0;i<4;i++){ %>
+      <label class="flex items-center gap-2">
+        <input type="radio" name="correct" value="<%= i %>" <%= i===0?'checked':'' %> class="text-secondary" />
+        <input name="opt<%= i+1 %>" placeholder="Option <%= i+1 %><%= i>1?' (optional)':'' %>" <%= i<2?'required':'' %> class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+      </label>
+      <% } %>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Explanation (shown on review)</label><input name="explanation" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold w-full">Add question</button>
+    </form>
+  </div>
+
+  <!-- Existing questions -->
+  <div class="lg:col-span-2">
+    <div class="flex justify-between items-center mb-3"><h2 class="font-headline text-headline-sm text-primary"><%= questions.length %> question<%= questions.length===1?'':'s' %></h2></div>
+    <div class="space-y-3">
+      <% if (!questions.length) { %><p class="text-on-surface-variant text-sm">No questions yet. Add your first on the left.</p><% } %>
+      <% questions.forEach(function(q, qi){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+        <div class="flex justify-between items-start gap-3">
+          <p class="font-bold text-primary"><%= qi+1 %>. <%= q.prompt %></p>
+          <form action="/faculty/questions/<%= q.id %>/delete" method="post" onsubmit="return confirm('Delete this question?');"><button class="text-error font-bold text-sm">Delete</button></form>
+        </div>
+        <ul class="mt-2 space-y-1">
+          <% q.options.forEach(function(o){ %>
+          <li class="text-sm flex items-center gap-2 <%= o.is_correct ? 'text-secondary font-bold' : 'text-on-surface-variant' %>">
+            <span class="material-symbols-outlined text-base"><%= o.is_correct ? 'check_circle' : 'radio_button_unchecked' %></span><%= o.text %>
+          </li>
+          <% }) %>
+        </ul>
+        <% if (q.explanation) { %><p class="text-xs text-on-surface-variant mt-2 bg-surface-container-low rounded p-2"><%= q.explanation %></p><% } %>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

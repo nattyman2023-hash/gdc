@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="bg-background text-on-surface font-body text-body-md min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+  <%- include('../partials/nav') %>
+
+  <main class="pt-20 flex-1">
+    <% if (flash.success.length || flash.error.length || flash.info.length) { %>
+      <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop pt-6">
+        <%- include('../partials/flash') %>
+      </div>
+    <% } %>
+    <%- body %>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/chat-widget') %>
+
+  <script>
+    // Mobile menu toggle
+    (function () {
+      var btn = document.getElementById('mobile-menu-btn');
+      var menu = document.getElementById('mobile-menu');
+      if (btn && menu) btn.addEventListener('click', function () { menu.classList.toggle('hidden'); });
+    })();
+    // Header shadow on scroll
+    window.addEventListener('scroll', function () {
+      var h = document.getElementById('site-header');
+      if (!h) return;
+      if (window.scrollY > 30) h.classList.add('shadow-md'); else h.classList.remove('shadow-md');
+    });
+    // Auto-dismiss flash messages
+    setTimeout(function () {
+      document.querySelectorAll('.flash-msg').forEach(function (el) {
+        el.style.transition = 'opacity .5s'; el.style.opacity = '0';
+        setTimeout(function () { el.remove(); }, 500);
+      });
+    }, 6000);
+    // Seamless inquiry submit — confirm inline without a full page reload.
+    document.querySelectorAll('[data-inquiry-form]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('button');
+        var original = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = 'Sending…'; }
+        fetch(form.action, { method: 'POST', body: new URLSearchParams(new FormData(form)), headers: { 'X-Requested-With': 'fetch' } })
+          .then(function (r) { if (!r.ok) throw new Error('failed'); })
+          .then(function () {
+            var card = form.closest('[data-inquiry]');
+            var done = card && card.querySelector('[data-inquiry-done]');
+            if (done) { form.classList.add('hidden'); done.classList.remove('hidden'); }
+          })
+          .catch(function () { form.submit(); }); // fall back to a normal submit
+      });
+    });
+  </script>
+</body>
+</html>

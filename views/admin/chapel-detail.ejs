@@ -1,0 +1,55 @@
+<div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+  <a href="/admin/chapel" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> All chapel sessions</a>
+  <form action="/admin/chapel/<%= session.id %>/delete" method="post" onsubmit="return confirm('Delete this chapel session?');"><button class="inline-flex items-center gap-1 text-error border border-error/40 px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">delete</span> Delete</button></form>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1 space-y-5">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <h1 class="font-headline text-headline-sm text-primary mb-1"><%= session.title %></h1>
+      <% if (session.theme) { %><p class="text-secondary font-bold text-sm mb-3"><%= session.theme %></p><% } %>
+      <dl class="divide-y divide-outline-variant/40 text-sm">
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">When</dt><dd class="font-bold text-primary text-right"><%= formatDateTime(session.starts_at) %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Speaker</dt><dd class="font-bold text-primary"><%= session.speaker || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Scripture</dt><dd class="font-bold text-primary"><%= session.scripture || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Present</dt><dd class="font-bold text-primary"><%= presentCount %> / <%= students.length %></dd></div>
+      </dl>
+      <% if (session.join_url) { %><a href="<%= session.join_url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-secondary font-bold text-sm mt-3"><span class="material-symbols-outlined text-base">videocam</span> Join link</a><% } %>
+    </div>
+
+    <form action="/admin/chapel/<%= session.id %>/status" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="field-label">Session status</label>
+      <div class="flex gap-2">
+        <select name="status" class="field flex-1">
+          <% ['scheduled','completed','cancelled'].forEach(function(st){ %><option value="<%= st %>" <%= session.status===st?'selected':'' %>><%= st %></option><% }) %>
+        </select>
+        <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2">
+    <h2 class="font-headline text-headline-sm text-primary mb-1">Attendance</h2>
+    <p class="text-on-surface-variant text-sm mb-3">Tap a name to mark <strong>present</strong>. Students are shown with their formation group.</p>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!students.length) { %><p class="p-4 text-on-surface-variant text-sm">No students enrolled yet.</p><% } %>
+      <% students.forEach(function(s){ %>
+      <div class="flex items-center justify-between p-3">
+        <div>
+          <p class="font-bold text-primary"><%= s.first_name %> <%= s.last_name %></p>
+          <p class="text-[11px] text-on-surface-variant uppercase font-tagline"><%= s.group_name %></p>
+        </div>
+        <div class="flex items-center gap-1">
+          <% [['present','Present','check_circle','text-secondary'],['excused','Excused','schedule','text-tertiary'],['absent','Absent','cancel','text-error']].forEach(function(opt){ %>
+          <form action="/admin/chapel/<%= session.id %>/attendance" method="post">
+            <input type="hidden" name="student_id" value="<%= s.id %>" />
+            <input type="hidden" name="status" value="<%= opt[0] %>" />
+            <button title="<%= opt[1] %>" class="material-symbols-outlined text-xl <%= s.attendance===opt[0] ? opt[3] : 'text-outline hover:text-on-surface-variant' %>"><%= opt[2] %></button>
+          </form>
+          <% }) %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

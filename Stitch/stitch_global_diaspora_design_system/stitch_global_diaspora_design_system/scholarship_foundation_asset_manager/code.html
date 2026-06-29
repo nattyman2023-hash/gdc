@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Foundation Finance Dashboard | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#001c43",
+                      "on-surface-variant": "#44474d",
+                      "on-surface": "#1c1c18",
+                      "on-primary-fixed": "#051b38",
+                      "primary-fixed": "#d6e3ff",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6ce",
+                      "surface-container-high": "#ebe8e2",
+                      "on-tertiary-fixed": "#001a40",
+                      "on-primary-container": "#7386a8",
+                      "secondary-fixed": "#ffdea9",
+                      "surface-bright": "#fcf9f3",
+                      "on-error-container": "#93000a",
+                      "surface-tint": "#4c5f7f",
+                      "tertiary-fixed": "#d7e2ff",
+                      "surface": "#fcf9f3",
+                      "error": "#ba1a1a",
+                      "primary-container": "#071d3a",
+                      "outline": "#74777e",
+                      "on-primary-fixed-variant": "#354766",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#f0eee8",
+                      "secondary-container": "#fdc355",
+                      "inverse-primary": "#b4c7ec",
+                      "surface-container-highest": "#e5e2dc",
+                      "on-error": "#ffffff",
+                      "on-tertiary-container": "#6a85bb",
+                      "on-background": "#1c1c18",
+                      "inverse-surface": "#31312d",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "on-secondary-fixed": "#271900",
+                      "surface-container-low": "#f6f3ed",
+                      "error-container": "#ffdad6",
+                      "background": "#fcf9f3",
+                      "tertiary": "#00030d",
+                      "surface-dim": "#dcdad4",
+                      "primary": "#00030c",
+                      "surface-variant": "#e5e2dc",
+                      "secondary": "#7d5800",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f3f0ea",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "on-secondary-container": "#725000",
+                      "on-tertiary-fixed-variant": "#294678"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "tagline": ["Montserrat"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg-mobile": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .audited-border {
+            border-bottom: 1px solid rgba(7, 29, 58, 0.1);
+        }
+        .bento-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+            transform: translateY(-2px);
+        }
+        body {
+            background-color: #fcf9f3;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="bg-primary-container dark:bg-primary-container text-on-primary font-tagline text-tagline uppercase tracking-widest docked full-width top-0 sticky z-50 border-b border-outline-variant/15 shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
+<div class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest dark:text-surface-bright">
+            GDU Foundation
+        </div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Research</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Faculty</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">About</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Student Life</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-lowest/10 border-none text-surface-container-lowest rounded-none px-4 py-2 text-sm focus:ring-1 focus:ring-secondary-container placeholder:text-surface-container-lowest/50" placeholder="Search accounts..." type="text"/>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 font-tagline text-xs uppercase tracking-widest hover:opacity-90 transition-opacity">
+                Apply Now
+            </button>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface dark:bg-surface-dim docked left-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/10">
+<div class="p-6 audited-border">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Student Profile Avatar" class="w-12 h-12 rounded-none object-cover border border-outline-variant/30" data-alt="A professional headshot of a senior financial officer for a university foundation. He is a middle-aged Black man wearing a crisp navy suit and a white shirt, looking directly at the camera with a calm and confident expression. The lighting is soft and professional, set against a blurred background of a traditional academic office with wooden bookshelves. The overall tone is authoritative and trustworthy, reflecting a high-end corporate academic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIVwGR1dANskPvZ15ORevIs8mlVaOAKFUOpuxfL9TlJAATSYOk_4lshhiOLEWJ4OL-iAnelLiYCesGP2p2FlegFSPyI3k35i4uVKYlQIKrL--BLej-Y1L8cMKMF1MWX8ZTwODlWHbKmnXDOtDmWLTVkR3saURtyJiR8nhjmekoxSjWbpEySz7ziXS4sDZTibW5G7H4zM17u4i_3gh-YBVFYhg175pFV3wKRwmtr0afju4HeFF3VZzRAs06wfwKPKLbOITJPab4iTk"/>
+<div>
+<p class="font-headline-sm text-sm text-primary">Student Portal</p>
+<p class="font-body-md text-xs text-on-surface-variant">Global Diaspora University</p>
+</div>
+</div>
+</div>
+<nav class="flex-grow py-4">
+<a class="flex items-center gap-stack-md bg-secondary-container text-on-secondary-container font-bold px-4 py-3 rounded-none" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-body-md text-body-md">Academic Record</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-body-md text-body-md">Financials</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="book">book</span>
+<span class="font-body-md text-body-md">Library</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</nav>
+<div class="p-6">
+<button class="w-full bg-primary-container text-surface-container-lowest py-3 font-tagline text-xs uppercase tracking-widest hover:bg-tertiary transition-colors">
+                    WhatsApp Support
+                </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-grow lg:ml-64 px-margin-mobile md:px-margin-desktop py-12 bg-background">
+<div class="max-w-container-max mx-auto">
+<!-- Header & Foundation Seal -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+<div>
+<span class="font-tagline text-tagline text-secondary uppercase tracking-[0.3em] block mb-2">Foundation Treasury</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Capital Management Dashboard</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-4 italic">"Entrusted for the advancement of the Global Diaspora."</p>
+</div>
+<div class="hidden md:block">
+<div class="w-24 h-24 border-2 border-secondary-container/30 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px]" data-icon="account_balance">account_balance</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Key Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+<!-- Total Donated Capital -->
+<div class="bento-card bg-surface-container-lowest p-8 border border-outline-variant/20 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-secondary-container/10 -mr-8 -mt-8 rotate-45"></div>
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="payments">payments</span>
+<span class="font-tagline text-[10px] text-on-surface-variant uppercase tracking-widest">+14.2% YOY</span>
+</div>
+<h3 class="font-tagline text-xs text-on-surface-variant uppercase tracking-widest mb-1">Total Donated Capital</h3>
+<p class="font-display-lg text-headline-md text-primary">$12,482,900.00</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between text-xs font-body-md text-on-surface-variant">
+<span>Endowment Reserve</span>
+<span class="font-bold text-primary">$8.2M</span>
+</div>
+</div>
+</div>
+<!-- Scholarships Awarded -->
+<div class="bento-card bg-surface-container-lowest p-8 border border-outline-variant/20">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="history_edu">history_edu</span>
+</div>
+<h3 class="font-tagline text-xs text-on-surface-variant uppercase tracking-widest mb-1">Scholarships Awarded</h3>
+<p class="font-display-lg text-headline-md text-primary">1,248 <span class="text-lg font-body-md text-on-surface-variant font-normal">Active</span></p>
+<div class="mt-4 h-2 bg-surface-container w-full">
+<div class="h-full bg-secondary-container" style="width: 78%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2 uppercase tracking-tighter">Budget Utilization: 78% of FY24 Allocation</p>
+</div>
+<!-- Available Subsidies -->
+<div class="bento-card bg-primary-container p-8 border border-primary-container">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-secondary-container" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 uppercase">Ready</span>
+</div>
+<h3 class="font-tagline text-xs text-surface-container-lowest/60 uppercase tracking-widest mb-1">Available Subsidies</h3>
+<p class="font-display-lg text-headline-md text-surface-container-lowest">$2,104,500</p>
+<button class="mt-6 w-full py-2 bg-surface-container-lowest/10 border border-surface-container-lowest/20 text-surface-container-lowest text-xs font-tagline uppercase tracking-widest hover:bg-surface-container-lowest/20 transition-all">
+                            Disburse Funds
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter items-start">
+<!-- Recent Donations Table -->
+<section class="bg-surface-container-low p-8 border border-outline-variant/15">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-sm text-primary">Recent Donations</h2>
+<button class="text-secondary font-tagline text-xs uppercase hover:underline">Download Audit Log</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="audited-border">
+<tr>
+<th class="pb-4 font-tagline text-[10px] uppercase tracking-widest text-on-surface-variant">Contributor</th>
+<th class="pb-4 font-tagline text-[10px] uppercase tracking-widest text-on-surface-variant">Amount</th>
+<th class="pb-4 font-tagline text-[10px] uppercase tracking-widest text-on-surface-variant">Fund</th>
+<th class="pb-4 font-tagline text-[10px] uppercase tracking-widest text-on-surface-variant text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 font-body-md text-sm font-semibold">Lagos Diaspora Guild</td>
+<td class="py-4 font-body-md text-sm">$45,000</td>
+<td class="py-4 font-body-md text-xs text-on-surface-variant">STEM Excellence</td>
+<td class="py-4 text-right">
+<span class="text-[10px] font-bold text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-0.5 uppercase">Verified</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 font-body-md text-sm font-semibold">Dr. Amadi Estate</td>
+<td class="py-4 font-body-md text-sm">$125,000</td>
+<td class="py-4 font-body-md text-xs text-on-surface-variant">Medical Research</td>
+<td class="py-4 text-right">
+<span class="text-[10px] font-bold text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-0.5 uppercase">Verified</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 font-body-md text-sm font-semibold">Global Tech Partners</td>
+<td class="py-4 font-body-md text-sm">$250,000</td>
+<td class="py-4 font-body-md text-xs text-on-surface-variant">Infrastructure</td>
+<td class="py-4 text-right">
+<span class="text-[10px] font-bold text-on-secondary-fixed-variant bg-secondary-fixed px-2 py-0.5 uppercase">Verified</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 font-body-md text-sm font-semibold">Anonymous Donor</td>
+<td class="py-4 font-body-md text-sm">$10,000</td>
+<td class="py-4 font-body-md text-xs text-on-surface-variant">Student Welfare</td>
+<td class="py-4 text-right">
+<span class="text-[10px] font-bold text-on-error-container bg-error-container px-2 py-0.5 uppercase">Pending</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Student Subsidy List -->
+<section class="bg-surface-container-lowest p-8 border border-outline-variant/15">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-sm text-primary">Active Subsidy Recipients</h2>
+<span class="bg-primary-container text-surface-container-lowest text-[10px] px-3 py-1 font-tagline uppercase">West Africa Region</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center font-bold text-secondary border border-outline-variant/20">CK</div>
+<div>
+<h4 class="font-body-md text-sm font-bold text-primary">Chidi Kalu</h4>
+<p class="font-body-md text-xs text-on-surface-variant">B.Eng Computer Science • Year 3</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-body-md text-sm font-bold">$4,500 / term</p>
+<p class="text-[10px] text-secondary uppercase font-tagline">100% Covered</p>
+</div>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center font-bold text-secondary border border-outline-variant/20">AO</div>
+<div>
+<h4 class="font-body-md text-sm font-bold text-primary">Abiola Olatunde</h4>
+<p class="font-body-md text-xs text-on-surface-variant">MBBS Medicine • Year 5</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-body-md text-sm font-bold">$7,200 / term</p>
+<p class="text-[10px] text-secondary uppercase font-tagline">85% Covered</p>
+</div>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center font-bold text-secondary border border-outline-variant/20">NM</div>
+<div>
+<h4 class="font-body-md text-sm font-bold text-primary">Nia Mensah</h4>
+<p class="font-body-md text-xs text-on-surface-variant">B.A. International Law • Year 2</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-body-md text-sm font-bold">$3,800 / term</p>
+<p class="text-[10px] text-secondary uppercase font-tagline">100% Covered</p>
+</div>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center font-bold text-secondary border border-outline-variant/20">JT</div>
+<div>
+<h4 class="font-body-md text-sm font-bold text-primary">Jubril Traore</h4>
+<p class="font-body-md text-xs text-on-surface-variant">M.Sc Sustainable Energy • Year 1</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-body-md text-sm font-bold">$5,100 / term</p>
+<p class="text-[10px] text-secondary uppercase font-tagline">Disbursing</p>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/10 text-center">
+<p class="font-body-md text-xs text-on-surface-variant mb-4">Displaying top 4 records in Lagos Campus Office.</p>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-tagline text-xs uppercase tracking-widest hover:opacity-90">View Full Recipient Register</button>
+</div>
+</section>
+</div>
+<!-- Strategic Scripture Callout -->
+<div class="mt-16 py-12 border-y border-secondary-container/20 text-center">
+<p class="font-headline-md italic text-primary text-2xl mb-4">"For the administration of this service not only supplieth the want of the saints, but is abundant also by many thanksgivings unto God."</p>
+<div class="w-24 h-0.5 bg-secondary-container mx-auto mb-4"></div>
+<p class="font-tagline text-xs text-secondary uppercase tracking-[0.2em]">2 Corinthians 9:12</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter bg-primary-container dark:bg-primary-container text-surface-container-lowest font-body-md text-body-md border-t-4 border-tertiary-fixed-dim">
+<div class="flex flex-col gap-4">
+<span class="font-display-lg text-headline-md text-surface-container-lowest">GDU Foundation</span>
+<p class="text-surface-variant text-sm max-w-xs">Upholding the standard of academic and spiritual stewardship for the global African diaspora.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-tagline text-xs uppercase tracking-widest mb-2 text-tertiary-fixed-dim">Institutional Links</h4>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-tagline text-xs uppercase tracking-widest mb-2 text-tertiary-fixed-dim">Professional Governance</h4>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Careers</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Alumni</a>
+<p class="mt-6 text-[10px] text-surface-variant opacity-60">
+                © 2024 Global Diaspora University. Accredited by International Academic Council.
+            </p>
+</div>
+</footer>
+<script>
+        // Micro-interaction for currency numbers
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentVal = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = currentVal.toLocaleString('en-US', { style: 'currency', currency: 'USD' }).split('.')[0];
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Initialize micro-animations on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const currencyElements = document.querySelectorAll('.font-display-lg');
+            // Simplified animation triggers
+            console.log('Foundation Dashboard Loaded - Professional Context Active');
+        });
+    </script>
+</body></html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Diaspora University | Educate. Equip. Empower.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#354766",
+                    "on-primary-container": "#7386a8",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#6a85bb",
+                    "surface-bright": "#fcf9f3",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "background": "#fcf9f3",
+                    "surface-container-high": "#ebe8e2",
+                    "on-tertiary-fixed": "#001a40",
+                    "tertiary-container": "#001c43",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e5e2dc",
+                    "inverse-on-surface": "#f3f0ea",
+                    "secondary": "#7d5800",
+                    "inverse-primary": "#b4c7ec",
+                    "outline-variant": "#c4c6ce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#00030d",
+                    "surface-container": "#f0eee8",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "error": "#ba1a1a",
+                    "inverse-surface": "#31312d",
+                    "surface-tint": "#4c5f7f",
+                    "surface": "#fcf9f3",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "surface-container-low": "#f6f3ed",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "primary": "#00030c",
+                    "outline": "#74777e",
+                    "on-surface-variant": "#44474d",
+                    "tertiary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "on-secondary-container": "#725000",
+                    "secondary-fixed": "#ffdea9",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-background": "#1c1c18",
+                    "on-primary-fixed": "#051b38",
+                    "on-secondary-fixed": "#271900",
+                    "surface-dim": "#dcdad4",
+                    "primary-container": "#071d3a",
+                    "surface-container-highest": "#e5e2dc",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "secondary-container": "#fdc355",
+                    "on-surface": "#1c1c18"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "label-sm": ["Inter"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .ivory-gradient {
+            background: linear-gradient(180deg, #ffffff 0%, #fcf9f3 100%);
+        }
+        .seal-animation {
+            animation: fadeInScale 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest border-b border-outline-variant fixed top-0 w-full z-50">
+<nav class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Global Diaspora University</span>
+</div>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-primary border-b-2 border-secondary font-bold pb-1 font-label-sm text-label-sm" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">About GDU</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Academic Programs</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Student Life</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-sm text-label-sm text-on-primary-fixed-variant hover:text-primary transition-all">Student Login</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded font-label-sm text-label-sm font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">Apply Now</button>
+</div>
+</nav>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-margin-desktop ivory-gradient overflow-hidden">
+<div class="max-w-4xl mx-auto seal-animation">
+<img alt="Global Diaspora University Institutional Seal" class="w-64 h-64 mx-auto mb-12 drop-shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg5IHrTrast3Zf-asd5LgKAZF8vyfppPszvIkUojeMIqRq_1zP-_8R-uCfOat03sfrMvbeiX1lbfQ-spUJqZSKRysFgYLz5_RyMKeX9vpyfUlTZCLhEIR7pO5Dx7q7aLsvtkW6G3LehhS2MLT71AdRoCS5Zg9_pVfirmQDaRYDhQ7_r-XxR8o7pC-lJmgxw-eSKU9hhF3dXozahCwmFYlCj4xwc5SKIVU7LunezjtAbJvuUM-tASl6KL7zfRY8AGL52pPbZKkaMyU"/>
+<p class="font-tagline text-tagline text-secondary mb-6 uppercase tracking-[0.3em]">Institutional Heritage & Mission</p>
+<h1 class="font-display-lg text-display-lg text-primary mb-8 leading-tight">Empowering a Global Diaspora for Divine Purpose</h1>
+<div class="w-24 h-px bg-secondary mx-auto mb-8"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12 italic">
+                    "EDUCATE. EQUIP. EMPOWER. IMPACT THE WORLD."
+                </p>
+<div class="flex flex-col sm:flex-row justify-center gap-6">
+<button class="bg-primary text-on-primary px-10 py-4 rounded font-bold text-body-md transition-all hover:shadow-lg active:scale-95">Explore Programs</button>
+<button class="border-2 border-secondary text-primary px-10 py-4 rounded font-bold text-body-md transition-all hover:bg-secondary-fixed hover:text-on-secondary-fixed active:scale-95">Our Mission</button>
+</div>
+</div>
+</section>
+<!-- Scripture Callout -->
+<section class="py-16 bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-margin-desktop text-center">
+<div class="w-16 h-px bg-secondary-fixed-dim mx-auto mb-6"></div>
+<blockquote class="font-headline-md text-headline-md italic text-primary-container max-w-3xl mx-auto">
+                    "Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."
+                </blockquote>
+<p class="font-tagline text-tagline text-on-surface-variant mt-4">— Matthew 28:19</p>
+<div class="w-16 h-px bg-secondary-fixed-dim mx-auto mt-6"></div>
+</div>
+</section>
+<!-- About Our Mission (Asymmetric Layout) -->
+<section class="py-24 bg-surface-bright">
+<div class="max-w-container-max mx-auto px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<div class="md:col-span-5 order-2 md:order-1">
+<p class="font-tagline text-tagline text-secondary mb-4">OUR PHILOSOPHY</p>
+<h2 class="font-headline-md text-headline-md text-primary mb-6">A Legacy of Faith and Excellence</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed">
+                        Global Diaspora University stands as a beacon for the international community, bridging the gap between spiritual calling and professional excellence. Founded on the bedrock of Christian values, we provide an academic environment that nurtures both the intellect and the soul.
+                    </p>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-body-md">Global perspective with localized impact.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-body-md">Interdisciplinary approach to theology and modern science.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-body-md">Mentorship-driven educational model.</span>
+</li>
+</ul>
+<a class="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all" href="#">
+                        Learn More About Our Values <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="md:col-span-7 order-1 md:order-2 relative h-[500px]">
+<div class="absolute inset-0 bg-surface-container-high rounded translate-x-4 translate-y-4"></div>
+<img class="absolute inset-0 w-full h-full object-cover rounded shadow-lg" data-alt="A grand university campus building with traditional Gothic architecture featuring stone archways and stained glass windows under a clear blue sky. The scene is shot with high-end editorial lighting, emphasizing the textures of the stone and the serene, academic atmosphere. The composition is clean and formal, reflecting a prestigious and historical educational institution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe3UoNnDFQHZ_QOQVVbnOnYFx6CyxPcFgaae9rySF8zkofESiN8k0NWbgaXt0-j8DZamWDAoufVEpTo-VHRBdVM2slZawAciMJwSApa5Oj5s4asyybgC61dihyKiD4W3vdGALgcCeb4OikRA0jsXglEODGPeYhlJau3DwhuOJ3ul-AvAu3RC0aOgUx4GrqjpcM5UtSXJPB2IAnm45lThswDtQDDcGoUQ1DORH2A47LtNB96rDgVr0TJusRO0y5f_yM4gfyr4SVwns"/>
+</div>
+</div>
+</section>
+<!-- Featured Programs (Bento Grid) -->
+<section class="py-24 bg-surface">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div>
+<p class="font-tagline text-tagline text-secondary mb-2">ACADEMIC EXCELLENCE</p>
+<h2 class="font-headline-md text-headline-md text-primary">Featured Academic Programs</h2>
+</div>
+<button class="text-primary font-bold border-b border-primary pb-1">View All Programs</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Theological Studies (Large) -->
+<div class="md:col-span-2 relative group overflow-hidden bg-primary-container min-h-[400px]">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A detailed close-up of an ancient leather-bound Bible open on a dark oak wooden desk in a dimly lit library. Soft warm candlelight flickers in the background, illuminating the textured pages and fine typography. The mood is reverent, scholarly, and timeless, perfectly capturing the essence of advanced theological research and spiritual study." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTcfidFvCbZTDzlIlkxnKxYOrh0qSE_R88f9Lx-7xq8Az7UEY4RrhmhTO7dQjDl5rY-tP94J5is1RQQzmTCVyXhCbTf5RLM-jWzbCixZCJepRy1Vc1i0L3iQ_GkLHeqquIiciNnEaHKAQELiZmmOlK2XaIi3Cgiutt8kejH0CLKKglBcxjXCdLfIWyMHMeMQggSKIFNuJjHe_mrN9javnLDXQW2f4_pLrz5l_M4N9-WAjCyEJFMPLwVGslsgtM2pla4QD5rVXitSw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-8">
+<span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-tagline text-[10px] mb-4">LEADERSHIP TRACK</span>
+<h3 class="font-headline-sm text-headline-sm text-on-primary mb-2">School of Global Theology</h3>
+<p class="text-on-primary-container text-body-md max-w-lg mb-6">Equipping spiritual leaders with profound biblical insights and global mission perspectives.</p>
+<button class="bg-surface text-primary px-6 py-2 font-bold text-label-sm">Program Details</button>
+</div>
+</div>
+<!-- Business Administration -->
+<div class="bg-surface-container border border-outline-variant p-8 flex flex-col group hover:border-secondary transition-colors">
+<div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">business_center</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">International Business</h3>
+<p class="text-on-surface-variant text-body-md mb-8">Developing ethical business leaders to thrive in the modern global economy with integrity.</p>
+<div class="mt-auto">
+<a class="flex items-center gap-2 font-bold group-hover:gap-3 transition-all" href="#">Explore <span class="material-symbols-outlined">arrow_right_alt</span></a>
+</div>
+</div>
+<!-- Education -->
+<div class="bg-surface-container border border-outline-variant p-8 flex flex-col group hover:border-secondary transition-colors">
+<div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">Educational Leadership</h3>
+<p class="text-on-surface-variant text-body-md mb-8">Shaping the next generation of educators through Christian pedagogical excellence.</p>
+<div class="mt-auto">
+<a class="flex items-center gap-2 font-bold group-hover:gap-3 transition-all" href="#">Explore <span class="material-symbols-outlined">arrow_right_alt</span></a>
+</div>
+</div>
+<!-- Humanities (Horizontal) -->
+<div class="md:col-span-2 bg-surface-container-high border border-outline-variant p-8 flex flex-col md:flex-row gap-8 group">
+<div class="md:w-1/3">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">Arts & Humanities</h3>
+<p class="text-on-surface-variant text-body-md">Understanding human culture and expression through the lens of divine creation.</p>
+</div>
+<div class="md:w-2/3 grid grid-cols-2 gap-4">
+<div class="bg-surface p-4 rounded border border-outline-variant/30 text-center">
+<p class="font-bold text-primary">History</p>
+</div>
+<div class="bg-surface p-4 rounded border border-outline-variant/30 text-center">
+<p class="font-bold text-primary">Philosophy</p>
+</div>
+<div class="bg-surface p-4 rounded border border-outline-variant/30 text-center">
+<p class="font-bold text-primary">Literature</p>
+</div>
+<div class="bg-surface p-4 rounded border border-outline-variant/30 text-center">
+<p class="font-bold text-primary">Linguistics</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Global Spiritual Community Section -->
+<section class="py-24 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary z-0">
+<img class="w-full h-full object-cover opacity-20" data-alt="A wide panoramic shot of a diverse group of international students and professors standing together in front of a majestic university gate. The lighting is warm golden hour, casting long soft shadows across the cobblestone pathway. The mood is inclusive, triumphant, and hopeful, illustrating a vibrant and unified global community committed to a shared spiritual mission." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKKmM1wcznV6n9cTzXZG8j1oVqYYI8bN9EM4U0c5yUbheHGELhZpccgKdL6JpD6etApcEWtbYHIWp4vf7-wf28S4ISU7Lx4A-NoYLkKzzBlLmWbs_MhUjW2gu-HNEBZj-hzHhQeyHWrZ8mKLzrGMWKR30ERxSrtV833vzBRm_nqwWP5496dMLyIgDzm1a67xoA8vGU9Jhh7XoA65dwP9jYnY1rTmB-BAiGhte0z-lhH3zjQfwH_kfSYkHKvwuZxiNubZqzcFdJ_cs"/>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto px-margin-desktop text-center text-on-primary">
+<p class="font-tagline text-tagline text-secondary-fixed mb-6">CONNECT & GROW</p>
+<h2 class="font-display-lg text-display-lg mb-8">Join Our Global Spiritual Community</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-12 max-w-2xl mx-auto">
+                    Beyond the classroom, GDU is a family. We connect believers across continents to pray, serve, and impact their local communities through the power of unified faith.
+                </p>
+<div class="flex flex-wrap justify-center gap-8">
+<div class="text-center">
+<p class="font-display-lg text-display-lg text-secondary-fixed mb-1">50+</p>
+<p class="font-tagline text-tagline">Countries Represented</p>
+</div>
+<div class="w-px h-16 bg-outline-variant/30 hidden md:block"></div>
+<div class="text-center">
+<p class="font-display-lg text-display-lg text-secondary-fixed mb-1">12k+</p>
+<p class="font-tagline text-tagline">Active Alumni</p>
+</div>
+<div class="w-px h-16 bg-outline-variant/30 hidden md:block"></div>
+<div class="text-center">
+<p class="font-display-lg text-display-lg text-secondary-fixed mb-1">100%</p>
+<p class="font-tagline text-tagline">Mission Driven</p>
+</div>
+</div>
+<button class="mt-16 bg-secondary-fixed text-on-secondary-fixed px-12 py-4 rounded-full font-bold text-body-md hover:scale-105 transition-transform">Get Involved</button>
+</div>
+</section>
+<!-- Admission CTA -->
+<section class="py-24 bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-margin-desktop border border-outline-variant p-16 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 border-t-8 border-r-8 border-secondary-fixed-dim/20 -translate-y-8 translate-x-8"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Begin Your Journey Today</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
+                            Applications for the upcoming semester are now open. Step into a community that values your calling and equips you for global leadership.
+                        </p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded font-bold">Apply Now</button>
+<button class="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all">Request Info <span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="bg-surface p-8 border border-outline-variant/50">
+<p class="font-bold text-primary mb-4">Admissions Deadlines</p>
+<div class="space-y-4">
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="font-body-md">Early Decision</span>
+<span class="font-bold text-secondary">Oct 15</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="font-body-md">Regular Decision</span>
+<span class="font-bold text-secondary">Jan 15</span>
+</div>
+<div class="flex justify-between">
+<span class="font-body-md">International Scholars</span>
+<span class="font-bold text-secondary">Dec 01</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container text-on-primary-container">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto">
+<div class="space-y-6">
+<div class="font-headline-sm text-headline-sm text-on-primary-fixed">Global Diaspora University</div>
+<p class="font-tagline text-tagline text-surface-bright max-w-sm">EDUCATE. EQUIP. EMPOWER. IMPACT THE WORLD.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined p-2 border border-outline-variant rounded hover:bg-on-primary-fixed-variant transition-colors cursor-pointer">public</span>
+<span class="material-symbols-outlined p-2 border border-outline-variant rounded hover:bg-on-primary-fixed-variant transition-colors cursor-pointer">share</span>
+<span class="material-symbols-outlined p-2 border border-outline-variant rounded hover:bg-on-primary-fixed-variant transition-colors cursor-pointer">mail</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<h4 class="font-bold text-on-primary-fixed mb-4">Quick Links</h4>
+<ul class="space-y-3 font-body-md">
+<li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">News & Insights</a></li>
+<li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">FAQs</a></li>
+<li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-primary-fixed mb-4">Legal</h4>
+<ul class="space-y-3 font-body-md">
+<li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Terms & Conditions</a></li>
+<li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Accessibility Statement</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="border-t border-on-primary-fixed-variant/30 py-8 text-center max-w-container-max mx-auto px-margin-desktop">
+<p class="font-body-md text-sm text-outline-variant opacity-80">
+                © 2024 Global Diaspora University. Educate. Equip. Empower. Impact the World.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple scroll reveal interaction
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+
+        // Sticky Nav logic
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

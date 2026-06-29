@@ -1,0 +1,30 @@
+<%
+  // Expects: activity (rows), entity ('lead'|'application'), entityId, email (contact email)
+  var icons = { 'Status changed':'sync_alt', 'Assigned':'person', 'Email sent':'mail', 'Converted to application':'swap_horiz', 'Created from lead':'add', 'Interview scheduled':'event', 'Interview outcome':'how_to_reg' };
+%>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="font-headline text-headline-sm text-primary">Activity</h2>
+    <button type="button" class="text-secondary font-bold text-sm" onclick="document.getElementById('email-<%= entity %>-<%= entityId %>').classList.toggle('hidden')"><span class="material-symbols-outlined text-base align-middle">mail</span> Send email</button>
+  </div>
+
+  <form id="email-<%= entity %>-<%= entityId %>" action="/admin/<%= entity %>s/<%= entityId %>/email" method="post" class="hidden bg-surface-container-low rounded p-3 mb-4 space-y-2">
+    <p class="text-xs text-on-surface-variant">To: <strong><%= email %></strong></p>
+    <input name="subject" required placeholder="Subject" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+    <textarea name="body" required rows="4" placeholder="Write your message…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"></textarea>
+    <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Send email</button>
+  </form>
+
+  <div class="space-y-2">
+    <% if (!activity.length) { %><p class="text-on-surface-variant text-sm">No activity logged yet.</p><% } %>
+    <% activity.forEach(function(a){ %>
+    <div class="flex items-start gap-3 text-sm border-b border-outline-variant/30 pb-2 last:border-0">
+      <span class="material-symbols-outlined text-base text-on-surface-variant mt-0.5"><%= icons[a.action] || 'history' %></span>
+      <div class="flex-1">
+        <p class="text-primary"><span class="font-bold"><%= a.action %></span><% if (a.detail) { %> <span class="text-on-surface-variant"><%= a.detail %></span><% } %></p>
+        <p class="text-[11px] text-on-surface-variant"><%= a.actor_name || 'System' %> · <%= formatDate(a.created_at) %></p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>

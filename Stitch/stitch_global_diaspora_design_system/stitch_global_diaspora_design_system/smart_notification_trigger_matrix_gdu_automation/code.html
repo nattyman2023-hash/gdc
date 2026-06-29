@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Notification Trigger Matrix | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .matrix-row:hover {
+            background-color: rgba(240, 238, 232, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c4c6ce;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface-variant": "#44474d",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3ed",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "surface-variant": "#e5e2dc",
+                        "primary-container": "#071d3a",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#4c5f7f",
+                        "on-secondary-fixed": "#271900",
+                        "on-primary-fixed-variant": "#354766",
+                        "surface-container-high": "#ebe8e2",
+                        "secondary-container": "#fdc355",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdea9",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline": "#74777e",
+                        "on-primary-container": "#7386a8",
+                        "inverse-surface": "#31312d",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "tertiary": "#00030d",
+                        "surface-dim": "#dcdad4",
+                        "on-background": "#1c1c18",
+                        "surface-container-highest": "#e5e2dc",
+                        "surface-bright": "#fcf9f3",
+                        "on-tertiary-container": "#6a85bb",
+                        "background": "#fcf9f3",
+                        "primary": "#00030c",
+                        "inverse-on-surface": "#f3f0ea",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-container": "#f0eee8",
+                        "surface": "#fcf9f3",
+                        "secondary": "#7d5800",
+                        "on-primary-fixed": "#051b38",
+                        "outline-variant": "#c4c6ce",
+                        "tertiary-container": "#001c43",
+                        "inverse-primary": "#b4c7ec",
+                        "on-surface": "#1c1c18"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "tagline": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "tagline": ["14px", { "lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar Anchor -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface border-r border-outline-variant/10 w-64">
+<div class="p-6 flex flex-col items-center">
+<h1 class="font-headline-md text-headline-md text-primary mb-1">Student Portal</h1>
+<p class="font-tagline text-label-sm text-on-surface-variant uppercase tracking-widest text-center">Global Diaspora University</p>
+</div>
+<nav class="mt-8 flex-1">
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container font-bold px-6 py-4" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-body-md text-body-md">Academic Record</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-body-md text-body-md">Financials</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">book</span>
+<span class="font-body-md text-body-md">Library</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</nav>
+<div class="p-6 border-t border-outline-variant/10">
+<button class="w-full bg-primary-container text-surface-container-lowest py-3 rounded hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span class="font-tagline text-[12px] uppercase">WhatsApp Support</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-64 min-h-screen">
+<!-- TopNavBar Anchor -->
+<header class="bg-primary-container sticky top-0 z-50 shadow-sm border-b border-outline-variant/15 flex justify-between items-center w-full px-6 md:px-16 py-4">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest">GDU</span>
+<div class="hidden md:block h-8 w-[1px] bg-outline-variant/30 mx-4"></div>
+<nav class="hidden md:flex gap-8">
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Research</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-lowest/10 px-4 py-2 rounded-full border border-surface-container-lowest/20">
+<span class="material-symbols-outlined text-surface-container-lowest mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-surface-container-lowest placeholder:text-surface-container-lowest/60 text-body-md w-48" placeholder="Search parameters..." type="text"/>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 font-tagline text-[12px] uppercase tracking-widest rounded-sm hover:scale-95 transition-transform">Apply Now</button>
+</div>
+</header>
+<section class="p-margin-mobile md:p-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<div class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed font-tagline text-[10px] uppercase tracking-[0.2em] mb-4">Admin Control Panel / Page 62</div>
+<h2 class="font-headline-md text-headline-md text-primary-container">Smart Notification Trigger Matrix</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-2">Configure automated logic for institutional communication flows. Ensure academic adherence and student engagement through precision-timed triggers.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 border border-primary-container text-primary-container px-5 py-3 hover:bg-primary-container hover:text-white transition-all">
+<span class="material-symbols-outlined">history</span>
+<span class="font-tagline text-[12px] uppercase">Audit Logs</span>
+</button>
+<button class="flex items-center gap-2 bg-primary-container text-white px-5 py-3 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span class="font-tagline text-[12px] uppercase">New Rule</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Layout for Matrix & Analytics -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Main Trigger Matrix (Col 1-8) -->
+<div class="xl:col-span-8 bg-surface-container-lowest border border-outline-variant/20 shadow-sm p-8">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">tune</span>
+                                Automation Matrix
+                            </h3>
+<div class="flex items-center gap-4">
+<span class="font-body-md text-label-sm text-on-surface-variant">Filter by Category:</span>
+<select class="bg-surface-container-low border-outline-variant/30 text-body-md px-3 py-1 focus:ring-primary">
+<option>All Academic</option>
+<option>Financial</option>
+<option>Enrollment</option>
+</select>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="pb-4 font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant">Trigger Event</th>
+<th class="pb-4 font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant text-center">Email</th>
+<th class="pb-4 font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant text-center">SMS</th>
+<th class="pb-4 font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant text-center">WhatsApp</th>
+<th class="pb-4 font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant">Timing Logic</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="matrix-row group transition-colors">
+<td class="py-6">
+<div class="font-headline-sm text-[18px] text-primary">Live Session Starting</div>
+<div class="font-body-md text-[13px] text-on-surface-variant">Virtual classroom sync event</div>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6">
+<div class="flex items-center bg-surface-container-low px-3 py-2 border border-outline-variant/20">
+<select class="bg-transparent border-none text-body-md focus:ring-0 w-full p-0">
+<option>15 mins before</option>
+<option>1 hour before</option>
+<option>At start</option>
+</select>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="matrix-row group transition-colors">
+<td class="py-6">
+<div class="font-headline-sm text-[18px] text-primary">Quiz Failed</div>
+<div class="font-body-md text-[13px] text-on-surface-variant">Score below threshold (65%)</div>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6">
+<div class="flex items-center bg-surface-container-low px-3 py-2 border border-outline-variant/20">
+<select class="bg-transparent border-none text-body-md focus:ring-0 w-full p-0">
+<option>Immediate</option>
+<option>24 hour delay</option>
+<option>Weekly summary</option>
+</select>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="matrix-row group transition-colors">
+<td class="py-6">
+<div class="font-headline-sm text-[18px] text-primary">Tuition Due</div>
+<div class="font-body-md text-[13px] text-on-surface-variant">Outstanding balance detected</div>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6">
+<div class="flex items-center bg-surface-container-low px-3 py-2 border border-outline-variant/20">
+<select class="bg-transparent border-none text-body-md focus:ring-0 w-full p-0">
+<option>7 days before</option>
+<option>3 days before</option>
+<option>Day of</option>
+</select>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="matrix-row group transition-colors">
+<td class="py-6">
+<div class="font-headline-sm text-[18px] text-primary">Course Completed</div>
+<div class="font-body-md text-[13px] text-on-surface-variant">Final grade posted</div>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6 text-center">
+<input checked="" class="w-5 h-5 rounded-none border-primary text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-6">
+<div class="flex items-center bg-surface-container-low px-3 py-2 border border-outline-variant/20">
+<select class="bg-transparent border-none text-body-md focus:ring-0 w-full p-0">
+<option>Immediate</option>
+<option>End of term</option>
+</select>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-8 flex justify-end">
+<button class="bg-primary-container text-surface-container-lowest px-10 py-4 font-tagline text-[14px] uppercase tracking-widest hover:shadow-lg transition-all active:scale-[0.98]">
+                                Save Matrix Configuration
+                            </button>
+</div>
+</div>
+<!-- Right Sidebar Analytics (Col 9-12) -->
+<div class="xl:col-span-4 flex flex-col gap-gutter">
+<!-- Delivery Success Rate Card -->
+<div class="bg-primary-container p-8 text-surface-container-lowest relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-tagline text-[12px] uppercase tracking-[0.2em] mb-6 opacity-80">Aggregate Delivery Score</h4>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-display-lg font-display-lg text-secondary-fixed-dim">98.4</span>
+<span class="text-headline-sm font-headline-sm text-secondary-fixed-dim">%</span>
+</div>
+<div class="w-full bg-surface-container-lowest/20 h-[2px] mb-4">
+<div class="bg-secondary-fixed-dim h-full" style="width: 98.4%"></div>
+</div>
+<p class="font-body-md text-[14px] opacity-70">Total triggers processed: 12,402 in last 30 days.</p>
+</div>
+<!-- Subtle background logo watermark -->
+<span class="material-symbols-outlined absolute -bottom-10 -right-10 text-[200px] opacity-10 pointer-events-none">verified_user</span>
+</div>
+<!-- Recent Logs Card -->
+<div class="bg-surface border border-outline-variant/20 p-8 flex-1">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center justify-between">
+                                Recent Activity
+                                <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:rotate-180 transition-transform duration-500">sync</span>
+</h4>
+<div class="space-y-6 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
+<!-- Log Item 1 -->
+<div class="flex gap-4 border-b border-outline-variant/10 pb-4">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-green-700 text-[20px]">check_circle</span>
+</div>
+<div>
+<div class="font-body-md font-bold text-primary">Tuition Due <span class="font-normal opacity-60">→ 428 students</span></div>
+<div class="font-label-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="bg-surface-container-highest px-1">Email</span>
+<span class="bg-surface-container-highest px-1">SMS</span>
+<span>• 2 mins ago</span>
+</div>
+</div>
+</div>
+<!-- Log Item 2 -->
+<div class="flex gap-4 border-b border-outline-variant/10 pb-4">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-green-700 text-[20px]">check_circle</span>
+</div>
+<div>
+<div class="font-body-md font-bold text-primary">Live Session Starting <span class="font-normal opacity-60">→ 12 students</span></div>
+<div class="font-label-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="bg-surface-container-highest px-1">WhatsApp</span>
+<span>• 14 mins ago</span>
+</div>
+</div>
+</div>
+<!-- Log Item 3 -->
+<div class="flex gap-4 border-b border-outline-variant/10 pb-4">
+<div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-red-700 text-[20px]">error_outline</span>
+</div>
+<div>
+<div class="font-body-md font-bold text-primary">Quiz Failed <span class="font-normal text-red-600">(API Error)</span></div>
+<div class="font-label-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="bg-surface-container-highest px-1">Email</span>
+<span>• 1 hour ago</span>
+</div>
+</div>
+</div>
+<!-- Log Item 4 -->
+<div class="flex gap-4 border-b border-outline-variant/10 pb-4">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-green-700 text-[20px]">check_circle</span>
+</div>
+<div>
+<div class="font-body-md font-bold text-primary">Tuition Due <span class="font-normal opacity-60">→ 14 students</span></div>
+<div class="font-label-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="bg-surface-container-highest px-1">Email</span>
+<span>• 3 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border-t border-outline-variant/20 text-center font-tagline text-[11px] uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">
+                                View Full Automation Logs
+                            </button>
+</div>
+</div>
+</div>
+<!-- Strategic Context Card -->
+<div class="mt-gutter bg-surface-container-low border-l-4 border-secondary p-8 flex flex-col md:flex-row items-center gap-8">
+<div class="flex-shrink-0">
+<div class="w-24 h-24 rounded-full border-2 border-secondary flex items-center justify-center">
+<img alt="Institutional Seal" class="w-16 h-16 object-contain grayscale opacity-60" data-alt="A macro shot of a prestigious university seal embossed on heavy parchment paper. The scene is lit by warm, candle-like light that highlights the intricate gold leaf details of the institutional crest. The aesthetic is deeply academic, traditional, and high-prestige, following a navy and gold color palette. The composition is centered with significant breathing room around the seal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSPsV29kUDlm5uMV8S2NCMu62jI80Qek0Aebe32UcDg0Yn0du-2uJaITKJyJvuRuB73FVsIy_2CFH9dKPbyL7DNV41ime40yTh4KfAefRKFk4Fc1Q8kWi-K5H-y515uOI8E0Gqv4DVMXzfs1bLAY1TVd70Ipt1qk1CZBZrQs1sX1RQXEPk8_f4nqH5UsYKWBKVXHGYokaxtIfJQbOlzLQXynr5CdST-FcuL3PSfkTcbRV-5QB0u1xFQhXKx24OPZDqBYEKZ_sYjOw"/>
+</div>
+</div>
+<div>
+<h5 class="font-headline-sm text-headline-sm text-primary mb-2 italic">Institutional Integrity Mandate</h5>
+<p class="font-body-md text-on-surface-variant leading-relaxed italic">"All automated communications must maintain the linguistic dignity and pastoral care expected of Global Diaspora University. Ensure SMS triggers for financial matters are sent strictly between 09:00 and 17:00 UTC to respect student time zones."</p>
+<p class="font-tagline text-[11px] uppercase tracking-widest mt-4 text-primary opacity-60">— Office of the Vice-Chancellor</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Anchor -->
+<footer class="w-full bg-primary-container py-12 px-6 md:px-16 grid grid-cols-1 md:grid-cols-3 gap-8 border-t-4 border-tertiary-fixed-dim">
+<div class="col-span-1">
+<span class="font-display-lg text-headline-md text-surface-container-lowest">GDU</span>
+<p class="font-body-md text-surface-variant mt-4 opacity-80">Empowering the global diaspora through accessible, prestigious academic excellence since 1924.</p>
+</div>
+<div class="col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between gap-8">
+<div class="grid grid-cols-2 gap-8 flex-1">
+<div class="flex flex-col gap-3">
+<h6 class="font-tagline text-[12px] uppercase text-tertiary-fixed-dim mb-2">Governance</h6>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a>
+</div>
+<div class="flex flex-col gap-3">
+<h6 class="font-tagline text-[12px] uppercase text-tertiary-fixed-dim mb-2">Connect</h6>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Careers</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Alumni</a>
+</div>
+</div>
+<div class="text-left md:text-right flex flex-col justify-end">
+<p class="font-body-md text-[13px] text-surface-variant opacity-60 leading-relaxed">© 2024 Global Diaspora University.<br/>Accredited by International Academic Council.</p>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interaction for toggle switches/checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('bg-secondary-fixed/10');
+                    setTimeout(() => row.classList.remove('bg-secondary-fixed/10'), 600);
+                }
+            });
+        });
+
+        // Simulating auto-refresh interaction on logs
+        const refreshIcon = document.querySelector('.material-symbols-outlined.cursor-pointer');
+        refreshIcon?.addEventListener('click', () => {
+            const logsContainer = document.querySelector('.max-h-\\[400px\\]');
+            logsContainer.style.opacity = '0.5';
+            setTimeout(() => {
+                logsContainer.style.opacity = '1';
+            }, 500);
+        });
+    </script>
+</body></html>

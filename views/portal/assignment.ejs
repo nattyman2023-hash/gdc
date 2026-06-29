@@ -1,0 +1,48 @@
+<a href="/portal/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
+
+<div class="max-w-3xl">
+  <div class="mb-6">
+    <p class="font-tagline text-label-sm text-secondary uppercase">Assignment</p>
+    <h1 class="font-headline text-headline-md text-primary"><%= assignment.title %></h1>
+    <p class="text-on-surface-variant text-sm"><% if (assignment.due_date) { %>Due <%= formatDate(assignment.due_date) %> · <% } %>Out of <%= assignment.max_points %> points</p>
+  </div>
+
+  <% if (assignment.instructions) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 mb-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-2">Instructions</h2>
+    <p class="text-on-surface-variant whitespace-pre-line"><%= assignment.instructions %></p>
+  </div>
+  <% } %>
+
+  <% if (submission && submission.status === 'graded') { %>
+  <div class="bg-secondary-fixed border border-secondary rounded-lg p-5 mb-6">
+    <p class="font-tagline text-label-sm text-on-secondary-fixed uppercase">Graded</p>
+    <p class="font-display text-headline-md text-secondary"><%= submission.grade %>/<%= assignment.max_points %></p>
+    <% if (submission.feedback) { %><p class="text-on-secondary-fixed text-sm mt-2"><span class="font-bold">Feedback:</span> <%= submission.feedback %></p><% } %>
+  </div>
+  <% } %>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-3"><%= submission ? 'Your submission' : 'Submit your work' %></h2>
+    <% if (submission && submission.status === 'graded') { %>
+      <% if (submission.body) { %><p class="text-on-surface-variant text-sm whitespace-pre-line bg-surface-container-low rounded p-3 mb-2"><%= submission.body %></p><% } %>
+      <% if (submission.url) { %><a href="<%= submission.url %>" target="_blank" class="text-secondary font-bold text-sm">View your attachment</a><% } %>
+      <p class="text-on-surface-variant text-sm mt-3">This assignment has been graded and is locked.</p>
+    <% } else { %>
+    <form action="/portal/assignments/<%= assignment.id %>/submit" method="post" class="space-y-4">
+      <div>
+        <label class="field-label">Your answer</label>
+        <textarea name="body" rows="6" class="field" placeholder="Type your response here…"><%= submission ? submission.body : '' %></textarea>
+      </div>
+      <div>
+        <label class="field-label">Or attach a link (Google Doc, PDF, etc.)</label>
+        <input name="url" value="<%= submission ? submission.url : '' %>" placeholder="https://…" class="field" />
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="bg-primary text-on-primary px-6 py-2.5 rounded font-bold"><%= submission ? 'Update submission' : 'Submit' %></button>
+        <% if (submission) { %><span class="text-secondary text-sm font-bold"><span class="material-symbols-outlined text-base align-middle">check_circle</span> Submitted <%= formatDate(submission.submitted_at) %></span><% } %>
+      </div>
+    </form>
+    <% } %>
+  </div>
+</div>

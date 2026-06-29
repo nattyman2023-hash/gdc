@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academic Standing | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .academic-gradient {
+            background: linear-gradient(135deg, #00030c 0%, #071d3a 100%);
+        }
+        .gold-border {
+            border: 1px solid #fdc355;
+        }
+        .soft-gold-shadow {
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+        }
+        .velocity-ring {
+            transition: stroke-dashoffset 1s ease-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#ebe8e2",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-tertiary-container": "#6a85bb",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "on-primary-container": "#7386a8",
+                        "background": "#fcf9f3",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "inverse-on-surface": "#f3f0ea",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#001c43",
+                        "on-background": "#1c1c18",
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed": "#051b38",
+                        "inverse-primary": "#b4c7ec",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-surface-variant": "#44474d",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c4c6ce",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#00030d",
+                        "surface-bright": "#fcf9f3",
+                        "secondary-container": "#fdc355",
+                        "inverse-surface": "#31312d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#f0eee8",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e5e2dc",
+                        "on-primary": "#ffffff",
+                        "secondary": "#7d5800",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fcf9f3",
+                        "primary-fixed": "#d6e3ff",
+                        "primary": "#00030c",
+                        "on-tertiary-fixed": "#001a40",
+                        "surface-tint": "#4c5f7f",
+                        "surface-dim": "#dcdad4",
+                        "outline": "#74777e",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "secondary-fixed": "#ffdea9",
+                        "primary-container": "#071d3a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "tagline": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-fixed-dim selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface sticky top-0 z-50 border-b border-outline-variant">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Global Diaspora University</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-primary border-b-2 border-secondary font-bold pb-1 font-body-md text-body-md" href="#">Academics</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Research</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Global Reach</a>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:bg-opacity-90 transition-all active:scale-95">Apply Now</button>
+</div>
+</nav>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-12 flex gap-gutter">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col gap-2 p-4 h-full w-64 bg-surface-container-low border-r border-outline-variant rounded-r-xl sticky top-24">
+<div class="mb-6 px-4">
+<h3 class="font-headline-sm text-headline-sm text-primary">About GDU</h3>
+<p class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Institutional Excellence</p>
+</div>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">history_edu</span> Our Story
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">menu_book</span> Statement of Faith
+            </a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg px-4 py-3 active:scale-95 duration-100" href="#">
+<span class="material-symbols-outlined">verified</span> Accreditation
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">school</span> Faculty
+            </a>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-1 space-y-10">
+<!-- Hero: Academic Standing -->
+<section class="academic-gradient rounded-xl p-10 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8">
+<!-- Scripture Overlay (Subtle) -->
+<div class="absolute top-4 right-8 opacity-20 text-right pointer-events-none">
+<p class="font-headline-sm italic text-lg">"Commit your work to the Lord..."</p>
+<p class="text-xs uppercase tracking-widest font-tagline">Proverbs 16:3</p>
+</div>
+<div class="relative z-10 space-y-4">
+<span class="font-tagline text-secondary-container uppercase">Student Portal</span>
+<h1 class="font-display-lg text-display-lg">Academic Standing</h1>
+<div class="flex gap-12 mt-6">
+<div>
+<p class="font-label-sm text-on-primary-container uppercase tracking-widest">Cumulative GPA</p>
+<p class="font-display-lg text-6xl text-secondary-container font-bold">3.92</p>
+</div>
+<div class="border-l border-white/20 pl-12">
+<p class="font-label-sm text-on-primary-container uppercase tracking-widest">Honor Status</p>
+<p class="font-headline-md text-white mt-1">Summa Cum Laude</p>
+</div>
+</div>
+</div>
+<!-- Velocity Chart -->
+<div class="relative w-48 h-48">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/10" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary-container velocity-ring" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="110.58" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<p class="text-3xl font-bold font-display-lg">80%</p>
+<p class="text-[10px] uppercase font-tagline leading-tight">Course<br/>Velocity</p>
+</div>
+</div>
+</section>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter">
+<!-- Performance Analytics -->
+<div class="xl:col-span-2 space-y-gutter">
+<div class="bg-surface border border-outline-variant rounded-xl p-8 soft-gold-shadow">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-primary">Performance Trends</h2>
+<p class="text-on-surface-variant font-body-md">Comparative analysis across core foundational modules</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2"><span class="w-3 h-3 bg-primary rounded-full"></span> <span class="text-xs font-tagline uppercase">Actual</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 bg-secondary rounded-full"></span> <span class="text-xs font-tagline uppercase">Benchmark</span></div>
+</div>
+</div>
+<!-- Simplified Bar Chart Representative -->
+<div class="space-y-6">
+<!-- Leadership Module -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-sm">
+<span>Leadership Development</span>
+<span class="font-bold text-primary">96%</span>
+</div>
+<div class="h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 96%"></div>
+</div>
+</div>
+<!-- Christian Ethics -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-sm">
+<span>Global Christian Ethics</span>
+<span class="font-bold text-primary">89%</span>
+</div>
+<div class="h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 89%"></div>
+</div>
+</div>
+<!-- Missiology -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-sm">
+<span>Urban Missiology</span>
+<span class="font-bold text-primary">92%</span>
+</div>
+<div class="h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Module Breakdown Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-secondary">
+<h4 class="font-tagline text-xs text-secondary uppercase mb-2">Upcoming Milestones</h4>
+<p class="font-headline-sm text-lg text-primary mb-1">Missiology Thesis Proposal</p>
+<p class="text-sm text-on-surface-variant mb-4 italic">"Transforming Diaspora Communities through Servant Leadership"</p>
+<div class="flex items-center gap-2 text-xs font-label-sm text-primary">
+<span class="material-symbols-outlined text-sm">calendar_today</span> Due in 4 days
+                            </div>
+</div>
+<div class="bg-white p-6 rounded-xl gold-border">
+<h4 class="font-tagline text-xs text-primary uppercase mb-2">Special Recognition</h4>
+<p class="font-headline-sm text-lg text-primary mb-1">Dean's Honor Roll</p>
+<p class="text-sm text-on-surface-variant mb-4">Fall 2023 Academic Excellence Award for Research</p>
+<button class="text-secondary font-bold text-xs flex items-center gap-1 hover:underline">
+                                View Certificate <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Recent Feedback Panel -->
+<aside class="space-y-6">
+<div class="bg-primary text-on-primary p-8 rounded-xl h-full">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-secondary-container">forum</span>
+<h2 class="font-headline-sm">Faculty Feedback</h2>
+</div>
+<div class="space-y-8">
+<div class="relative pl-6 border-l border-secondary-container/30">
+<div class="absolute -left-1.5 top-0 w-3 h-3 bg-secondary-container rounded-full"></div>
+<p class="text-sm font-label-sm text-secondary-container mb-2">Prof. Elias Thorne • Ethics</p>
+<p class="font-body-md text-sm leading-relaxed text-white/90">
+                                    "Your recent paper on Covenantal Economics showed profound insight into post-colonial theological frameworks. Exceptional secondary source integration."
+                                </p>
+</div>
+<div class="relative pl-6 border-l border-secondary-container/30">
+<div class="absolute -left-1.5 top-0 w-3 h-3 bg-white/30 rounded-full"></div>
+<p class="text-sm font-label-sm text-white/60 mb-2">Dr. Sarah Jenkins • Leadership</p>
+<p class="font-body-md text-sm leading-relaxed text-white/80">
+                                    "Continue refining the executive summary. Your logic is sound, but the visual presentation of the data needs more academic rigor."
+                                </p>
+</div>
+<div class="relative pl-6 border-l border-secondary-container/30">
+<div class="absolute -left-1.5 top-0 w-3 h-3 bg-white/30 rounded-full"></div>
+<p class="text-sm font-label-sm text-white/60 mb-2">Rev. James Adeyemi • Missiology</p>
+<p class="font-body-md text-sm leading-relaxed text-white/80">
+                                    "A masterclass in empathetic sociological observation. Well done on the case study of Lagos urban shifts."
+                                </p>
+</div>
+</div>
+<button class="w-full mt-10 py-3 border border-white/20 rounded-lg text-sm font-tagline uppercase tracking-widest hover:bg-white/10 transition-all">
+                            View All Feedback
+                        </button>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary mt-20">
+<div class="w-full py-12 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="space-y-4 text-center md:text-left">
+<div class="font-headline-md text-headline-md text-secondary">Global Diaspora University</div>
+<p class="font-body-md text-body-md text-on-primary-container max-w-md">© 2024 Global Diaspora University. All rights reserved. Founded on Faith, Committed to Excellence.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-on-primary-container hover:text-white transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
+<a class="text-on-primary-container hover:text-white transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+<a class="text-on-primary-container hover:text-white transition-colors font-body-md text-body-md" href="#">Campus Safety</a>
+<a class="text-on-primary-container hover:text-white transition-colors font-body-md text-body-md" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+<script>
+        // Interactivity for Progress Ring
+        document.addEventListener('DOMContentLoaded', () => {
+            const ring = document.querySelector('.velocity-ring');
+            if (ring) {
+                // Triggering animation
+                setTimeout(() => {
+                    ring.style.strokeDashoffset = "110.58"; // 80% of 552.92
+                }, 300);
+            }
+        });
+    </script>
+</body></html>

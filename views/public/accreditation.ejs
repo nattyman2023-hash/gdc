@@ -1,0 +1,36 @@
+<%- include('../partials/page-hero', { heroTitle: 'Accreditation & Quality Assurance', heroTagline: 'Accreditation In Progress', heroText: 'We are committed to maintaining the highest standards of academic quality and integrity as we pursue formal accreditation.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-3 gap-12">
+    <div class="md:col-span-2">
+      <div class="bg-tertiary-container border border-tertiary rounded-lg p-5 mb-8">
+        <p class="font-bold text-on-tertiary-container flex items-center gap-2 mb-1"><span class="material-symbols-outlined">pending</span> Our current status</p>
+        <p class="text-on-tertiary-container text-body-md">Global Diaspora Christian University is <strong>not yet accredited</strong>. Having taught learners since 2019, we are now actively working through the formal accreditation process. We share this openly so that prospective students can make a fully informed decision.</p>
+      </div>
+      <h2 class="font-headline text-headline-md text-primary mb-6">Our commitment to quality</h2>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-4">While accreditation is in progress, we are committed to delivering quality-assured, Christ-centred higher education. Our programmes are designed and reviewed against rigorous academic standards to ensure they are credible, relevant and ready for recognition.</p>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-8">We undergo ongoing internal quality assurance and continuously improve our curriculum, faculty and student support to meet international expectations and the requirements of accrediting bodies.</p>
+
+      <div class="space-y-4">
+        <% [
+          ['verified','Institutional standing','Our institutional details and the current stage of our accreditation journey are available on request.'],
+          ['workspace_premium','Programme design','Each programme is mapped to recognised academic levels and credit frameworks in readiness for accreditation.'],
+          ['gavel','Academic governance','An academic board oversees standards, assessment and the award of qualifications.']
+        ].forEach(function(item){ %>
+        <div class="flex items-start gap-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+          <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1;"><%= item[0] %></span>
+          <div><h3 class="font-headline text-headline-sm text-primary mb-1"><%= item[1] %></h3><p class="text-on-surface-variant text-body-md"><%= item[2] %></p></div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <aside>
+      <div class="bg-primary text-on-primary rounded-lg p-8 sticky top-28">
+        <span class="material-symbols-outlined text-secondary-fixed-dim text-5xl mb-4" style="font-variation-settings:'FILL' 1;">verified_user</span>
+        <h3 class="font-headline text-headline-sm mb-3">Ask about our status</h3>
+        <p class="text-on-primary-container text-body-md mb-6">Have questions about where we are in the accreditation process, or what it means for your studies? Our team is happy to explain in full.</p>
+        <a href="/contact" class="block text-center bg-secondary text-on-secondary px-6 py-3 rounded font-bold hover:opacity-90">Talk to our team</a>
+      </div>
+    </aside>
+  </div>
+</section>

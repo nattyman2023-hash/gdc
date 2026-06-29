@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academic Achievement | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Inter:wght@100..900&amp;family=Montserrat:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "surface-variant": "#e5e2dc",
+                        "secondary": "#7d5800",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-secondary-fixed": "#271900",
+                        "surface-container-low": "#f6f3ed",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf9f3",
+                        "tertiary": "#00030d",
+                        "surface-container": "#f0eee8",
+                        "secondary-container": "#fdc355",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "tertiary-fixed": "#d7e2ff",
+                        "surface": "#fcf9f3",
+                        "error": "#ba1a1a",
+                        "primary-container": "#071d3a",
+                        "outline": "#74777e",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-bright": "#fcf9f3",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#001c43",
+                        "on-surface-variant": "#44474d",
+                        "on-surface": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6ce",
+                        "surface-container-high": "#ebe8e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "tagline": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .prestige-border {
+            border: 1px solid rgba(125, 88, 0, 0.2);
+        }
+        .achievement-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fcf9f3 100%);
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+        }
+        .confetti-canvas {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface dark:bg-primary-container border-b border-outline-variant dark:border-primary-fixed-variant">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">Global Diaspora University</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Programs</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Mission</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Spirituality</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4 mr-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="help_outline">help_outline</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-body-md hover:opacity-90 transition-opacity">Student Portal</button>
+</div>
+</header>
+<!-- SideNavBar (Suppressed for focused achievement screen, but kept layout integrity) -->
+<!-- Content Main Area -->
+<main class="pt-32 pb-20 px-4 md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<section class="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="inline-block mb-4 px-4 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-sm font-tagline text-tagline">
+                ALUMNI CONVOCATION 2024
+            </div>
+<h1 class="font-display-lg text-display-lg mb-4 text-primary">Congratulations, Dr. Elena Rostova</h1>
+<div class="w-24 h-1 bg-secondary-fixed-dim mx-auto mb-6"></div>
+<p class="font-headline-sm text-headline-sm italic text-on-surface-variant max-w-2xl mx-auto">
+                "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."
+            </p>
+</section>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Certificate Preview Card -->
+<div class="md:col-span-8 achievement-card prestige-border p-unit-4 flex flex-col items-center justify-center relative overflow-hidden group">
+
+<div class="relative z-10 w-full max-w-2xl bg-white p-8 prestige-border shadow-xl transform group-hover:scale-[1.01] transition-transform duration-500">
+<div class="flex flex-col items-center border-[12px] border-double border-secondary-fixed-dim p-8">
+<img alt="University Seal" class="w-24 h-24 mb-6 opacity-80" data-alt="A highly detailed and prestigious university seal of Global Diaspora University featuring a golden globe, an open bible, and a cross, rendered in a classical wax-seal style with intricate engravings and academic motifs. The aesthetic is formal and traditional, set against a clean white background with soft golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1HAPJeJdwlx2mE03ucKyahteYRpSvam7I2MDCXY4W1DOXEwexmiv49k6Hon3jG50BmGyJ1ZXC0nleleDN_7nVBe0eGJfzwHNxa9PtvfiG28utB8Xv-v_cIevcaB63iEaaIiXAW_EOaj_oZpALLyj7MJu0ZtPB5YlkpYJivlhn7O6sJFrAEI0cFtgbF7witeYkxTVKFWgpA2EZKeQ5FuaiBl20Wpr_Uc-kyjsHQ-3MmXJLoEDdrrsgSTJMhPJC0g5jO41I4pTHi1Y"/>
+<span class="font-tagline text-tagline text-secondary tracking-widest mb-2">DIPLOMA OF EXCELLENCE</span>
+<h2 class="font-headline-md text-headline-md text-center mb-6">Global Diaspora University</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">This certifies that</p>
+<p class="font-headline-sm text-headline-sm text-primary mb-6">Elena Rostova</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mb-8 px-8">
+                            Has successfully completed the requirements for the degree of<br/>
+<span class="font-bold text-primary">Master of Global Leadership &amp; Christian Ethics</span><br/>
+                            with all rights and honors pertaining thereto.
+                        </p>
+<div class="flex justify-between w-full mt-8 border-t border-outline-variant pt-6 italic font-body-md opacity-60">
+<div>Registrar, GDU</div>
+<div>Chancellor, GDU</div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-4 relative z-10">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-sm flex items-center gap-2 hover:bg-primary-container transition-colors shadow-lg">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                        Download PDF
+                    </button>
+<button class="border border-secondary text-secondary px-8 py-3 rounded-sm flex items-center gap-2 hover:bg-secondary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                        Share to LinkedIn
+                    </button>
+</div>
+</div>
+<!-- Stats & Verification Side Column -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Grade Card -->
+<div class="achievement-card prestige-border p-8 text-center flex flex-col items-center justify-center">
+<span class="font-tagline text-tagline text-on-surface-variant mb-2">FINAL GRADE</span>
+<div class="text-[64px] font-display-lg leading-none text-secondary mb-2">4.0</div>
+<span class="font-headline-sm text-headline-sm text-primary">Summa Cum Laude</span>
+<p class="mt-4 font-body-md text-body-md text-on-surface-variant italic">
+                        Academic Year 2023 - 2024
+                    </p>
+</div>
+<!-- Verification Card -->
+<div class="achievement-card prestige-border p-8">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<h3 class="font-headline-sm text-headline-sm">Secure Verification</h3>
+</div>
+<div class="space-y-6">
+<div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-1 uppercase text-[10px]">Verifiable Credential ID</p>
+<div class="flex items-center justify-between bg-surface-container p-3 rounded-sm font-mono text-sm break-all">
+<span>GDU-2024-VC-8832-X029</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="content_copy">content_copy</span>
+</div>
+</div>
+<div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-1 uppercase text-[10px]">Public Ledger Hash</p>
+<div class="flex items-center gap-2 text-primary font-bold hover:underline cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="link">link</span>
+<span class="text-sm">View on Blockchain Explorer</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed italic">
+                                This credential is cryptographically signed and stored on a decentralized ledger to ensure lifelong academic integrity.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Alumni Resources -->
+<div class="bg-primary text-on-primary p-8 rounded-sm">
+<h3 class="font-headline-sm text-headline-sm mb-4">Alumni Network</h3>
+<p class="font-body-md text-body-md opacity-80 mb-6">Join our community of over 15,000 leaders globally. Access career resources, mentorship, and lifelong spiritual guidance.</p>
+<button class="w-full bg-secondary-fixed text-on-secondary-fixed py-3 rounded-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                        Access Alumni Portal
+                    </button>
+</div>
+</div>
+</div>
+<!-- Career Pathway Section -->
+<section class="mt-20">
+<div class="flex items-center gap-4 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Your Next Chapter</h2>
+<div class="flex-grow h-px bg-outline-variant"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-8 bg-surface-container-low prestige-border hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl mb-4" data-icon="school">school</span>
+<h4 class="font-headline-sm text-headline-sm mb-2">Doctoral Opportunities</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Advance your research with our partner theological seminaries worldwide.</p>
+<a class="text-secondary font-bold flex items-center gap-1 group" href="#">
+                        Explore PhD Programs
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="p-8 bg-surface-container-low prestige-border hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl mb-4" data-icon="work">work</span>
+<h4 class="font-headline-sm text-headline-sm mb-2">Global Placements</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Curated opportunities within NGOs, ministries, and ethical corporate sectors.</p>
+<a class="text-secondary font-bold flex items-center gap-1 group" href="#">
+                        View Careers
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="p-8 bg-surface-container-low prestige-border hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl mb-4" data-icon="volunteer_activism">volunteer_activism</span>
+<h4 class="font-headline-sm text-headline-sm mb-2">Mentorship Circle</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Pay it forward by mentoring current students in our global diaspora.</p>
+<a class="text-secondary font-bold flex items-center gap-1 group" href="#">
+                        Become a Mentor
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col items-center gap-6 bg-primary dark:bg-primary-container text-on-primary">
+<span class="font-headline-sm text-headline-sm text-secondary-fixed">Global Diaspora University</span>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Compliance</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+<div class="w-full h-px bg-on-primary opacity-10 max-w-4xl"></div>
+<p class="text-center font-body-md text-body-md opacity-80">
+            © 2024 Global Diaspora University. Committed to Excellence in Christian Education.
+        </p>
+</footer>
+<canvas class="confetti-canvas" id="confetti"></canvas>
+<script>
+        // Micro-interaction: Confetti Celebration
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * -15 - 5;
+                this.speedX = Math.random() * 6 - 3;
+                this.color = ['#f6bd50', '#ffffff', '#7d5800', '#b4c7ec'][Math.floor(Math.random() * 4)];
+                this.gravity = 0.25;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.speedY += this.gravity;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.y < canvas.height + 50);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // Trigger on load
+        setTimeout(() => {
+            triggerConfetti();
+            animate();
+        }, 500);
+
+        // Simple Copy Logic
+        document.querySelectorAll('[data-icon="content_copy"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.previousElementSibling.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.innerText = 'done';
+                    setTimeout(() => this.innerText = 'content_copy', 2000);
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: https://gdcu.edu/sitemap.xml
+
+# Disallow admin sections
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /faculty/

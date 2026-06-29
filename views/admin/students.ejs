@@ -1,0 +1,32 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">People</p><h1 class="font-headline text-headline-md text-primary">Students</h1></div>
+  <a href="/admin/users/new?role=student" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">person_add</span> Add student</a>
+</div>
+
+<form method="get" class="flex flex-wrap gap-3 mb-5">
+  <input name="q" value="<%= filters.q %>" placeholder="Search name or email…" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary min-w-[220px]" />
+  <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Search</button>
+  <a href="/admin/students" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+</form>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Name</th><th class="px-4 py-3 hidden sm:table-cell">Email</th><th class="px-4 py-3">Engagement</th><th class="px-4 py-3">Courses</th><th class="px-4 py-3">Certificates</th><th class="px-4 py-3 hidden md:table-cell">Joined</th></tr>
+    </thead>
+    <tbody>
+      <% if (!students.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">No students found.</td></tr><% } %>
+      <% students.forEach(function(s){ var tone = ({active:'bg-secondary-container text-on-secondary-container',warn:'bg-tertiary-container text-on-tertiary-container',warn2:'bg-tertiary-container text-on-tertiary-container',risk:'bg-error-container text-on-error-container'})[s.engagement.tone] || 'bg-surface-container-high text-on-surface-variant'; %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low cursor-pointer" data-drawer="/admin/students/<%= s.id %>/drawer">
+        <td class="px-4 py-3 font-bold text-primary"><a href="/admin/students/<%= s.id %>" class="hover:text-secondary"><%= s.first_name %> <%= s.last_name %></a></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= s.email %></td>
+        <td class="px-4 py-3"><span class="inline-block font-tagline text-[11px] uppercase px-2 py-1 rounded <%= tone %>"><%= s.engagement.label %></span></td>
+        <td class="px-4 py-3 text-on-surface-variant"><%= s.enrollments %></td>
+        <td class="px-4 py-3 text-on-surface-variant"><%= s.certificates %></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><a href="/admin/students/<%= s.id %>" class="inline-flex items-center gap-1 text-secondary font-bold text-sm"><%= formatDate(s.created_at) %> <span class="material-symbols-outlined text-base">chevron_right</span></a></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('_pagination', { pg: pg, baseUrl: '/admin/students?q=' + encodeURIComponent(filters.q) }) %>

@@ -1,0 +1,32 @@
+<article class="py-16 bg-surface-bright">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+<%
+  const newsImage = imageFor('news', post);
+%>
+    <a href="/news" class="inline-flex items-center gap-2 text-secondary mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All news</a>
+    <span class="font-tagline text-label-sm text-secondary uppercase"><%= post.category %></span>
+    <h1 class="font-display text-display-lg-mobile md:text-headline-md text-primary my-4"><%= post.title %></h1>
+    <p class="font-tagline text-label-sm text-on-surface-variant mb-8"><%= formatDate(post.published_at) %><% if (post.author) { %> · <%= post.author %><% } %></p>
+    <div class="h-56 bg-primary-container rounded-lg overflow-hidden mb-8">
+      <img src="<%= newsImage %>" alt="" class="h-full w-full object-cover" loading="eager" decoding="async" />
+    </div>
+    <div class="font-body text-body-lg text-on-surface leading-relaxed whitespace-pre-line"><%= post.body || post.excerpt %></div>
+  </div>
+</article>
+
+<% if (more && more.length) { %>
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-8">More from GDCU</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% more.forEach(function(n){ %>
+      <a href="/news/<%= n.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:border-secondary transition-colors">
+        <span class="font-tagline text-label-sm text-secondary uppercase"><%= n.category %></span>
+        <h3 class="font-headline text-headline-sm text-primary mt-2 mb-2"><%= n.title %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= truncate(n.excerpt, 90) %></p>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>

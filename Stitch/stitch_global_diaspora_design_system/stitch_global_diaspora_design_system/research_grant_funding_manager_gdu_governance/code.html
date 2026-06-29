@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Research Grant &amp; Funding Manager | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Inter:wght@100..900&amp;family=Montserrat:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e5e2dc",
+                        "secondary-container": "#fdc355",
+                        "on-primary-fixed-variant": "#354766",
+                        "surface-container": "#f0eee8",
+                        "primary-container": "#071d3a",
+                        "tertiary": "#00030d",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-secondary-fixed": "#271900",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#fcf9f3",
+                        "on-tertiary-fixed": "#001a40",
+                        "inverse-surface": "#31312d",
+                        "secondary-fixed": "#ffdea9",
+                        "on-surface-variant": "#44474d",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-tertiary-container": "#6a85bb",
+                        "surface-tint": "#4c5f7f",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "inverse-primary": "#b4c7ec",
+                        "tertiary-container": "#001c43",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#051b38",
+                        "background": "#fcf9f3",
+                        "surface": "#fcf9f3",
+                        "outline": "#74777e",
+                        "on-secondary-container": "#725000",
+                        "outline-variant": "#c4c6ce",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "surface-container-high": "#ebe8e2",
+                        "primary": "#00030c",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1c1c18",
+                        "surface-dim": "#dcdad4",
+                        "secondary": "#7d5800",
+                        "on-surface": "#1c1c18",
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-container": "#7386a8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#d7e2ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "tagline": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f3;
+            color: #1c1c18;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scripture-divider {
+            position: relative;
+            text-align: center;
+        }
+        .scripture-divider::before, .scripture-divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 15%;
+            height: 1px;
+            background-color: #7d5800;
+        }
+        .scripture-divider::before { left: 20%; }
+        .scripture-divider::after { right: 20%; }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        .gold-border {
+            border: 1px solid #7d5800;
+        }
+        
+        .soft-navy-border {
+            border: 1px solid rgba(0, 3, 12, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(125, 88, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar (The Anchor) -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight leading-none">GDU</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Admin</p>
+</div>
+</div>
+<div class="space-y-2 flex-grow">
+<a class="flex items-center gap-3 p-3 transition-all duration-200 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 transition-all duration-200 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-body-md text-body-md">Financials</span>
+</a>
+<a class="flex items-center gap-3 p-3 transition-all duration-200 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Student Directory</span>
+</a>
+<a class="flex items-center gap-3 p-3 transition-all duration-200 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-body-md text-body-md">Curriculum</span>
+</a>
+<a class="flex items-center gap-3 p-3 transition-all duration-200 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-body-md text-body-md">Faculty Registry</span>
+</a>
+<a class="flex items-center gap-3 p-3 transition-all duration-200 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">System Settings</span>
+</a>
+</div>
+<button class="mt-4 bg-primary text-on-primary py-3 px-4 rounded font-tagline text-tagline uppercase flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Registration
+        </button>
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined text-error">logout</span>
+<span class="font-label-sm text-label-sm">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="h-20 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop sticky top-0 z-30">
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">Grant &amp; Funding Manager</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant italic">Excellence in Research for Divine Purpose</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-surface-container-low border-none focus:ring-1 focus:ring-secondary rounded-full py-2 pl-10 pr-4 w-64 text-body-md font-body-md" placeholder="Search grants or faculty..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_balance</span>
+</button>
+<div class="h-10 w-10 rounded-full overflow-hidden border border-secondary">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a distinguished university administrator in a formal navy blue suit. The lighting is soft and academic, set against a blurred background of a traditional university library with leather-bound books. The aesthetic is prestigious, high-end, and authoritative, reflecting the heritage of Global Diaspora University." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-zeINeBctQ7S3OUa90jYPBdmPdANIN6MLDk8HT7reJCfQpIRt4KnUfdme3bmNOEsPZGhL4vKi5Q4t2o3H6Q289zXs5ynd8aWWiH70fZ0JZa8DfZEjD0oqubG2lBes-6jBIUV8c7yxGveLKWdzg-LVj-8_mz5yiKx0GZnPY07yTZ9ThwYAWD0xfcAvUaMsm3Yg5G1tYQLOfhGSBUL-c2Bcol3RYLhf0xJe5bjBI8FClFIAnUl2liSVBN8UbkHSDFCTs0FcJh2ybxA"/>
+</div>
+</div>
+</div>
+</header>
+<section class="p-gutter max-w-container-max mx-auto space-y-10">
+<!-- Scripture Callout -->
+<div class="py-6 scripture-divider">
+<p class="font-headline-sm text-headline-sm italic text-secondary text-center px-20">
+                    "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."
+                </p>
+<p class="font-tagline text-tagline text-on-surface-variant text-center mt-2 uppercase tracking-[0.2em]">Jeremiah 29:11</p>
+</div>
+<!-- Dashboard Stats Bento -->
+<div class="bento-grid">
+<!-- Total Funding -->
+<div class="col-span-12 md:col-span-4 bg-primary text-on-primary p-8 rounded-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 scale-150 group-hover:scale-125 transition-transform">
+<span class="material-symbols-outlined text-[80px]">payments</span>
+</div>
+<div>
+<p class="font-tagline text-tagline text-secondary-container uppercase mb-2">Total Active Funding</p>
+<h3 class="font-display-lg text-display-lg">$42,850,000</h3>
+</div>
+<div class="mt-6 flex items-center gap-2 text-label-sm font-label-sm bg-primary-container p-2 rounded w-fit">
+<span class="material-symbols-outlined text-[16px] text-green-400">trending_up</span>
+<span>12.4% increase from Q3</span>
+</div>
+</div>
+<!-- Active Grants -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low soft-navy-border p-8 rounded-lg flex flex-col justify-between">
+<div>
+<p class="font-tagline text-tagline text-on-surface-variant uppercase mb-2">Active Grants</p>
+<h3 class="font-display-lg text-display-lg text-primary">156</h3>
+</div>
+<div class="flex gap-4 mt-4">
+<div class="flex-1 bg-surface-container-high p-3 rounded">
+<p class="text-label-sm font-label-sm text-on-surface-variant">NGO Sourced</p>
+<p class="font-headline-sm text-headline-sm">84</p>
+</div>
+<div class="flex-1 bg-surface-container-high p-3 rounded">
+<p class="text-label-sm font-label-sm text-on-surface-variant">Foundations</p>
+<p class="font-headline-sm text-headline-sm">72</p>
+</div>
+</div>
+</div>
+<!-- Pending Deadlines -->
+<div class="col-span-12 md:col-span-4 bg-white gold-border p-8 rounded-lg flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-tagline text-tagline text-secondary uppercase mb-1">Upcoming Deadlines</p>
+<h3 class="font-headline-md text-headline-md text-primary">Critical Submissions</h3>
+</div>
+<span class="material-symbols-outlined text-secondary">event_upcoming</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-2 border-b border-outline-variant">
+<div>
+<p class="font-body-md text-body-md font-bold text-primary">Global Health Initiative</p>
+<p class="text-label-sm font-label-sm text-error">Ends in 2 days</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant">
+<div>
+<p class="font-body-md text-body-md font-bold text-primary">AI Ethics Consortium</p>
+<p class="text-label-sm font-label-sm text-secondary">Ends in 9 days</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Visualization & Funding Mix -->
+<div class="grid grid-cols-12 gap-gutter">
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest soft-navy-border rounded-lg p-8">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Funding Distribution Trends</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Historical analysis of allocation across academic departments (2020 - 2024)</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container-high rounded text-label-sm font-label-sm hover:bg-outline-variant transition-colors">Export PDF</button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded text-label-sm font-label-sm">Filters</button>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-4 px-4">
+<!-- Simulated Chart -->
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-32 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-48 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Theology</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-40 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-32 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">STEM</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-24 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-56 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Medicine</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-16 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-40 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Ethics</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-48 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-24 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Policy</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
+<div class="w-full bg-secondary-container opacity-20 rounded-t-sm h-20 group-hover:opacity-40 transition-opacity"></div>
+<div class="w-full bg-primary rounded-t-sm h-36 group-hover:scale-y-105 transition-transform origin-bottom"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">History</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low soft-navy-border rounded-lg p-8">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6">Funding Source Mix</h3>
+<div class="relative h-64 w-64 mx-auto mb-8">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#e5e2dc" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#00030c" stroke-dasharray="65 100" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="16" stroke="#7d5800" stroke-dasharray="25 100" stroke-dashoffset="-65" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-headline-md">100%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Allocated</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="flex-grow font-body-md text-body-md">Private Foundations</span>
+<span class="font-bold">65%</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="flex-grow font-body-md text-body-md">International NGOs</span>
+<span class="font-bold">25%</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-surface-variant"></div>
+<span class="flex-grow font-body-md text-body-md">Government Grants</span>
+<span class="font-bold">10%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Ongoing Research Projects Table -->
+<div class="bg-white gold-border rounded-lg overflow-hidden">
+<div class="p-8 border-b border-outline-variant flex justify-between items-center">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Ongoing Research Projects</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Monitor live project status, financial burn rates, and academic milestones.</p>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-tagline text-tagline text-secondary">ACTIVE PROJECTS: 42</span>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<button class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">filter_list</span>
+                            Filter
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-left">
+<th class="p-4 font-tagline text-tagline text-on-surface-variant">Project Title &amp; PI</th>
+<th class="p-4 font-tagline text-tagline text-on-surface-variant">Total Budget</th>
+<th class="p-4 font-tagline text-tagline text-on-surface-variant">Budget Health</th>
+<th class="p-4 font-tagline text-tagline text-on-surface-variant">Milestone Status</th>
+<th class="p-4 font-tagline text-tagline text-on-surface-variant">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4">
+<p class="font-body-md text-body-md font-bold text-primary">Sustainable Energy for Rural Diasporas</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PI: Dr. Samuel Okonjo</p>
+</td>
+<td class="p-4 font-body-md text-body-md">$1,200,000</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-[75%] h-full bg-green-600"></div>
+</div>
+<span class="text-label-sm font-label-sm text-green-700">Healthy</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-primary-container text-on-primary-container rounded text-label-sm font-label-sm">Phase 2: Field Study</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:underline font-bold text-label-sm uppercase">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4">
+<p class="font-body-md text-body-md font-bold text-primary">Ancient Semitic Textual Digitization</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PI: Prof. Miriam Weiss</p>
+</td>
+<td class="p-4 font-body-md text-body-md">$450,000</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-[92%] h-full bg-secondary"></div>
+</div>
+<span class="text-label-sm font-label-sm text-secondary">Review Needed</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded text-label-sm font-label-sm">Phase 4: Archiving</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:underline font-bold text-label-sm uppercase">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4">
+<p class="font-body-md text-body-md font-bold text-primary">Biotech Ethics in Developing Nations</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PI: Dr. Aris Thorne</p>
+</td>
+<td class="p-4 font-body-md text-body-md">$2,800,000</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-[45%] h-full bg-green-600"></div>
+</div>
+<span class="text-label-sm font-label-sm text-green-700">Healthy</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-primary-container text-on-primary-container rounded text-label-sm font-label-sm">Phase 1: Literature Review</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:underline font-bold text-label-sm uppercase">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4">
+<p class="font-body-md text-body-md font-bold text-primary">Economic Resilience Post-Global Crisis</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">PI: Dr. Elena Rodriguez</p>
+</td>
+<td class="p-4 font-body-md text-body-md">$980,000</td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-[100%] h-full bg-error"></div>
+</div>
+<span class="text-label-sm font-label-sm text-error">Over Budget</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2 py-1 bg-error-container text-on-error-container rounded text-label-sm font-label-sm">Delayed</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:underline font-bold text-label-sm uppercase">Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Showing 4 of 42 Projects</span>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded hover:bg-white transition-colors">
+<span class="material-symbols-outlined">navigate_before</span>
+</button>
+<button class="p-2 border border-outline-variant rounded hover:bg-white transition-colors">
+<span class="material-symbols-outlined">navigate_next</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer (The Final Anchor) -->
+<footer class="w-full py-12 px-margin-desktop border-t border-outline-variant flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto gap-8">
+<div class="text-center md:text-left">
+<h4 class="font-tagline text-tagline text-primary uppercase mb-2">Global Diaspora University</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">© 2024 Global Diaspora University. All Rights Reserved. Established for Divine Purpose.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<div class="flex flex-col gap-2">
+<span class="font-tagline text-tagline text-primary uppercase text-[12px]">Legal</span>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-tagline text-tagline text-primary uppercase text-[12px]">Governance</span>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Institutional Accreditation</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary">school</span>
+</div>
+<span class="font-tagline text-tagline text-primary text-[10px] tracking-widest uppercase">Member of World Christian Education Alliance</span>
+</div>
+</footer>
+</section>
+</main>
+<!-- Contextual FAB (Restricted to Dashboard main views) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-transform z-50 group">
+<span class="material-symbols-outlined text-[32px]">post_add</span>
+<span class="absolute right-full mr-4 bg-primary text-on-primary px-4 py-2 rounded font-tagline text-tagline whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Submit New Grant</span>
+</button>
+<script>
+        // Micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Potential modal or detail toggle logic
+                console.log('Project selection triggered');
+            });
+        });
+    </script>
+</body></html>

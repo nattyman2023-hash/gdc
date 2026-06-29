@@ -1,0 +1,70 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Content</p><h1 class="font-headline text-headline-md text-primary">Library &amp; Resources</h1></div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1">
+    <form action="<%= editing ? '/admin/content/resources/'+editing.id : '/admin/content/resources' %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4 sticky top-24">
+      <h2 class="font-headline text-headline-sm text-primary"><%= editing ? 'Edit resource' : 'Add resource' %></h2>
+      <% const f = (k)=> (editing && editing[k]!=null) ? editing[k] : ''; %>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Title *</label>
+        <input name="title" required value="<%= f('title') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Type</label>
+          <select name="type" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+            <% ['link','document','video','book','journal'].forEach(function(t){ %><option value="<%= t %>" <%= f('type')===t?'selected':'' %>><%= t %></option><% }) %>
+          </select>
+        </div>
+        <div>
+          <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Category</label>
+          <input name="category" value="<%= f('category') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+        </div>
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">URL *</label>
+        <input name="url" required value="<%= f('url') %>" placeholder="https://…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Description</label>
+        <textarea name="description" rows="2" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= f('description') %></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Course (optional)</label>
+          <select name="course_id" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+            <option value="">General</option>
+            <% courses.forEach(function(c){ %><option value="<%= c.id %>" <%= String(f('course_id'))===String(c.id)?'selected':'' %>><%= c.title %></option><% }) %>
+          </select>
+        </div>
+        <div>
+          <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Sort</label>
+          <input name="sort_order" type="number" value="<%= f('sort_order')||0 %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+        </div>
+      </div>
+      <label class="flex items-center gap-2"><input type="checkbox" name="published" <%= (!editing || editing.published) ? 'checked' : '' %> class="rounded text-secondary" /> <span class="text-sm">Published</span></label>
+      <div class="flex gap-2">
+        <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold"><%= editing ? 'Save' : 'Add' %></button>
+        <% if (editing) { %><a href="/admin/content/resources" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a><% } %>
+      </div>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2 space-y-3">
+    <% if (!resources.length) { %><p class="text-on-surface-variant">No resources yet.</p><% } %>
+    <% resources.forEach(function(r){ %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex justify-between items-start gap-3">
+      <div>
+        <span class="font-tagline text-[11px] text-secondary uppercase"><%= r.type %><% if (r.category) { %> · <%= r.category %><% } %></span>
+        <p class="font-bold text-primary"><%= r.title %></p>
+        <a href="<%= r.url %>" target="_blank" class="text-on-surface-variant text-xs hover:text-secondary break-all"><%= truncate(r.url, 60) %></a>
+      </div>
+      <div class="flex items-center gap-2 whitespace-nowrap">
+        <% if (!r.published) { %><%- include('../_badge', { status: 'draft' }) %><% } %>
+        <a href="/admin/content/resources?edit=<%= r.id %>" class="text-secondary font-bold text-sm">Edit</a>
+        <form action="/admin/content/resources/<%= r.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this resource?');"><button class="text-error font-bold text-sm">Delete</button></form>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>

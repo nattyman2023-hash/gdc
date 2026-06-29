@@ -1,0 +1,268 @@
+<!-- Hero -->
+<section class="relative min-h-[88vh] flex flex-col items-center justify-center text-center px-margin-mobile lg:px-margin-desktop bg-primary text-on-primary overflow-hidden">
+  <img src="/img/generated/gdcu-student-courtyard-learning.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/45"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-primary/20 via-primary/45 to-primary/85"></div>
+  <div class="relative max-w-4xl mx-auto">
+    <p class="font-tagline text-tagline text-secondary mb-6 uppercase tracking-[0.3em]">Christ-centred · Online · Since 2019</p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg text-on-primary mb-8 leading-tight">Empowering a Global Diaspora for Divine Purpose</h1>
+    <div class="w-24 h-px bg-secondary mx-auto mb-8"></div>
+    <p class="font-body text-body-lg text-on-primary-container max-w-2xl mx-auto mb-10">Affordable, borderless theological and leadership education — open to learners in any nation, wherever your calling takes you.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+      <a href="/admissions/apply" class="bg-secondary text-on-secondary px-10 py-4 rounded font-bold text-body-md transition-all hover:shadow-lg active:scale-95">Apply Now</a>
+      <a href="/programs" class="border-2 border-secondary-fixed text-on-primary px-10 py-4 rounded font-bold text-body-md transition-all hover:bg-secondary-fixed hover:text-on-secondary-fixed active:scale-95">Explore Programs</a>
+    </div>
+    <!-- Trust / social proof -->
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-12 text-on-primary-container">
+      <% [['public','Learners in 50+ nations'],['payments','Genuinely affordable'],['menu_book','Christ-centred faculty'],['verified','Accreditation in progress']].forEach(function(b){ %>
+      <span class="inline-flex items-center gap-2 font-tagline text-label-sm uppercase tracking-wider"><span class="material-symbols-outlined text-secondary-fixed text-lg" style="font-variation-settings:'FILL' 1;"><%= b[0] %></span> <%= b[1] %></span>
+      <% }) %>
+    </div>
+  </div>
+  <a href="#why-gdcu" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-on-primary-container/70 hover:text-secondary-fixed animate-bounce" aria-label="Scroll down"><span class="material-symbols-outlined text-3xl">expand_more</span></a>
+</section>
+
+<!-- Why GDCU — value props -->
+<section id="why-gdcu" class="py-20 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Why GDCU</p>
+      <h2 class="font-headline text-headline-md text-primary">Education that travels with your calling</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+      <% [
+        ['public','Borderless','Study from any nation — no relocation, no borders. One global classroom.'],
+        ['savings','Affordable','Tuition kept intentionally low so cost is never the reason you stop.'],
+        ['menu_book','Christ-centred','Every programme is rooted in Scripture and taught by experienced, faith-driven faculty.'],
+        ['schedule','Flexible & online','Learn around work, family and ministry with mentorship-driven online study.']
+      ].forEach(function(v){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-7 hover:shadow-md hover:border-secondary/60 transition-all">
+        <div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-5 rounded-lg"><span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= v[0] %></span></div>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= v[1] %></h3>
+        <p class="text-on-surface-variant text-body-md leading-relaxed"><%= v[2] %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Study by qualification -->
+<section class="py-20 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Choose your path</p>
+      <h2 class="font-headline text-headline-md text-primary">Study by qualification</h2>
+      <p class="text-on-surface-variant text-body-md mt-3">From a short certificate to a doctorate — find the level that fits where you are now.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <% [
+        ['Certificate','Certificate','workspace_premium'],
+        ['Diploma','Diploma','description'],
+        ['Degree','Undergraduate','school'],
+        ['Masters','Masters','auto_stories'],
+        ['PhD','Doctorate','science']
+      ].forEach(function(c){ var n = (typeof levelCounts !== 'undefined' && levelCounts[c[1]]) ? levelCounts[c[1]] : 0; %>
+      <a href="/programs?level=<%= encodeURIComponent(c[1]) %>" class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 text-center hover:border-secondary hover:shadow-md transition-all flex flex-col items-center">
+        <div class="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:text-on-secondary transition-colors"><span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;"><%= c[2] %></span></div>
+        <h3 class="font-headline text-headline-sm text-primary"><%= c[0] %></h3>
+        <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1"><%= n %> programme<%= n===1?'':'s' %></p>
+      </a>
+      <% }) %>
+    </div>
+    <div class="text-center mt-10">
+      <a href="/programs" class="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">Browse all programmes <span class="material-symbols-outlined">arrow_forward</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Open days callout -->
+<section class="py-10 bg-surface-container-low">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="bg-secondary-container text-on-secondary-container rounded-xl p-6 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-5">
+      <div class="flex items-center gap-4 text-center sm:text-left">
+        <span class="material-symbols-outlined text-4xl shrink-0" style="font-variation-settings:'FILL' 1;">co_present</span>
+        <div>
+          <% if (typeof openDaysCount !== 'undefined' && openDaysCount > 0) { %>
+            <p class="font-headline text-headline-sm"><%= openDaysCount %> upcoming open day<%= openDaysCount===1?'':'s' %> — meet us online, free</p>
+            <% if (nextOpenDay) { %><p class="text-sm opacity-80">Next: <%= nextOpenDay.title %> · <%= formatDate(nextOpenDay.starts_at) %></p><% } %>
+          <% } else { %>
+            <p class="font-headline text-headline-sm">Open days are coming soon</p>
+            <p class="text-sm opacity-80">Register your interest and we’ll invite you to the next one.</p>
+          <% } %>
+        </div>
+      </div>
+      <a href="/open-days" class="bg-primary text-on-primary px-7 py-3 rounded font-bold shrink-0 hover:opacity-90 active:scale-95 transition-all">See open days</a>
+    </div>
+  </div>
+</section>
+
+<!-- Scripture callout -->
+<section class="py-16 bg-surface-container-low">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop text-center">
+    <div class="w-16 h-px bg-secondary-fixed-dim mx-auto mb-6"></div>
+    <blockquote class="font-headline text-headline-md italic text-primary-container max-w-3xl mx-auto">"Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."</blockquote>
+    <p class="font-tagline text-tagline text-on-surface-variant mt-4">— Matthew 28:19</p>
+    <div class="w-16 h-px bg-secondary-fixed-dim mx-auto mt-6"></div>
+  </div>
+</section>
+
+<!-- Mission -->
+<section class="py-24 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+    <div class="md:col-span-6">
+      <p class="font-tagline text-tagline text-secondary mb-4 uppercase">Our Philosophy</p>
+      <h2 class="font-headline text-headline-md text-primary mb-6">A Legacy of Faith and Excellence</h2>
+      <p class="font-body text-body-md text-on-surface-variant mb-6 leading-relaxed">Serving learners since <strong>2019</strong>, Global Diaspora Christian University is a beacon for the international community, bridging the gap between spiritual calling and professional excellence. Founded on the bedrock of Christian values, we provide an online academic environment that nurtures both the intellect and the soul.</p>
+      <p class="font-body text-body-md text-on-surface-variant mb-6 leading-relaxed">After years in the academic field, we realised we could offer Christ-centred education without borders — to anyone, anywhere — and keep it genuinely affordable. That conviction shapes everything we do.</p>
+      <ul class="space-y-4 mb-8">
+        <% ['Borderless learning — open to students in any nation.', 'Affordable tuition that removes cost as a barrier.', 'Mentorship-driven, flexible online learning.'].forEach(function(point){ %>
+        <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">star</span>
+          <span class="font-body text-body-md"><%= point %></span>
+        </li>
+        <% }) %>
+      </ul>
+      <a class="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all" href="/about">Learn more about our values <span class="material-symbols-outlined">arrow_forward</span></a>
+    </div>
+    <div class="md:col-span-6 relative h-[420px]">
+      <div class="absolute inset-0 bg-surface-container-high rounded translate-x-4 translate-y-4"></div>
+      <div class="absolute inset-0 w-full h-full rounded shadow-lg bg-primary-container overflow-hidden">
+        <img src="/img/generated/gdcu-student-video-lesson-home.png" alt="Student studying at home while watching an online lesson" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured programs -->
+<section class="py-24 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+      <div>
+        <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Academic Excellence</p>
+        <h2 class="font-headline text-headline-md text-primary">Featured Academic Programs</h2>
+      </div>
+      <a href="/programs" class="text-primary font-bold border-b border-primary pb-1">View all programs</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% featured.forEach(function(p){ %>
+      <a href="/programs/<%= p.slug %>" class="bg-surface-container-lowest border border-outline-variant flex flex-col group hover:border-secondary hover:shadow-md transition-all rounded-xl overflow-hidden">
+        <div class="h-40 bg-primary-container overflow-hidden">
+          <img src="<%= imageFor('program', p) %>" alt="" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+        </div>
+        <div class="p-7 flex flex-col flex-1">
+          <div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-6 rounded">
+            <span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= p.icon || 'school' %></span>
+          </div>
+          <span class="font-tagline text-label-sm text-secondary uppercase mb-2"><%= p.level %></span>
+          <h3 class="font-headline text-headline-sm text-primary mb-4"><%= p.title %></h3>
+          <p class="text-on-surface-variant text-body-md mb-8"><%= truncate(p.summary, 120) %></p>
+          <div class="mt-auto flex items-center justify-between">
+            <span class="font-bold text-primary"><%= formatMoney(p.tuition, p.tuition_currency) %></span>
+            <span class="flex items-center gap-2 font-bold group-hover:gap-3 transition-all text-secondary">Explore <span class="material-symbols-outlined">arrow_right_alt</span></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Community stats -->
+<section class="py-24 relative overflow-hidden bg-primary">
+  <div class="relative z-10 max-w-4xl mx-auto px-margin-mobile lg:px-margin-desktop text-center text-on-primary">
+    <p class="font-tagline text-tagline text-secondary-fixed mb-6 uppercase">Connect &amp; Grow</p>
+    <h2 class="font-display text-display-lg-mobile md:text-display-lg mb-8">Join Our Global Spiritual Community</h2>
+    <p class="font-body text-body-lg text-on-primary-container mb-12 max-w-2xl mx-auto">Beyond the classroom, GDCU is a family. We connect believers across continents to pray, serve, and impact their local communities through the power of unified faith.</p>
+    <div class="flex flex-wrap justify-center gap-8">
+      <% [['50+','Countries Represented'],['12k+','Active Alumni'],['100%','Mission Driven']].forEach(function(s, i){ %>
+        <% if (i>0){ %><div class="w-px h-16 bg-outline-variant/30 hidden md:block"></div><% } %>
+        <div class="text-center">
+          <p class="font-display text-display-lg-mobile md:text-display-lg text-secondary-fixed mb-1"><%= s[0] %></p>
+          <p class="font-tagline text-tagline uppercase"><%= s[1] %></p>
+        </div>
+      <% }) %>
+    </div>
+    <a href="/student-life" class="inline-block mt-16 bg-secondary text-on-secondary px-12 py-4 rounded font-bold text-body-md hover:scale-105 transition-transform">Get Involved</a>
+  </div>
+</section>
+
+<!-- Latest news -->
+<% if (latestNews && latestNews.length) { %>
+<section class="py-24 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Media Center</p>
+        <h2 class="font-headline text-headline-md text-primary">News &amp; Insights</h2>
+      </div>
+      <a href="/news" class="text-primary font-bold border-b border-primary pb-1 hidden sm:inline">All news</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% latestNews.forEach(function(n){ %>
+      <%
+        const newsImage = imageFor('news', n);
+      %>
+      <a href="/news/<%= n.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary hover:shadow-md transition-all">
+        <div class="h-40 bg-primary-container overflow-hidden">
+          <img src="<%= newsImage %>" alt="" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+        </div>
+        <div class="p-6">
+          <span class="font-tagline text-label-sm text-secondary uppercase"><%= n.category %></span>
+          <h3 class="font-headline text-headline-sm text-primary my-3 group-hover:text-secondary transition-colors"><%= n.title %></h3>
+          <p class="text-on-surface-variant text-body-md mb-4"><%= truncate(n.excerpt, 110) %></p>
+          <p class="font-tagline text-label-sm text-on-surface-variant"><%= formatDate(n.published_at) %></p>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- How it works -->
+<section class="py-24 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Your journey</p>
+      <h2 class="font-headline text-headline-md text-primary">From enquiry to graduation</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+      <% [
+        ['Apply','Tell us about your calling and submit a simple online application.'],
+        ['Start learning','Access your courses, schedule and resources in your student portal.'],
+        ['Be mentored','Work through weekly content and assessments with faculty support.'],
+        ['Graduate','Complete your programme and step out equipped to serve and lead.']
+      ].forEach(function(s, i){ %>
+      <div class="relative">
+        <div class="flex items-center gap-4 mb-4">
+          <span class="w-11 h-11 shrink-0 rounded-full bg-primary text-on-primary font-display text-headline-sm flex items-center justify-center"><%= i+1 %></span>
+          <% if (i < 3) { %><span class="hidden md:block flex-1 h-px bg-outline-variant"></span><% } %>
+        </div>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= s[0] %></h3>
+        <p class="text-on-surface-variant text-body-md leading-relaxed"><%= s[1] %></p>
+      </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-12">
+      <a href="/how-it-works" class="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">See how online learning works <span class="material-symbols-outlined">arrow_forward</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Admission CTA -->
+<section class="py-24 bg-surface-container-lowest">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop border border-outline-variant p-8 md:p-16 relative overflow-hidden rounded-lg">
+    <div class="absolute top-0 right-0 w-64 h-64 border-t-8 border-r-8 border-secondary-fixed-dim/20 -translate-y-8 translate-x-8"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
+      <div>
+        <h2 class="font-headline text-headline-md text-primary mb-6">Begin Your Journey Today</h2>
+        <p class="font-body text-body-md text-on-surface-variant mb-8 leading-relaxed">Applications for the upcoming intake are now open. Step into a community that values your calling and equips you for global leadership.</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/admissions/apply" class="bg-primary text-on-primary px-8 py-3 rounded font-bold">Apply Now</a>
+          <a href="/admissions" class="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all">Admissions &amp; Tuition <span class="material-symbols-outlined">chevron_right</span></a>
+        </div>
+      </div>
+      <%- include('../partials/request-info', { programs: featured, compact: true }) %>
+    </div>
+  </div>
+</section>

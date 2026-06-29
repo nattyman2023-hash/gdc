@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alumni Marketplace | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#4c5f7f",
+                      "on-primary-fixed": "#051b38",
+                      "surface-variant": "#e5e2dc",
+                      "surface-container-high": "#ebe8e2",
+                      "surface-container": "#f0eee8",
+                      "secondary-fixed": "#ffdea9",
+                      "on-secondary-container": "#725000",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "on-secondary-fixed": "#271900",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1c1c18",
+                      "inverse-surface": "#31312d",
+                      "surface": "#fcf9f3",
+                      "outline": "#74777e",
+                      "primary-fixed": "#d6e3ff",
+                      "on-surface": "#1c1c18",
+                      "inverse-primary": "#b4c7ec",
+                      "secondary": "#7d5800",
+                      "on-surface-variant": "#44474d",
+                      "on-primary-fixed-variant": "#354766",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f6f3ed",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "primary": "#00030c",
+                      "on-tertiary-fixed": "#001a40",
+                      "tertiary": "#00030d",
+                      "on-primary-container": "#7386a8",
+                      "secondary-container": "#fdc355",
+                      "surface-dim": "#dcdad4",
+                      "primary-container": "#071d3a",
+                      "outline-variant": "#c4c6ce",
+                      "tertiary-fixed": "#d7e2ff",
+                      "tertiary-container": "#001c43",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "surface-container-highest": "#e5e2dc",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "on-tertiary-container": "#6a85bb",
+                      "surface-bright": "#fcf9f3",
+                      "background": "#fcf9f3",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f3f0ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "tagline": ["Montserrat"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg-mobile": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Playfair Display"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .business-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .business-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(7, 29, 58, 0.08);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .scripture-divider {
+            position: relative;
+            text-align: center;
+        }
+        .scripture-divider::before, .scripture-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 80px;
+            height: 1px;
+            background-color: #7d5800;
+        }
+        .scripture-divider::before { left: -100px; }
+        .scripture-divider::after { right: -100px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50 h-20">
+<div class="flex justify-between items-center px-gutter w-full max-w-container-max mx-auto h-full">
+<div class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">
+                Global Diaspora University
+            </div>
+<nav class="hidden md:flex space-x-8 items-center">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">Programs</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">Research</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">About</a>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-body-md hover:opacity-90 transition-all scale-95 duration-150">
+                    Apply Now
+                </button>
+</nav>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative py-24 overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 opacity-5">
+
+</div>
+<div class="max-w-container-max mx-auto px-gutter relative z-10 text-center">
+<div class="mb-4 inline-block">
+<span class="font-tagline text-tagline bg-secondary text-on-secondary px-4 py-1 rounded-sm uppercase">Global Network</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary mb-6 max-w-3xl mx-auto">
+                    The Global Alumni Marketplace
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+                    A collaborative ecosystem for GDU graduates to trade services, fund startups, and showcase the brilliance of the diaspora.
+                </p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-lg font-body-md flex items-center gap-2 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">add_business</span>
+                        List Your Business
+                    </button>
+<button class="border-2 border-secondary text-primary px-8 py-4 rounded-lg font-body-md hover:bg-secondary-container transition-all">
+                        Explore Directory
+                    </button>
+</div>
+</div>
+</section>
+<!-- Scripture Callout -->
+<section class="py-16 bg-surface">
+<div class="max-w-3xl mx-auto px-gutter text-center">
+<div class="scripture-divider inline-block">
+<p class="font-headline-sm italic text-secondary mb-2">"As every man hath received the gift, even so minister the same one to another, as good stewards of the manifold grace of God."</p>
+<span class="font-tagline text-tagline opacity-60 uppercase">1 Peter 4:10</span>
+</div>
+</div>
+</section>
+<!-- Featured Entrepreneur Spotlight -->
+<section class="py-20 px-gutter max-w-container-max mx-auto">
+<div class="bg-surface-container-lowest border border-secondary rounded-xl p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center shadow-sm">
+<div class="w-full md:w-1/2">
+<div class="mb-4">
+<span class="font-tagline text-tagline text-secondary border border-secondary px-3 py-1">Featured Entrepreneur of the Month</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Dr. Elena Vance, Class of '14</h2>
+<p class="font-tagline text-tagline text-secondary mb-6">CEO, Lumina MedTech Diaspora</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+                        Pioneering accessible diagnostic tools for underserved rural communities in sub-Saharan Africa. Dr. Vance exemplifies the GDU spirit of innovation fueled by divine mandate.
+                    </p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-body-md">Read the Interview</button>
+<button class="text-secondary font-tagline text-tagline flex items-center gap-2">View Profile <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<div class="w-full md:w-1/2 aspect-square overflow-hidden rounded-lg">
+<img alt="Entrepreneur Spotlight" class="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-700" data-alt="A professional and confident African woman CEO sitting in a modern, sunlit glass office with a blurred cityscape in the background. She is dressed in a navy executive blazer, reflecting an academic and corporate professional aesthetic. The lighting is soft and golden, highlighting a sophisticated atmosphere of leadership and innovation within the Global Diaspora University network." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_C_jkXCj32Nq4Q1lVsEnlNQ6ZuPWTW-0neBYpYTOcpowG0TaypZm8xKGdJwj-7sgHZ5_TSltPjg89X1XS0i547VMXRm0GaQ7SVjYSE694VpQR_uJmTAu6aoiatk9BIbiaXk3ZOynvh7GnlaG4E1IfcJ-_4HsJ1N8PiPIRx7KLgvYZIT2buIR7XBOHJo2W70BdwHyvZE-O18SmjJiZ9BpoWlSeYSqYtzErF2aZWhiSfk76JyO6s-UIFzpiuaW00ZnV3r96NPOqxTM"/>
+</div>
+</div>
+</section>
+<!-- Business Directory (Bento Style) -->
+<section class="py-20 bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Alumni-Owned Businesses</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Connecting global expertise with local roots.</p>
+</div>
+<div class="flex gap-2">
+<span class="p-2 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</span>
+<span class="p-2 border border-outline-variant rounded-full cursor-pointer hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">search</span>
+</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<!-- Tech -->
+<div class="business-card-hover bg-surface-container-lowest border border-outline-variant p-6 rounded-lg flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">devices</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Ethos Systems</h3>
+<p class="font-tagline text-tagline text-on-surface-variant mb-4 uppercase">Technology &amp; AI</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Secure cloud infrastructure designed for faith-based non-profits across the diaspora.</p>
+<div class="pt-6 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-primary">Nairobi, Kenya</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer">open_in_new</span>
+</div>
+</div>
+<!-- Ministry -->
+<div class="business-card-hover bg-surface-container-lowest border border-outline-variant p-6 rounded-lg flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">church</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Vessels Global</h3>
+<p class="font-tagline text-tagline text-on-surface-variant mb-4 uppercase">Ministry Support</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Strategic consulting for church plants and community development projects in Europe.</p>
+<div class="pt-6 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-primary">London, UK</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer">open_in_new</span>
+</div>
+</div>
+<!-- Education -->
+<div class="business-card-hover bg-surface-container-lowest border border-outline-variant p-6 rounded-lg flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">history_edu</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Diaspora Tutors</h3>
+<p class="font-tagline text-tagline text-on-surface-variant mb-4 uppercase">Education</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Bridging the gap for diaspora children through native language and cultural history curricula.</p>
+<div class="pt-6 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-primary">Atlanta, USA</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer">open_in_new</span>
+</div>
+</div>
+<!-- Finance -->
+<div class="business-card-hover bg-surface-container-lowest border border-outline-variant p-6 rounded-lg flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">payments</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">GDU Credit Union</h3>
+<p class="font-tagline text-tagline text-on-surface-variant mb-4 uppercase">Finance</p>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Mutual aid and small business micro-loans specifically for GDU verified alumni.</p>
+<div class="pt-6 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-primary">Global</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer">open_in_new</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Exchange & Startup Pitch Board (Asymmetric) -->
+<section class="py-24 max-w-container-max mx-auto px-gutter">
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- Service Exchange -->
+<div class="lg:w-2/3">
+<h2 class="font-headline-md text-headline-md text-primary mb-8 border-l-4 border-secondary pl-6">Service Exchange</h2>
+<div class="space-y-6">
+<div class="bg-surface border-b border-outline-variant py-6 group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-secondary transition-colors">Legal Consultation: IP in African Markets</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Offered by Julian K. ('09) • High-level legal vetting for diaspora entrepreneurs.</p>
+</div>
+<div class="text-right">
+<span class="font-tagline text-tagline text-secondary block">$120/hr</span>
+<span class="font-label-sm text-label-sm bg-secondary-container px-2 py-1 rounded">Alumni Rate</span>
+</div>
+</div>
+</div>
+<div class="bg-surface border-b border-outline-variant py-6 group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-secondary transition-colors">Digital Strategy &amp; Growth Marketing</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Offered by Sarah M. ('18) • Full-funnel strategy for cross-border startups.</p>
+</div>
+<div class="text-right">
+<span class="font-tagline text-tagline text-secondary block">$85/hr</span>
+<span class="font-label-sm text-label-sm bg-secondary-container px-2 py-1 rounded">Alumni Rate</span>
+</div>
+</div>
+</div>
+<div class="bg-surface py-6 group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-secondary transition-colors">Theological Research &amp; Manuscript Editing</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Offered by Pastor David O. ('01) • Specialized editing for ministry publications.</p>
+</div>
+<div class="text-right">
+<span class="font-tagline text-tagline text-secondary block">Variable</span>
+<span class="font-label-sm text-label-sm bg-secondary-container px-2 py-1 rounded">Alumni Rate</span>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-8 text-primary font-tagline text-tagline flex items-center gap-2 hover:translate-x-2 transition-transform">
+                        Explore all 150+ Services <span class="material-symbols-outlined">trending_flat</span>
+</button>
+</div>
+<!-- Startup Pitch Board -->
+<div class="lg:w-1/3">
+<div class="bg-primary text-on-primary p-8 rounded-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 opacity-10">
+<span class="material-symbols-outlined !text-[120px] -rotate-12">rocket_launch</span>
+</div>
+<h2 class="font-headline-md text-headline-md mb-6">Pitch Board</h2>
+<p class="font-body-md text-body-md opacity-80 mb-8">Invest in the next generation of diaspora ventures. Funding open for alumni only.</p>
+<div class="space-y-6">
+<div class="border-b border-on-primary/20 pb-4">
+<h5 class="font-label-sm text-label-sm text-secondary-fixed mb-1 uppercase tracking-widest">Active Seed Round</h5>
+<h4 class="font-body-lg font-bold mb-2">Solar Diaspora Grid</h4>
+<div class="w-full bg-on-primary/10 h-1 rounded-full mb-2">
+<div class="bg-secondary h-full rounded-full" style="width: 75%"></div>
+</div>
+<p class="font-label-sm text-label-sm opacity-60">75% of $500k goal reached</p>
+</div>
+<div class="border-b border-on-primary/20 pb-4">
+<h5 class="font-label-sm text-label-sm text-secondary-fixed mb-1 uppercase tracking-widest">In Preparation</h5>
+<h4 class="font-body-lg font-bold mb-2">HealthPass Africa</h4>
+<p class="font-body-md text-body-md opacity-60">Pre-seed stage, seeking mentors and technical partners.</p>
+</div>
+</div>
+<button class="mt-8 w-full bg-secondary text-on-secondary py-3 rounded-lg font-body-md hover:bg-secondary-fixed-dim transition-colors">
+                            Submit a Pitch
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Call to Action Banner -->
+<section class="py-20 bg-surface-container-highest">
+<div class="max-w-container-max mx-auto px-gutter text-center">
+<div class="max-w-3xl mx-auto">
+<h2 class="font-display-lg text-display-lg text-primary mb-6">Expand Your Reach Beyond Borders</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 italic">
+                        "Two are better than one; because they have a good reward for their labour." — Ecclesiastes 4:9
+                    </p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">1,200+</h3>
+<p class="font-tagline text-tagline uppercase opacity-60">Verified Businesses</p>
+</div>
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">$4.2M</h3>
+<p class="font-tagline text-tagline uppercase opacity-60">Funding Facilitated</p>
+</div>
+<div class="p-6">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">84</h3>
+<p class="font-tagline text-tagline uppercase opacity-60">Countries Represented</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary w-full py-12 px-gutter flex flex-col items-center space-y-6">
+<div class="font-headline-md text-headline-md text-secondary-fixed">Global Diaspora University</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors font-tagline text-tagline uppercase" href="#">Accreditation</a>
+<a class="text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors font-tagline text-tagline uppercase" href="#">Privacy Policy</a>
+<a class="text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors font-tagline text-tagline uppercase underline" href="#">Giving</a>
+<a class="text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors font-tagline text-tagline uppercase" href="#">Contact Us</a>
+</div>
+<div class="font-tagline text-tagline text-on-primary-fixed-variant opacity-80 pt-8 border-t border-on-primary/10 w-full text-center">
+            © 2024 Global Diaspora University. Commissioned for a Higher Purpose.
+        </div>
+</footer>
+<!-- SideNavBar (Admin Portal - Hidden by default but structure maintained) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-24 pb-8 bg-surface-container-low w-64 -translate-x-full lg:hidden transition-transform z-40 border-r border-outline-variant">
+<div class="px-6 mb-8">
+<div class="font-headline-sm text-headline-sm text-primary">GDU Admin</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase">Marketplace Portal</div>
+</div>
+<nav class="flex-grow space-y-2 px-2">
+<div class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 flex items-center gap-4">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 rounded-lg flex items-center gap-4 transition-all">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm">Directory</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 rounded-lg flex items-center gap-4 transition-all">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">Financials</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest px-4 py-3 rounded-lg flex items-center gap-4 transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+</aside>
+<script>
+        // Micro-interactions for the business cards
+        document.querySelectorAll('.business-card-hover').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.material-symbols-outlined');
+                if(icon) {
+                    icon.style.transform = 'scale(1.1) rotate(-5deg)';
+                    icon.style.transition = 'transform 0.3s ease';
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.material-symbols-outlined');
+                if(icon) {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                }
+            });
+        });
+
+        // Simple scroll observer for animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

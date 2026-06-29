@@ -1,0 +1,36 @@
+<div class="mb-6">
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Faculty Workspace</p>
+  <h1 class="font-headline text-headline-md text-primary">Welcome, Dr. <%= currentUser.name.split(' ')[0] %></h1>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <% const cards = [['Courses', courses.length, 'menu_book'],['Students', totalStudents, 'groups'],['Assessments', courses.reduce((s,c)=>s+c.quiz_count,0), 'quiz'],['Avg. progress', (courses.length ? Math.round(courses.reduce((s,c)=>s+c.avg_progress,0)/courses.length) : 0)+'%', 'trending_up']]; %>
+  <% cards.forEach(function(c){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <span class="material-symbols-outlined text-secondary"><%= c[2] %></span>
+    <p class="font-headline text-headline-md text-primary leading-none mt-2"><%= c[1] %></p>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1"><%= c[0] %></p>
+  </div>
+  <% }) %>
+</div>
+
+<h2 class="font-headline text-headline-sm text-primary mb-4">My Courses</h2>
+<% if (!courses.length) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">You are not assigned to any courses yet. An administrator can assign you as a course instructor.</div>
+<% } %>
+<div class="grid md:grid-cols-2 gap-4">
+  <% courses.forEach(function(c){ %>
+  <a href="/faculty/courses/<%= c.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:border-secondary transition-colors">
+    <div class="flex items-center justify-between mb-3">
+      <span class="font-tagline text-label-sm text-secondary uppercase"><%= c.code || 'Course' %></span>
+      <span class="material-symbols-outlined text-secondary"><%= c.icon || 'menu_book' %></span>
+    </div>
+    <h3 class="font-headline text-headline-sm text-primary mb-3"><%= c.title %></h3>
+    <div class="flex items-center gap-4 text-sm text-on-surface-variant">
+      <span><span class="material-symbols-outlined text-base align-middle">groups</span> <%= c.student_count %> students</span>
+      <span><span class="material-symbols-outlined text-base align-middle">trending_up</span> <%= c.avg_progress %>% avg</span>
+      <span><span class="material-symbols-outlined text-base align-middle">quiz</span> <%= c.quiz_count %></span>
+    </div>
+  </a>
+  <% }) %>
+</div>

@@ -1,0 +1,38 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Search</p><h1 class="font-headline text-headline-md text-primary">Results for "<%= q %>"</h1></div>
+
+<% if (!q) { %>
+  <p class="text-on-surface-variant">Type a name, email or reference in the search box above.</p>
+<% } else { %>
+  <% const total = leads.length + applications.length + students.length; %>
+  <p class="text-on-surface-variant text-sm mb-6"><%= total %> result<%= total===1?'':'s' %> found.</p>
+
+  <div class="space-y-8">
+    <div>
+      <h2 class="font-headline text-headline-sm text-primary mb-2">Applications (<%= applications.length %>)</h2>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+        <% if (!applications.length) { %><p class="p-4 text-on-surface-variant text-sm">None.</p><% } %>
+        <% applications.forEach(function(a){ %>
+        <a href="/admin/applications/<%= a.id %>" class="flex items-center justify-between p-4 hover:bg-surface-container-low"><div><p class="font-bold text-primary"><%= a.first_name %> <%= a.last_name %></p><p class="text-xs text-on-surface-variant"><%= a.reference %> · <%= a.email %></p></div><span class="material-symbols-outlined text-secondary">chevron_right</span></a>
+        <% }) %>
+      </div>
+    </div>
+    <div>
+      <h2 class="font-headline text-headline-sm text-primary mb-2">Leads (<%= leads.length %>)</h2>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+        <% if (!leads.length) { %><p class="p-4 text-on-surface-variant text-sm">None.</p><% } %>
+        <% leads.forEach(function(l){ %>
+        <a href="/admin/leads/<%= l.id %>" class="flex items-center justify-between p-4 hover:bg-surface-container-low"><div><p class="font-bold text-primary"><%= l.first_name %> <%= l.last_name || '' %></p><p class="text-xs text-on-surface-variant"><%= l.email %></p></div><span class="material-symbols-outlined text-secondary">chevron_right</span></a>
+        <% }) %>
+      </div>
+    </div>
+    <div>
+      <h2 class="font-headline text-headline-sm text-primary mb-2">Students (<%= students.length %>)</h2>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+        <% if (!students.length) { %><p class="p-4 text-on-surface-variant text-sm">None.</p><% } %>
+        <% students.forEach(function(s){ %>
+        <a href="/admin/students/<%= s.id %>" class="flex items-center justify-between p-4 hover:bg-surface-container-low"><div><p class="font-bold text-primary"><%= s.first_name %> <%= s.last_name %></p><p class="text-xs text-on-surface-variant"><%= s.email %></p></div><span class="material-symbols-outlined text-secondary">chevron_right</span></a>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+<% } %>

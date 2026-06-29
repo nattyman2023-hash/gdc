@@ -1,0 +1,78 @@
+<a href="/admin" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Admin Dashboard</a>
+
+<div class="max-w-6xl mx-auto">
+  <h1 class="font-headline text-headline-lg text-primary mb-2">Essay Submissions</h1>
+  <p class="text-on-surface-variant mb-6">Review and grade module-end essays</p>
+
+  <% if (flash.success && flash.success.length) { %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div>
+  <% } %>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="px-6 py-4 border-b border-outline-variant">
+      <div class="flex gap-4 text-sm">
+        <span class="font-medium">Total: <%= essays.length %></span>
+        <span class="text-green-700">Graded: <%= essays.filter(function(e){ return e.status === 'graded' }).length %></span>
+        <span class="text-amber-700">Pending: <%= essays.filter(function(e){ return e.status === 'submitted' }).length %></span>
+      </div>
+    </div>
+    <div class="divide-y divide-outline-variant">
+      <% essays.forEach(function(essay){ %>
+      <div class="p-6 hover:bg-surface-container-lowest transition-colors">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="font-semibold"><%= essay.first_name %> <%= essay.last_name %></h3>
+              <span class="text-xs text-on-surface-variant"><%= essay.email %></span>
+              <span class="px-2 py-0.5 rounded-full text-xs font-medium <%= essay.status === 'graded' ? 'bg-green-100 text-green-800' : essay.status === 'returned' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800' %>">
+                <%= essay.status %>
+              </span>
+            </div>
+            <p class="text-sm text-on-surface-variant mb-1">Module: <strong><%= essay.module_title %></strong></p>
+            <p class="text-sm text-on-surface-variant mb-2">Submitted: <%= new Date(essay.submitted_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+            <div class="bg-gray-50 rounded p-3 mb-3 max-h-32 overflow-y-auto">
+              <p class="text-sm whitespace-pre-wrap"><%= essay.body %></p>
+            </div>
+            <% if (essay.score !== null) { %>
+              <p class="text-sm"><span class="font-medium">Score:</span> <%= essay.score %></p>
+            <% } %>
+            <% if (essay.feedback) { %>
+              <p class="text-sm text-on-surface-variant mt-1"><span class="font-medium">Feedback:</span> <%= essay.feedback %></p>
+            <% } %>
+          </div>
+          <div class="ml-4">
+            <button onclick="document.getElementById('grade-<%= essay.id %>').classList.toggle('hidden')" class="px-4 py-2 bg-primary text-on-primary rounded text-sm font-medium hover:opacity-90">
+              <%= essay.status === 'graded' ? 'Re-grade' : 'Grade' %>
+            </button>
+          </div>
+        </div>
+        <!-- Grade Form -->
+        <div id="grade-<%= essay.id %>" class="hidden mt-4 bg-gray-50 rounded-lg p-4">
+          <form method="POST" action="/admin/essays/<%= essay.id %>/grade" class="space-y-3">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Score (0-100)</label>
+                <input type="number" name="score" value="<%= essay.score || '' %>" min="0" max="100" class="w-full px-3 py-2 border rounded">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Feedback</label>
+              <textarea name="feedback" rows="3" class="w-full px-3 py-2 border rounded"><%= essay.feedback || '' %></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button type="button" onclick="document.getElementById('grade-<%= essay.id %>').classList.add('hidden')" class="px-4 py-2 border rounded text-sm">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded text-sm font-bold">Submit Grade</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <% }) %>
+      <% if (essays.length === 0) { %>
+        <div class="p-12 text-center text-on-surface-variant">
+          <span class="material-symbols-outlined text-4xl mb-2">edit_note</span>
+          <p>No essay submissions yet.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>

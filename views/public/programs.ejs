@@ -1,0 +1,59 @@
+<%- include('../partials/page-hero', { heroTitle: 'Academic Programs', heroTagline: 'Educate · Equip · Empower', heroText: 'Affordable, online, Christ-centred programmes across theology, leadership and enterprise.' }) %>
+
+<section class="py-12 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <!-- Filters -->
+    <form method="get" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-10 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <div class="md:col-span-2">
+        <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Search</label>
+        <input name="q" value="<%= filters.q %>" placeholder="Search programmes…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Level</label>
+        <select name="level" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">All levels</option>
+          <% levels.forEach(function(l){ %><option value="<%= l %>" <%= filters.level===l?'selected':'' %>><%= l %></option><% }) %>
+        </select>
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">School</label>
+        <select name="school" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">All schools</option>
+          <% schools.forEach(function(s){ %><option value="<%= s %>" <%= filters.school===s?'selected':'' %>><%= s %></option><% }) %>
+        </select>
+      </div>
+      <div class="md:col-span-4 flex gap-3">
+        <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold">Filter</button>
+        <a href="/programs" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+      </div>
+    </form>
+
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-6"><%= programs.length %> program<%= programs.length===1?'':'s' %> found</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% if (!programs.length) { %>
+        <p class="text-on-surface-variant col-span-full">No programmes match your filters. <a href="/programs" class="text-secondary font-bold underline">Clear filters</a>.</p>
+      <% } %>
+      <% programs.forEach(function(p){ %>
+      <a href="/programs/<%= p.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:border-secondary hover:shadow-md transition-all <%= p.featured ? 'border-t-4 border-t-secondary' : '' %>">
+        <div class="h-36 bg-primary-container overflow-hidden">
+          <img src="<%= imageFor('program', p) %>" alt="" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+        </div>
+        <div class="p-8 flex flex-col flex-1">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-secondary-container flex items-center justify-center rounded"><span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= p.icon || 'school' %></span></div>
+            <% if (p.featured) { %><span class="font-tagline text-[10px] bg-secondary text-on-secondary px-2 py-1 uppercase">Featured</span><% } %>
+          </div>
+          <span class="font-tagline text-label-sm text-secondary uppercase mb-1"><%= p.level %> · <%= p.school %></span>
+          <h3 class="font-headline text-headline-sm text-primary mb-3 group-hover:text-secondary transition-colors"><%= p.title %></h3>
+          <p class="text-on-surface-variant text-body-md mb-6 flex-1"><%= truncate(p.summary, 130) %></p>
+          <div class="flex items-center justify-between border-t border-outline-variant/40 pt-4">
+            <span class="text-on-surface-variant text-sm"><span class="material-symbols-outlined text-base align-middle">schedule</span> <%= p.duration %></span>
+            <span class="font-bold text-primary"><%= formatMoney(p.tuition, p.tuition_currency) %></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>

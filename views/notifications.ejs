@@ -1,0 +1,22 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <h1 class="font-headline text-headline-md text-primary">Notifications</h1>
+  <% if (notifications.some(function(n){return !n.read;})) { %>
+  <form action="/notifications/read-all" method="post"><button class="border border-outline text-primary px-4 py-2 rounded font-bold text-sm">Mark all read</button></form>
+  <% } %>
+</div>
+
+<% var icons = { application:'description', payment:'payments', message:'forum', success:'celebration', info:'notifications' }; %>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40 max-w-3xl">
+  <% if (!notifications.length) { %><p class="p-8 text-center text-on-surface-variant">You have no notifications.</p><% } %>
+  <% notifications.forEach(function(n){ %>
+  <a href="/notifications/go/<%= n.id %>" class="flex items-start gap-4 p-4 hover:bg-surface-container-low <%= n.read ? '' : 'bg-secondary-fixed/20' %>">
+    <span class="material-symbols-outlined text-secondary mt-0.5"><%= icons[n.type] || 'notifications' %></span>
+    <div class="flex-1 min-w-0">
+      <p class="font-bold text-primary"><%= n.title %></p>
+      <% if (n.body) { %><p class="text-on-surface-variant text-sm"><%= n.body %></p><% } %>
+      <p class="text-[11px] text-on-surface-variant uppercase font-tagline mt-1"><%= formatDate(n.created_at) %></p>
+    </div>
+    <% if (!n.read) { %><span class="w-2.5 h-2.5 rounded-full bg-secondary shrink-0 mt-1.5"></span><% } %>
+  </a>
+  <% }) %>
+</div>

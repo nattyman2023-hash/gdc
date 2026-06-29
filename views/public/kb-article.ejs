@@ -1,0 +1,19 @@
+<article class="py-16 bg-surface-bright">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <a href="/knowledge-base" class="inline-flex items-center gap-2 text-secondary mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> Knowledge Base</a>
+    <span class="font-tagline text-label-sm text-secondary uppercase"><%= article.category %></span>
+    <h1 class="font-display text-display-lg-mobile md:text-headline-md text-primary my-3"><%= article.title %></h1>
+    <div class="font-body text-body-lg text-on-surface leading-relaxed whitespace-pre-line mt-6"><%= article.body || article.excerpt %></div>
+  </div>
+</article>
+
+<% if (related && related.length) { %>
+<section class="py-12 bg-surface">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Related articles</h2>
+    <ul class="space-y-2">
+      <% related.forEach(function(a){ %><li><a href="/knowledge-base/<%= a.slug %>" class="text-secondary hover:underline inline-flex items-center gap-2"><span class="material-symbols-outlined text-base">article</span> <%= a.title %></a></li><% }) %>
+    </ul>
+  </div>
+</section>
+<% } %>

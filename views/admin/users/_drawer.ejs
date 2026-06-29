@@ -1,0 +1,92 @@
+<%
+  var roleTone = ({ admin:'bg-primary text-on-primary', faculty:'bg-secondary-fixed text-on-secondary-fixed', staff:'bg-secondary-container text-on-secondary-container', student:'bg-surface-container-high text-on-surface-variant' })[user.role] || 'bg-surface-container-high text-on-surface-variant';
+  var eng = (typeof engagement !== 'undefined') ? engagement : null;
+  var engTone = eng ? ({active:'bg-secondary-container text-on-secondary-container',warn:'bg-tertiary-container text-on-tertiary-container',warn2:'bg-tertiary-container text-on-tertiary-container',risk:'bg-error-container text-on-error-container'})[eng.tone] : '';
+%>
+<div class="sticky top-0 bg-primary text-on-primary px-6 py-4 flex items-center justify-between z-10">
+  <div class="flex items-center gap-3">
+    <div class="w-11 h-11 rounded-full bg-on-primary/15 flex items-center justify-center font-headline text-headline-sm"><%= (user.first_name||'?').charAt(0) %></div>
+    <div>
+      <h2 class="font-headline text-headline-sm leading-tight"><%= user.first_name %> <%= user.last_name %></h2>
+      <p class="text-on-primary-container text-xs"><%= user.email %></p>
+    </div>
+  </div>
+  <button data-drawer-close class="material-symbols-outlined hover:text-secondary-fixed" title="Close">close</button>
+</div>
+
+<div class="p-6 space-y-5">
+  <div class="flex items-center gap-2 flex-wrap">
+    <span class="font-tagline text-[11px] uppercase px-2 py-1 rounded <%= roleTone %>"><%= user.role %></span>
+    <%- include('../_badge', { status: user.status === 'active' ? 'active' : 'inactive' }) %>
+    <% if (eng) { %><span class="font-tagline text-[11px] uppercase px-2 py-1 rounded <%= engTone %>"><%= eng.label %></span><% } %>
+    <% if (user.role === 'student') { %><a href="/admin/students/<%= user.id %>" class="ml-auto text-secondary font-bold text-sm inline-flex items-center gap-1">Full profile <span class="material-symbols-outlined text-base">open_in_new</span></a><% } %>
+  </div>
+
+  <dl class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40 text-sm">
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Email</dt><dd class="font-bold text-primary text-right"><%= user.email %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Role</dt><dd class="font-bold text-primary capitalize"><%= user.role %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Joined</dt><dd class="font-bold text-primary"><%= formatDate(user.created_at) %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Last login</dt><dd class="font-bold text-primary"><%= user.last_login_at ? formatDate(user.last_login_at) : 'Never' %></dd></div>
+  </dl>
+
+  <%
+    var pr = (typeof profile !== 'undefined' && profile) ? profile : {};
+    var rows = [];
+    if (user.role === 'faculty') {
+      rows = [['Title', pr.title], ['Specialism', pr.specialism], ['Qualifications', pr.qualifications], ['Department', pr.department], ['Phone', pr.phone]];
+    } else if (user.role === 'student') {
+      rows = [['Phone', pr.phone], ['Country', pr.country], ['Intake', pr.intake], ['Year', pr.year_of_study], ['Student ref', pr.student_ref]];
+    } else {
+      rows = [['Job title', pr.job_title], ['Department', pr.department], ['Phone', pr.phone]];
+    }
+    var filled = rows.filter(function(r){ return r[1]; });
+  %>
+  <% if (filled.length) { %>
+  <dl class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40 text-sm">
+    <% filled.forEach(function(r){ %><div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant"><%= r[0] %></dt><dd class="font-bold text-primary text-right"><%= r[1] %></dd></div><% }) %>
+  </dl>
+  <% if (pr.bio) { %><p class="text-on-surface-variant text-sm"><%= pr.bio %></p><% } %>
+  <% } %>
+
+  <% if (user.role === 'student') { %>
+    <!-- Student richness -->
+    <div class="grid grid-cols-3 gap-2 text-center">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3"><p class="font-headline text-headline-sm text-primary"><%= enrollments.length %></p><p class="font-tagline text-[10px] text-on-surface-variant uppercase">Courses</p></div>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3"><p class="font-headline text-headline-sm text-primary"><%= certificates %></p><p class="font-tagline text-[10px] text-on-surface-variant uppercase">Certs</p></div>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3"><p class="font-headline text-headline-sm <%= outstanding>0?'text-error':'text-primary' %>"><%= formatMoney(outstanding, 'GBP') %></p><p class="font-tagline text-[10px] text-on-surface-variant uppercase">Owed</p></div>
+    </div>
+    <% if (formationGroup) { %><p class="text-sm text-on-surface-variant"><span class="material-symbols-outlined text-sm align-middle text-secondary">diversity_3</span> Formation: <a href="/admin/formation/<%= formationGroup.id %>" class="text-secondary font-bold"><%= formationGroup.name %></a></p><% } %>
+    <div>
+      <h3 class="font-headline text-headline-sm text-primary mb-2">Enrolled courses</h3>
+      <% if (!enrollments.length) { %><p class="text-on-surface-variant text-sm">No enrolments.</p><% } %>
+      <div class="space-y-2">
+        <% enrollments.forEach(function(e){ %>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+          <div class="flex justify-between items-center mb-1"><p class="font-bold text-primary text-sm"><%= e.course_title %></p><span class="text-[11px] text-on-surface-variant"><%= e.progress_pct %>%</span></div>
+          <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= e.progress_pct %>%"></div></div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } else if (user.role === 'faculty') { %>
+    <!-- Faculty richness -->
+    <div class="grid grid-cols-2 gap-2 text-center">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3"><p class="font-headline text-headline-sm text-primary"><%= courses.length %></p><p class="font-tagline text-[10px] text-on-surface-variant uppercase">Courses taught</p></div>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3"><p class="font-headline text-headline-sm text-primary"><%= interviewsHosted %></p><p class="font-tagline text-[10px] text-on-surface-variant uppercase">Interviews hosted</p></div>
+    </div>
+    <% if (courses.length) { %><div><h3 class="font-headline text-headline-sm text-primary mb-2">Teaching</h3><ul class="space-y-1 text-sm">
+      <% courses.forEach(function(c){ %><li class="text-on-surface-variant"><span class="material-symbols-outlined text-sm align-middle text-secondary">menu_book</span> <%= c.title %></li><% }) %>
+    </ul></div><% } %>
+  <% } else { %>
+    <p class="text-on-surface-variant text-sm">This account manages the CRM and administrative areas of GDCU.</p>
+  <% } %>
+
+  <!-- Actions -->
+  <div class="flex flex-wrap gap-2 pt-2 border-t border-outline-variant/40">
+    <a href="/admin/users/<%= user.id %>/edit" class="border border-outline text-primary px-4 py-2 rounded font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+    <% if (!isSelf && canManage) { %>
+      <form data-drawer-form data-reload-page action="/admin/users/<%= user.id %>/status" method="post"><button class="border border-outline text-on-surface-variant px-4 py-2 rounded font-bold text-sm"><%= user.status === 'active' ? 'Deactivate' : 'Reactivate' %></button></form>
+      <form data-drawer-form data-reload-page action="/admin/users/<%= user.id %>/delete" method="post"><button class="text-error border border-error/40 px-4 py-2 rounded font-bold text-sm">Delete</button></form>
+    <% } %>
+  </div>
+</div>

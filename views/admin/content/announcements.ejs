@@ -1,0 +1,55 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Content</p><h1 class="font-headline text-headline-md text-primary">Announcements</h1></div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <!-- Compose / edit -->
+  <div class="lg:col-span-1">
+    <form action="<%= editing ? '/admin/content/announcements/'+editing.id : '/admin/content/announcements' %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-4 sticky top-24">
+      <h2 class="font-headline text-headline-sm text-primary"><%= editing ? 'Edit announcement' : 'Post announcement' %></h2>
+      <% const f = (k)=> (editing && editing[k]!=null) ? editing[k] : ''; %>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Audience</label>
+        <select name="course_id" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">All students (global)</option>
+          <% courses.forEach(function(c){ %><option value="<%= c.id %>" <%= String(f('course_id'))===String(c.id)?'selected':'' %>><%= c.title %></option><% }) %>
+        </select>
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Title *</label>
+        <input name="title" required value="<%= f('title') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Message *</label>
+        <textarea name="body" required rows="4" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= f('body') %></textarea>
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Author</label>
+        <input name="author" value="<%= f('author') %>" placeholder="<%= currentUser.name %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold"><%= editing ? 'Save' : 'Post' %></button>
+        <% if (editing) { %><a href="/admin/content/announcements" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a><% } %>
+      </div>
+    </form>
+  </div>
+
+  <!-- List -->
+  <div class="lg:col-span-2 space-y-3">
+    <% if (!announcements.length) { %><p class="text-on-surface-variant">No announcements yet.</p><% } %>
+    <% announcements.forEach(function(a){ %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <span class="font-tagline text-[11px] uppercase px-2 py-0.5 rounded <%= a.course_id ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-surface-container-high text-on-surface-variant' %>"><%= a.course_title || 'Global' %></span>
+          <p class="font-bold text-primary mt-1"><%= a.title %></p>
+        </div>
+        <div class="flex items-center gap-2 whitespace-nowrap">
+          <a href="/admin/content/announcements?edit=<%= a.id %>" class="text-secondary font-bold text-sm">Edit</a>
+          <form action="/admin/content/announcements/<%= a.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this announcement?');"><button class="text-error font-bold text-sm">Delete</button></form>
+        </div>
+      </div>
+      <p class="text-on-surface-variant text-sm mt-2"><%= a.body %></p>
+      <p class="font-tagline text-[11px] text-on-surface-variant uppercase mt-2"><%= a.author || 'GDCU' %> · <%= formatDate(a.published_at) %></p>
+    </div>
+    <% }) %>
+  </div>
+</div>

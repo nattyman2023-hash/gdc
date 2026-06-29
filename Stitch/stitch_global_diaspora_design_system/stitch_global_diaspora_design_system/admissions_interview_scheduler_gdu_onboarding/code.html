@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Diaspora University | Interview Scheduling</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fcf9f3",
+                      "tertiary": "#00030d",
+                      "secondary-container": "#fdc355",
+                      "tertiary-fixed": "#d7e2ff",
+                      "on-primary-fixed-variant": "#354766",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "on-tertiary-container": "#6a85bb",
+                      "on-primary-fixed": "#051b38",
+                      "on-secondary-fixed": "#271900",
+                      "error-container": "#ffdad6",
+                      "outline": "#74777e",
+                      "secondary-fixed": "#ffdea9",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "inverse-on-surface": "#f3f0ea",
+                      "secondary": "#7d5800",
+                      "surface": "#fcf9f3",
+                      "primary": "#00030c",
+                      "on-primary-container": "#7386a8",
+                      "tertiary-container": "#001c43",
+                      "surface-variant": "#e5e2dc",
+                      "outline-variant": "#c4c6ce",
+                      "surface-container-high": "#ebe8e2",
+                      "surface-container": "#f0eee8",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "inverse-primary": "#b4c7ec",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "surface-container-low": "#f6f3ed",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#1c1c18",
+                      "surface-tint": "#4c5f7f",
+                      "surface-dim": "#dcdad4",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#d6e3ff",
+                      "on-error-container": "#93000a",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#44474d",
+                      "on-surface": "#1c1c18",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#071d3a",
+                      "on-primary": "#ffffff",
+                      "background": "#fcf9f3",
+                      "inverse-surface": "#31312d",
+                      "surface-container-highest": "#e5e2dc"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "margin-mobile": "20px",
+                      "unit": "8px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "headline-sm": ["Playfair Display"],
+                      "body-lg": ["Inter"],
+                      "tagline": ["Montserrat"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Playfair Display"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c4c6ce;
+            border-radius: 10px;
+        }
+        .mentor-card:hover {
+            border-color: #7d5800;
+            background-color: #ffffff;
+        }
+        .mentor-card.active {
+            border-color: #7d5800;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-margin-desktop h-20 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary">Global Diaspora University</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Programs</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Mission</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Spirituality</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">help_outline</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">Student Portal</button>
+</div>
+</header>
+<main class="pt-32 pb-20 px-6 md:px-0 flex flex-col items-center">
+<div class="max-w-[900px] w-full">
+<!-- Header Section -->
+<div class="mb-12 text-center">
+<span class="font-tagline text-tagline text-secondary uppercase mb-4 block">Prospective Student Wizard</span>
+<h1 class="font-display-lg text-display-lg mb-4 text-primary">Academic Interview Scheduling</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto italic font-serif">
+                    "For I know the plans I have for you," declares the Lord. Begin your journey with an intentional conversation.
+                </p>
+</div>
+<!-- Wizard Container -->
+<div class="bg-surface-container-lowest border border-outline-variant relative overflow-hidden min-h-[600px] flex flex-col">
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-variant flex">
+<div class="h-full bg-secondary-container transition-all duration-500" id="progress-indicator" style="width: 25%;"></div>
+</div>
+<!-- Wizard Steps Wrapper -->
+<div class="flex-1 relative">
+<!-- Step 1: Logistics & Preferences -->
+<section class="step-transition opacity-100 p-8 md:p-12" id="step-1">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-6">Select Your Location</h2>
+<div class="space-y-6">
+<div class="group">
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-2 uppercase">Preferred Time Zone</label>
+<select class="w-full bg-surface-container-low border-0 border-b border-primary p-4 focus:ring-0 focus:border-secondary transition-colors text-body-md">
+<option>GMT+0 (London, Zone 1)</option>
+<option>GMT+1 (Paris, Lagos)</option>
+<option>GMT-5 (New York, Bogota)</option>
+<option>GMT+8 (Singapore, Perth)</option>
+</select>
+</div>
+<div class="p-6 bg-surface-container border border-outline-variant flex gap-4 items-start">
+<span class="material-symbols-outlined text-secondary">info</span>
+<p class="text-label-sm leading-relaxed text-on-surface-variant">
+                                            Your interview will be conducted virtually. Please ensure your local time matches the selected zone to avoid confusion.
+                                        </p>
+</div>
+</div>
+</div>
+<div class="relative h-64 md:h-full bg-surface-variant overflow-hidden rounded">
+<img class="w-full h-full object-cover grayscale opacity-60" data-alt="A sophisticated, high-end close-up of a classic brass and wood mechanical clock face in a sun-drenched library. The lighting is warm and golden, reflecting off polished surfaces. The aesthetic is academic, traditional, and timeless, emphasizing the importance of punctuality and order in a formal university setting. Muted navy and gold tones dominate the palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ0CwVqNISF3qTI2pHICMnVaPQkPh78Ic0BclhCG18PVZSau3rEDbDtjwHcEymBF-JVvgjfsX142TUm7bafCKclQ1D9u0MHoS4fWv_dVolF_R30LTIg3jvGrT6OOJULW-lwbvma_9DU-HgUyVFfdaEmf4V6XQ8e2B35QjDNqFcPjDSiRcIsZRjZYSZFW0l9qK94Cs1E5PqMPvlPUcR_zUVhBgUnJjpz21e7LrDTQzsX9k50oGprP17h383GSIn0ZJGIecQeDzn0OE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-on-primary">
+<p class="font-tagline text-tagline text-[10px]">ZONE 1 | GLOBAL TIME</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 2: Select Academic Mentor (Hidden by default) -->
+<section class="step-transition hidden opacity-0 p-8 md:p-12" id="step-2">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-8 text-center">Meet Your Academic Mentors</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Mentor 1 -->
+<div class="mentor-card group p-6 border border-outline-variant transition-all cursor-pointer flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-outline-variant group-hover:border-secondary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a senior academic mentor with a warm, welcoming expression. She is seated in a wood-paneled office filled with theological and academic books. The lighting is natural and soft, creating a trust-inspiring atmosphere. The style is classic editorial photography for a prestigious university brochure, featuring a rich palette of deep navy, ivory, and mahogany." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGNvyIZOfyqYXPCPFLfgjX9e_IdVx2BD2mBgTfPj7MbyAgUamBGZYa3U9PDXWqKCwMBYmOyqlIc1oUYX382M8rSDXTf5yt6R4ABUXHIpMIBAYjqaPwp_Kl9is8UmUdBs4WP_hecvO_e098Hz6hv-tz0GLEAfc9EqV7iXlKuojQaIoFKMilIZwHJsBD2WIysoW_ZljdP-zL6XSEqc3cdImk6jpM9pay0lCBAcNpa6LA3d7zj7lRQUlQMwE0sRTSKEvQ2kr8lEkl1w8"/>
+</div>
+<h3 class="font-bold text-primary mb-1">Dr. Aris Thorne</h3>
+<p class="text-label-sm text-secondary mb-4">Theology &amp; Ethics</p>
+<button class="text-label-sm font-bold border-b border-primary hover:text-secondary hover:border-secondary transition-all">View Slots</button>
+</div>
+<!-- Mentor 2 -->
+<div class="mentor-card active group p-6 border border-outline-variant transition-all cursor-pointer flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-secondary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A high-resolution professional headshot of a male professor in his 50s with a distinguished look, wearing a navy blazer. The background is a blurred university campus courtyard with traditional brick architecture. The lighting is bright and clear, conveying authority and friendliness. The composition is centered and formal, consistent with GDU's elite academic identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf-igY4IeDzaPl4RSxOQ5zjdvOwvjmGo8D7tyEJ4LjG-2xfIX5YiT1wpY2AcY62Qxafv15iOuckyjGjjScO5m7brdAMxAP1a5THNPpbyzcQIeVM8D7hEHhLqVLaY6ZIlBnFBuk-2z4UvRMIrdkRRW-gSlXhrGkdQewEQNmwEgxu7X6JNxoT7tCOkE3mEVj_VUDTOQ6EgVTYvwG9J4iygVaAQ1sE_StX4OxRuAxOUSa43gZL2ogo6WNyyLsp7D_NevpLty1ZqNeRYU"/>
+</div>
+<h3 class="font-bold text-primary mb-1">Prof. Julian Vane</h3>
+<p class="text-label-sm text-secondary mb-4">Intercultural Studies</p>
+<button class="text-label-sm font-bold border-b border-secondary text-secondary">Selected</button>
+</div>
+<!-- Mentor 3 -->
+<div class="mentor-card group p-6 border border-outline-variant transition-all cursor-pointer flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-outline-variant group-hover:border-secondary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A sharp, modern portrait of a female academic mentor in a minimalist, bright office. She is dressed in business casual attire with a soft gold cross necklace. The mood is sophisticated and intellectually focused. High-key lighting fills the frame, maintaining a clean, light-mode aesthetic. The image reflects professional competence and Christian values in a modern educational context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpUY9tOKqXpBQ6fOT4P9g3nSJbQ4YGTcXKjSDcJ0kMeEim1zJJxjyxa4orc3B9t4XJMW2_PLGia0TA4_V-QzwcY3u647mAKZAlw0jAYpcf4ZIMi5yciVeOkK2b7kG7Qhs01uVD7vT07ecLiMWX0UkyDATaWLMAFxoyufca71xxREKTmI5rLNmSaUMuSSKygpKAf5NJdxV3Gc91ovvr8i55FsphNgoMYL-APWIq62Yrnly_8qW8DyLWI6dLqNYHb8sISYjMOstrt9Y"/>
+</div>
+<h3 class="font-bold text-primary mb-1">Dr. Elena Rossi</h3>
+<p class="text-label-sm text-secondary mb-4">Leadership &amp; Mission</p>
+<button class="text-label-sm font-bold border-b border-primary hover:text-secondary hover:border-secondary transition-all">View Slots</button>
+</div>
+</div>
+</section>
+<!-- Step 3: Calendar Sync & Confirm (Hidden by default) -->
+<section class="step-transition hidden opacity-0 p-8 md:p-12" id="step-3">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-4">Confirm Appointment</h2>
+<p class="text-on-surface-variant mb-8 italic">Wednesday, Oct 24, 2024 at 10:00 AM (GMT+0)</p>
+<div class="space-y-4 mb-8">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Sync with Calendar</p>
+<div class="flex flex-col gap-3">
+<button class="flex items-center justify-between p-4 border border-outline-variant hover:bg-surface transition-colors rounded">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+<span class="font-medium">Google Calendar</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="flex items-center justify-between p-4 border border-outline-variant hover:bg-surface transition-colors rounded">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">mail</span>
+<span class="font-medium">Outlook Calendar</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-8 border border-outline-variant">
+<h3 class="font-tagline text-tagline text-secondary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">verified</span>
+                                    PREPARE FOR YOUR INTERVIEW
+                                </h3>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<div class="mt-1 flex-shrink-0">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_box</span>
+</div>
+<div>
+<p class="font-bold text-primary mb-1">Review GDU Mission Statement</p>
+<a class="text-label-sm text-on-primary-container underline decoration-on-primary-container/30 hover:decoration-on-primary-container transition-all" href="#">Read document →</a>
+</div>
+</li>
+<li class="flex gap-4">
+<div class="mt-1 flex-shrink-0">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_box</span>
+</div>
+<div>
+<p class="font-bold text-primary mb-1">Reflect on the Faith Document</p>
+<a class="text-label-sm text-on-primary-container underline decoration-on-primary-container/30 hover:decoration-on-primary-container transition-all" href="#">Download PDF →</a>
+</div>
+</li>
+<li class="flex gap-4">
+<div class="mt-1 flex-shrink-0">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">check_box_outline_blank</span>
+</div>
+<div>
+<p class="font-bold text-primary mb-1">Stable Connection Check</p>
+<p class="text-label-sm text-on-surface-variant">Ensure a quiet space with reliable internet.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</div>
+<!-- Wizard Actions -->
+<div class="p-8 md:px-12 md:pb-12 bg-surface-container-low flex justify-between items-center border-t border-outline-variant/30">
+<button class="hidden text-on-surface-variant hover:text-primary font-bold flex items-center gap-2 transition-colors" id="prev-btn">
+<span class="material-symbols-outlined">arrow_back</span> Back
+                    </button>
+<div class="flex-1" id="spacer"></div>
+<button class="bg-primary text-on-primary px-10 py-4 rounded-lg font-bold flex items-center gap-2 hover:opacity-90 transition-opacity" id="next-btn">
+<span>Continue</span> <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="hidden bg-secondary text-on-secondary px-10 py-4 rounded-lg font-bold flex items-center gap-2 hover:opacity-90 transition-opacity" id="confirm-btn">
+                        Confirm Appointment <span class="material-symbols-outlined">done_all</span>
+</button>
+</div>
+</div>
+<!-- Footer Quote -->
+<div class="mt-16 text-center border-t border-outline-variant pt-12">
+<div class="w-16 h-px bg-secondary-container mx-auto mb-8"></div>
+<p class="font-display-lg italic text-on-surface-variant/40 text-2xl leading-relaxed max-w-xl mx-auto">
+                    "Wisdom is the principal thing; therefore get wisdom."
+                </p>
+<div class="w-16 h-px bg-secondary-container mx-auto mt-8"></div>
+</div>
+</div>
+</main>
+<footer class="w-full py-12 px-margin-desktop flex flex-col items-center gap-6 bg-primary">
+<span class="font-headline-sm text-headline-sm text-secondary-fixed">Global Diaspora University</span>
+<nav class="flex flex-wrap justify-center gap-8 text-surface-variant opacity-80 font-body-md">
+<a class="hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="hover:text-secondary-fixed transition-colors" href="#">Compliance</a>
+<a class="hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</nav>
+<p class="text-surface-variant opacity-60 text-label-sm text-center">
+            © 2024 Global Diaspora University. Committed to Excellence in Christian Education.
+        </p>
+</footer>
+<script>
+        const steps = [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3')];
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const confirmBtn = document.getElementById('confirm-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+        let currentStep = 0;
+
+        function updateWizard() {
+            steps.forEach((step, index) => {
+                if (index === currentStep) {
+                    step.classList.remove('hidden');
+                    setTimeout(() => step.classList.add('opacity-100'), 50);
+                } else {
+                    step.classList.add('hidden');
+                    step.classList.remove('opacity-100');
+                }
+            });
+
+            // Update Progress Bar
+            progressIndicator.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+
+            // Update Buttons
+            if (currentStep === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            if (currentStep === steps.length - 1) {
+                nextBtn.classList.add('hidden');
+                confirmBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                confirmBtn.classList.add('hidden');
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateWizard();
+                window.scrollTo({ top: 100, behavior: 'smooth' });
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateWizard();
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            confirmBtn.innerHTML = 'Scheduling...';
+            confirmBtn.disabled = true;
+            setTimeout(() => {
+                confirmBtn.innerHTML = 'Confirmed!';
+                confirmBtn.classList.replace('bg-secondary', 'bg-green-700');
+                alert('Success! Your interview has been scheduled. Check your email for details.');
+            }, 1500);
+        });
+
+        // Initialize
+        updateWizard();
+    </script>
+</body></html>

@@ -1,0 +1,23 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Faculty</p><h1 class="font-headline text-headline-md text-primary">My Students</h1></div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Student</th><th class="px-4 py-3 hidden sm:table-cell">Email</th><th class="px-4 py-3">Course</th><th class="px-4 py-3">Progress</th><th class="px-4 py-3">Status</th></tr>
+    </thead>
+    <tbody>
+      <% if (!students.length) { %><tr><td colspan="5" class="px-4 py-6 text-center text-on-surface-variant">No enrolled students yet.</td></tr><% } %>
+      <% students.forEach(function(s){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 font-bold text-primary"><%= s.first_name %> <%= s.last_name %></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= s.email %></td>
+        <td class="px-4 py-3"><a href="/faculty/courses/<%= s.course_slug %>" class="text-secondary font-bold"><%= s.course_title %></a></td>
+        <td class="px-4 py-3 w-40">
+          <div class="flex items-center gap-2"><div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= s.progress_pct %>%"></div></div><span class="text-xs text-on-surface-variant"><%= s.progress_pct %>%</span></div>
+        </td>
+        <td class="px-4 py-3"><%- include('../admin/_badge', { status: s.status==='completed' ? 'paid' : (s.status==='active'?'sent':'void') }) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

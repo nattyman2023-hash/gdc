@@ -1,0 +1,57 @@
+<div class="sticky top-0 bg-primary text-on-primary px-6 py-4 flex items-center justify-between z-10">
+  <div>
+    <p class="font-tagline text-[11px] text-secondary-fixed uppercase tracking-wider">Application · <%= application.reference %></p>
+    <h2 class="font-headline text-headline-sm leading-tight"><%= application.first_name %> <%= application.last_name %></h2>
+  </div>
+  <button data-drawer-close class="material-symbols-outlined hover:text-secondary-fixed" title="Close">close</button>
+</div>
+
+<div class="p-6 space-y-5">
+  <div class="flex items-center gap-2 flex-wrap">
+    <%- include('_badge', { status: application.status }) %>
+    <%- include('_badge', { status: application.payment_status }) %>
+    <% if (application.archived) { %><span class="font-tagline text-[10px] uppercase px-2 py-1 rounded bg-surface-container-high text-on-surface-variant">Archived</span><% } %>
+    <a href="/admin/applications/<%= application.id %>" class="ml-auto text-secondary font-bold text-sm inline-flex items-center gap-1">Full record <span class="material-symbols-outlined text-base">open_in_new</span></a>
+  </div>
+
+  <dl class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40 text-sm">
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Email</dt><dd class="font-bold text-primary text-right"><%= application.email %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Phone</dt><dd class="font-bold text-primary text-right"><%= application.phone || '—' %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Country</dt><dd class="font-bold text-primary text-right"><%= application.country || '—' %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Program</dt><dd class="font-bold text-primary text-right"><%= application.program_title || '—' %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Intake</dt><dd class="font-bold text-primary text-right"><%= application.intake || '—' %></dd></div>
+    <div class="flex justify-between px-4 py-2"><dt class="text-on-surface-variant">Applied</dt><dd class="font-bold text-primary text-right"><%= formatDate(application.created_at) %></dd></div>
+  </dl>
+  <% if (application.statement) { %><div class="bg-surface-container-low rounded p-3 text-sm text-on-surface-variant"><span class="font-bold">Statement:</span> <%= application.statement %></div><% } %>
+
+  <!-- Pipeline -->
+  <form data-drawer-form action="/admin/applications/<%= application.id %>/status" method="post" class="flex gap-2">
+    <select name="status" class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm">
+      <% statuses.forEach(function(s){ %><option value="<%= s %>" <%= application.status===s?'selected':'' %>><%= s.replace('_',' ') %></option><% }) %>
+    </select>
+    <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Update</button>
+  </form>
+
+  <div class="flex flex-wrap gap-2">
+    <a href="/admin/applications/<%= application.id %>/edit" class="border border-outline text-primary px-4 py-2 rounded font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+    <form data-drawer-form data-reload-page action="/admin/applications/<%= application.id %>/archive" method="post"><button class="border border-outline text-on-surface-variant px-4 py-2 rounded font-bold text-sm"><%= application.archived ? 'Restore' : 'Archive' %></button></form>
+    <form data-drawer-form data-reload-page action="/admin/applications/<%= application.id %>/delete" method="post"><button class="text-error border border-error/40 px-4 py-2 rounded font-bold text-sm">Delete</button></form>
+  </div>
+
+  <div>
+    <h3 class="font-headline text-headline-sm text-primary mb-2">Notes</h3>
+    <form data-drawer-form action="/admin/applications/<%= application.id %>/notes" method="post" class="mb-3">
+      <textarea name="body" required rows="2" placeholder="Add an admissions note…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"></textarea>
+      <div class="flex justify-end mt-1"><button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-sm">Add note</button></div>
+    </form>
+    <div class="space-y-2">
+      <% if (!notes.length) { %><p class="text-on-surface-variant text-sm">No notes yet.</p><% } %>
+      <% notes.forEach(function(n){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+        <div class="flex justify-between"><p class="font-bold text-primary text-xs"><%= n.author_name || 'Staff' %></p><p class="text-[11px] text-on-surface-variant"><%= formatDate(n.created_at) %></p></div>
+        <p class="text-on-surface-variant text-sm mt-1 whitespace-pre-line"><%= n.body %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

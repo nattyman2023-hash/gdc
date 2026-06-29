@@ -1,0 +1,59 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">People</p><h1 class="font-headline text-headline-md text-primary">Staff &amp; Users</h1></div>
+  <a href="/admin/users/new" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">person_add</span> New user</a>
+</div>
+
+<form method="get" class="flex flex-wrap gap-3 mb-4">
+  <input name="q" value="<%= filters.q %>" placeholder="Search name or email…" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary min-w-[220px]" />
+  <select name="role" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All roles</option>
+    <% roles.forEach(function(r){ %><option value="<%= r %>" <%= filters.role===r?'selected':'' %>><%= r %></option><% }) %>
+  </select>
+  <select name="status" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">Any status</option>
+    <option value="active" <%= filters.status==='active'?'selected':'' %>>Active</option>
+    <option value="inactive" <%= filters.status==='inactive'?'selected':'' %>>Inactive</option>
+  </select>
+  <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Filter</button>
+  <a href="/admin/users" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+</form>
+
+<!-- Role chips with counts -->
+<div class="flex flex-wrap gap-2 mb-5">
+  <a href="/admin/users?q=<%= encodeURIComponent(filters.q) %><%= filters.status?('&status='+filters.status):'' %>" class="px-3 py-1 rounded-full text-xs font-bold border <%= !filters.role ? 'bg-primary text-on-primary border-primary' : 'border-outline text-on-surface-variant hover:border-secondary' %>">All <span class="opacity-70"><%= total %></span></a>
+  <% roles.forEach(function(r){ %>
+  <a href="/admin/users?role=<%= r %><%= filters.q?('&q='+encodeURIComponent(filters.q)):'' %><%= filters.status?('&status='+filters.status):'' %>" class="px-3 py-1 rounded-full text-xs font-bold border capitalize <%= filters.role===r ? 'bg-primary text-on-primary border-primary' : 'border-outline text-on-surface-variant hover:border-secondary' %>"><%= r %> <span class="opacity-70"><%= roleCounts[r] || 0 %></span></a>
+  <% }) %>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Name</th><th class="px-4 py-3 hidden sm:table-cell">Email</th><th class="px-4 py-3">Role</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 hidden lg:table-cell">Engagement</th><th class="px-4 py-3 hidden md:table-cell">Last login</th><th class="px-4 py-3 text-right">Actions</th></tr>
+    </thead>
+    <tbody>
+      <% if (!users.length) { %><tr><td colspan="7" class="px-4 py-6 text-center text-on-surface-variant">No users found.</td></tr><% } %>
+      <% users.forEach(function(u){ var engTone = u.engagement ? ({active:'bg-secondary-container text-on-secondary-container',warn:'bg-tertiary-container text-on-tertiary-container',warn2:'bg-tertiary-container text-on-tertiary-container',risk:'bg-error-container text-on-error-container'})[u.engagement.tone] : ''; %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low cursor-pointer" data-drawer="/admin/users/<%= u.id %>/drawer">
+        <td class="px-4 py-3 font-bold text-primary"><%= u.first_name %> <%= u.last_name %><% if (currentUser && u.id===currentUser.id) { %> <span class="text-xs font-normal text-on-surface-variant">(you)</span><% } %></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= u.email %></td>
+        <td class="px-4 py-3"><span class="font-tagline text-[11px] uppercase px-2 py-1 rounded bg-surface-container-high text-on-surface-variant"><%= u.role %></span></td>
+        <td class="px-4 py-3"><%- include('../_badge', { status: u.status === 'active' ? 'active' : 'inactive' }) %></td>
+        <td class="px-4 py-3 hidden lg:table-cell"><% if (u.engagement) { %><span class="font-tagline text-[11px] uppercase px-2 py-1 rounded <%= engTone %>"><%= u.engagement.label %></span><% } else { %><span class="text-on-surface-variant">—</span><% } %></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= u.last_login_at ? formatDate(u.last_login_at) : 'never' %></td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/admin/users/<%= u.id %>/edit" class="text-secondary font-bold" onclick="event.stopPropagation()">Edit</a>
+          <% if (!currentUser || u.id !== currentUser.id) { %>
+          <form action="/admin/users/<%= u.id %>/status" method="post" class="inline" onsubmit="return confirm('<%= u.status==="active" ? "Deactivate" : "Reactivate" %> this user?');">
+            <button class="<%= u.status==='active' ? 'text-on-surface-variant' : 'text-secondary' %> font-bold ml-3" onclick="event.stopPropagation()"><%= u.status==='active' ? 'Deactivate' : 'Reactivate' %></button>
+          </form>
+          <form action="/admin/users/<%= u.id %>/delete" method="post" class="inline" onsubmit="return confirm('Permanently delete this user? This cannot be undone.');">
+            <button class="text-error font-bold ml-3" onclick="event.stopPropagation()">Delete</button>
+          </form>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

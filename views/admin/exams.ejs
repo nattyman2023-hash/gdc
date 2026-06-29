@@ -1,0 +1,42 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
+    <div>
+      <h1 class="font-headline text-headline-lg text-primary">Final Exams</h1>
+      <p class="text-on-surface-variant mt-1">Culminating assessments at course, year and whole-programme level. Module quizzes are managed inside each course.</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="/admin/quizzes/create?final=1&scope=course&return=/admin/exams" class="px-3 py-2 border border-outline-variant rounded text-sm font-medium hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm align-middle mr-1">menu_book</span> Course exam</a>
+      <a href="/admin/quizzes/create?final=1&scope=year&return=/admin/exams" class="px-3 py-2 border border-outline-variant rounded text-sm font-medium hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm align-middle mr-1">calendar_today</span> Year exam</a>
+      <a href="/admin/quizzes/create?final=1&scope=programme&return=/admin/exams" class="px-3 py-2 bg-primary text-on-primary rounded text-sm font-bold hover:opacity-90"><span class="material-symbols-outlined text-sm align-middle mr-1">workspace_premium</span> Programme exam</a>
+    </div>
+  </div>
+
+  <% if (flash.success && flash.success.length) { %><div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div><% } %>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+        <tr><th class="px-4 py-3">Exam</th><th class="px-4 py-3">Scope</th><th class="px-4 py-3">Applies to</th><th class="px-4 py-3">Questions</th><th class="px-4 py-3">Pass</th><th class="px-4 py-3 text-right">Manage</th></tr>
+      </thead>
+      <tbody>
+        <% if (!exams.length) { %><tr><td colspan="6" class="px-4 py-8 text-center text-on-surface-variant">No final exams yet. Use the buttons above to create one.</td></tr><% } %>
+        <% exams.forEach(function(e){
+             var scopeBadge = e.exam_scope==='programme' ? 'bg-primary text-on-primary' : (e.exam_scope==='year' ? 'bg-secondary-container text-on-secondary-container' : 'bg-amber-100 text-amber-800');
+             var applies = e.exam_scope==='course' ? (e.course_title||'—') : (e.exam_scope==='year' ? ((e.program_title||'—') + ' · Year ' + (e.exam_year||'?')) : (e.program_title||'—'));
+        %>
+        <tr class="border-t border-outline-variant/30 hover:bg-surface-container-lowest">
+          <td class="px-4 py-3 font-medium text-primary"><%= e.title %></td>
+          <td class="px-4 py-3"><span class="font-tagline text-[11px] uppercase px-2 py-1 rounded <%= scopeBadge %>"><%= e.exam_scope %></span></td>
+          <td class="px-4 py-3 text-on-surface-variant"><%= applies %></td>
+          <td class="px-4 py-3 text-on-surface-variant"><%= e.questionCount %></td>
+          <td class="px-4 py-3 text-on-surface-variant"><%= e.pass_mark %>%</td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <a href="/admin/quizzes/<%= e.id %>/edit?return=/admin/exams" class="text-secondary font-bold">Edit</a>
+            <form method="POST" action="/admin/quizzes/<%= e.id %>/delete" class="inline" onsubmit="return confirm('Delete this exam?');"><button class="text-error font-bold ml-3">Delete</button></form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

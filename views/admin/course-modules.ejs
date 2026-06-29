@@ -1,0 +1,486 @@
+<a href="/admin/courses" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All Courses</a>
+
+<div class="max-w-5xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="font-headline text-headline-lg text-primary"><%= course.title %></h1>
+      <p class="text-on-surface-variant mt-1">
+        <%= modules.length %> modules · 
+        <% if (course.drip_feed_enabled) { %><span class="text-blue-600 font-medium">Drip Feed: <%= course.drip_feed_interval_hours %>h interval</span><% } else { %>No drip feed<% } %>
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <a href="/admin/courses/<%= course.id %>/preview" target="_blank" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">visibility</span> Preview
+      </a>
+      <a href="/admin/courses/<%= course.id %>/edit" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span> Edit Course
+      </a>
+      <button onclick="document.getElementById('add-module-form').classList.toggle('hidden')" class="bg-primary text-on-primary px-4 py-2 rounded font-bold hover:opacity-90 text-sm">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">add</span> Add Module
+      </button>
+    </div>
+  </div>
+
+  <% if (flash.success && flash.success.length) { %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div>
+  <% } %>
+  <% if (flash.error && flash.error.length) { %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6"><p class="text-red-800"><%= flash.error[0] %></p></div>
+  <% } %>
+
+  <!-- Add Module Form -->
+  <div id="add-module-form" class="hidden bg-white rounded-lg p-6 shadow mb-6">
+    <h3 class="font-semibold text-lg mb-4">Add New Module</h3>
+    <form method="POST" action="/admin/courses/<%= course.id %>/modules" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Module Title *</label>
+          <input type="text" name="title" required class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Release Date (optional)</label>
+          <input type="datetime-local" name="release_date" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Summary</label>
+        <textarea name="summary" rows="2" class="w-full px-3 py-2 border rounded"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Prerequisite Module</label>
+          <select name="prerequisite_module_id" class="w-full px-3 py-2 border rounded">
+            <option value="">None</option>
+            <% modules.forEach(function(m){ %>
+              <option value="<%= m.id %>"><%= m.title %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label class="flex items-center gap-2 mb-2">
+            <input type="checkbox" name="essay_required" value="1" class="w-4 h-4" onchange="document.getElementById('essay-prompt-group').classList.toggle('hidden', !this.checked)">
+            <span class="text-sm font-medium">Require Essay at End</span>
+          </label>
+          <div id="essay-prompt-group" class="hidden mt-2">
+            <label class="block text-sm font-medium mb-1">Essay Prompt</label>
+            <textarea name="essay_prompt" rows="2" class="w-full px-3 py-2 border rounded" placeholder="Describe what the student should write about..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="document.getElementById('add-module-form').classList.add('hidden')" class="px-4 py-2 border rounded text-sm">Cancel</button>
+        <button type="submit" class="bg-primary text-on-primary px-6 py-2 rounded font-bold text-sm">Add Module</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Final Exam (course-level culminating assessment) -->
+  <div class="bg-white rounded-lg shadow mb-6 overflow-hidden border-l-4 border-amber-400">
+    <div class="px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-amber-500">workspace_premium</span>
+        <div>
+          <h3 class="font-semibold text-primary">Final Exam</h3>
+          <p class="text-xs text-on-surface-variant">A culminating exam students must pass before earning the course certificate.</p>
+        </div>
+      </div>
+      <% if (!finalExam) { %>
+        <a href="/admin/quizzes/create?final=1&scope=course&course_id=<%= course.id %>&return=/admin/courses/<%= course.id %>/modules" class="px-3 py-1.5 bg-amber-500 text-white rounded text-xs font-medium hover:bg-amber-600">+ Add final exam</a>
+      <% } %>
+    </div>
+    <% if (finalExam) { %>
+    <div class="px-6 pb-4">
+      <div class="flex items-center justify-between text-sm bg-amber-50 border border-amber-200 rounded px-3 py-2">
+        <div>
+          <span class="font-medium text-primary"><%= finalExam.title %></span>
+          <span class="text-xs text-on-surface-variant ml-2"><%= finalExam.questionCount %> question<%= finalExam.questionCount===1?'':'s' %> · pass <%= finalExam.pass_mark %>%<%= finalExam.time_limit_min ? (' · ' + finalExam.time_limit_min + ' min') : '' %></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="/admin/quizzes/<%= finalExam.id %>/edit?return=/admin/courses/<%= course.id %>/modules" class="p-1 text-on-surface-variant hover:text-primary rounded" title="Edit final exam"><span class="material-symbols-outlined text-sm">edit</span></a>
+          <form method="POST" action="/admin/quizzes/<%= finalExam.id %>/delete" class="inline" onsubmit="return confirm('Delete the final exam?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <!-- Assignments (course-level) -->
+  <div class="bg-white rounded-lg shadow mb-4 overflow-hidden border-l-4 border-blue-400">
+    <div class="px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-blue-500">assignment</span>
+        <div><h3 class="font-semibold text-primary">Assignments</h3><p class="text-xs text-on-surface-variant">Written tasks students submit for grading.</p></div>
+      </div>
+      <button type="button" onclick="document.getElementById('add-assignment').classList.toggle('hidden')" class="px-3 py-1.5 bg-blue-500 text-white rounded text-xs font-medium hover:bg-blue-600">+ Add assignment</button>
+    </div>
+    <div id="add-assignment" class="hidden px-6 pb-4">
+      <form method="POST" action="/admin/courses/<%= course.id %>/assignments" class="space-y-3 bg-blue-50 border border-blue-200 rounded p-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm"></textarea></div>
+        <div class="w-40"><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-assignment').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Create assignment</button></div>
+      </form>
+    </div>
+    <% if (assignments && assignments.length) { %>
+    <div class="px-6 pb-4 space-y-1.5">
+      <% assignments.forEach(function(a){ %>
+      <div class="flex items-center justify-between text-sm bg-blue-50 border border-blue-200 rounded px-3 py-2">
+        <div><span class="font-medium text-primary"><%= a.title %></span><span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span></div>
+        <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+      </div>
+      <% }) %>
+    </div>
+    <% } else { %>
+    <div class="px-6 pb-4"><p class="text-xs text-on-surface-variant">No assignments yet. Click <strong>+ Add assignment</strong> to create one.</p></div>
+    <% } %>
+  </div>
+
+  <!-- Year → Module → Lesson hierarchy, all collapsible (folded until clicked) -->
+  <%
+    var byYear = {}; var yearOrder = [];
+    modules.forEach(function(m){ var y = m.sort_order >= 100 ? Math.floor(m.sort_order / 100) : 0; if (!byYear[y]) { byYear[y] = []; yearOrder.push(y); } byYear[y].push(m); });
+  %>
+  <% yearOrder.forEach(function(y, yi){ var yMods = byYear[y]; var yImg = (yMods.find(function(m){ return m.featured_image; }) || {}).featured_image; %>
+    <% if (y) { %>
+    <details class="group/yr mb-4 rounded-lg overflow-hidden border border-outline-variant shadow-sm" <%= yi===0 ? 'open' : '' %>>
+      <summary class="list-none select-none cursor-pointer relative h-28 flex items-end text-on-primary">
+        <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+        <div class="relative w-full px-5 py-3 flex items-center justify-between">
+          <div><p class="font-tagline text-[11px] uppercase tracking-wider text-secondary-fixed">Academic Year</p><h2 class="font-headline text-headline-sm">Year <%= y %> <span class="text-sm font-normal opacity-80">· <%= yMods.length %> modules</span></h2></div>
+          <span class="material-symbols-outlined transition-transform group-open/yr:rotate-180">expand_more</span>
+        </div>
+      </summary>
+      <div class="p-4 bg-surface-container-low/40">
+    <% } %>
+    <% yMods.forEach(function(mod){ var mi = modules.indexOf(mod); %>
+  <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden">
+    <!-- Card summary (the box) -->
+    <summary class="list-none select-none cursor-pointer flex items-stretch hover:bg-surface-container-lowest">
+      <div class="w-32 sm:w-44 shrink-0 bg-primary-container relative">
+        <img src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+      </div>
+      <div class="flex-1 flex items-center justify-between gap-3 px-5 py-4 min-w-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="bg-primary text-on-primary w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-sm"><%= mi + 1 %></span>
+          <div class="min-w-0">
+            <h3 class="font-semibold text-primary truncate"><%= mod.title %></h3>
+            <div class="flex flex-wrap gap-3 text-xs text-on-surface-variant mt-0.5">
+              <span><%= mod.lessons.length %> lessons</span>
+              <% var blkCount = [...new Set(mod.lessons.map(function(l){return l.block_no;}).filter(Boolean))].length; %>
+              <% if (blkCount) { %><span><%= blkCount %> blocks</span><% } %>
+              <% if (mod.essay_required) { %><span class="text-blue-600 font-medium">Essay required</span><% } %>
+            </div>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open/mod:rotate-180 shrink-0">expand_more</span>
+      </div>
+    </summary>
+
+    <!-- Card body (revealed on click) -->
+    <div class="border-t border-outline-variant">
+    <div class="px-6 py-3 flex items-center justify-end gap-2 bg-surface-container-lowest border-b border-outline-variant flex-wrap">
+      <button onclick="document.getElementById('edit-module-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white">
+        <span class="material-symbols-outlined text-sm">edit</span> Edit module
+      </button>
+      <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
+        <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
+      </button>
+      <form method="POST" action="/admin/modules/<%= mod.id %>/delete" class="inline" onsubmit="return confirm('Delete this module and all its lessons?');">
+        <button type="submit" class="p-1.5 text-on-surface-variant hover:text-red-600 rounded" title="Delete module"><span class="material-symbols-outlined text-base">delete</span></button>
+      </form>
+    </div>
+
+    <!-- Edit Module Form -->
+    <div id="edit-module-<%= mod.id %>" class="hidden px-6 py-4 border-b border-outline-variant bg-gray-50">
+      <form method="POST" action="/admin/modules/<%= mod.id %>" class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium mb-1">Title</label>
+            <input type="text" name="title" value="<%= mod.title %>" required class="w-full px-2 py-1.5 border rounded text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1">Release Date</label>
+            <input type="datetime-local" name="release_date" value="<%= mod.release_date ? new Date(mod.release_date).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Summary</label>
+          <textarea name="summary" rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= mod.summary || '' %></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Featured image (shown on the module card)</label>
+          <div class="flex gap-3 items-start">
+            <div class="flex-1">
+              <input type="url" name="featured_image" id="mod-img-<%= mod.id %>" value="<%= mod.featured_image || '' %>" placeholder="https://… or upload →" class="w-full px-2 py-1.5 border rounded text-sm">
+              <button type="button" data-upload-target="#mod-img-<%= mod.id %>" data-upload-preview="#mod-img-prev-<%= mod.id %>" class="mt-1 inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1 hover:bg-white"><span class="material-symbols-outlined text-sm">upload</span> Upload</button>
+            </div>
+            <img id="mod-img-prev-<%= mod.id %>" src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-28 h-16 object-cover rounded border border-outline-variant" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium mb-1">Prerequisite Module</label>
+            <select name="prerequisite_module_id" class="w-full px-2 py-1.5 border rounded text-sm">
+              <option value="">None</option>
+              <% modules.forEach(function(om){ if (om.id !== mod.id) { %>
+                <option value="<%= om.id %>" <% if (mod.prerequisite_module_id === om.id) { %>selected<% } %>><%= om.title %></option>
+              <% }}) %>
+            </select>
+          </div>
+          <div>
+            <label class="flex items-center gap-2 mb-1">
+              <input type="checkbox" name="essay_required" value="1" <%= mod.essay_required ? 'checked' : '' %> class="w-4 h-4">
+              <span class="text-xs font-medium">Require Essay</span>
+            </label>
+            <textarea name="essay_prompt" rows="2" class="w-full px-2 py-1.5 border rounded text-sm mt-1" placeholder="Essay prompt..."><%= mod.essay_prompt || '' %></textarea>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="document.getElementById('edit-module-<%= mod.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button>
+          <button type="submit" class="px-3 py-1 bg-primary text-on-primary rounded text-xs font-bold">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Lesson (block) — streamlined: name it, pick its parts, optionally add a quiz -->
+    <% var nextBlk = (Math.max(0, ...mod.lessons.map(function(l){ return Number(l.block_no)||0; }), 0) + 1); %>
+    <div id="add-lesson-<%= mod.id %>" class="hidden px-6 py-5 border-b border-outline-variant bg-blue-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold text-sm"><%= nextBlk %></span>
+        <div>
+          <h4 class="font-bold text-primary">New Lesson <%= nextBlk %></h4>
+          <p class="text-xs text-on-surface-variant">Adds to <strong><%= mod.title %></strong> as the next lesson. A lesson is a block of parts students complete together.</p>
+        </div>
+      </div>
+      <form method="POST" action="/admin/modules/<%= mod.id %>/block" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium mb-1">Lesson title *</label>
+          <input type="text" name="block_title" required placeholder="e.g. What Is the Bible?" class="w-full px-3 py-2 border rounded text-sm">
+        </div>
+        <div>
+          <p class="block text-xs font-medium mb-2">Parts of this lesson (the elements students work through)</p>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-sm bg-white border border-outline-variant rounded px-3 py-2">
+              <input type="checkbox" name="part_read" value="on" checked class="w-4 h-4">
+              <span class="material-symbols-outlined text-base text-blue-600">menu_book</span>
+              <span><strong>Main reading</strong> <span class="text-xs text-on-surface-variant">— long read, 7–10 min (add the text after)</span></span>
+            </label>
+            <label class="flex items-center gap-2 text-sm bg-white border border-outline-variant rounded px-3 py-2">
+              <input type="checkbox" name="part_study" value="on" checked class="w-4 h-4">
+              <span class="material-symbols-outlined text-base text-blue-600">article</span>
+              <span><strong>Study reading</strong> <span class="text-xs text-on-surface-variant">— shorter supporting read</span></span>
+            </label>
+            <label class="flex items-center gap-2 text-sm bg-white border border-outline-variant rounded px-3 py-2">
+              <input type="checkbox" name="part_video" value="on" checked class="w-4 h-4">
+              <span class="material-symbols-outlined text-base text-red-600">smart_display</span>
+              <span><strong>Video</strong> <span class="text-xs text-on-surface-variant">— 15-min clip</span></span>
+            </label>
+            <label class="flex items-center gap-2 text-sm bg-white border border-outline-variant rounded px-3 py-2">
+              <input type="checkbox" name="part_audio" value="on" class="w-4 h-4">
+              <span class="material-symbols-outlined text-base text-purple-600">headphones</span>
+              <span><strong>Audio</strong> <span class="text-xs text-on-surface-variant">— optional listen</span></span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Video URL <span class="text-on-surface-variant">(if including a video — YouTube/Vimeo/MP4)</span></label>
+          <input type="url" name="video_url" placeholder="https://youtu.be/…" class="w-full px-3 py-2 border rounded text-sm">
+        </div>
+        <label class="flex items-center gap-2 text-sm bg-indigo-50 border border-indigo-200 rounded px-3 py-2">
+          <input type="checkbox" name="add_quiz" value="on" class="w-4 h-4">
+          <span class="material-symbols-outlined text-base text-indigo-600">quiz</span>
+          <span><strong>Also add a quiz for this lesson</strong> <span class="text-xs text-on-surface-variant">— after saving, you'll add its questions (students must pass to continue)</span></span>
+        </label>
+        <p class="text-xs text-on-surface-variant">After creating, click <strong>edit</strong> on each part to write its reading content or fine-tune the video.</p>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.add('hidden')" class="px-3 py-1.5 border rounded text-xs">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-bold hover:bg-blue-700">Create Lesson <%= nextBlk %></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Lessons List (grouped into blocks: "Lesson 1, 2, …") -->
+    <div class="divide-y divide-outline-variant">
+      <% var lastBlk = null; %>
+      <% mod.lessons.forEach(function(lesson, li){ %>
+      <% if (lesson.block_no && lesson.block_no !== lastBlk) { lastBlk = lesson.block_no; var blkTitle = lesson.block_title || ('Lesson '+lesson.block_no); %>
+      <div class="px-6 py-2.5 bg-indigo-50/60 border-b border-outline-variant flex items-center justify-between gap-2 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-base text-indigo-500">view_agenda</span>
+          <div><p class="font-tagline text-[11px] text-secondary uppercase leading-none">Lesson <%= lesson.block_no %></p><p class="font-bold text-primary text-sm"><%= blkTitle %></p></div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="document.getElementById('addpart-<%= mod.id %>-<%= lesson.block_no %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-xs border border-outline-variant bg-white rounded px-2 py-1 hover:bg-surface-container-lowest" title="Add another part to this lesson"><span class="material-symbols-outlined text-sm">add</span> Part</button>
+          <a href="/admin/quizzes/create?course_id=<%= course.id %>&module_id=<%= mod.id %>&after_block=<%= lesson.block_no %>&block_title=<%= encodeURIComponent(blkTitle) %>&return=/admin/courses/<%= course.id %>/modules" class="inline-flex items-center gap-1 text-xs bg-indigo-500 text-white rounded px-2 py-1 hover:bg-indigo-600" title="Add a quiz that covers this lesson"><span class="material-symbols-outlined text-sm">quiz</span> Quiz for this lesson</a>
+        </div>
+      </div>
+      <!-- Add a part to THIS lesson (block #/title pre-filled) -->
+      <div id="addpart-<%= mod.id %>-<%= lesson.block_no %>" class="hidden px-6 py-3 bg-blue-50 border-b border-outline-variant">
+        <form method="POST" action="/admin/modules/<%= mod.id %>/lessons" class="space-y-2">
+          <input type="hidden" name="block_no" value="<%= lesson.block_no %>">
+          <input type="hidden" name="block_title" value="<%= blkTitle %>">
+          <p class="text-xs text-on-surface-variant">Adding a part to <strong>Lesson <%= lesson.block_no %> — <%= blkTitle %></strong></p>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2"><label class="block text-xs font-medium mb-1">Part title *</label><input type="text" name="title" required placeholder="e.g. Read: …" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm"><option value="reading">Reading</option><option value="video">Video</option><option value="audio">Audio</option><option value="discussion">Discussion</option></select></div>
+          </div>
+          <div><label class="block text-xs font-medium mb-1">Content</label><textarea name="content" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="Reading text…"></textarea></div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-medium mb-1">Video URL</label><input type="url" name="video_url" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="10" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          </div>
+          <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('addpart-<%= mod.id %>-<%= lesson.block_no %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded text-xs font-bold">Add part</button></div>
+        </form>
+      </div>
+      <% } %>
+      <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>">
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-on-surface-variant w-6"><%= li + 1 %>.</span>
+          <div>
+            <span class="text-sm font-medium"><%= lesson.title %></span>
+            <span class="ml-2 px-1.5 py-0.5 rounded text-xs <%= lesson.type === 'video' ? 'bg-red-100 text-red-700' : lesson.type === 'live' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>"><%= lesson.type %></span>
+            <% if (lesson.image_url) { %><span class="material-symbols-outlined text-sm text-on-surface-variant align-middle ml-1" title="Has image">image</span><% } %>
+            <% if (lesson.video_url) { %><span class="material-symbols-outlined text-sm text-on-surface-variant align-middle ml-1" title="Has video">smart_display</span><% } %>
+            <% if (lesson.materials && lesson.materials.length) { %><span class="ml-1 text-xs text-on-surface-variant">· <%= lesson.materials.length %> material<%= lesson.materials.length !== 1 ? 's' : '' %></span><% } %>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+          <span><%= lesson.duration_min %> min</span>
+          <a href="/admin/lessons/<%= lesson.id %>/preview" target="_blank" class="p-1 hover:text-secondary rounded" title="Preview as a student">
+            <span class="material-symbols-outlined text-sm">visibility</span>
+          </a>
+          <button onclick="document.getElementById('edit-lesson-<%= lesson.id %>').classList.toggle('hidden')" class="p-1 hover:text-primary rounded">
+            <span class="material-symbols-outlined text-sm">edit</span>
+          </button>
+          <button onclick="document.getElementById('materials-<%= lesson.id %>').classList.toggle('hidden')" class="p-1 hover:text-blue-600 rounded">
+            <span class="material-symbols-outlined text-sm">attachment</span>
+          </button>
+          <form method="POST" action="/admin/lessons/<%= lesson.id %>/delete" class="inline" onsubmit="return confirm('Delete this lesson?');">
+            <button type="submit" class="p-1 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
+          </form>
+        </div>
+      </div>
+      <!-- Edit Lesson Form -->
+      <div id="edit-lesson-<%= lesson.id %>" class="hidden px-6 py-3 bg-gray-50 border-b">
+        <form method="POST" action="/admin/lessons/<%= lesson.id %>" class="space-y-2">
+          <div class="grid grid-cols-3 gap-2">
+            <div class="col-span-2">
+              <label class="block text-xs font-medium mb-1">Title</label>
+              <input type="text" name="title" value="<%= lesson.title %>" required class="w-full px-2 py-1 border rounded text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1">Type</label>
+              <select name="type" class="w-full px-2 py-1 border rounded text-sm">
+                <% ['reading','video','live','assignment','discussion','audio'].forEach(function(t){ %><option value="<%= t %>" <%= lesson.type === t ? 'selected' : '' %>><%= t.charAt(0).toUpperCase()+t.slice(1) %></option><% }) %>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1">Content</label>
+            <textarea name="content" data-rich rows="4" class="w-full px-2 py-1 border rounded text-sm"><%= lesson.content || '' %></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-medium mb-1">Lesson image</label>
+              <input type="url" name="image_url" id="lesson-img-<%= lesson.id %>" value="<%= lesson.image_url || '' %>" placeholder="https://… or upload →" class="w-full px-2 py-1 border rounded text-sm">
+              <button type="button" data-upload-target="#lesson-img-<%= lesson.id %>" class="mt-1 inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1 hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm">upload</span> Upload</button>
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1">Video URL</label>
+              <input type="url" name="video_url" value="<%= lesson.video_url || '' %>" class="w-full px-2 py-1 border rounded text-sm">
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="<%= lesson.duration_min || 15 %>" class="w-full px-2 py-1 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Sort order</label><input type="number" name="sort_order" value="<%= lesson.sort_order || li+1 %>" class="w-full px-2 py-1 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Lesson (block) #</label><input type="number" name="block_no" min="1" value="<%= lesson.block_no || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Block title</label><input type="text" name="block_title" value="<%= lesson.block_title || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>
+          </div>
+          <% if (lesson.image_url) { %><img src="<%= lesson.image_url %>" alt="" class="h-20 rounded border border-outline-variant object-cover" onerror="this.style.display='none'"><% } %>
+          <div class="flex justify-end gap-2">
+            <button type="button" onclick="document.getElementById('edit-lesson-<%= lesson.id %>').classList.add('hidden')" class="px-2 py-1 border rounded text-xs">Cancel</button>
+            <button type="submit" class="px-2 py-1 bg-primary text-on-primary rounded text-xs font-bold">Save</button>
+          </div>
+        </form>
+      </div>
+      <!-- Lesson Materials -->
+      <div id="materials-<%= lesson.id %>" class="hidden px-6 py-3 bg-amber-50 border-b">
+        <p class="text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wide">Materials</p>
+        <% if (lesson.materials && lesson.materials.length) { %>
+          <div class="space-y-1.5 mb-3">
+            <% lesson.materials.forEach(function(mat){ %>
+            <div class="flex items-center justify-between text-sm">
+              <a href="<%= mat.url %>" target="_blank" class="text-secondary font-medium inline-flex items-center gap-1 hover:underline">
+                <span class="material-symbols-outlined text-sm">attachment</span> <%= mat.label %>
+                <span class="text-on-surface-variant font-normal text-xs">(<%= mat.type %>)</span>
+              </a>
+              <form method="POST" action="/admin/materials/<%= mat.id %>/delete" class="inline" onsubmit="return confirm('Remove this material?');">
+                <button type="submit" class="p-0.5 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
+              </form>
+            </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="text-xs text-on-surface-variant mb-3">No materials attached.</p>
+        <% } %>
+        <form method="POST" action="/admin/lessons/<%= lesson.id %>/materials" class="grid grid-cols-12 gap-2 items-end">
+          <input name="label" required placeholder="Label" class="col-span-3 px-2 py-1 border rounded text-xs">
+          <input name="url" required placeholder="URL (https://…)" class="col-span-5 px-2 py-1 border rounded text-xs">
+          <select name="type" class="col-span-2 px-2 py-1 border rounded text-xs">
+            <option value="link">Link</option><option value="pdf">PDF</option><option value="slides">Slides</option><option value="video">Video</option>
+          </select>
+          <button type="submit" class="col-span-2 bg-amber-500 text-white px-2 py-1 rounded text-xs font-bold hover:bg-amber-600">Add</button>
+        </form>
+      </div>
+      <% }) %>
+      <% if (mod.lessons.length === 0) { %>
+        <div class="px-6 py-4 text-center text-sm text-on-surface-variant">No lessons yet. Click <strong>Add a Lesson</strong> above to build one (its readings, video, and quiz together).</div>
+      <% } %>
+    </div>
+
+    <!-- Module quizzes (integrated quiz builder) -->
+    <div class="px-6 py-4 border-t border-outline-variant bg-indigo-50/40">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wide inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">quiz</span> Quizzes in this module</p>
+        <a href="/admin/quizzes/create?course_id=<%= course.id %>&module_id=<%= mod.id %>&return=/admin/courses/<%= course.id %>/modules" class="px-3 py-1 bg-indigo-500 text-white rounded text-xs font-medium hover:bg-indigo-600">+ Module-wide quiz</a>
+      </div>
+      <% if (mod.quizzes && mod.quizzes.length) { %>
+        <div class="space-y-1.5">
+          <% mod.quizzes.forEach(function(qz){ %>
+          <div class="flex items-center justify-between text-sm bg-white border border-outline-variant rounded px-3 py-2">
+            <div>
+              <% if (qz.after_block) { %><span class="inline-block bg-indigo-100 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded mr-1.5">Lesson <%= qz.after_block %></span><% } %>
+              <span class="font-medium text-primary"><%= qz.title %></span>
+              <span class="text-xs text-on-surface-variant ml-2"><%= qz.questionCount %> question<%= qz.questionCount===1?'':'s' %> · pass <%= qz.pass_mark %>%<%= qz.time_limit_min ? (' · ' + qz.time_limit_min + ' min') : '' %></span>
+              <% if (qz.questionCount === 0) { %><span class="text-[10px] text-red-600 font-bold ml-1">⚠ no questions yet</span><% } %>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="/admin/quizzes/<%= qz.id %>/edit?return=/admin/courses/<%= course.id %>/modules" class="p-1 text-on-surface-variant hover:text-primary rounded" title="Edit quiz"><span class="material-symbols-outlined text-sm">edit</span></a>
+              <form method="POST" action="/admin/quizzes/<%= qz.id %>/delete" class="inline" onsubmit="return confirm('Delete this quiz?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-xs text-on-surface-variant">No quizzes in this module yet. Click <strong>+ Quiz</strong> to build one.</p>
+      <% } %>
+    </div>
+    </div>
+  </details>
+    <% }) %>
+    <% if (y) { %></div></details><% } %>
+  <% }) %>
+
+  <% if (modules.length === 0) { %>
+    <div class="bg-white rounded-lg shadow p-12 text-center text-on-surface-variant">
+      <span class="material-symbols-outlined text-5xl mb-3">folder_open</span>
+      <p class="text-lg mb-2">No modules yet</p>
+      <p>Click "Add Module" above to build your course structure.</p>
+    </div>
+  <% } %>
+</div>

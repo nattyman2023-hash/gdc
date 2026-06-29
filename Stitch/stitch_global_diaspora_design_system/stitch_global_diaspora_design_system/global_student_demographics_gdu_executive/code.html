@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Executive Demographic Dashboard | GDU Zone 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fcf9f3",
+                    "tertiary": "#00030d",
+                    "secondary-container": "#fdc355",
+                    "tertiary-fixed": "#d7e2ff",
+                    "on-primary-fixed-variant": "#354766",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "on-tertiary-container": "#6a85bb",
+                    "on-primary-fixed": "#051b38",
+                    "on-secondary-container": "#725000",
+                    "on-tertiary-fixed": "#001a40",
+                    "error-container": "#ffdad6",
+                    "outline": "#74777e",
+                    "secondary-fixed": "#ffdea9",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "inverse-on-surface": "#f3f0ea",
+                    "secondary": "#7d5800",
+                    "surface": "#fcf9f3",
+                    "primary": "#00030c",
+                    "on-primary-container": "#7386a8",
+                    "tertiary-container": "#001c43",
+                    "surface-variant": "#e5e2dc",
+                    "outline-variant": "#c4c6ce",
+                    "surface-container-high": "#ebe8e2",
+                    "surface-container": "#f0eee8",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "inverse-primary": "#b4c7ec",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "surface-container-low": "#f6f3ed",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1c1c18",
+                    "on-secondary-fixed": "#271900",
+                    "surface-tint": "#4c5f7f",
+                    "surface-dim": "#dcdad4",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#44474d",
+                    "on-surface": "#1c1c18",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#071d3a",
+                    "on-primary": "#ffffff",
+                    "background": "#fcf9f3",
+                    "inverse-surface": "#31312d",
+                    "surface-container-highest": "#e5e2dc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-bar { transition: height 1s ease-out; }
+        .map-dot { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface-container-lowest dark:bg-primary-container border-b border-outline-variant dark:border-on-primary-container shadow-sm dark:shadow-none docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-surface-bright">Global Diaspora University</span>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Home</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">About GDU</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Academic Programs</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Student Life</a>
+<a class="text-on-surface-variant dark:surface-variant font-medium hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-label-sm text-label-sm" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-sm text-label-sm text-on-primary-fixed dark:text-primary-fixed hover:opacity-80 transition-all">Student Login</button>
+<button class="bg-primary-container text-on-primary px-6 py-2 font-label-sm text-label-sm rounded-DEFAULT hover:bg-primary transition-all">Apply Now</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow max-w-container-max mx-auto w-full px-margin-desktop py-12">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex flex-col items-start gap-2">
+<span class="font-tagline text-tagline text-secondary uppercase tracking-[0.15em]">Global Analytics</span>
+<h1 class="font-display-lg text-display-lg text-primary">Zone 4 Executive Demographic Dashboard</h1>
+<div class="w-24 h-1 bg-secondary-container mt-2"></div>
+</div>
+<p class="mt-6 font-body-lg text-body-lg text-on-surface-variant max-w-3xl italic font-serif">
+                "Go therefore and make disciples of all nations..." — Monitoring our global impact through data-driven academic excellence.
+            </p>
+</header>
+<!-- World Map Visualization -->
+<section class="mb-12">
+<div class="relative bg-white border border-outline-variant p-8 rounded-lg overflow-hidden group shadow-sm">
+<div class="absolute top-8 left-8 z-10">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Global Presence</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Live Student Enrollment Hotspots</p>
+</div>
+<!-- Simulated Interactive Map -->
+<div class="aspect-[21/9] w-full bg-surface-container relative overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-20 grayscale" data-alt="A stylized world map in muted greyscale and deep navy tones, featuring delicate gold circuit-like connections between major cities. The aesthetic is academic and prestigious, with a high-key lighting that emphasizes clean white space and formal professional geometry. Soft focal blur adds depth to the continental outlines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5cEPS-DLqgPflWh6b9E9Rsa9rowV7dLhXWD9pw36WlmX0nV7iUjEBKmjRzBYUbFgeeB95m0Hh-6yhGRPKj6THmrZf-Oq-ApfRgAXNqysTBi4drjQXxl2GxIy8AAfavxlHwitYATbbDPIWnUGan7tbG2ojjo5ohIvMrML-LACFlOteyxZ3X7d2j1L07ej9VxrLklzTqltDMHTqV4V2BH8vdjtkWTuTZ2nyaFsf858FM5I-F7MYh5fT0D0b0PECkrniRE3bxw838RQ"/>
+<!-- Hotspots -->
+<!-- London -->
+<div class="absolute top-[30%] left-[45%] group/pin">
+<div class="w-4 h-4 bg-secondary rounded-full map-dot cursor-pointer"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-3 py-1 text-xs opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap">London: 1,240 Students</div>
+</div>
+<!-- Lagos -->
+<div class="absolute top-[55%] left-[48%] group/pin">
+<div class="w-4 h-4 bg-secondary rounded-full map-dot cursor-pointer"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-3 py-1 text-xs opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap">Lagos: 3,120 Students</div>
+</div>
+<!-- Nairobi -->
+<div class="absolute top-[60%] left-[55%] group/pin">
+<div class="w-4 h-4 bg-secondary rounded-full map-dot cursor-pointer"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-3 py-1 text-xs opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap">Nairobi: 2,850 Students</div>
+</div>
+<!-- Dallas -->
+<div class="absolute top-[40%] left-[25%] group/pin">
+<div class="w-4 h-4 bg-secondary rounded-full map-dot cursor-pointer"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-3 py-1 text-xs opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap">Dallas: 1,890 Students</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+<!-- Enrollment by Region (Pie Chart) -->
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg flex flex-col items-center">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-6 self-start">Enrollment by Region</h4>
+<div class="relative w-48 h-48 rounded-full border-[16px] border-primary-container flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-[16px] border-secondary-container border-t-transparent border-l-transparent transform rotate-45"></div>
+<div class="text-center">
+<span class="block font-headline-md text-headline-md text-primary">12.4k</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total</span>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-2 gap-4 w-full">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary-container"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Africa (62%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-secondary-container"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Europe (18%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-secondary"></div>
+<span class="font-label-sm text-label-sm text-on-surface">N. America (15%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-outline"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Other (5%)</span>
+</div>
+</div>
+</div>
+<!-- Religious Affiliation (Bar Chart) -->
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-6">Religious Affiliation</h4>
+<div class="space-y-6 h-48 flex flex-col justify-end">
+<div class="flex items-end gap-4 h-full px-4">
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-primary-container rounded-t-sm chart-bar" style="height: 85%"></div>
+<span class="font-label-sm text-label-sm transform -rotate-45 md:rotate-0">Christian</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-secondary-container rounded-t-sm chart-bar" style="height: 10%"></div>
+<span class="font-label-sm text-label-sm">Muslim</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-outline-variant rounded-t-sm chart-bar" style="height: 5%"></div>
+<span class="font-label-sm text-label-sm">Other</span>
+</div>
+</div>
+</div>
+<p class="mt-8 pt-4 border-t border-outline-variant font-label-sm text-label-sm text-on-surface-variant text-center">92% Engagement with Campus Ministries</p>
+</div>
+<!-- Student Age Distribution -->
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-6">Age Distribution</h4>
+<div class="space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span>18 - 22 (Undergrad)</span>
+<span>42%</span>
+</div>
+<div class="w-full bg-surface-variant h-2">
+<div class="bg-secondary-container h-full w-[42%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span>23 - 30 (Graduate)</span>
+<span>35%</span>
+</div>
+<div class="w-full bg-surface-variant h-2">
+<div class="bg-secondary-container h-full w-[35%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span>31 - 45 (Professional)</span>
+<span>18%</span>
+</div>
+<div class="w-full bg-surface-variant h-2">
+<div class="bg-secondary-container h-full w-[18%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span>45+ (Executive)</span>
+<span>5%</span>
+</div>
+<div class="w-full bg-surface-variant h-2">
+<div class="bg-secondary-container h-full w-[5%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Diaspora Hubs Table -->
+<section class="mb-12">
+<div class="bg-surface-container-lowest border border-secondary shadow-sm rounded-lg overflow-hidden">
+<div class="px-8 py-6 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Top Diaspora Hubs Analysis</h3>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-primary-container p-2 border border-outline-variant hover:bg-surface-variant">filter_list</button>
+<button class="material-symbols-outlined text-primary-container p-2 border border-outline-variant hover:bg-surface-variant">download</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary-container text-on-primary">
+<th class="px-8 py-4 font-label-sm text-label-sm uppercase tracking-wider">City Hub</th>
+<th class="px-8 py-4 font-label-sm text-label-sm uppercase tracking-wider text-right">Population</th>
+<th class="px-8 py-4 font-label-sm text-label-sm uppercase tracking-wider text-right">Growth Rate</th>
+<th class="px-8 py-4 font-label-sm text-label-sm uppercase tracking-wider text-right">Avg. GPA</th>
+<th class="px-8 py-4 font-label-sm text-label-sm uppercase tracking-wider text-center">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4 font-body-md text-on-surface font-semibold">Lagos, Nigeria</td>
+<td class="px-8 py-4 text-right">3,120</td>
+<td class="px-8 py-4 text-right text-error font-semibold">+12.4%</td>
+<td class="px-8 py-4 text-right">3.82</td>
+<td class="px-8 py-4 text-center">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 font-bold rounded-sm">ELITE HUB</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4 font-body-md text-on-surface font-semibold">Nairobi, Kenya</td>
+<td class="px-8 py-4 text-right">2,850</td>
+<td class="px-8 py-4 text-right text-error font-semibold">+8.7%</td>
+<td class="px-8 py-4 text-right">3.65</td>
+<td class="px-8 py-4 text-center">
+<span class="bg-surface-variant text-on-surface-variant text-[10px] px-2 py-0.5 font-bold rounded-sm">STEADY</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4 font-body-md text-on-surface font-semibold">London, UK</td>
+<td class="px-8 py-4 text-right">1,240</td>
+<td class="px-8 py-4 text-right text-error font-semibold">+4.2%</td>
+<td class="px-8 py-4 text-right">3.78</td>
+<td class="px-8 py-4 text-center">
+<span class="bg-surface-variant text-on-surface-variant text-[10px] px-2 py-0.5 font-bold rounded-sm">STEADY</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4 font-body-md text-on-surface font-semibold">Dallas, USA</td>
+<td class="px-8 py-4 text-right">1,890</td>
+<td class="px-8 py-4 text-right text-error font-semibold">+15.1%</td>
+<td class="px-8 py-4 text-right">3.91</td>
+<td class="px-8 py-4 text-center">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 font-bold rounded-sm">ELITE HUB</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Scripture Callout -->
+<section class="max-w-2xl mx-auto text-center py-12">
+<div class="h-px w-32 bg-secondary mx-auto mb-6"></div>
+<p class="font-display-lg italic text-headline-md text-primary mb-6">
+                "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
+            </p>
+<span class="font-tagline text-tagline text-secondary">Colossians 3:23</span>
+<div class="h-px w-32 bg-secondary mx-auto mt-6"></div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto">
+<div class="flex flex-col gap-6">
+<span class="font-headline-sm text-headline-sm text-on-primary-fixed dark:text-primary-fixed">Global Diaspora University</span>
+<p class="font-body-md text-body-md text-surface-variant dark:text-outline-variant max-w-sm">
+                    Educating the next generation of global leaders through faith, discipline, and scholarly excellence.
+                </p>
+<p class="font-body-md text-body-md text-surface-variant dark:text-outline-variant">
+                    © 2024 Global Diaspora University. Educate. Equip. Empower. Impact the World.
+                </p>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col gap-4">
+<span class="font-tagline text-tagline text-secondary-fixed uppercase tracking-widest">Resources</span>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">News &amp; Insights</a>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">FAQs</a>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Accessibility Statement</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-tagline text-tagline text-secondary-fixed uppercase tracking-widest">Legal</span>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="#">Terms &amp; Conditions</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple entry animations for chart bars
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const targetHeight = bar.style.height;
+                bar.style.height = '0px';
+                setTimeout(() => {
+                    bar.style.height = targetHeight;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

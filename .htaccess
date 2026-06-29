@@ -1,0 +1,39 @@
+# GDCU - Hostinger .htaccess for Node.js reverse proxy
+# Place in the public_html directory on Hostinger
+
+# Force HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Proxy all requests to Node.js app running on port 3000
+RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]
+
+# Deny access to sensitive files
+<FilesMatch "\.(env|json|sqlite|sqlite3|md|log)$">
+  Require all denied
+</FilesMatch>
+
+# Cache static assets
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff2?)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Gzip compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Block bad bots
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} (ahrefs|majestic|rogerbot|semrush|spyder) [NC]
+RewriteRule .* - [F,L]

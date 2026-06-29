@@ -1,0 +1,38 @@
+<%- include('../partials/page-hero', { heroTitle: 'Diaspora Research Grants', heroTagline: 'Scholarship & Research', heroText: 'Funding for research into diaspora theology, migration, mission and community development.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-5 gap-10">
+    <div class="md:col-span-2">
+      <h2 class="font-headline text-headline-md text-primary mb-4">About the grants</h2>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-4">The Diaspora Research Grant supports faculty, doctoral researchers and practitioners undertaking original research aligned with the University's mission.</p>
+      <ul class="space-y-3">
+        <% ['Diaspora & migration theology','Global majority church','Community development','Mission & cross-cultural studies'].forEach(function(i){ %>
+        <li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span><span class="text-on-surface-variant"><%= i %></span></li>
+        <% }) %>
+      </ul>
+    </div>
+    <div class="md:col-span-3">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+        <h2 class="font-headline text-headline-sm text-primary mb-4">Apply for a grant</h2>
+        <% if (Object.keys(errors).length) { %><div class="bg-error-container text-on-error-container px-3 py-2 rounded mb-4 text-sm">Please correct the highlighted fields.</div><% } %>
+        <form action="/research-grants" method="post" class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">First name *</label><input name="first_name" value="<%= form.first_name||'' %>" class="w-full px-3 py-2 rounded border <%= errors.first_name?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Last name *</label><input name="last_name" value="<%= form.last_name||'' %>" class="w-full px-3 py-2 rounded border <%= errors.last_name?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Email *</label><input type="email" name="email" value="<%= form.email||'' %>" class="w-full px-3 py-2 rounded border <%= errors.email?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Institution</label><input name="institution" value="<%= form.institution||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          </div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Project title *</label><input name="title" value="<%= form.title||'' %>" class="w-full px-3 py-2 rounded border <%= errors.title?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Category</label><input name="category" value="<%= form.category||'' %>" placeholder="e.g. Migration theology" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+            <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Amount requested (£)</label><input name="amount_requested" type="number" step="0.01" value="<%= form.amount_requested||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          </div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Project summary</label><textarea name="summary" rows="4" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= form.summary||'' %></textarea></div>
+          <button class="bg-primary text-on-primary px-6 py-3 rounded font-bold">Submit application</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">People</p><h1 class="font-headline text-headline-md text-primary">Faculty</h1></div>
+  <a href="/admin/users/new?role=faculty" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">person_add</span> Add faculty member</a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <% if (!faculty.length) { %><p class="text-on-surface-variant">No faculty records.</p><% } %>
+  <% faculty.forEach(function(f){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <div class="flex items-start justify-between gap-3 mb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-center font-bold text-lg"><%= f.first_name.charAt(0) %></div>
+        <div><p class="font-bold text-primary">Dr. <%= f.first_name %> <%= f.last_name %></p><p class="text-sm text-on-surface-variant"><%= f.email %></p></div>
+      </div>
+      <% if (currentUser && (currentUser.role === 'admin' || currentUser.role === 'staff')) { %>
+      <a href="/admin/users/<%= f.id %>/edit" class="text-secondary font-bold text-sm inline-flex items-center gap-1 shrink-0" title="Edit faculty account"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+      <% } %>
+    </div>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Teaching</p>
+    <% if (!f.courses.length) { %><p class="text-sm text-on-surface-variant">No assigned courses.</p><% } %>
+    <ul class="space-y-1 mb-4">
+      <% f.courses.forEach(function(c){ %><li class="text-sm text-primary">• <%= c.code ? c.code + ' — ' : '' %><%= c.title %></li><% }) %>
+    </ul>
+    <div class="flex gap-3 border-t border-outline-variant/40 pt-3">
+      <a href="/admin/users/<%= f.id %>/edit" class="text-secondary font-bold text-sm">Manage account</a>
+      <a href="mailto:<%= f.email %>" class="text-on-surface-variant text-sm hover:text-primary">Email</a>
+    </div>
+  </div>
+  <% }) %>
+</div>

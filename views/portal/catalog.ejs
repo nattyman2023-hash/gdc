@@ -1,0 +1,57 @@
+<div class="flex items-end justify-between gap-3 mb-6 flex-wrap">
+  <div>
+    <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Course Catalogue</p>
+    <h1 class="font-headline text-headline-md text-primary">Course List</h1>
+    <p class="text-on-surface-variant mt-1 italic">Click on a block to open the course.</p>
+  </div>
+  <!-- List / card view toggle -->
+  <div class="inline-flex border border-outline-variant rounded overflow-hidden text-sm">
+    <a href="/portal/catalog?view=grid" class="px-3 py-1.5 inline-flex items-center gap-1 <%= view==='grid' ? 'bg-primary text-on-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low' %>"><span class="material-symbols-outlined text-base">grid_view</span> Cards</a>
+    <a href="/portal/catalog?view=list" class="px-3 py-1.5 inline-flex items-center gap-1 <%= view==='list' ? 'bg-primary text-on-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low' %>"><span class="material-symbols-outlined text-base">view_list</span> List</a>
+  </div>
+</div>
+
+<% if (!courses.length) { %><p class="text-on-surface-variant">No courses are available yet.</p><% } %>
+
+<% if (view === 'list') { %>
+  <!-- List view -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% courses.forEach(function(c){ var enrolled = enrolledIds.includes(c.id); %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+      <div class="h-28 bg-primary-container overflow-hidden"><img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <p class="font-tagline text-label-sm text-secondary uppercase"><%= c.code || 'Course' %> · <%= c.credits %> credits</p>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= c.title %></h3>
+        <p class="text-on-surface-variant text-body-md mb-5 flex-1"><%= truncate(c.summary, 120) %></p>
+        <% if (enrolled) { %>
+          <a href="/portal/courses/<%= c.slug %>" class="text-center bg-surface-container-high text-primary px-5 py-2 rounded font-bold border border-outline-variant hover:border-secondary">Go to course</a>
+        <% } else { %>
+          <form action="/portal/courses/<%= c.id %>/enroll" method="post"><button class="w-full bg-primary text-on-primary px-5 py-2 rounded font-bold hover:opacity-90">Enrol</button></form>
+        <% } %>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <!-- Card grid (boxes) -->
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <% courses.forEach(function(c){
+         var enrolled = enrolledIds.includes(c.id);
+         var img = c.featured_image || '/img/generated/gdcu-online-learning.png';
+         var cta = enrolled ? 'To the course' : 'Enrol now';
+         var inner = `
+           <div class="relative h-44 rounded-lg overflow-hidden border border-outline-variant shadow-sm group-hover:shadow-lg transition-shadow">
+             <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/25"></div>
+             <span class="absolute top-3 left-0 bg-primary text-on-primary text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug">${c.title}</span>
+             <span class="absolute bottom-3 right-3 bg-white/95 text-primary text-xs font-bold px-3 py-1.5 rounded-full inline-flex items-center gap-1">${cta} <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+           </div>`;
+    %>
+    <% if (enrolled) { %>
+      <a href="/portal/courses/<%= c.slug %>" class="group block"><%- inner %></a>
+    <% } else { %>
+      <form action="/portal/courses/<%= c.id %>/enroll" method="post"><button type="submit" class="group block w-full text-left"><%- inner %></button></form>
+    <% } %>
+    <% }) %>
+  </div>
+<% } %>

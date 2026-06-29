@@ -1,0 +1,31 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Operations</p><h1 class="font-headline text-headline-md text-primary">Support Tickets</h1></div>
+
+<form method="get" class="flex flex-wrap gap-3 mb-5">
+  <select name="status" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All statuses</option>
+    <% ['open','pending','resolved','closed'].forEach(function(s){ %><option value="<%= s %>" <%= filters.status===s?'selected':'' %>><%= s %></option><% }) %>
+  </select>
+  <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Filter</button>
+  <a href="/admin/support" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+</form>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Ref</th><th class="px-4 py-3">Subject</th><th class="px-4 py-3 hidden md:table-cell">From</th><th class="px-4 py-3 hidden sm:table-cell">Category</th><th class="px-4 py-3">Priority</th><th class="px-4 py-3">Status</th></tr>
+    </thead>
+    <tbody>
+      <% if (!tickets.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">No tickets.</td></tr><% } %>
+      <% tickets.forEach(function(t){ %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low cursor-pointer" data-drawer="/admin/support/<%= t.id %>/drawer">
+        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><a href="/admin/support/<%= t.id %>" class="hover:text-secondary"><%= t.reference %></a></td>
+        <td class="px-4 py-3 font-bold text-primary"><a href="/admin/support/<%= t.id %>" class="hover:text-secondary"><%= t.subject %></a></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= t.first_name ? (t.first_name+' '+t.last_name) : (t.email||'—') %></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= t.category %></td>
+        <td class="px-4 py-3"><span class="<%= t.priority==='high' ? 'text-error font-bold' : 'text-on-surface-variant' %>"><%= t.priority %></span></td>
+        <td class="px-4 py-3"><%- include('_badge', { status: (t.status==='resolved'||t.status==='closed') ? 'paid' : (t.status==='pending'?'sent':'new') }) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <style> @media print { .no-print { display:none !important; } body { background:#fff; } } </style>
+</head>
+<body class="bg-surface-container-low min-h-screen p-6 font-body">
+  <div class="max-w-3xl mx-auto bg-surface-container-lowest border border-outline-variant rounded-lg p-8 md:p-12">
+    <div class="flex items-center justify-between border-b-2 border-primary pb-4 mb-6">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings:'FILL' 1;">school</span>
+        <div><p class="font-headline text-headline-sm text-primary font-bold leading-tight">Global Diaspora Christian University</p><p class="font-tagline text-label-sm text-secondary uppercase">Academic Transcript</p></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+      <div><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Student</p><p class="font-bold text-primary"><%= holder %></p></div>
+      <div class="text-right"><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Issued</p><p class="font-bold text-primary"><%= formatDate(generated) %></p></div>
+    </div>
+
+    <table class="w-full text-left text-sm mb-6">
+      <thead class="border-y border-outline-variant font-tagline text-label-sm uppercase text-on-surface-variant">
+        <tr><th class="py-2">Code</th><th class="py-2">Course</th><th class="py-2 text-center">Credits</th><th class="py-2 text-center">Best score</th><th class="py-2 text-right">Status</th></tr>
+      </thead>
+      <tbody>
+        <% if (!rows.length) { %><tr><td colspan="5" class="py-4 text-center text-on-surface-variant">No enrolment records.</td></tr><% } %>
+        <% rows.forEach(function(r){ %>
+        <tr class="border-b border-outline-variant/30">
+          <td class="py-2 font-mono text-xs text-on-surface-variant"><%= r.code || '—' %></td>
+          <td class="py-2 text-primary font-medium"><%= r.title %></td>
+          <td class="py-2 text-center text-on-surface-variant"><%= r.credits %></td>
+          <td class="py-2 text-center text-on-surface-variant"><%= r.best_score===null ? '—' : r.best_score+'%' %></td>
+          <td class="py-2 text-right capitalize <%= r.status==='completed' ? 'text-secondary font-bold' : 'text-on-surface-variant' %>"><%= r.status %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <div class="flex justify-between items-center border-t-2 border-primary pt-4">
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase">Total credits earned</p>
+      <p class="font-headline text-headline-sm text-primary"><%= totalCredits %></p>
+    </div>
+    <p class="text-xs text-on-surface-variant mt-6 italic">This transcript is generated from the student record system. Best score shows the highest quiz result achieved per course and is indicative, not a final grade.</p>
+  </div>
+
+  <div class="no-print max-w-3xl mx-auto mt-6 flex gap-4">
+    <button onclick="window.print()" class="bg-primary text-on-primary px-6 py-2 rounded font-bold"><span class="material-symbols-outlined align-middle text-base">print</span> Print / Save PDF</button>
+    <a href="/portal" class="border border-outline text-primary px-6 py-2 rounded font-bold bg-surface-container-lowest">Back to portal</a>
+  </div>
+</body>
+</html>

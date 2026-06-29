@@ -1,0 +1,57 @@
+<%- include('../partials/page-hero', { heroTitle: 'Admissions & Tuition', heroTagline: 'Begin Your Journey', heroText: 'A simple, supportive admissions process designed for diaspora students worldwide.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-12 text-center">How to Apply</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+      <% [
+        ['1','Choose your program','Browse our catalogue and find the programme that fits your calling.'],
+        ['2','Submit your application','Complete the online form and pay the application fee securely.'],
+        ['3','Interview & review','Our admissions team reviews your application and may invite you to a short interview.'],
+        ['4','Enrol & begin','Receive your offer, confirm your place and start learning online.']
+      ].forEach(function(step){ %>
+      <div class="relative bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+        <div class="w-12 h-12 bg-primary text-on-primary font-headline text-headline-sm flex items-center justify-center rounded-full mb-4"><%= step[0] %></div>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= step[1] %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= step[2] %></p>
+      </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-12">
+      <a href="/admissions/apply" class="inline-block bg-primary text-on-primary px-10 py-4 rounded font-bold hover:opacity-90">Start Your Application</a>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="flex justify-between items-end mb-8">
+      <h2 class="font-headline text-headline-md text-primary">Tuition by Program</h2>
+      <a href="/programs" class="text-primary font-bold border-b border-primary pb-1 hidden sm:inline">View all</a>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-primary text-on-primary font-tagline text-label-sm uppercase">
+          <tr><th class="px-6 py-4">Program</th><th class="px-6 py-4 hidden sm:table-cell">Level</th><th class="px-6 py-4 hidden md:table-cell">Duration</th><th class="px-6 py-4 text-right">Tuition</th></tr>
+        </thead>
+        <tbody>
+          <% programs.forEach(function(p, i){ %>
+          <tr class="<%= i%2 ? 'bg-surface-container-low' : '' %> border-t border-outline-variant/30">
+            <td class="px-6 py-4"><a href="/programs/<%= p.slug %>" class="font-bold text-primary hover:text-secondary"><%= p.title %></a></td>
+            <td class="px-6 py-4 hidden sm:table-cell text-on-surface-variant"><%= p.level %></td>
+            <td class="px-6 py-4 hidden md:table-cell text-on-surface-variant"><%= p.duration %></td>
+            <td class="px-6 py-4 text-right font-bold text-primary"><%= formatMoney(p.tuition, p.tuition_currency) %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-on-surface-variant text-sm mt-4">Tuition may be paid in full or via an instalment plan. Scholarships and diaspora sponsorships are available for eligible students — <a href="/contact" class="text-secondary font-bold underline">contact us</a> to learn more.</p>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-container-low">
+  <div class="max-w-2xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <%- include('../partials/request-info', { programs: programs }) %>
+  </div>
+</section>

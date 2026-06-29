@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alumni Mentorship &amp; Career Network | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "primary-fixed": "#d6e3ff",
+                    "secondary-container": "#fdc355",
+                    "primary": "#00030c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ea",
+                    "surface-dim": "#dcdad4",
+                    "surface-container-low": "#f6f3ed",
+                    "on-primary-container": "#7386a8",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b4c7ec",
+                    "surface-tint": "#4c5f7f",
+                    "surface-variant": "#e5e2dc",
+                    "on-surface-variant": "#44474d",
+                    "outline": "#74777e",
+                    "surface-container-high": "#ebe8e2",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#fcf9f3",
+                    "on-tertiary-fixed": "#001a40",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ffdea9",
+                    "surface-container": "#f0eee8",
+                    "on-primary-fixed": "#051b38",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-secondary-container": "#725000",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#31312d",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "tertiary-fixed": "#d7e2ff",
+                    "primary-container": "#071d3a",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#6a85bb",
+                    "on-background": "#1c1c18",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "secondary": "#7d5800",
+                    "background": "#fcf9f3",
+                    "tertiary-container": "#001c43",
+                    "tertiary": "#00030d",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "on-surface": "#1c1c18",
+                    "on-secondary-fixed": "#271900",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-primary-fixed-variant": "#354766",
+                    "outline-variant": "#c4c6ce",
+                    "surface": "#fcf9f3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "margin-desktop": "64px",
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ivory-gradient {
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,245,239,1) 100%);
+        }
+        .seal-watermark {
+            opacity: 0.03;
+            pointer-events: none;
+            position: absolute;
+            z-index: 0;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">GDU</span>
+<div class="hidden lg:block h-8 w-[1px] bg-outline-variant mx-2"></div>
+<span class="hidden lg:block font-tagline text-tagline text-secondary uppercase tracking-widest">Alumni Network</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Academics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Research</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Faith</a>
+<a class="text-primary border-b-2 border-secondary-container font-bold pb-1" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant">language</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-tagline text-label-sm uppercase tracking-wider rounded-sm hover:bg-opacity-90 transition-all">Apply Now</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section with Scripture -->
+<header class="relative pt-32 pb-20 overflow-hidden bg-surface-container-low border-b border-outline-variant/30">
+<div class="absolute inset-0 opacity-5">
+
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10 text-center">
+<div class="w-24 h-24 mx-auto mb-8 relative">
+<img alt="GDU Seal" class="rounded-full shadow-lg" data-alt="A highly detailed official university seal of Global Diaspora University embossed in gold on a deep navy background. The seal is circular and intricate, featuring academic and Christian symbols like an open book and a cross, illuminated by soft studio lighting in a formal, scholarly setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFuXryUOX_RhOWHnV7aSIsLSOqfiRkvSqX9PNI-EaPXWmhDFL7ZfKKa_c5XjxGt3ou-aXOzyhvqOQStBtUdfUGPjXJUswRPRar7rhJEdPfNlMOGSN5r5G7APv0hspVImnKZkUoEeUkReatDTqof6YQtI7OKtW7YA3IbExsPRdDNLUEkdS2gBFPUgb3psLpE0ia-xaR8Qrr3q8gp-lfqMV5q1IFatsBK4N2dtVXO9YfTBAova6Ot69oqfXJx6Iqdt5uB9M3pIZj6LU"/>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">Empowering Global Generations</h1>
+<div class="max-w-2xl mx-auto py-6 border-y border-secondary-container/30 my-8">
+<p class="font-headline-sm text-headline-sm italic text-secondary-fixed-variant leading-relaxed">
+                    "As iron sharpens iron, so one person sharpens another."
+                </p>
+<span class="font-tagline text-label-sm uppercase tracking-widest mt-2 block text-outline">— Proverbs 27:17</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto mb-10">
+                A dedicated space for GDU alumni to bridge continents, foster spiritual growth, and champion academic excellence through professional mentorship.
+            </p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 font-tagline text-label-sm uppercase tracking-widest rounded-sm shadow-md hover:translate-y-[-2px] transition-transform">Find a Mentor</button>
+<button class="border border-secondary text-primary px-8 py-4 font-tagline text-label-sm uppercase tracking-widest rounded-sm hover:bg-secondary-container/10 transition-all">Become a Mentor</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 flex flex-col lg:flex-row gap-gutter">
+<!-- Left Column: Main Content -->
+<div class="flex-1">
+<!-- Mentor Directory -->
+<section class="mb-20">
+<div class="flex items-end justify-between mb-10 border-b border-outline-variant pb-4">
+<div>
+<span class="font-tagline text-label-sm text-secondary uppercase tracking-[0.2em] mb-2 block">The Directory</span>
+<h2 class="font-headline-md text-headline-md text-primary">Distinguished Mentors</h2>
+</div>
+<div class="flex gap-4">
+<select class="bg-surface border-outline-variant text-label-sm font-body-md py-2 px-4 rounded-sm">
+<option>All Regions</option>
+<option>UK</option>
+<option>US</option>
+<option>Africa</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Mentor Card 1 -->
+<div class="bg-white border border-outline-variant/30 p-6 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow duration-500 relative group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 clip-path-triangle group-hover:bg-secondary/20 transition-colors"></div>
+<img alt="Mentor Portrait" class="w-24 h-24 object-cover rounded-sm border-2 border-secondary-container" data-alt="A professional portrait of a woman of African descent in her 40s, wearing business attire. She is smiling warmly in a bright, modern corporate office environment with high-key lighting. The style is professional and authoritative, with a clean navy and cream color palette visible in the surroundings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1g9-QwSIiLMSDbdXtKsCDdw_5p3nudjVaqxq_FIcPWr-6iallaAUlvcNrnxb3mXyZk2GqDpLIx_ykWxTW2tCfUPJG-xRsSDhcpc_hiQeU6yevIyXE77RYV3Af-gaq72bSDYyir_BMKSbticJe56aHWidMXw2WCRJh1roeARYk1eYoWutHkVRaIE4o3b6ARs4XHc4rjr5ftk0O7QuY-l18M7UJ6FLjljwkAmtqopNd3w-IOg9hccpRCDGyJG8agbtLywesxJ3dz9g"/>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Dr. Sarah Mensah</h3>
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-2 py-0.5 rounded-sm uppercase">US / Diaspora</span>
+</div>
+<p class="font-body-md text-on-surface-variant font-medium mb-1">Director of Public Health, CDC</p>
+<p class="font-label-sm text-outline mb-4">Faith Focus: Institutional Equity &amp; Ethics</p>
+<button class="w-full py-2 border border-primary text-primary font-tagline text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Request Matching</button>
+</div>
+</div>
+<!-- Mentor Card 2 -->
+<div class="bg-white border border-outline-variant/30 p-6 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow duration-500 relative group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 clip-path-triangle group-hover:bg-secondary/20 transition-colors"></div>
+<img alt="Mentor Portrait" class="w-24 h-24 object-cover rounded-sm border-2 border-secondary-container" data-alt="A headshot of a middle-aged man in a charcoal suit and white shirt, looking confident and approachable. He is set against a background of traditional library shelves filled with leather-bound books. The lighting is warm and academic, emphasizing rich textures of gold, navy, and cream." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAftyVIBODE1Qio-mldtKyWGAlduD2KKc6fzBzE07VDc96Vz0gNSvXwo0BrBqKU6ynpOhdpbYBR1hODCh8dVibUkeuEEsKdgdcwnooVa_0KYoi5ilxCF_uxIKgHW0qwHQFR0vaBSSyOtxOS-GFzo6-lE1sAoLbZ47m6nAGCEyu75g0n_6Q9vgj7VwGD-_UCu6-jmcC3cw0AyJ-35bTtkUE7uNEOjh4ucCZAfQYVzcNcm9n1cdoBtRSupi-ijAgVSWcggt8UGqGt9xk"/>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">David Thompson</h3>
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-2 py-0.5 rounded-sm uppercase">UK / Europe</span>
+</div>
+<p class="font-body-md text-on-surface-variant font-medium mb-1">Snr Partner, Global Law Associates</p>
+<p class="font-label-sm text-outline mb-4">Faith Focus: Integrity in Governance</p>
+<button class="w-full py-2 border border-primary text-primary font-tagline text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Request Matching</button>
+</div>
+</div>
+<!-- Mentor Card 3 -->
+<div class="bg-white border border-outline-variant/30 p-6 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow duration-500 relative group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 clip-path-triangle group-hover:bg-secondary/20 transition-colors"></div>
+<img alt="Mentor Portrait" class="w-24 h-24 object-cover rounded-sm border-2 border-secondary-container" data-alt="A portrait of a young male professional of West African heritage in a vibrant business-casual outfit. He is standing in a tech-focused hub with clean glass partitions and subtle warm lighting. The aesthetic is modern and sophisticated, incorporating deep navy accents and soft gold highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-IwrFuYl0NBTYGmsSBP7QAuE3RCcqBe44ElgY-YuiPbgTthztv_G-2iysM81RBwZPT0jXIHVaaJiRVWk6V12TKdp5mwPB0UwWApPGXgOk8qYHqv2duASgMU_LzXRSHXKQTucQDIetju2mVJmPViC8wzm7Py5snF5hYo3thvcTx9pxrHx5NNVqU36X0tIGIzu3Kfa6FqkFLpBcsHb8xC9Syp_ttvY7BNn--vNw1yLBWCDPhZMVS9imD29GN3ddma147nL4hOmA4RM"/>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Emmanuel Obi</h3>
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-2 py-0.5 rounded-sm uppercase">Lagos / Africa</span>
+</div>
+<p class="font-body-md text-on-surface-variant font-medium mb-1">Founder, TechForGood NGO</p>
+<p class="font-label-sm text-outline mb-4">Faith Focus: Digital Stewardship</p>
+<button class="w-full py-2 border border-primary text-primary font-tagline text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Request Matching</button>
+</div>
+</div>
+<!-- Mentor Card 4 -->
+<div class="bg-white border border-outline-variant/30 p-6 flex flex-col md:flex-row gap-6 hover:shadow-xl transition-shadow duration-500 relative group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-secondary/10 clip-path-triangle group-hover:bg-secondary/20 transition-colors"></div>
+<img alt="Mentor Portrait" class="w-24 h-24 object-cover rounded-sm border-2 border-secondary-container" data-alt="A professional woman with glasses and a thoughtful expression, wearing a tailored blazer. She is photographed in an academic setting with soft, natural light coming through a window. The palette is a refined blend of ivory, navy, and gold, conveying a sense of heritage and professional excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSSEg-WZtYUC96c5C-pX9EYVDDultLgweeQ6TFFl_1VNDiGHQd-nOS0Dy0ZOTiQDtnE-GDmCYTY8m-IV2ProxCatQe2gDDH5hrOQDH_5Z3pUWuCbnp6nWrfFGKnsAEz77XSR8niBvfLOPUJ0m-Bf6Vk7WdOxNBUE0GYFShB3hdeZNq1KS53wS2tj-l09tsglqh1UELx80AD5ZB_fTDH2XvG4jXNdwzSy1wV8jDez2RUiRdtYUxS2QBneCpe7kY6IebVRqEstzmQ7o"/>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Prof. Anne Clarke</h3>
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-2 py-0.5 rounded-sm uppercase">London / UK</span>
+</div>
+<p class="font-body-md text-on-surface-variant font-medium mb-1">Dean of Alumni Research</p>
+<p class="font-label-sm text-outline mb-4">Faith Focus: Science &amp; Theology</p>
+<button class="w-full py-2 border border-primary text-primary font-tagline text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Request Matching</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Career Opportunities Section -->
+<section class="bg-surface-container-high/50 p-10 border border-outline-variant/40 rounded-sm">
+<div class="mb-8">
+<span class="font-tagline text-label-sm text-secondary uppercase tracking-[0.2em] mb-2 block">Career Opportunities</span>
+<h2 class="font-headline-md text-headline-md text-primary">Partner Organization Vacancies</h2>
+</div>
+<div class="space-y-4">
+<div class="bg-white p-6 border-l-4 border-secondary flex flex-col md:flex-row justify-between items-center group cursor-pointer hover:bg-surface-bright transition-colors">
+<div>
+<span class="font-tagline text-[10px] text-outline uppercase">Christian Aid International</span>
+<h4 class="font-headline-sm text-[20px] text-primary mt-1">Lead Program Coordinator - West Africa</h4>
+</div>
+<div class="mt-4 md:mt-0 text-right">
+<span class="font-label-sm text-on-surface-variant block mb-2">Location: Abuja, Nigeria</span>
+<span class="text-secondary font-tagline text-label-sm uppercase tracking-widest group-hover:underline">View Details →</span>
+</div>
+</div>
+<div class="bg-white p-6 border-l-4 border-primary flex flex-col md:flex-row justify-between items-center group cursor-pointer hover:bg-surface-bright transition-colors">
+<div>
+<span class="font-tagline text-[10px] text-outline uppercase">Global Diaspora Education Fund</span>
+<h4 class="font-headline-sm text-[20px] text-primary mt-1">Senior Financial Analyst</h4>
+</div>
+<div class="mt-4 md:mt-0 text-right">
+<span class="font-label-sm text-on-surface-variant block mb-2">Location: London, UK</span>
+<span class="text-secondary font-tagline text-label-sm uppercase tracking-widest group-hover:underline">View Details →</span>
+</div>
+</div>
+<div class="bg-white p-6 border-l-4 border-secondary flex flex-col md:flex-row justify-between items-center group cursor-pointer hover:bg-surface-bright transition-colors">
+<div>
+<span class="font-tagline text-[10px] text-outline uppercase">Compassion Partners</span>
+<h4 class="font-headline-sm text-[20px] text-primary mt-1">Ethical Policy Advisor</h4>
+</div>
+<div class="mt-4 md:mt-0 text-right">
+<span class="font-label-sm text-on-surface-variant block mb-2">Location: Washington D.C., USA</span>
+<span class="text-secondary font-tagline text-label-sm uppercase tracking-widest group-hover:underline">View Details →</span>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full py-4 border-2 border-primary text-primary font-tagline text-label-sm uppercase tracking-[0.2em] hover:bg-primary hover:text-on-primary transition-all">Access Full Job Board</button>
+</section>
+</div>
+<!-- Right Column: Sidebar -->
+<aside class="w-full lg:w-80 space-y-8">
+<!-- Mentorship Matching CTA Card -->
+<div class="bg-primary p-8 text-on-primary relative overflow-hidden">
+<div class="absolute -bottom-10 -right-10 w-40 h-40 border-4 border-secondary/20 rounded-full"></div>
+<h3 class="font-headline-sm text-headline-sm mb-4 relative z-10">Smart Matching</h3>
+<p class="font-body-md opacity-80 mb-6 relative z-10">Let our algorithm suggest the ideal mentor based on your career goals and faith journey.</p>
+<button class="w-full bg-secondary text-on-secondary py-3 font-tagline text-label-sm uppercase tracking-widest rounded-sm hover:brightness-110 transition-all relative z-10">Start Matchmaking</button>
+</div>
+<!-- Upcoming Events Sidebar -->
+<div class="bg-surface-container-low p-6 border border-outline-variant/30">
+<h4 class="font-tagline text-label-sm text-secondary uppercase tracking-widest mb-6 border-b border-secondary/20 pb-2">Upcoming Events</h4>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="bg-white border border-outline-variant flex flex-col items-center justify-center w-14 h-14 shrink-0 shadow-sm">
+<span class="font-tagline text-[10px] text-outline uppercase">Nov</span>
+<span class="font-headline-sm text-primary -mt-1">14</span>
+</div>
+<div>
+<h5 class="font-body-md font-bold text-primary leading-tight">London Alumni Gala 2024</h5>
+<span class="font-label-sm text-outline">The Savoy, 19:00 GMT</span>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-white border border-outline-variant flex flex-col items-center justify-center w-14 h-14 shrink-0 shadow-sm">
+<span class="font-tagline text-[10px] text-outline uppercase">Dec</span>
+<span class="font-headline-sm text-primary -mt-1">02</span>
+</div>
+<div>
+<h5 class="font-body-md font-bold text-primary leading-tight">Webinar: Faith in Tech</h5>
+<span class="font-label-sm text-outline">Online / Global Zoom</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Success Stories Carousel Placeholder -->
+<div class="bg-white border border-outline-variant/30 p-6">
+<h4 class="font-tagline text-label-sm text-secondary uppercase tracking-widest mb-6 border-b border-secondary/20 pb-2">Impact Story</h4>
+<img alt="Success Story" class="w-full h-40 object-cover rounded-sm mb-4" data-alt="A candid photo of two professionals, a mentor and a mentee, engaged in a deep conversation in a traditional wood-paneled office. The atmosphere is warm, intellectual, and supportive, with books and a soft glowing lamp in the background. The scene is rendered in an elegant, cinematic style with a focus on human connection and mentorship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-xbq9KM9WszONLpz7Qfs-7ifFe5gVm-edXhe7a7SyeivJKuzqcwyn7NoZUgJ6YtKNkfKh4AkfXwB1Qnffmx5L3KfT6UHiOFfJQDNeZnKjhH2TncX4UOoN1cYR3Uk0FmWntqPe-9Gx7XGcZkoG5HXxNp7f6TOwJvQumyBSj96t9lqLIUoLPcRY8TqxLzmsMYPPW4GU-2cdtUbtsPsm9aJ-hjwX7dvWGtzVknZmkOoDnZc8ri2Qi_r8nJMDcmWuGN0fSV6YG3-fEAM"/>
+<blockquote class="font-body-md italic text-on-surface-variant mb-4">
+                    "The GDU network didn't just give me a career path; it gave me a community of faith that supported my vision for social change in Lagos."
+                </blockquote>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-full overflow-hidden">
+<img alt="User" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2zHXadWwtc9J1v_zzYjgtuBKlSci472fOHacRhDInhoOsQoUZwzG_WWmPrqZ51tkl3LWRYAGVAvk0M4Yw9EmUgWjyvgKw0Hs33o5hTSTKCYC7964VXEPgGEUSpe4gsJ4YcryR5sqoU5sYS7Ik39VCEqziVrqmlPcXFmLfWoif3jr42yJJ9e5ZWgV8IYHZE7pM_B8si4pb7qCXWbSNIaMdTx27XbifuWpy8ILGtLb0L6E4hsaDuHBz1hv22Al6hBXcjAIUqYJM6fE"/>
+</div>
+<div>
+<span class="block font-bold text-primary text-label-sm">Felix Adebayo</span>
+<span class="block text-outline text-[10px]">Class of 2018</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary w-full py-12 px-margin-mobile md:px-margin-desktop mt-auto border-t border-on-primary-fixed-variant/20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-12">
+<div class="flex flex-col gap-4">
+<span class="font-display-lg text-display-lg text-on-primary">GDU</span>
+<p class="font-tagline text-tagline opacity-80">Commissioned for a Higher Purpose.</p>
+</div>
+<div class="flex flex-wrap gap-8">
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+</div>
+<div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-body-md text-sm opacity-60">© 2024 Global Diaspora University. All Rights Reserved.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary-fixed">face_nod</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary-fixed">linked_camera</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary-fixed">mail</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple intersection observer for reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section, aside > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

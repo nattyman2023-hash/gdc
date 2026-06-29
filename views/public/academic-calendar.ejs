@@ -1,0 +1,12 @@
+<%- include('../partials/page-hero', { heroTitle: 'Academic Calendar', heroTagline: 'Key Dates', heroText: 'Term dates, opening and closure dates, and important deadlines for our global community.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <%- include('../partials/schedule-list', { groups: groups, cats: cats, showAudience: false }) %>
+    <div class="mt-12 bg-primary text-on-primary rounded-lg p-8 text-center">
+      <h2 class="font-headline text-headline-sm mb-2">Are you a current student?</h2>
+      <p class="text-on-primary-container mb-5">Sign in to your portal to see dates and deadlines specific to your programme.</p>
+      <a href="/login" class="bg-secondary text-on-secondary px-6 py-3 rounded font-bold">Go to my portal</a>
+    </div>
+  </div>
+</section>

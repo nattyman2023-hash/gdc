@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Oversight | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .seal-watermark {
+            opacity: 0.03;
+            pointer-events: none;
+            position: absolute;
+            right: -50px;
+            bottom: -50px;
+            transform: rotate(-15deg);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dcdad4;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#ebe8e2",
+                        "surface-bright": "#fcf9f3",
+                        "primary-container": "#071d3a",
+                        "on-tertiary-fixed": "#001a40",
+                        "surface-dim": "#dcdad4",
+                        "on-secondary": "#ffffff",
+                        "background": "#fcf9f3",
+                        "outline-variant": "#c4c6ce",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#b4c7ec",
+                        "primary-fixed": "#d6e3ff",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "on-secondary-fixed": "#271900",
+                        "on-primary-fixed": "#051b38",
+                        "primary": "#00030c",
+                        "surface-container-highest": "#e5e2dc",
+                        "tertiary": "#00030d",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-tertiary-container": "#6a85bb",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-surface": "#1c1c18",
+                        "secondary-container": "#fdc355",
+                        "on-surface-variant": "#44474d",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-secondary-container": "#725000",
+                        "on-primary": "#ffffff",
+                        "secondary": "#7d5800",
+                        "inverse-surface": "#31312d",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "surface-container": "#f0eee8",
+                        "on-primary-fixed-variant": "#354766",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#7386a8",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fcf9f3",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline": "#74777e",
+                        "surface-container-low": "#f6f3ed",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "secondary-fixed": "#ffdea9",
+                        "on-background": "#1c1c18",
+                        "tertiary-container": "#001c43",
+                        "surface-variant": "#e5e2dc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "tagline": ["Montserrat"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 z-50 w-full h-20">
+<nav class="flex justify-between items-center px-gutter w-full max-w-container-max mx-auto h-full">
+<div class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">
+                Global Diaspora University
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Programs</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Research</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">About</a>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-body-md hover:opacity-90 transition-opacity">
+                    Apply Now
+                </button>
+</div>
+</nav>
+</header>
+<div class="flex flex-1 pt-20">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant flex flex-col pt-24 pb-8 z-40">
+<div class="px-6 mb-8 flex items-center space-x-3">
+<img alt="University Seal" class="w-10 h-10 object-contain" data-alt="A dignified and formal university seal featuring an open Bible, a globe, and a traditional laurel wreath. The aesthetic is clean and corporate, utilizing a color palette of deep navy blue and metallic gold. The lighting is soft and even, suggesting a high-prestige academic institution with a strong Christian heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOr5Gu_l-p2FFoDpTNMfS8ny3r1PJmpK2QlW8_o0jxvkzphjpfpTmjf_Yyg17DdWbfdbgufaRUUbiJ8V3CD8GUwuv9XYcydSBHtFUo5RB6W4PIelXbvRLRrHkBEwyvoSuOTcSUChMXWUto0NyVnTRRws3bJ6Mi46LxakcxExFlDWk-PhLsZ_PkfN1JozzMHZoMbIPA1Xw4baq8sPeqlD5q-YOUUbHthB3s3DdBzarnSYLFA_yqBlpCWxtxW1OPQYIrkwA01owVdr0"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary leading-tight">GDU Admin</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">LMS Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center space-x-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-all rounded-lg font-label-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-label-sm" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Directory</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-all rounded-lg font-label-sm" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Financials</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant px-4 py-3 hover:bg-surface-container-highest transition-all rounded-lg font-label-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 p-margin-desktop bg-background overflow-y-auto">
+<div class="max-w-6xl mx-auto space-y-gutter relative">
+<!-- Profile Header -->
+<section class="bg-surface-container-lowest p-8 border border-outline-variant relative overflow-hidden">
+<div class="seal-watermark">
+<span class="material-symbols-outlined text-[200px]">verified_user</span>
+</div>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+<div class="flex items-center gap-6">
+<div class="relative">
+<img alt="Samuel Adebayo" class="w-32 h-32 rounded-lg object-cover border-2 border-secondary" data-alt="A professional portrait of a young African man, Samuel Adebayo, with a focused and intelligent expression. He is dressed in formal academic attire within a softly lit library setting with blurred bookshelves in the background. The lighting is warm and cinematic, highlighting his features with a sophisticated, high-end editorial feel consistent with a prestigious university profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdt_EuCFqwZn_RwGXEnxYmRgOtIONjRUSF1lHrMPRAOWmqJlNXz13Q0NfIT0HXYyzS9mR8tNB-0FUtLsxUgacIFjNsYbp-mUbEWw0KL7tjr-uga96PkDVmoCypW6woM9evJKdTQ7dUtBZmT8Yvosclg29RqsWTMkihWxMGgusoAZGODbFZzz8zLfNFEpO5BYYxZrj1B-PgXNniHUkIRP_GWp6JIjagwEBIIk-z8l7yPILgJkAiZscv2qVdFN-uUjb2ERXoreKg-Jo"/>
+<span class="absolute -bottom-2 -right-2 bg-green-600 text-white text-[10px] px-2 py-1 rounded-full uppercase font-bold tracking-widest shadow-sm">Active</span>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg text-primary">Samuel Adebayo</h1>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant mb-2">Bachelor of Divinity & Global Leadership</p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1">
+<span class="font-tagline text-tagline bg-secondary-container text-on-secondary-container px-3 py-1 rounded-sm uppercase">GPA 3.84</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+<span class="text-label-sm font-label-sm">Senior Year</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3 w-full md:w-auto">
+<button class="bg-primary text-on-primary py-3 px-8 rounded-lg hover:opacity-90 transition-all font-body-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">school</span> Approve Graduation
+                            </button>
+<button class="border border-error text-error py-2 px-8 rounded-lg hover:bg-error-container/20 transition-all font-body-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">warning</span> Issue Warning
+                            </button>
+</div>
+</div>
+</section>
+<!-- Bento Content Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Academic Performance Chart -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 border border-outline-variant">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="font-tagline text-tagline uppercase text-secondary mb-2">Growth Analysis</h3>
+<h2 class="font-headline-md text-headline-md">Academic Performance</h2>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<span class="text-label-sm font-label-sm">GPA Trend</span>
+</div>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 px-4 relative">
+<!-- Visualizing a simplified chart with CSS bars & lines for better control than images -->
+<div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">show_chart</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[75%] hover:bg-primary/20 transition-all relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">3.62</div>
+</div>
+<span class="text-[10px] font-label-sm uppercase text-on-surface-variant">Fall 22</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[82%] hover:bg-primary/20 transition-all relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">3.75</div>
+</div>
+<span class="text-[10px] font-label-sm uppercase text-on-surface-variant">Spr 23</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[78%] hover:bg-primary/20 transition-all relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">3.70</div>
+</div>
+<span class="text-[10px] font-label-sm uppercase text-on-surface-variant">Fall 23</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end">
+<div class="w-full bg-primary rounded-t h-[94%] hover:opacity-90 transition-all relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">3.84</div>
+</div>
+<span class="text-[10px] font-label-sm uppercase text-primary font-bold">Spr 24</span>
+</div>
+</div>
+</div>
+<!-- Financial Status Card -->
+<div class="col-span-12 lg:col-span-4 bg-primary text-on-primary p-8 border border-primary flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h3 class="font-tagline text-tagline uppercase text-secondary-fixed mb-6">Financial Ledger</h3>
+<div class="space-y-1">
+<p class="text-label-sm font-label-sm opacity-70">Outstanding Tuition</p>
+<h2 class="text-4xl font-bold text-secondary-container tracking-tight">$1,240.00</h2>
+</div>
+</div>
+<div class="mt-12 space-y-4">
+<div class="flex justify-between text-label-sm border-b border-white/10 pb-2">
+<span>Scholarship Applied</span>
+<span class="text-green-400">-$4,500</span>
+</div>
+<div class="flex justify-between text-label-sm border-b border-white/10 pb-2">
+<span>Housing & Dining</span>
+<span>$2,100</span>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-colors">
+                                View Full Statement
+                            </button>
+</div>
+</div>
+<!-- Enrollment History Table -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 border border-outline-variant overflow-x-auto">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md">Enrollment History</h2>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm">
+<span class="material-symbols-outlined text-base">download</span>
+<span>Export Transcript</span>
+</div>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="border-b-2 border-surface-container-highest">
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant">Course Code</th>
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant">Course Name</th>
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant">Semester</th>
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant text-right">Grade</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-bold text-primary">DIV402</td>
+<td class="py-4">Advanced Theological Ethics</td>
+<td class="py-4 text-on-surface-variant">Spring 2024</td>
+<td class="py-4 text-right"><span class="bg-primary text-on-primary px-3 py-1 text-xs rounded">A</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-bold text-primary">GLB311</td>
+<td class="py-4">Global Leadership Case Studies</td>
+<td class="py-4 text-on-surface-variant">Spring 2024</td>
+<td class="py-4 text-right"><span class="bg-primary text-on-primary px-3 py-1 text-xs rounded">A-</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-bold text-primary">DIV390</td>
+<td class="py-4">History of the Diaspora Church</td>
+<td class="py-4 text-on-surface-variant">Fall 2023</td>
+<td class="py-4 text-right"><span class="bg-primary text-on-primary px-3 py-1 text-xs rounded">B+</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-bold text-primary">DIV205</td>
+<td class="py-4">Systematic Theology II</td>
+<td class="py-4 text-on-surface-variant">Fall 2023</td>
+<td class="py-4 text-right"><span class="bg-primary text-on-primary px-3 py-1 text-xs rounded">A</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Advisor Notes Feed -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-8 border border-outline-variant flex flex-col h-full">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md">Advisor Notes</h2>
+<button class="text-secondary hover:underline font-label-sm">+ Add Note</button>
+</div>
+<div class="flex-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
+<!-- Note 1 -->
+<div class="border-l-2 border-secondary pl-4 py-1">
+<div class="flex justify-between text-[11px] font-tagline uppercase text-on-surface-variant mb-1">
+<span>Mar 12, 2024</span>
+<span>Dr. Elise Vance</span>
+</div>
+<p class="text-body-md italic text-on-surface leading-relaxed">
+                                    "Samuel has shown exceptional maturity in the DIV402 seminar. His thesis on global ethics is progressing ahead of schedule."
+                                </p>
+</div>
+<!-- Note 2 -->
+<div class="border-l-2 border-surface-dim pl-4 py-1">
+<div class="flex justify-between text-[11px] font-tagline uppercase text-on-surface-variant mb-1">
+<span>Jan 15, 2024</span>
+<span>Admin Office</span>
+</div>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                                    Registration hold removed after scholarship verification. Student is cleared for the final semester.
+                                </p>
+</div>
+<!-- Note 3 -->
+<div class="border-l-2 border-surface-dim pl-4 py-1">
+<div class="flex justify-between text-[11px] font-tagline uppercase text-on-surface-variant mb-1">
+<span>Nov 02, 2023</span>
+<span>Dr. Elise Vance</span>
+</div>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                                    Mid-term check-in. Student expressed interest in postgraduate studies in Oxford. Highly recommended for Global Leadership track.
+                                </p>
+</div>
+</div>
+<div class="mt-8">
+<div class="italic text-center py-4 border-t border-surface-container text-on-tertiary-container font-headline-sm text-sm">
+                                "Whatever you do, work at it with all your heart..."
+                                <p class="text-[10px] font-tagline uppercase mt-1">Colossians 3:23</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-primary w-full py-12 px-gutter flex flex-col items-center space-y-6 text-on-primary">
+<div class="font-headline-md text-headline-md text-secondary-fixed">
+            Global Diaspora University
+        </div>
+<div class="flex flex-wrap justify-center gap-8 text-on-primary-fixed-variant font-tagline text-tagline">
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Accreditation</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Giving</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Contact Us</a>
+</div>
+<p class="font-tagline text-tagline text-on-primary-fixed-variant opacity-60 text-center">
+            © 2024 Global Diaspora University. Commissioned for a Higher Purpose.
+        </p>
+</footer>
+<script>
+        // Micro-interaction for advisor notes hovering
+        document.querySelectorAll('.border-l-2').forEach(note => {
+            note.addEventListener('mouseenter', () => {
+                note.classList.add('translate-x-2', 'transition-transform');
+            });
+            note.addEventListener('mouseleave', () => {
+                note.classList.remove('translate-x-2');
+            });
+        });
+
+        // Simple button active states
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95', 'duration-150'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

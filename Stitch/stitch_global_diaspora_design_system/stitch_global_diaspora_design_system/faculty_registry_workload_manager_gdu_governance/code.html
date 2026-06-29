@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Faculty Registry | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#44474d",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-secondary-container": "#725000",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e5e2dc",
+                        "secondary": "#7d5800",
+                        "primary": "#00030c",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#ebe8e2",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "surface-container": "#f0eee8",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-secondary-fixed": "#271900",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#071d3a",
+                        "tertiary-container": "#001c43",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e5e2dc",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "surface": "#fcf9f3",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline-variant": "#c4c6ce",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "background": "#fcf9f3",
+                        "surface-bright": "#fcf9f3",
+                        "surface-container-low": "#f6f3ed",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-tint": "#4c5f7f",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-primary-fixed-variant": "#354766",
+                        "surface-dim": "#dcdad4",
+                        "secondary-container": "#fdc355",
+                        "outline": "#74777e",
+                        "on-primary-container": "#7386a8",
+                        "tertiary": "#00030d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "container-max": "1280px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .faculty-card-gradient {
+            background: linear-gradient(135deg, #fcf9f3 0%, #f0eee8 100%);
+        }
+        .scripture-divider::before, .scripture-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #7d5800;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant z-40 p-4 flex flex-col hidden md:flex">
+<div class="mb-8 px-2">
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight">Administration</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Academic Affairs</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm">Student Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Curriculum</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">Financials</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Faculty Registry</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">System Settings</span>
+</a>
+</nav>
+<div class="pt-4 mt-4 border-t border-outline-variant space-y-1">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-bold text-label-sm flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                New Registration
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 min-h-screen bg-surface">
+<!-- Top Bar -->
+<header class="h-20 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop sticky top-0 z-30 shadow-sm">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Faculty Registry</h2>
+<div class="h-6 w-px bg-outline-variant"></div>
+<span class="font-tagline text-tagline text-secondary bg-secondary-fixed/30 px-2 py-0.5 rounded">GLOBAL NETWORK</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-surface-container-low border-b border-primary w-64 pl-10 pr-4 py-2 text-body-md focus:outline-none focus:border-secondary transition-colors" placeholder="Search Professors..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">account_balance</span></button>
+<div class="w-10 h-10 rounded-full border border-outline bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img alt="Admin" data-alt="A professional headshot of a mature university administrator wearing a tailored navy blazer and a crisp white shirt, looking forward with an authoritative yet approachable expression. The lighting is soft and corporate, set against a blurred background of a prestigious academic library with leather-bound books." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYHmC7FXvn9_4WRnIIPRIMhj5UHe4xEDtrYgS81_n0eh9K13KWsyYJ7cK8ytdfVQpBHCLb91pURJi78svxK99yzPB0TuqNk2aGTkUJJcPBsficPqP4LFZB752azucaaw0CuY071JqAMVGQi81E6_THnoNRBFsFOOzAvPHx8k169v_R1xlZfL_lboYflM0LcO9YvVKlnmfAJbo6NdzJG8QbvWnMyHnQGDI9mzA9wTwBxNvZaCrvsKBAbc3JBinTWpBR6kKICuypeLM"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Body -->
+<div class="p-margin-desktop max-w-container-max mx-auto space-y-12">
+<!-- Scripture Callout -->
+<section class="py-8">
+<div class="flex items-center gap-8 scripture-divider max-w-3xl mx-auto">
+<p class="font-headline-md italic text-primary text-center px-4 leading-relaxed">
+                        "For the Lord gives wisdom; from his mouth come knowledge and understanding."
+                        <span class="block font-tagline text-tagline mt-4 not-italic text-secondary">— Proverbs 2:6</span>
+</p>
+</div>
+</section>
+<!-- Dashboard Highlights (Bento Grid Style) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="md:col-span-2 bg-primary-container text-on-primary p-8 flex flex-col justify-between">
+<div>
+<h3 class="font-headline-sm mb-2">Academic Research Credits</h3>
+<p class="font-body-md text-on-primary-container">Quarterly institutional progress across all departments.</p>
+</div>
+<div class="mt-8 flex items-end gap-4">
+<div class="text-5xl font-bold text-secondary-fixed">84%</div>
+<div class="mb-2 font-label-sm uppercase tracking-widest text-on-primary-container">Target Goal Reached</div>
+</div>
+<div class="mt-6 w-full bg-white/10 h-2 overflow-hidden">
+<div class="bg-secondary-container h-full w-[84%]"></div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-secondary text-3xl">school</span>
+<span class="font-tagline text-[10px] bg-secondary-container px-2 py-1">ACTIVE</span>
+</div>
+<div>
+<div class="text-4xl font-bold text-primary">142</div>
+<div class="font-label-sm text-on-surface-variant uppercase mt-1">Lead Professors</div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-secondary text-3xl">pending_actions</span>
+<span class="font-tagline text-[10px] bg-error-container text-on-error-container px-2 py-1">HIGH LOAD</span>
+</div>
+<div>
+<div class="text-4xl font-bold text-primary">12</div>
+<div class="font-label-sm text-on-surface-variant uppercase mt-1">Grading Alerts</div>
+</div>
+</div>
+</section>
+<!-- Main Faculty Directory Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-end border-b border-outline-variant pb-4">
+<div>
+<h3 class="font-headline-sm text-primary">Faculty Roster</h3>
+<p class="font-body-md text-on-surface-variant">Global Academic Network &amp; Portfolio Management</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline text-label-sm font-bold hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter By Department
+                        </button>
+<button class="flex items-center gap-2 px-6 py-2 bg-secondary text-on-secondary text-label-sm font-bold shadow-sm hover:opacity-90 transition-opacity" id="onboarding-btn">
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                            Faculty Onboarding
+                        </button>
+</div>
+</div>
+<!-- Faculty Table-Card Hybrid -->
+<div class="space-y-4">
+<!-- Professor 1 -->
+<div class="group bg-white border border-outline-variant p-6 flex flex-col md:flex-row items-center gap-8 hover:shadow-md transition-shadow">
+<div class="w-24 h-24 flex-shrink-0 border-2 border-secondary-fixed p-1">
+<img alt="Dr. Alistair Vaughn" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="A portrait of an elderly, distinguished academic man with grey hair and glasses, wearing a charcoal wool suit. He stands in a bright, modern university atrium with clean architectural lines. The image has a high-prestige, editorial aesthetic with cool tones and soft natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPVfo-3fE5pjVg6Ih3vNuZzgzHC2tylZsX8bqxghCVKer2ENZKubo8Jvr7TeugyHm9669l_53Vk8_GUChzjafQ51nvTyqiGPGMb8XLlJpWozZPjp12PEbsRoFwHqy5NvAFOp9VPw-s3IHLZfmfDqLiHIl4Xxtw_Z-ecYVpnRGvfaIDTU10bwWRbL6HN_u8Y84dNN6YLnWuLrvj9IttS65MXv0lfYtG23YekCNeXXgdfW9VAhZ0AXyer14EZe93DqUxHtKUN8wgL3A"/>
+</div>
+<div class="flex-1 space-y-2 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-2">
+<h4 class="font-headline-sm text-primary">Dr. Alistair Vaughn</h4>
+<span class="md:ml-2 font-tagline text-[10px] text-secondary border border-secondary px-2 py-0.5 self-center">SENIOR FELLOW</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Specialization</p>
+<p class="font-body-md font-medium text-primary">Post-Colonial Theology</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Active Cohorts</p>
+<p class="font-body-md font-medium text-primary">4 Programs</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Grading Status</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<p class="font-label-sm font-bold text-on-surface">On Track</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-row md:flex-col gap-3">
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="Send Message">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="View Profile">
+<span class="material-symbols-outlined">description</span>
+</button>
+</div>
+</div>
+<!-- Professor 2 -->
+<div class="group bg-white border border-outline-variant p-6 flex flex-col md:flex-row items-center gap-8 hover:shadow-md transition-shadow">
+<div class="w-24 h-24 flex-shrink-0 border-2 border-secondary-fixed p-1">
+<img alt="Dr. Elena Petrova" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="A portrait of a professional woman of Eastern European descent, middle-aged with brown hair styled neatly. She is wearing a dark blue academic robe with gold accents, standing in front of a classical university archway. The mood is authoritative and scholarly, with warm late afternoon sunlight catching the stone architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6W4eNpfll8gg0JrB2FnSgOBxfVxBAguZQygrNmcQJX_LcnbbgIvPehddn0ULrhAP4igBwdX_bcwsmrH94DSpOle-_9ALYNWu7O8rT2fEdYd63BYyYnirnym2QYamMrcIqc7TzPkt_7lEh6cgwLSgcYlgbAwGihEvgRa5nLJ0bNG2x-KAPBCsET9peIYRcrC391p_gy3KmBUEbreon_r8SxqGUAcf9v04PLmhljz4zzBVdubRwXQeHQQ9_X4rjk8WDh0Sp_hZfNuI"/>
+</div>
+<div class="flex-1 space-y-2 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-2">
+<h4 class="font-headline-sm text-primary">Dr. Elena Petrova</h4>
+<span class="md:ml-2 font-tagline text-[10px] text-secondary border border-secondary px-2 py-0.5 self-center">DEPARTMENT HEAD</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Specialization</p>
+<p class="font-body-md font-medium text-primary">Diaspora Sociology</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Active Cohorts</p>
+<p class="font-body-md font-medium text-primary">7 Programs</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Grading Status</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<p class="font-label-sm font-bold text-on-surface">High Workload</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-row md:flex-col gap-3">
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="Send Message">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="View Profile">
+<span class="material-symbols-outlined">description</span>
+</button>
+</div>
+</div>
+<!-- Professor 3 -->
+<div class="group bg-white border border-outline-variant p-6 flex flex-col md:flex-row items-center gap-8 hover:shadow-md transition-shadow">
+<div class="w-24 h-24 flex-shrink-0 border-2 border-secondary-fixed p-1">
+<img alt="Prof. Kwame Mensah" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="A portrait of a confident West African professor in his early 40s, wearing a modern suit with a kente cloth pocket square. He is seated in a sunlit faculty office with shelves of academic journals and a world map in the background. The aesthetic is warm, vibrant, and professional, emphasizing global leadership." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxjz4LaAeQQjxQLz7kn9FPbxHRvG-6HJQEgC9npfSoVQ4YCR41HgoNJ7QUoiMOLs8gpNMB5fwZeK1JZJnfNHz9OsebUXhnu_GV5JdIG6S_mcUC_wBAIPMTCVRiCyEcGBMbRJ7bUD7iRLIfC7cBQyMDIUClKPmZ3f12YIm5L5sBNklG9y0OutvCYiCz3y7X-fn_Rc2eK4AyU3fPXPWboC0uasBofhK8_51_cVoVqyz0_VyueDEv0hf7pe5VvPTF4AOHHep06wTsacM"/>
+</div>
+<div class="flex-1 space-y-2 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-2">
+<h4 class="font-headline-sm text-primary">Prof. Kwame Mensah</h4>
+<span class="md:ml-2 font-tagline text-[10px] text-secondary border border-secondary px-2 py-0.5 self-center">LEAD PROFESSOR</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Specialization</p>
+<p class="font-body-md font-medium text-primary">Ethics &amp; Global Governance</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Active Cohorts</p>
+<p class="font-body-md font-medium text-primary">3 Programs</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Grading Status</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<p class="font-label-sm font-bold text-on-surface">On Track</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-row md:flex-col gap-3">
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="Send Message">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="p-3 border border-outline-variant hover:bg-primary hover:text-on-primary transition-all rounded-lg" title="View Profile">
+<span class="material-symbols-outlined">description</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Research Credits Tracking -->
+<section class="bg-surface-container-low border border-outline-variant p-10">
+<div class="mb-8">
+<h3 class="font-headline-sm text-primary">Institutional Credit Audit</h3>
+<p class="font-body-md text-on-surface-variant">Ongoing research publication status and grant fulfillment tracking.</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline">
+<th class="pb-4 font-tagline text-[12px] uppercase">Researcher</th>
+<th class="pb-4 font-tagline text-[12px] uppercase">Department</th>
+<th class="pb-4 font-tagline text-[12px] uppercase text-center">Publications</th>
+<th class="pb-4 font-tagline text-[12px] uppercase text-center">Credit Score</th>
+<th class="pb-4 font-tagline text-[12px] uppercase text-right">Last Audit</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-medium">Vaughn, A.</td>
+<td class="py-4 text-on-surface-variant">Theology</td>
+<td class="py-4 text-center">12</td>
+<td class="py-4 text-center">
+<span class="text-primary font-bold">980</span>
+</td>
+<td class="py-4 text-right text-on-surface-variant">Nov 12, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-medium">Petrova, E.</td>
+<td class="py-4 text-on-surface-variant">Sociology</td>
+<td class="py-4 text-center">08</td>
+<td class="py-4 text-center">
+<span class="text-primary font-bold">750</span>
+</td>
+<td class="py-4 text-right text-on-surface-variant">Dec 01, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="py-4 font-medium">Mensah, K.</td>
+<td class="py-4 text-on-surface-variant">Ethics</td>
+<td class="py-4 text-center">15</td>
+<td class="py-4 text-center">
+<span class="text-primary font-bold">1,120</span>
+</td>
+<td class="py-4 text-right text-on-surface-variant">Oct 28, 2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-desktop bg-surface border-t border-outline-variant flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto mt-20">
+<div class="mb-4 md:mb-0">
+<span class="font-tagline text-tagline text-primary">GLOBAL DIASPORA UNIVERSITY</span>
+<p class="font-body-md text-label-sm text-on-surface-variant mt-1">© 2024 Global Diaspora University. All Rights Reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</footer>
+</main>
+<!-- Modal: Onboarding Wizard (Simplified) -->
+<div class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-50 flex items-center justify-center hidden" id="onboarding-modal">
+<div class="bg-surface w-full max-w-2xl p-10 shadow-xl border border-secondary/20 relative">
+<button class="absolute top-6 right-6 text-on-surface-variant hover:text-primary" id="close-modal">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="mb-8">
+<h2 class="font-headline-sm text-primary mb-2">Faculty Onboarding Wizard</h2>
+<div class="flex gap-2">
+<div class="h-1 flex-1 bg-secondary"></div>
+<div class="h-1 flex-1 bg-surface-container-high"></div>
+<div class="h-1 flex-1 bg-surface-container-high"></div>
+</div>
+<p class="font-label-sm text-secondary uppercase tracking-widest mt-4">Step 1: Credential Verification</p>
+</div>
+<form class="space-y-6">
+<div>
+<label class="block font-label-sm text-on-surface-variant uppercase mb-2">Full Legal Name</label>
+<input class="w-full bg-surface-container-low border-b border-primary p-3 focus:outline-none focus:border-secondary transition-all" placeholder="Enter academic name..." type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block font-label-sm text-on-surface-variant uppercase mb-2">Proposed Department</label>
+<select class="w-full bg-surface-container-low border-b border-primary p-3 focus:outline-none focus:border-secondary transition-all">
+<option>Theology</option>
+<option>Applied Ethics</option>
+<option>Digital Diaspora Studies</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-on-surface-variant uppercase mb-2">Initial Faculty Rank</label>
+<select class="w-full bg-surface-container-low border-b border-primary p-3 focus:outline-none focus:border-secondary transition-all">
+<option>Senior Fellow</option>
+<option>Lead Professor</option>
+<option>Visiting Lecturer</option>
+</select>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-bold uppercase tracking-widest hover:bg-on-surface-variant transition-colors" type="button">
+                    Continue to Background Check
+                </button>
+</form>
+</div>
+</div>
+<script>
+        // Modal Logic
+        const onboardingBtn = document.getElementById('onboarding-btn');
+        const closeModal = document.getElementById('close-modal');
+        const modal = document.getElementById('onboarding-modal');
+
+        onboardingBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Hover animation logic for cards
+        const cards = document.querySelectorAll('.group');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Diaspora University | Live Webinar - Global Missiology</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fcf9f3",
+                    "tertiary": "#00030d",
+                    "secondary-container": "#fdc355",
+                    "tertiary-fixed": "#d7e2ff",
+                    "on-primary-fixed-variant": "#354766",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "on-tertiary-container": "#6a85bb",
+                    "on-primary-fixed": "#051b38",
+                    "on-secondary-container": "#725000",
+                    "on-tertiary-fixed": "#001a40",
+                    "error-container": "#ffdad6",
+                    "outline": "#74777e",
+                    "secondary-fixed": "#ffdea9",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "inverse-on-surface": "#f3f0ea",
+                    "secondary": "#7d5800",
+                    "surface": "#fcf9f3",
+                    "primary": "#00030c",
+                    "on-primary-container": "#7386a8",
+                    "tertiary-container": "#001c43",
+                    "surface-variant": "#e5e2dc",
+                    "outline-variant": "#c4c6ce",
+                    "surface-container-high": "#ebe8e2",
+                    "surface-container": "#f0eee8",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "inverse-primary": "#b4c7ec",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "surface-container-low": "#f6f3ed",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1c1c18",
+                    "on-secondary-fixed": "#271900",
+                    "surface-tint": "#4c5f7f",
+                    "surface-dim": "#dcdad4",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#44474d",
+                    "on-surface": "#1c1c18",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#071d3a",
+                    "on-primary": "#ffffff",
+                    "background": "#fcf9f3",
+                    "inverse-surface": "#31312d",
+                    "surface-container-highest": "#e5e2dc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-glow {
+            box-shadow: 0 0 15px rgba(253, 195, 85, 0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c4c6ce;
+            border-radius: 10px;
+        }
+        .transcript-line {
+            transition: all 0.3s ease;
+        }
+        .transcript-active {
+            color: #7d5800;
+            font-weight: 600;
+            background: #fdc35522;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<nav class="bg-primary-container dark:bg-primary-container text-on-primary dark:text-primary-fixed font-tagline text-tagline uppercase tracking-widest docked full-width top-0 sticky z-50 border-b border-outline-variant/15 shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
+<div class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest dark:text-surface-bright">Global Diaspora University</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Programs</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Research</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Faculty</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-primary-container">search</span>
+<input class="bg-primary/20 border-none rounded-none pl-10 pr-4 py-2 text-on-primary placeholder:text-on-primary-container/60 focus:ring-1 focus:ring-secondary-container w-48" placeholder="Search..." type="text"/>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 font-tagline text-tagline transition-all hover:brightness-110 active:opacity-80">Apply Now</button>
+</div>
+</nav>
+<main class="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
+<!-- Left Side Bar Navigation (Academic Context) -->
+<aside class="hidden lg:flex flex-col w-64 bg-surface-container-low border-r border-outline-variant/10 py-6 px-4 shrink-0">
+<div class="mb-8 px-2">
+<h3 class="font-headline-sm text-primary mb-1">Student Portal</h3>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Global Diaspora University</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all rounded-none font-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container font-bold px-4 py-3 rounded-none font-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span>Academic Record</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all rounded-none font-body-md" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span>Financials</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all rounded-none font-body-md" href="#">
+<span class="material-symbols-outlined">book</span>
+<span>Library</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<button class="w-full bg-surface-container-high text-primary px-4 py-3 font-tagline text-[12px] flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+                    WhatsApp Support
+                </button>
+</div>
+</aside>
+<!-- Main Video Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-bright">
+<!-- Video Stage -->
+<section class="bg-tertiary-container relative aspect-video w-full group overflow-hidden">
+<img class="w-full h-full object-cover opacity-90" data-alt="A high-definition livestream view of a distinguished professor delivering a lecture on Global Missiology from a classic university wood-paneled study. The lighting is warm and directional, highlighting shelves of old theological books in the background. The aesthetic is scholarly and professional, utilizing deep navy and rich gold accents to evoke a sense of academic tradition and spiritual depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBncSfVVhdyObK9DBRFDDZ-A1jFmdGZP3di37xPPNciOrXY2yjRN-xt7HrYKD0f_sp2oOgYioOlNF-KDJAJlBFglEVnQqrbpsnSkFcwS7xyeJ3kkaKAOAh-r0Kkp5zebSAdX4afBwhuaZH9UkjOWnqAxuQKcyzBTHm7ANadC0mZYr0oCD85uAZTj0LWNfp4U9bcHieNDSZtU7B7OQgHXXQnaSZCWHXiu_o6vehWLgby0BgQQ9-F85O-5W0v1F1bPua8xsthKROPgJM"/>
+<!-- Live Overlay -->
+<div class="absolute top-6 left-6 flex items-center gap-3">
+<div class="bg-error px-3 py-1 flex items-center gap-2 rounded-none">
+<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+<span class="font-tagline text-[10px] text-white tracking-widest">LIVE</span>
+</div>
+<div class="bg-black/40 backdrop-blur-md px-3 py-1 rounded-none border border-white/10">
+<span class="font-tagline text-[10px] text-white tracking-widest">ZONE 2: GLOBAL MISSIOLOGY</span>
+</div>
+</div>
+<!-- Video Controls (Simulated) -->
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-6">
+<button class="text-white hover:text-secondary-fixed transition-colors"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span></button>
+<button class="text-white hover:text-secondary-fixed transition-colors"><span class="material-symbols-outlined">volume_up</span></button>
+<div class="h-1 w-48 bg-white/30 relative">
+<div class="absolute inset-0 bg-secondary-container w-[75%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 text-[12px] font-tagline text-white border border-white/30 px-2 py-1 hover:bg-white/10" id="transcription-btn">
+<span class="material-symbols-outlined text-[16px]">closed_caption</span>
+                                CC
+                            </button>
+<button class="text-white hover:text-secondary-fixed transition-colors"><span class="material-symbols-outlined">settings</span></button>
+<button class="text-white hover:text-secondary-fixed transition-colors"><span class="material-symbols-outlined">fullscreen</span></button>
+</div>
+</div>
+</div>
+<!-- Hand Raise Interaction -->
+<button class="absolute bottom-10 right-10 w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all z-10" id="hand-raise">
+<span class="material-symbols-outlined text-[32px]">front_hand</span>
+</button>
+</section>
+<!-- Metadata & Interactive Elements -->
+<div class="p-margin-mobile md:p-gutter grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Info Col -->
+<div class="md:col-span-8 space-y-10">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-secondary font-tagline text-[12px] uppercase tracking-[0.2em]">Theology &amp; Culture 401</span>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-headline-md text-primary mb-4 leading-tight">Global Missiology: Bridging Traditions in the Diaspora</h1>
+<!-- Speaker Bio -->
+<div class="flex items-start gap-6 p-6 bg-white border border-outline-variant/20">
+<img class="w-20 h-20 object-cover border-2 border-secondary-fixed" data-alt="A professional portrait of an elderly African academic with a kind, intelligent expression, wearing a navy suit and a subtle gold lapel pin. The background is a soft-focus library. The image conveys wisdom, authority, and deep theological experience, fitting the Scholarly and Professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_EZNToGHOTh7V7WS1-NdmFBN6WMAW7O8p_vmlvVPGrePHZNOArVjJAgXZoyvidRj3JeuMgxDFZPp0BqWG8Z66ueWxuCV3JD9Q4RTCUVyZlN9U96_drSkEC4KbFOWqspXts4jKju3oRtFtnODKnzTYjWB2c5N7CQExliXWtl9abr9FfuRz6zMJttdHLGLP8ZDhF8P-t6V0m_TLr1qTrcbfvC4jW0_UhMcaUyofLAYe9PNUroDI8cN6_kWdzpHDQjAgL-E_JAXtyEI"/>
+<div>
+<h4 class="font-headline-sm text-primary">Dr. Elias Ndlovu</h4>
+<p class="text-label-sm text-secondary font-semibold mb-2">Senior Fellow, Institute for Intercultural Theology</p>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                                    Dr. Ndlovu has published over 15 works on the intersection of migration and faith. Today's lecture focuses on the historical resilience of diaspora congregations in post-colonial contexts.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Resources Section -->
+<section>
+<h3 class="font-tagline text-tagline text-primary uppercase tracking-widest border-b border-outline-variant/30 pb-2 mb-6">Session Resource Pack</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="group flex items-center p-4 border border-outline-variant/15 bg-surface-container-low hover:border-secondary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-secondary mr-4 text-[32px]">picture_as_pdf</span>
+<div class="flex-1">
+<p class="font-body-md font-semibold text-primary">Lecture Slides (PDF)</p>
+<p class="text-[12px] text-on-surface-variant">Annotated for Week 4</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary">download</span>
+</div>
+<div class="group flex items-center p-4 border border-outline-variant/15 bg-surface-container-low hover:border-secondary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-secondary mr-4 text-[32px]">auto_stories</span>
+<div class="flex-1">
+<p class="font-body-md font-semibold text-primary">Selected Bibliography</p>
+<p class="text-[12px] text-on-surface-variant">Recommended Reading</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary">download</span>
+</div>
+</div>
+</section>
+<!-- Q&A Queue -->
+<section class="bg-surface-container-lowest border border-outline-variant/20 p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-primary">Questions Queue</h3>
+<button class="bg-primary text-white font-tagline text-[12px] px-4 py-2 hover:bg-primary/90">ASK A QUESTION</button>
+</div>
+<div class="space-y-4">
+<!-- Q Item -->
+<div class="flex gap-4 p-4 border-l-4 border-secondary bg-surface-container-low">
+<div class="flex flex-col items-center">
+<button class="material-symbols-outlined text-secondary hover:scale-110 active:scale-90">expand_less</button>
+<span class="font-bold text-primary">42</span>
+</div>
+<div class="flex-1">
+<p class="font-body-md text-primary font-medium">How does the concept of 'Sacred Space' translate into digital-first diaspora communities?</p>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 bg-primary-container rounded-full flex items-center justify-center text-[10px] text-white">MK</div>
+<span class="text-[12px] text-on-surface-variant">Mark Kim • 12m ago</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-tagline text-[10px] text-secondary-fixed-dim bg-primary-container px-2 py-0.5">VOTED</span>
+</div>
+</div>
+<!-- Q Item -->
+<div class="flex gap-4 p-4 border-l-4 border-outline-variant bg-white">
+<div class="flex flex-col items-center">
+<button class="material-symbols-outlined text-outline hover:text-secondary transition-colors">expand_less</button>
+<span class="font-bold text-on-surface-variant">18</span>
+</div>
+<div class="flex-1">
+<p class="font-body-md text-on-surface-variant">Can you elaborate on the 'Three-Self' principle within the modern missional context?</p>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 bg-secondary-container rounded-full flex items-center justify-center text-[10px] text-on-secondary-container">AL</div>
+<span class="text-[12px] text-on-surface-variant">Aria Lopez • 24m ago</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Interaction Sidebar -->
+<div class="md:col-span-4 space-y-6">
+<!-- Faith Integrated Chat -->
+<div class="flex flex-col h-[600px] bg-white border border-outline-variant/20">
+<div class="bg-primary-container p-4 flex items-center justify-between">
+<span class="font-tagline text-tagline text-white tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                FAITH CHAT
+                            </span>
+<span class="text-[12px] text-on-primary-container">1,402 Attending</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" id="chat-stream">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-secondary uppercase mb-1">Student Chaplain</span>
+<div class="bg-surface-container-high p-3 rounded-lg rounded-tl-none">
+<p class="text-[13px] italic text-primary">"Let us begin with a moment of silence for those displaced by recent global events..."</p>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary mb-1">Benjamin O.</span>
+<div class="bg-surface-container-low p-3 rounded-lg rounded-tl-none">
+<p class="text-[13px] text-on-surface">Powerful opening, Dr. Elias. The diaspora is indeed the modern mission field.</p>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary mb-1">Dr. Sarah West</span>
+<div class="bg-surface-container-low p-3 rounded-lg rounded-tl-none">
+<p class="text-[13px] text-on-surface">Agreed. The ecclesiology must adapt to the mobility of the people.</p>
+</div>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2 mb-3">
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span></button>
+<button class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined text-[18px]">menu_book</span></button>
+<span class="text-[10px] text-outline ml-auto">Community Mode On</span>
+</div>
+<div class="relative">
+<input class="w-full border-outline-variant bg-surface-container-low py-3 px-4 text-body-md focus:ring-secondary focus:border-secondary" placeholder="Share a reflection or prayer..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Live Transcription (Toggled Content) -->
+<div class="bg-surface-container-low border border-outline-variant/10 p-4 transition-all duration-500 opacity-100" id="transcription-panel">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-tagline text-[12px] text-primary uppercase font-bold tracking-tighter">Live Transcription</h4>
+<div class="w-8 h-4 bg-secondary-container rounded-full relative cursor-pointer" onclick="this.classList.toggle('bg-outline-variant')">
+<div class="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="space-y-3 font-body-md text-[14px] leading-relaxed text-on-surface-variant h-32 overflow-hidden mask-fade">
+<p class="transcript-line">...the socio-political factors that drive these movements are often seen as purely secular...</p>
+<p class="transcript-line transcript-active">...but from a missiological perspective, we see the 'sovereign hand' in the scattering of the seeds...</p>
+<p class="transcript-line">...we must ask ourselves: what does it mean to be a 'resident alien' in a digital age?</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container dark:bg-primary-container text-surface-container-lowest font-body-md text-body-md full-width bottom-0 border-t-4 border-tertiary-fixed-dim w-full py-stack-lg px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-4">
+<h2 class="font-display-lg text-headline-md text-surface-container-lowest">GDU</h2>
+<p class="text-surface-variant max-w-xs">Building academic bridges across the global diaspora with excellence and faith.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Careers</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Alumni</a>
+</div>
+<div class="flex flex-col justify-end items-end gap-2 text-right">
+<p class="text-surface-variant text-[12px]">© 2024 Global Diaspora University. Accredited by International Academic Council.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-surface-variant cursor-pointer hover:text-secondary-fixed transition-colors">public</span>
+<span class="material-symbols-outlined text-surface-variant cursor-pointer hover:text-secondary-fixed transition-colors">mail</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions
+        const handRaiseBtn = document.getElementById('hand-raise');
+        let isRaised = false;
+        
+        handRaiseBtn.addEventListener('click', () => {
+            isRaised = !isRaised;
+            if(isRaised) {
+                handRaiseBtn.classList.add('active-glow', 'bg-primary-container', 'text-secondary-container');
+                handRaiseBtn.querySelector('span').innerText = 'check';
+                // Add chat notification
+                const chatStream = document.getElementById('chat-stream');
+                const notification = document.createElement('div');
+                notification.className = 'text-center py-2';
+                notification.innerHTML = `<span class="bg-secondary-fixed-dim text-on-secondary-fixed px-3 py-1 rounded-full text-[10px] font-bold">You raised your hand</span>`;
+                chatStream.appendChild(notification);
+                chatStream.scrollTop = chatStream.scrollHeight;
+            } else {
+                handRaiseBtn.classList.remove('active-glow', 'bg-primary-container', 'text-secondary-container');
+                handRaiseBtn.querySelector('span').innerText = 'front_hand';
+            }
+        });
+
+        // Transcription Toggle
+        const transBtn = document.getElementById('transcription-btn');
+        const transPanel = document.getElementById('transcription-panel');
+        transBtn.addEventListener('click', () => {
+            transPanel.classList.toggle('hidden');
+            transBtn.classList.toggle('bg-secondary-container');
+            transBtn.classList.toggle('text-on-secondary-container');
+        });
+
+        // Simple Chat Simulator
+        const chatInput = document.querySelector('input[placeholder="Share a reflection or prayer..."]');
+        const chatSubmit = chatInput.nextElementSibling;
+        const chatStream = document.getElementById('chat-stream');
+
+        function addMessage() {
+            if(!chatInput.value.trim()) return;
+            const msg = document.createElement('div');
+            msg.className = 'flex flex-col items-end';
+            msg.innerHTML = `
+                <span class="text-[10px] font-bold text-secondary mb-1">You</span>
+                <div class="bg-primary-container text-white p-3 rounded-lg rounded-tr-none">
+                    <p class="text-[13px]">${chatInput.value}</p>
+                </div>
+            `;
+            chatStream.appendChild(msg);
+            chatInput.value = '';
+            chatStream.scrollTop = chatStream.scrollHeight;
+        }
+
+        chatSubmit.addEventListener('click', addMessage);
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') addMessage(); });
+
+        // Upvote Logic Simulation
+        document.querySelectorAll('button.material-symbols-outlined').forEach(btn => {
+            if(btn.innerText === 'expand_less') {
+                btn.addEventListener('click', function() {
+                    const count = this.nextElementSibling;
+                    if(!this.dataset.voted) {
+                        count.innerText = parseInt(count.innerText) + 1;
+                        this.style.color = '#7d5800';
+                        this.dataset.voted = true;
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

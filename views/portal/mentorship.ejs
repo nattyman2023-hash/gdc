@@ -1,0 +1,30 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Faculty Mentorship</p><h1 class="font-headline text-headline-md text-primary">Office Hours</h1><p class="text-on-surface-variant mt-1">Book one-to-one time with faculty.</p></div>
+
+<% if (!slots.length) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">No office hours are open for booking right now. Please check back soon.</div>
+<% } %>
+<div class="space-y-3">
+  <% slots.forEach(function(s){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <p class="font-bold text-primary">Dr. <%= s.first_name %> <%= s.last_name %></p>
+      <p class="text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base align-middle">schedule</span> <%= formatDateTime(s.starts_at) %> · <%= s.mode==='online'?'Online':'In person' %><% if (s.topic) { %> · <%= s.topic %><% } %></p>
+      <p class="text-xs text-on-surface-variant mt-1"><%= s.booked_count %>/<%= s.capacity %> booked</p>
+    </div>
+    <div class="shrink-0">
+      <% if (s.mine) { %>
+        <div class="flex items-center gap-2">
+          <% if (s.mode==='online' && s.join_url) { %><a href="<%= s.join_url %>" target="_blank" class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Join</a><% } %>
+          <form action="/portal/office-hours/<%= s.id %>/cancel" method="post"><button class="border border-outline text-on-surface-variant px-4 py-2 rounded font-bold text-sm">Cancel</button></form>
+        </div>
+      <% } else if (s.full) { %>
+        <span class="text-on-surface-variant text-sm font-bold">Full</span>
+      <% } else { %>
+        <form action="/portal/office-hours/<%= s.id %>/book" method="post" class="flex gap-2">
+          <button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold text-sm">Book</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+  <% }) %>
+</div>

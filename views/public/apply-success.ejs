@@ -1,0 +1,29 @@
+<section class="py-24 bg-surface-bright min-h-[60vh] flex items-center">
+  <div class="max-w-xl mx-auto px-margin-mobile lg:px-margin-desktop text-center">
+    <div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto mb-6">
+      <span class="material-symbols-outlined text-on-secondary-container" style="font-size:48px; font-variation-settings:'FILL' 1;">check</span>
+    </div>
+    <h1 class="font-display text-display-lg-mobile md:text-headline-md text-primary mb-4">Application Received</h1>
+    <p class="font-body text-body-lg text-on-surface-variant mb-6">Thank you for applying to Global Diaspora Christian University. Our admissions team will review your application and be in touch by email.</p>
+
+    <% if (application) { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 text-left inline-block mx-auto mb-8">
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Your application reference</p>
+      <p class="font-headline text-headline-sm text-primary mb-3"><%= application.reference %></p>
+      <p class="text-sm text-on-surface-variant">Applicant: <strong><%= application.first_name %> <%= application.last_name %></strong></p>
+      <p class="text-sm text-on-surface-variant">Payment status:
+        <% if (application.payment_status === 'paid' || paid) { %>
+          <span class="text-secondary font-bold">Paid ✓</span>
+        <% } else { %>
+          <span class="text-on-surface-variant font-bold">Pending</span>
+        <% } %>
+      </p>
+    </div>
+    <% } %>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/" class="bg-primary text-on-primary px-8 py-3 rounded font-bold">Return Home</a>
+      <a href="/programs" class="border-2 border-secondary text-primary px-8 py-3 rounded font-bold hover:bg-secondary-fixed transition-colors">Explore More Programs</a>
+    </div>
+  </div>
+</section>

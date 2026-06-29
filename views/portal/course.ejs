@@ -1,0 +1,226 @@
+<a href="/portal" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Dashboard</a>
+
+<div class="bg-primary text-on-primary rounded-lg p-6 lg:p-8 mb-6">
+  <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest"><%= course.code || 'Course' %></p>
+  <h1 class="font-headline text-headline-md mb-2"><%= course.title %></h1>
+  <p class="text-on-primary-container max-w-2xl mb-6"><%= course.summary %></p>
+  <div class="flex items-center gap-4 max-w-md">
+    <div class="flex-1">
+      <div class="flex justify-between text-sm mb-1"><span class="text-on-primary-container"><%= enrollment.progress_pct %>% complete</span><% if (enrollment.status==='completed'){ %><span class="text-secondary-fixed font-bold">✓ Completed</span><% } %></div>
+      <div class="w-full h-2 bg-on-primary-fixed-variant/40 rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= enrollment.progress_pct %>%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2 space-y-5">
+    <% if (typeof continueTo !== 'undefined' && continueTo) { %>
+      <% if (continueTo.ready) { %>
+      <a href="/portal/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="block bg-primary text-on-primary rounded-lg p-5 hover:shadow-lg transition-shadow">
+        <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider">Continue where you left off</p>
+        <p class="font-headline text-headline-sm mt-1">Lesson <%= continueTo.blockNo %> — <%= continueTo.blockTitle %></p>
+        <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
+        <span class="inline-flex items-center gap-1 mt-3 bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm">Resume <span class="material-symbols-outlined text-base">arrow_forward</span></span>
+      </a>
+      <% } else { %>
+      <div class="block bg-primary/90 text-on-primary rounded-lg p-5">
+        <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider">Up next</p>
+        <p class="font-headline text-headline-sm mt-1">Lesson <%= continueTo.blockNo %> — <%= continueTo.blockTitle %></p>
+        <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
+        <% if (continueTo.nextAvailable) { %>
+          <span class="inline-flex items-center gap-1 mt-3 bg-on-primary/15 text-on-primary px-4 py-2 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">lock_clock</span> Unlocks <%= new Date(continueTo.nextAvailable).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) %></span>
+          <p class="text-on-primary-container text-xs mt-2">Lessons release gradually to keep your learning steady — well done on finishing the last one!</p>
+        <% } else { %>
+          <a href="/portal/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="inline-flex items-center gap-1 mt-3 bg-on-primary/15 text-on-primary px-4 py-2 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">quiz</span> Pass the quiz to continue</a>
+        <% } %>
+      </div>
+      <% } %>
+    <% } %>
+    <h2 class="font-headline text-headline-sm text-primary">Curriculum</h2>
+    <% if (typeof curriculum !== 'undefined' && curriculum) { %>
+      <%
+        function unlockTime(d){ return new Date(d).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
+        function partLabel(l){ return l.type==='video' ? 'Watch (video)' : (/^Study/i.test(l.title) ? 'Scripture study' : 'Reading'); }
+      %>
+      <%
+        var byYear = {}; var yearOrder = [];
+        curriculum.forEach(function(m){ var y = m.sort_order >= 100 ? Math.floor(m.sort_order / 100) : 0; if (!byYear[y]) { byYear[y] = []; yearOrder.push(y); } byYear[y].push(m); });
+      %>
+      <% yearOrder.forEach(function(y){ var yMods = byYear[y]; var yImg = (yMods.find(function(m){ return m.featured_image; }) || {}).featured_image; var yearCurrent = yMods.some(function(m){ return m.blocks.some(function(b){ return b.open && !b.complete; }); }); %>
+        <% if (y) { %>
+        <details class="group/yr rounded-xl overflow-hidden border border-outline-variant shadow-sm" <%= yearCurrent ? 'open' : '' %>>
+          <summary class="list-none select-none cursor-pointer relative h-32 flex items-end text-on-primary">
+            <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
+            <div class="relative w-full px-5 py-4 flex items-center justify-between">
+              <div>
+                <p class="font-tagline text-[11px] uppercase tracking-wider text-secondary-fixed">Academic Year</p>
+                <h2 class="font-headline text-headline-sm">Year <%= y %></h2>
+                <p class="text-sm text-on-primary-container/80"><%= yMods.length %> modules · <%= yMods.reduce((s,m)=>s+m.blocks.length,0) %> lessons</p>
+              </div>
+              <span class="material-symbols-outlined transition-transform group-open/yr:rotate-180">expand_more</span>
+            </div>
+          </summary>
+          <div class="p-4 bg-surface-container-low/40 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <% } %>
+        <% yMods.forEach(function(m){ var mi = curriculum.indexOf(m); var modCurrent = m.blocks.some(function(b){ return b.open && !b.complete; }); var modComplete = m.blocks.length && m.blocks.every(function(b){ return b.complete; }); %>
+        <details class="group/mod bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" <%= modCurrent ? 'open' : '' %>>
+          <summary class="list-none select-none cursor-pointer overflow-hidden">
+            <div class="relative h-24 bg-primary-container">
+              <img src="<%= m.featured_image || yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+              <% if (modComplete) { %>
+              <span class="absolute top-3 right-3 font-tagline text-[10px] bg-secondary text-on-secondary px-2 py-1 uppercase rounded">✓ Complete</span>
+              <% } else if (modCurrent) { %>
+              <span class="absolute top-3 right-3 font-tagline text-[10px] bg-amber-500 text-white px-2 py-1 uppercase rounded">In progress</span>
+              <% } %>
+            </div>
+            <div class="p-4">
+              <p class="font-tagline text-[10px] text-secondary uppercase tracking-wider">Module <%= (mi%100)+1 %></p>
+              <h3 class="font-headline text-headline-sm text-primary mt-0.5"><%= m.title.replace(/^Year \d+ · /,'') %></h3>
+              <p class="text-xs text-on-surface-variant mt-1"><%= m.blocks.length %> lesson blocks<% if (modComplete) { %> · <span class="text-secondary font-bold">✓ done</span><% } %></p>
+            </div>
+          </summary>
+        <div class="border-t border-outline-variant/40 divide-y divide-outline-variant/30">
+          <% m.blocks.forEach(function(blk){ var current = blk.open && !blk.complete; %>
+          <details class="group/blk px-4 py-3 transition-colors <%= blk.complete ? 'bg-surface-container-low/30' : (current ? 'bg-secondary-fixed/15' : '') %>" <%= current ? 'open' : '' %>>
+            <summary class="list-none select-none cursor-pointer flex items-center justify-between gap-3">
+              <p class="font-bold text-sm flex items-center gap-1.5 <%= blk.complete ? 'text-on-surface-variant' : 'text-primary' %>">
+                <span class="material-symbols-outlined text-base text-on-surface-variant transition-transform group-open/blk:rotate-90">chevron_right</span>
+                Lesson <%= blk.block_no %> — <%= blk.title %>
+              </p>
+              <% if (blk.complete) { %><span class="text-xs text-secondary font-bold whitespace-nowrap">✓ Complete</span>
+              <% } else if (current) { %><span class="text-xs text-secondary font-bold whitespace-nowrap">● Current</span>
+              <% } else if (blk.next_available) { %><span class="text-xs text-on-surface-variant inline-flex items-center gap-1 whitespace-nowrap"><span class="material-symbols-outlined text-sm">lock_clock</span> Unlocks <%= unlockTime(blk.next_available) %></span>
+              <% } else { %><span class="text-xs text-on-surface-variant inline-flex items-center gap-1 whitespace-nowrap"><span class="material-symbols-outlined text-sm">lock</span> Locked</span><% } %>
+            </summary>
+            <ul class="mt-2 space-y-0.5 pl-6">
+              <% blk.lessons.forEach(function(l){ %>
+              <li>
+                <% if (blk.open || blk.complete) { %>
+                <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 text-sm py-1 hover:text-secondary">
+                  <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>"><%= l.completed ? 'check_circle' : (l.type==='video' ? 'play_circle' : 'article') %></span>
+                  <span class="<%= l.completed ? 'text-on-surface-variant' : 'text-primary' %>"><%= partLabel(l) %></span>
+                  <span class="ml-auto text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
+                </a>
+                <% } else { %>
+                <span class="flex items-center gap-2 text-sm py-1 text-on-surface-variant/50">
+                  <span class="material-symbols-outlined text-base">lock</span> <%= partLabel(l) %>
+                  <span class="ml-auto text-xs"><%= l.duration_min %> min</span>
+                </span>
+                <% } %>
+              </li>
+              <% }) %>
+            </ul>
+            <% if (blk.quiz) { %>
+            <div class="mt-2 ml-6 flex items-center justify-between gap-3 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+              <span class="text-sm font-medium text-primary inline-flex items-center gap-1"><span class="material-symbols-outlined text-base text-amber-600">quiz</span> <%= blk.quiz.title %></span>
+              <% if (blk.quiz.passed) { %><span class="text-xs text-secondary font-bold whitespace-nowrap">✓ Passed</span>
+              <% } else if (blk.quiz.available) { %><a href="/portal/quizzes/<%= blk.quiz.id %>" class="text-xs bg-primary text-on-primary px-3 py-1 rounded font-bold whitespace-nowrap">Take quiz</a>
+              <% } else { %><span class="text-xs text-on-surface-variant whitespace-nowrap">Finish the lessons first</span><% } %>
+            </div>
+            <% } %>
+          </details>
+          <% }) %>
+        </div>
+        </details>
+        <% }) %>
+        <% if (y) { %></div></details><% } %>
+      <% }) %>
+      <p class="text-xs text-on-surface-variant">Lessons unlock gradually (about every 4 hours after you finish one) to support steady, focused learning. A short quiz follows every 5 lessons — you can retake it until you pass.</p>
+    <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <% structure.forEach(function(m, mi){ %>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="px-5 py-4 bg-surface-container-high border-b border-outline-variant">
+            <p class="font-tagline text-label-sm text-secondary uppercase">Module <%= mi+1 %></p>
+            <h3 class="font-headline text-headline-sm text-primary"><%= m.title %></h3>
+          </div>
+          <ul class="divide-y divide-outline-variant/40">
+            <% m.lessons.forEach(function(l){ %>
+            <li>
+              <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low">
+                <span class="material-symbols-outlined <%= l.completed ? 'text-secondary' : 'text-outline' %>"><%= l.completed ? 'check_circle' : (l.type==='video'||l.type==='live' ? 'play_circle' : 'article') %></span>
+                <span class="flex-1 <%= l.completed ? 'text-on-surface-variant line-through' : 'text-primary font-medium' %>"><%= l.title %></span>
+                <span class="text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
+              </a>
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+        <% }) %>
+      </div>
+
+      <% if (quizzes.length) { %>
+      <h2 class="font-headline text-headline-sm text-primary pt-4">Assessments</h2>
+      <% quizzes.forEach(function(q){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
+        <div>
+          <h3 class="font-headline text-headline-sm text-primary"><%= q.title %></h3>
+          <p class="text-on-surface-variant text-sm"><%= q.description %> · Pass mark <%= q.pass_mark %>%</p>
+          <% if (q.best) { %><p class="text-sm mt-1 <%= q.best.passed ? 'text-secondary' : 'text-error' %>">Best score: <%= q.best.score %>% <%= q.best.passed ? '(passed)' : '(not yet passed)' %></p><% } %>
+        </div>
+        <a href="/portal/quizzes/<%= q.id %>" class="bg-primary text-on-primary px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= q.best ? 'Retake' : 'Start' %></a>
+      </div>
+      <% }) %>
+      <% } %>
+    <% } %>
+<!-- Final exam (course-level) -->
+    <% if (typeof finalExam !== 'undefined' && finalExam) { %>
+    <h2 class="font-headline text-headline-sm text-primary pt-4">Final Exam</h2>
+    <div class="bg-surface-container-lowest border-l-4 border-secondary border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined text-secondary">workspace_premium</span> <%= finalExam.title %></h3>
+        <p class="text-on-surface-variant text-sm">Pass mark <%= finalExam.pass_mark %>%<% if (finalExam.time_limit_min) { %> · <%= finalExam.time_limit_min %> min<% } %> · required for your certificate</p>
+        <% if (finalExam.best) { %><p class="text-sm mt-1 <%= finalExamPassed ? 'text-secondary' : 'text-error' %>">Best score: <%= finalExam.best.score %>% <%= finalExamPassed ? '(passed)' : '(not yet passed)' %></p><% } %>
+        <% if (!finalExamUnlocked) { %><p class="text-sm mt-1 text-on-surface-variant"><span class="material-symbols-outlined text-sm align-middle">lock</span> Complete all lessons to unlock</p><% } %>
+      </div>
+      <% if (finalExamUnlocked) { %>
+        <a href="/portal/quizzes/<%= finalExam.id %>" class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= finalExamPassed ? 'Retake' : 'Start exam' %></a>
+      <% } else { %>
+        <button disabled class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded font-bold shrink-0 cursor-not-allowed">Locked</button>
+      <% } %>
+    </div>
+    <% } %>
+
+    <% if (assignments && assignments.length) { %>
+    <h2 class="font-headline text-headline-sm text-primary pt-4">Assignments</h2>
+    <% assignments.forEach(function(asg){ var sub = asg.submission; %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary"><%= asg.title %></h3>
+        <p class="text-on-surface-variant text-sm"><% if (asg.due_date) { %>Due <%= formatDate(asg.due_date) %> · <% } %>Out of <%= asg.max_points %>
+          <% if (sub && sub.status === 'graded') { %>· <span class="text-secondary font-bold">Graded: <%= sub.grade %>/<%= asg.max_points %></span>
+          <% } else if (sub) { %>· <span class="text-secondary">Submitted</span><% } %>
+        </p>
+      </div>
+      <a href="/portal/assignments/<%= asg.id %>" class="<%= sub ? 'border border-outline text-primary' : 'bg-primary text-on-primary' %> px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= sub ? 'View' : 'Submit' %></a>
+    </div>
+    <% }) %>
+    <% } %>
+  </div>
+
+  <aside class="space-y-5">
+    <% if (instructor) { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-3">Instructor</p>
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-lg"><%= instructor.first_name.charAt(0) %></div>
+        <div><p class="font-bold text-primary">Dr. <%= instructor.first_name %> <%= instructor.last_name %></p><p class="text-sm text-on-surface-variant">Faculty</p></div>
+      </div>
+    </div>
+    <% } %>
+    <% if (enrollment.status==='completed') { %>
+    <div class="bg-secondary-fixed border border-secondary rounded-lg p-5 text-center">
+      <span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
+      <p class="font-bold text-on-secondary-fixed my-2">Course complete!</p>
+      <a href="/portal/certificates" class="inline-block bg-primary text-on-primary px-5 py-2 rounded font-bold">Claim certificate</a>
+    </div>
+    <% } %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Need assistance?</p>
+      <p class="text-sm text-on-surface-variant mb-3">Contact the student helpdesk or your instructor for support.</p>
+      <a href="/contact" class="text-secondary font-bold text-sm">Get support →</a>
+    </div>
+  </aside>
+</div>

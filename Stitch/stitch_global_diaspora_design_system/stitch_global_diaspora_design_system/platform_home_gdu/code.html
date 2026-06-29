@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Diaspora University | Platform Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .bg-mesh-gradient {
+            background-color: #071d3a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(172, 199, 255, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(246, 189, 80, 0.1) 0px, transparent 50%);
+        }
+        .hero-border-accent {
+            border-top: 2px solid #f6bd50;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f6f3ed",
+                      "on-primary-fixed": "#051b38",
+                      "tertiary-container": "#291a00",
+                      "on-background": "#1c1c18",
+                      "inverse-primary": "#b4c7ec",
+                      "surface-container-highest": "#e5e2dc",
+                      "on-surface-variant": "#44474d",
+                      "on-error": "#ffffff",
+                      "on-surface": "#1c1c18",
+                      "on-secondary-fixed": "#001a40",
+                      "surface-container": "#f0eee8",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#040200",
+                      "surface-bright": "#fcf9f3",
+                      "secondary-container": "#a8c4fe",
+                      "inverse-surface": "#31312d",
+                      "outline-variant": "#c4c6ce",
+                      "error-container": "#ffdad6",
+                      "surface-container-high": "#ebe8e2",
+                      "on-primary-fixed-variant": "#354766",
+                      "on-primary-container": "#7386a8",
+                      "tertiary-fixed": "#ffdea9",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "on-tertiary-container": "#ad7c0e",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#294678",
+                      "inverse-on-surface": "#f3f0ea",
+                      "background": "#fcf9f3",
+                      "outline": "#74777e",
+                      "secondary-fixed": "#d7e2ff",
+                      "on-tertiary-fixed-variant": "#5e4100",
+                      "primary-container": "#071d3a",
+                      "tertiary-fixed-dim": "#f6bd50",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#acc7ff",
+                      "on-secondary-container": "#345083",
+                      "surface-variant": "#e5e2dc",
+                      "surface": "#fcf9f3",
+                      "primary-fixed": "#d6e3ff",
+                      "secondary": "#425e92",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#4c5f7f",
+                      "surface-dim": "#dcdad4",
+                      "primary": "#00030c",
+                      "on-tertiary-fixed": "#271900"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "base": "8px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "container-max": "1280px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "tagline": ["Montserrat"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg-mobile": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "tagline": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- TopNavBar -->
+<header class="w-full z-50 flex flex-col items-center bg-primary-container dark:bg-primary-container border-b border-white/10 shadow-sm sticky top-0">
+<div class="max-w-container-max w-full flex items-center justify-between px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-surface-lowest dark:text-surface-lowest tracking-tight">Global Diaspora University</span>
+</div>
+<nav class="hidden md:flex items-center gap-gutter">
+<a class="font-tagline text-tagline text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1 transition-all" href="#">About</a>
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest hover:text-tertiary-fixed transition-colors duration-200" href="#">Catalog</a>
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest hover:text-tertiary-fixed transition-colors duration-200" href="#">Enrollment</a>
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest hover:text-tertiary-fixed transition-colors duration-200" href="#">Learning</a>
+</nav>
+<div class="flex items-center gap-stack-md">
+<div class="hidden sm:flex items-center gap-stack-sm mr-4">
+<span class="material-symbols-outlined text-surface-lowest/70 cursor-pointer hover:text-tertiary-fixed transition-colors">support</span>
+<span class="material-symbols-outlined text-surface-lowest/70 cursor-pointer hover:text-tertiary-fixed transition-colors">volunteer_activism</span>
+</div>
+<button class="hidden lg:block font-tagline text-tagline text-on-primary-fixed bg-tertiary-fixed-dim px-6 py-2 rounded-DEFAULT hover:opacity-90 transition-all">Student Portal</button>
+<button class="font-tagline text-tagline bg-surface-lowest text-primary-container px-6 py-2 rounded-DEFAULT font-bold active:scale-95 transition-all">Apply Now</button>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative bg-mesh-gradient text-on-primary-fixed pt-24 pb-32 overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="lg:col-span-7 z-10">
+<div class="inline-block border-l-4 border-tertiary-fixed-dim pl-4 mb-stack-md">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase tracking-[0.2em]">Institutional Excellence</span>
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-stack-md">
+                        Educate. Equip. Empower. <br/><span class="text-tertiary-fixed-dim">Impact the World.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-white/80 max-w-xl mb-stack-lg">
+                        Bridging global diaspora communities through accessible, prestigious, and spiritually grounded academic excellence. Registered in the UK, reaching the world.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-tertiary-fixed-dim text-on-primary-fixed px-8 py-4 font-tagline text-tagline font-bold rounded-DEFAULT hover:bg-tertiary-fixed transition-all flex items-center justify-center gap-2">
+                            Start Learning
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="border border-white/30 text-white px-8 py-4 font-tagline text-tagline font-bold rounded-DEFAULT hover:bg-white/10 transition-all">
+                            Create Student Account
+                        </button>
+</div>
+</div>
+<div class="lg:col-span-5 relative flex justify-center lg:justify-end mt-12 lg:mt-0">
+<div class="relative w-72 h-72 md:w-96 md:h-96">
+<div class="absolute inset-0 bg-tertiary-fixed-dim/20 rounded-full blur-3xl animate-pulse"></div>
+<img alt="Global Diaspora University Crest" class="relative z-10 w-full h-full object-contain filter drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0kbXyk5kWCKu5sg8CSGonH2xsMas7LQoqNJE_bDBZooq3kC7w3tnzjCOAv32YZ4C6fe6UzKNxRJgs143hfwh-_Fpi2u24uKnXiKcX4J2U3zBN5PSNTeGJY5hnzT8aYlhVnKXxoKA7WZI7mWV9vO3UOSyJktNx014oBjcx4tGtn5DgexwHVluLLOqB9J_EHV4AN3ficGbzhov6PXsVVBE1zubFRVpZLsTPpVOrVJw1zGlrbW275ZFPvYdbew5gmr_VuukfslC7zZE"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Statistics Section -->
+<section class="bg-surface-container-lowest -mt-16 relative z-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-outline-variant/30 bg-white shadow-xl border border-outline-variant/10">
+<div class="py-10 px-8 text-center flex flex-col items-center">
+<span class="font-display-lg text-primary-container block mb-1">6</span>
+<span class="font-tagline text-tagline text-on-surface-variant uppercase">Advanced Programs</span>
+</div>
+<div class="py-10 px-8 text-center flex flex-col items-center">
+<span class="font-display-lg text-primary-container block mb-1">Global</span>
+<span class="font-tagline text-tagline text-on-surface-variant uppercase">Student Body</span>
+</div>
+<div class="py-10 px-8 text-center flex flex-col items-center">
+<div class="flex items-center gap-2 mb-1 justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'opsz' 48;">verified</span>
+<span class="font-display-lg text-primary-container">UK</span>
+</div>
+<span class="font-tagline text-tagline text-on-surface-variant uppercase">Verified Credentials</span>
+</div>
+</div>
+</section>
+<!-- Feature Grid (Bento Style) -->
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-headline-md text-headline-md text-primary-container mb-4">A Digital Campus for the Global Citizen</h2>
+<div class="w-24 h-1 bg-tertiary-fixed-dim mx-auto"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Mobile-First LMS -->
+<div class="md:col-span-8 bg-surface-container-low border border-outline-variant/20 p-stack-lg group hover:border-tertiary-fixed-dim transition-colors relative overflow-hidden">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">smartphone</span>
+<h3 class="font-headline-md text-headline-md text-primary-container mb-4">Mobile-First LMS</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">Access your lectures, assignments, and peer discussions from any device, anywhere. Our system is designed for the modern learner on the move.</p>
+</div>
+<div class="absolute bottom-0 right-0 w-64 h-64 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'wght' 100;">school</span>
+</div>
+</div>
+<!-- Global Community -->
+<div class="md:col-span-4 bg-primary-container text-white p-stack-lg border-t-4 border-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl mb-4">public</span>
+<h3 class="font-headline-md text-headline-md text-white mb-4">Spiritual Community</h3>
+<p class="font-body-md text-white/80">Connect with a global diaspora of students sharing values, faith, and a commitment to world-changing impact.</p>
+</div>
+<!-- Optimization -->
+<div class="md:col-span-4 bg-surface-container-high p-stack-lg">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-4">bolt</span>
+<h3 class="font-headline-md text-headline-md text-primary-container mb-4">Low-Bandwidth</h3>
+<p class="font-body-md text-on-surface-variant">Intelligent optimization ensures learning content is accessible even in regions with limited internet connectivity.</p>
+</div>
+<!-- Credentials -->
+<div class="md:col-span-8 relative min-h-[300px] flex items-end p-stack-lg group overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A close-up shot of a high-quality academic diploma on thick cream-colored parchment paper, featuring gold foil lettering and an intricate university seal. The background shows a soft-focus library environment with mahogany bookshelves and leather-bound books. The lighting is warm and directional, emphasizing the prestigious texture and authoritative nature of the credential." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSND1NX9zXVvMjq5XNuDriFjUT-p1bhG2SR-L7s6diuxXcGGLD1-YUvdJTY56XbJqdvNmZIReL-6u6PnIySm1ezMxHQP4p16u4oNO9UWyoOT8rmmgCp_OEFiUV0FHlkV-0XCnEeLmk2Saa26zVj7EI8KSmLym89GB1BhxiIz2gQ3XZEhQyrh7OVMgkdRetJvBACN9qjEJFFtjQ6QYLIunN79aeyg0URG4VBARCm1INDvcD2XcGwmJGCkSwJd8NnclbezY3gkR4drU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container via-primary-container/40 to-transparent"></div>
+</div>
+<div class="relative z-10">
+<h3 class="font-headline-md text-headline-md text-white mb-2">Verified Excellence</h3>
+<p class="font-body-md text-white/90 max-w-lg">Earn certificates and degrees recognized for their rigorous UK academic standards and practical global application.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Video Section -->
+<section class="bg-primary-container py-24 text-white">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+<div class="max-w-4xl mx-auto border border-white/10 rounded-lg overflow-hidden shadow-2xl relative">
+<div class="aspect-video bg-black/40 flex items-center justify-center relative group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="A wide panoramic shot of an elegant, modern university lecture hall during a digital seminar. A diverse group of students is visible in a blurred background, while the foreground focuses on a high-definition screen showing a professional lecturer. The atmosphere is academic, sophisticated, and illuminated with cool-toned architectural lighting, conveying a sense of global connectivity and educational innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7y6fv5VWBchT4Lsj9ZlRA4QP9sxf0c0mUcm8EvOOZ5bxqWmOABAFLtElHRlwHY6wVBNJxPqkqzBunV7Oncl5Fiplpjs6iuH_MD6ntajpLeOzmFYZRTLDA16vftr0QV4vyJ558suG-BHK8jOoS-PCfvEMgt1iL8uiA465IBmQ8rplpWFQtcZlA_ELPYDJ4P4gyvOEZrdektUC9Sp7NKpaQSnhI4R9PYaU47MGjOX3_gJFQN4m887ECxUuAG7JjjvEe2Tt26kfZQfY"/>
+<div class="z-10 text-center px-8">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase tracking-[0.2em] mb-4 block">Academic Excellence</span>
+<h2 class="font-headline-md text-headline-md mb-8">The Platform Explainer</h2>
+<button class="w-20 h-20 bg-tertiary-fixed-dim rounded-full flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group shadow-[0_0_30px_rgba(246,189,80,0.3)]">
+<span class="material-symbols-outlined text-primary-container text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<p class="font-body-md text-white/60 mt-8 italic max-w-2xl mx-auto">"Join thousands of leaders shaping the future of their communities through accessible higher education."</p>
+</div>
+</section>
+<!-- Call to Action Section -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-4xl mx-auto text-center px-margin-mobile">
+<h2 class="font-display-lg-mobile md:font-display-lg text-primary-container mb-stack-md">Ready to Begin Your Journey?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg">Enrollment is now open for the upcoming academic semester. Secure your place at the global hub for diaspora education.</p>
+<div class="flex flex-col sm:flex-row gap-gutter justify-center">
+<button class="bg-primary-container text-white px-10 py-4 font-tagline text-tagline font-bold rounded-DEFAULT hover:bg-black transition-all">Enroll Now</button>
+<button class="bg-transparent border-2 border-primary-container text-primary-container px-10 py-4 font-tagline text-tagline font-bold rounded-DEFAULT hover:bg-primary-container hover:text-white transition-all">Download Catalog</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container dark:bg-primary-container text-on-primary-fixed dark:text-primary-fixed border-t border-white/5 py-stack-lg">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between gap-gutter">
+<div class="flex flex-col gap-4 max-w-sm">
+<span class="font-headline-md text-headline-md text-surface-lowest">Global Diaspora University</span>
+<p class="font-body-md text-surface-lowest/70">Empowering the diaspora to lead with integrity, faith, and academic rigor in a globalized world.</p>
+<p class="font-label-sm text-label-sm text-surface-lowest/50 mt-4">© 2024 Global Diaspora University. All rights reserved. Registered in the UK.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-stack-lg">
+<div class="flex flex-col gap-2">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase mb-2">University</span>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Governance</a>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Roadmap</a>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Research</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase mb-2">Support</span>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">FAQs</a>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Terms</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase mb-2">Social</span>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-surface-lowest/70 cursor-pointer hover:text-tertiary-fixed">share</span>
+<span class="material-symbols-outlined text-surface-lowest/70 cursor-pointer hover:text-tertiary-fixed">mail</span>
+<span class="material-symbols-outlined text-surface-lowest/70 cursor-pointer hover:text-tertiary-fixed">language</span>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple scroll interaction for the navigation bar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2');
+                header.classList.remove('py-4');
+                header.classList.add('bg-opacity-95');
+                header.classList.add('backdrop-blur-md');
+            } else {
+                header.classList.add('py-4');
+                header.classList.remove('py-2');
+                header.classList.remove('bg-opacity-95');
+                header.classList.remove('backdrop-blur-md');
+            }
+        });
+
+        // Hover micro-interactions for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

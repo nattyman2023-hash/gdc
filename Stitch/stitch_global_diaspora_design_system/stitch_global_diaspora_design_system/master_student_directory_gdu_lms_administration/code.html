@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Directory | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for academic refinement */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f6f3ed; }
+        ::-webkit-scrollbar-thumb { background: #74777e; border-radius: 10px; }
+        
+        .academic-table-row:hover {
+            background-color: rgba(253, 195, 85, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface-variant": "#44474d",
+                      "inverse-on-surface": "#f3f0ea",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#001c43",
+                      "surface-tint": "#4c5f7f",
+                      "secondary": "#7d5800",
+                      "on-surface": "#1c1c18",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dcdad4",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-container": "#6a85bb",
+                      "tertiary-fixed": "#d7e2ff",
+                      "on-primary-fixed-variant": "#354766",
+                      "surface": "#fcf9f3",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "on-primary-container": "#7386a8",
+                      "outline-variant": "#c4c6ce",
+                      "inverse-surface": "#31312d",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#071d3a",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "background": "#fcf9f3",
+                      "surface-container-low": "#f6f3ed",
+                      "surface-variant": "#e5e2dc",
+                      "on-background": "#1c1c18",
+                      "surface-container": "#f0eee8",
+                      "on-primary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "tertiary": "#00030d",
+                      "on-secondary-fixed": "#271900",
+                      "surface-container-high": "#ebe8e2",
+                      "on-tertiary-fixed": "#001a40",
+                      "primary": "#00030c",
+                      "surface-container-highest": "#e5e2dc",
+                      "surface-bright": "#fcf9f3",
+                      "secondary-container": "#fdc355",
+                      "primary-fixed": "#d6e3ff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdea9",
+                      "on-primary-fixed": "#051b38",
+                      "inverse-primary": "#b4c7ec",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "on-secondary-container": "#725000",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "outline": "#74777e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "unit": "8px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Playfair Display"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Playfair Display"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Playfair Display"],
+                      "tagline": ["Montserrat"],
+                      "display-lg-mobile": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant shadow-sm z-50">
+<nav class="flex justify-between items-center w-full px-margin-desktop h-20 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-3xl">school</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Global Diaspora University</h1>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-primary border-b-2 border-secondary-container font-bold pb-1 font-label-sm text-label-sm" href="#">Directory</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Records</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Faculty</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_balance</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Administrator Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXsMHmirY120_9S7K796-x8LAgdJerwGD8SWGW04S1SqHy_ehaHDeZnhlGd6X9Xoa2ATRgvw4V6mk5v_zN4bnfageRcVQKht0XFRex7EVF91OA9pbOTnVtsue3Y82fpAsnMCOrgR8nepF4P0V0VdkOcd9nxZa1P35MWSMZNEVbSqRbQfy3IuvaYVSjXFKN37eDLfWJixb76QIdcehfDoRsl9WETzRQNr6xfjw1b9TsqSNmxzkmySPxjjjFQCn8q_AyDsLu5_8B2qk"/>
+</div>
+</div>
+</nav>
+</header>
+<div class="flex flex-1">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-80px)] w-64 bg-surface-container-low border-r border-outline-variant p-4 z-40 hidden lg:flex flex-col">
+<div class="mb-8 px-2">
+<h2 class="font-headline-sm text-headline-sm text-primary">Administration</h2>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">Academic Affairs</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label-sm text-label-sm">Student Directory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Curriculum</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">Financials</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Faculty Registry</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">System Settings</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-outline-variant mt-4">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded font-bold font-label-sm text-label-sm mb-4 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Registration
+                </button>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-64 p-8 bg-surface">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+<div>
+<span class="font-tagline text-tagline text-secondary px-2 py-1 bg-secondary-fixed/30 rounded inline-block mb-2">ADMINISTRATOR VIEW</span>
+<h2 class="font-display-lg text-display-lg text-primary">Master Student Directory</h2>
+<p class="text-on-surface-variant max-w-2xl mt-2">Comprehensive academic records for the current global enrollment cycle. Securely manage identities, progress, and institutional standing.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2 border border-secondary text-primary font-bold rounded flex items-center gap-2 hover:bg-secondary-fixed/10 transition-colors">
+<span class="material-symbols-outlined text-lg">file_download</span>
+                        Export Records
+                    </button>
+<button class="px-5 py-2 bg-primary text-on-primary font-bold rounded flex items-center gap-2 hover:opacity-90 transition-opacity shadow-md">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Add Student
+                    </button>
+</div>
+</div>
+<!-- Advanced Filters -->
+<div class="bg-surface-container-low p-6 rounded-lg border border-outline-variant mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Search Records</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white border-b border-primary focus:ring-0 focus:border-secondary transition-all outline-none" placeholder="ID or Student Name..." type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Regional Hub</label>
+<select class="w-full bg-white border-b border-primary py-2 px-3 outline-none focus:border-secondary transition-all">
+<option>All Hubs</option>
+<option>Lagos, Nigeria</option>
+<option>London, UK</option>
+<option>Nairobi, Kenya</option>
+<option>Dallas, USA</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Cohort Year</label>
+<select class="w-full bg-white border-b border-primary py-2 px-3 outline-none focus:border-secondary transition-all">
+<option>All Cohorts</option>
+<option>2024</option>
+<option>2023</option>
+<option>2022</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Academic Status</label>
+<select class="w-full bg-white border-b border-primary py-2 px-3 outline-none focus:border-secondary transition-all">
+<option>Any Status</option>
+<option>Active</option>
+<option>On Leave</option>
+<option>Graduated</option>
+</select>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-white rounded-lg border border-outline-variant overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-highest border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">ID</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Student Name</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Program</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hub</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">GPA</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Student 1 -->
+<tr class="academic-table-row transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">GDU-2024-001</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">AA</div>
+<span class="font-bold text-primary">Ayoade Adebayo</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">MSc Global Leadership</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-[10px] font-bold uppercase tracking-wider">Active</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Lagos</td>
+<td class="px-6 py-5 text-right font-bold text-primary">3.92</td>
+<td class="px-6 py-5">
+<div class="flex justify-center gap-2">
+<button class="p-1 hover:text-secondary transition-colors" title="View Profile">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+<button class="p-1 hover:text-secondary transition-colors" title="Edit Record">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Student 2 -->
+<tr class="academic-table-row transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">GDU-2023-452</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold text-xs">ET</div>
+<span class="font-bold text-primary">Elena Tadesse</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">B.A. Post-Colonial Theology</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-[10px] font-bold uppercase tracking-wider">On Leave</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">London</td>
+<td class="px-6 py-5 text-right font-bold text-primary">3.65</td>
+<td class="px-6 py-5">
+<div class="flex justify-center gap-2">
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Student 3 -->
+<tr class="academic-table-row transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">GDU-2024-118</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-800 font-bold text-xs">JM</div>
+<span class="font-bold text-primary">John Mwangi</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">MSc Economic Policy</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-[10px] font-bold uppercase tracking-wider">Active</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Nairobi</td>
+<td class="px-6 py-5 text-right font-bold text-primary">4.00</td>
+<td class="px-6 py-5">
+<div class="flex justify-center gap-2">
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Student 4 -->
+<tr class="academic-table-row transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">GDU-2022-809</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 font-bold text-xs">SR</div>
+<span class="font-bold text-primary">Sarah Rodriguez</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">M.A. Christian Leadership</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-wider">Graduated</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Dallas</td>
+<td class="px-6 py-5 text-right font-bold text-primary">3.88</td>
+<td class="px-6 py-5">
+<div class="flex justify-center gap-2">
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Student 5 -->
+<tr class="academic-table-row transition-colors">
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">GDU-2024-045</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-800 font-bold text-xs">KF</div>
+<span class="font-bold text-primary">Kwame Fosu</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">MSc Global Leadership</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-[10px] font-bold uppercase tracking-wider">Active</span>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Lagos</td>
+<td class="px-6 py-5 text-right font-bold text-primary">3.74</td>
+<td class="px-6 py-5">
+<div class="flex justify-center gap-2">
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+<button class="p-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">Showing 1-5 of 1,248 Records</span>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-variant transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-primary text-on-primary rounded font-bold text-sm">1</button>
+<button class="px-3 py-1 border border-outline-variant rounded font-medium text-sm hover:bg-surface-variant">2</button>
+<button class="px-3 py-1 border border-outline-variant rounded font-medium text-sm hover:bg-surface-variant">3</button>
+<button class="p-2 border border-outline-variant rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Academic Insight Block -->
+<div class="mt-12 p-8 bg-surface-container border border-secondary-fixed-dim/40 rounded-lg relative overflow-hidden">
+<div class="absolute -right-20 -top-20 opacity-5">
+<span class="material-symbols-outlined text-[200px] text-primary">school</span>
+</div>
+<div class="relative z-10 max-w-3xl">
+<div class="w-12 h-0.5 bg-secondary mb-6"></div>
+<p class="font-headline-sm text-headline-sm italic text-primary leading-relaxed mb-6">
+                        "For the earth shall be filled with the knowledge of the glory of the Lord, as the waters cover the sea."
+                    </p>
+<p class="font-tagline text-tagline text-secondary">HABAKKUK 2:14</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-desktop bg-surface border-t border-outline-variant max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-center md:text-left">
+<p class="font-tagline text-tagline text-primary mb-2">GLOBAL DIASPORA UNIVERSITY</p>
+<p class="text-on-surface-variant font-body-md text-body-md">© 2024 Global Diaspora University. All Rights Reserved. Established for Divine Purpose.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Institutional Accreditation</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Support</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for table rows
+        document.querySelectorAll('.academic-table-row').forEach(row => {
+            row.addEventListener('click', () => {
+                // Potential action for row click (e.g., drawer open)
+                console.log('Row clicked');
+            });
+        });
+    </script>
+</body></html>

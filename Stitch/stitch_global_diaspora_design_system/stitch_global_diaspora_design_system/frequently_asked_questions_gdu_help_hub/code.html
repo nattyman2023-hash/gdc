@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FAQ | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed-variant": "#354766",
+                        "tertiary": "#00030d",
+                        "on-tertiary-container": "#6a85bb",
+                        "secondary-fixed": "#ffdea9",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "surface-tint": "#4c5f7f",
+                        "secondary": "#7d5800",
+                        "surface-dim": "#dcdad4",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "surface-container-high": "#ebe8e2",
+                        "secondary-container": "#fdc355",
+                        "on-primary-fixed": "#051b38",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "background": "#fcf9f3",
+                        "surface-variant": "#e5e2dc",
+                        "primary-container": "#071d3a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "primary-fixed": "#d6e3ff",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "surface-container": "#f0eee8",
+                        "primary": "#00030c",
+                        "inverse-surface": "#31312d",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-background": "#1c1c18",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "tertiary-container": "#001c43",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fcf9f3",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e5e2dc",
+                        "inverse-primary": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline": "#74777e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf9f3",
+                        "on-secondary-container": "#725000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+            padding-bottom: 24px;
+        }
+        .accordion-item.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #7d5800;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Global Diaspora University</span>
+</div>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Academics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Research</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Faith</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center gap-2 px-6 py-2 bg-primary text-on-primary font-tagline text-tagline rounded-lg hover:bg-primary-container transition-all active:scale-[0.98]">
+                    Apply Now
+                </button>
+<div class="flex gap-2">
+<span class="material-symbols-outlined p-2 cursor-pointer text-on-surface-variant hover:text-primary transition-colors">account_balance</span>
+<span class="material-symbols-outlined p-2 cursor-pointer text-on-surface-variant hover:text-primary transition-colors">language</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Hero Section -->
+<section class="text-center mb-16">
+<p class="font-tagline text-tagline text-secondary uppercase tracking-widest mb-4">Support Center</p>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-8">How can we help you?</h1>
+<div class="relative max-w-2xl mx-auto">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-b-2 border-primary-container focus:border-secondary outline-none font-body-md transition-all placeholder:text-outline/60" placeholder="Search for questions about admissions, tuition, or technical issues..." type="text"/>
+</div>
+</section>
+<!-- FAQ Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="lg:col-span-3 space-y-2">
+<div class="sticky top-40">
+<h3 class="font-tagline text-tagline text-on-surface-variant mb-6 px-4">CATEGORIES</h3>
+<nav class="flex flex-col gap-1">
+<button class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-semibold transition-all">
+<span class="material-symbols-outlined">info</span>
+                            General Questions
+                        </button>
+<button class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all">
+<span class="material-symbols-outlined">school</span>
+                            Admissions
+                        </button>
+<button class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all">
+<span class="material-symbols-outlined">payments</span>
+                            Tuition &amp; Payment
+                        </button>
+<button class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all">
+<span class="material-symbols-outlined">support_agent</span>
+                            Technical Support
+                        </button>
+</nav>
+</div>
+</aside>
+<!-- FAQ Accordions -->
+<div class="lg:col-span-9 space-y-12">
+<!-- Category: General Questions -->
+<section id="general">
+<div class="flex items-center gap-4 mb-8 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">info</span>
+<h2 class="font-headline-md text-headline-md text-primary">General Questions</h2>
+</div>
+<div class="space-y-4">
+<!-- Accordion Item 1 -->
+<div class="accordion-item bg-white border border-outline-variant/30 hover:border-secondary transition-all rounded-lg overflow-hidden group shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">What is the mission of Global Diaspora University?</span>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline group-hover:text-secondary">expand_more</span>
+</button>
+<div class="accordion-content px-6">
+<p class="text-on-surface-variant leading-relaxed">
+                                    Global Diaspora University is committed to fostering academic excellence rooted in traditional Christian values. Our mission is to empower students from across the diaspora to become leaders through a curriculum that balances rigorous academic inquiry with spiritual formation.
+                                </p>
+</div>
+</div>
+<!-- Accordion Item 2 -->
+<div class="accordion-item bg-white border border-outline-variant/30 hover:border-secondary transition-all rounded-lg overflow-hidden group shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Is GDU an accredited institution?</span>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline group-hover:text-secondary">expand_more</span>
+</button>
+<div class="accordion-content px-6">
+<p class="text-on-surface-variant leading-relaxed">
+                                    Yes, GDU is fully accredited by the Higher Learning Commission (HLC) and maintains specific programmatic accreditations for our business, theological, and nursing divisions.
+                                </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Admissions -->
+<section id="admissions">
+<div class="flex items-center gap-4 mb-8 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">school</span>
+<h2 class="font-headline-md text-headline-md text-primary">Admissions</h2>
+</div>
+<div class="space-y-4">
+<div class="accordion-item bg-white border border-outline-variant/30 hover:border-secondary transition-all rounded-lg overflow-hidden group shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">When are the application deadlines for the next session?</span>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline group-hover:text-secondary">expand_more</span>
+</button>
+<div class="accordion-content px-6">
+<p class="text-on-surface-variant leading-relaxed">
+                                    For the Academic Session 2024, the Early Decision deadline is November 1st, and the Regular Decision deadline is January 15th. International applicants are encouraged to apply by December 1st to allow time for visa processing.
+                                </p>
+</div>
+</div>
+<div class="accordion-item bg-white border border-outline-variant/30 hover:border-secondary transition-all rounded-lg overflow-hidden group shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Are standardized test scores (SAT/ACT) required?</span>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline group-hover:text-secondary">expand_more</span>
+</button>
+<div class="accordion-content px-6">
+<p class="text-on-surface-variant leading-relaxed">
+                                    GDU currently operates a test-optional admissions policy. While we welcome scores from students who feel they reflect their academic potential, they are not mandatory for admission.
+                                </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Image Banner -->
+<div class="relative h-[400px] w-full rounded-xl overflow-hidden shadow-xl my-16">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A grand, traditional university library with tall mahogany shelves filled with ancient books, featuring soft golden lighting casting deep shadows over long study tables. The atmosphere is quiet, reverent, and academic, capturing a sense of heritage and high-level intellectual pursuit. A few students are visible in the background, out of focus, immersed in their studies under classic green-shaded desk lamps." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcJikys9Q5s6HBWjSewsW1Szih7Nn_HyfzW4Ucc7b8CeIZVmPZnTKMtxNhuUPhNIa16vpT3XVNgNZpqTc-3xlpV1ew_ITCSZPulHBSpL0hd_5LZReC-UQ76FlNIL-73VoHRmzlGfyyqcA8UywZVu7Jo9BZNaPLxhvibFKXp874X6VmFKKfMvrR9-wUHLkBgTac-9GzgtO4QEqqYmM0s-WCoYR7lKp4vnh99YIO1WTAaSUnpoGYLbrk2JQWbWS91f75D-S6u0DoPlc"/>
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-[2px] flex items-center justify-center p-8">
+<div class="max-w-xl text-center">
+<div class="h-px w-24 bg-secondary mx-auto mb-4"></div>
+<p class="font-headline-md text-headline-md text-white italic px-4">"And you shall know the truth, and the truth shall make you free."</p>
+<div class="h-px w-24 bg-secondary mx-auto mt-4"></div>
+</div>
+</div>
+</div>
+<!-- Category: Tuition & Payment -->
+<section id="tuition">
+<div class="flex items-center gap-4 mb-8 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">payments</span>
+<h2 class="font-headline-md text-headline-md text-primary">Tuition &amp; Payment</h2>
+</div>
+<div class="space-y-4">
+<div class="accordion-item bg-white border border-outline-variant/30 hover:border-secondary transition-all rounded-lg overflow-hidden group shadow-sm">
+<button class="w-full flex items-center justify-between p-6 text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Does GDU offer financial aid or scholarships?</span>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline group-hover:text-secondary">expand_more</span>
+</button>
+<div class="accordion-content px-6">
+<p class="text-on-surface-variant leading-relaxed">
+                                    Yes, over 85% of GDU students receive some form of financial assistance. We offer merit-based scholarships, need-based grants, and specific diaspora heritage awards.
+                                </p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Contact Section -->
+<section class="mt-24 py-16 px-8 bg-surface-container rounded-2xl border border-outline-variant/50 text-center relative overflow-hidden">
+
+<div class="relative z-10">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">Still have questions?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+                    Our dedicated academic advisors and support staff are here to assist you in your journey towards higher excellence.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="px-8 py-4 bg-primary text-on-primary font-tagline text-tagline rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] flex items-center gap-3">
+<span class="material-symbols-outlined">mail</span>
+                        Contact Us
+                    </button>
+<button class="px-8 py-4 border-2 border-secondary text-primary font-tagline text-tagline rounded-lg hover:bg-secondary/5 transition-all active:scale-[0.98] flex items-center gap-3">
+<span class="material-symbols-outlined">call</span>
+                        Call Admissions
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-mobile md:px-margin-desktop bg-primary text-on-primary border-t border-on-primary-fixed-variant/20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
+<span class="font-display-lg text-display-lg text-on-primary">Global Diaspora University</span>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-4">
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Privacy Policy</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Terms of Service</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Accreditation</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Institutional Equity</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Accessibility</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md" href="#">Contact Us</a>
+</div>
+</div>
+<div class="border-t border-on-primary-fixed-variant/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-tagline text-tagline text-on-primary-fixed-variant">© 2024 Global Diaspora University. All Rights Reserved. Commissioned for a Higher Purpose.</p>
+<div class="flex gap-6">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary-fixed transition-all">public</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary-fixed transition-all">rss_feed</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all items
+            document.querySelectorAll('.accordion-item').forEach(i => {
+                i.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Search highlight micro-interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.01]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.01]');
+        });
+    </script>
+</body></html>

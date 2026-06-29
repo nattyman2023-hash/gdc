@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About GDU | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#7386a8",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fcf9f3",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#d7e2ff",
+                    "outline": "#74777e",
+                    "surface-container-low": "#f6f3ed",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "secondary-fixed": "#ffdea9",
+                    "on-background": "#1c1c18",
+                    "tertiary-container": "#001c43",
+                    "surface-variant": "#e5e2dc",
+                    "inverse-on-surface": "#f3f0ea",
+                    "on-surface": "#1c1c18",
+                    "secondary-container": "#fdc355",
+                    "on-surface-variant": "#44474d",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-secondary-container": "#725000",
+                    "on-primary": "#ffffff",
+                    "secondary": "#7d5800",
+                    "inverse-surface": "#31312d",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "surface-container": "#f0eee8",
+                    "on-primary-fixed-variant": "#354766",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#4c5f7f",
+                    "on-secondary-fixed": "#271900",
+                    "on-primary-fixed": "#051b38",
+                    "primary": "#00030c",
+                    "surface-container-highest": "#e5e2dc",
+                    "tertiary": "#00030d",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-tertiary-container": "#6a85bb",
+                    "surface-container-high": "#ebe8e2",
+                    "surface-bright": "#fcf9f3",
+                    "primary-container": "#071d3a",
+                    "on-tertiary-fixed": "#001a40",
+                    "surface-dim": "#dcdad4",
+                    "on-secondary": "#ffffff",
+                    "background": "#fcf9f3",
+                    "outline-variant": "#c4c6ce",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#b4c7ec",
+                    "primary-fixed": "#d6e3ff",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "margin-desktop": "64px",
+                    "container-max": "1280px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "headline-sm": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrolling-content {
+            scroll-behavior: smooth;
+        }
+        .tenet-accordion[open] .tenet-icon {
+            transform: rotate(180deg);
+        }
+        .roadmap-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #7d5800;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<nav class="bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline fixed top-0 w-full z-50 h-20">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-full">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed tracking-tight">
+                Global Diaspora University
+            </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Academics</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Research</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary transition-colors duration-200 font-body-md text-body-md" href="#">Global Reach</a>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:bg-opacity-90 transition-all">Apply Now</button>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<div class="flex max-w-container-max mx-auto pt-20">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex flex-col gap-2 p-4 h-[calc(100vh-80px)] w-64 fixed bg-surface-container-low dark:bg-surface-container-high border-r border-outline-variant">
+<div class="mb-6 px-4 pt-4">
+<h2 class="font-headline-sm text-headline-sm text-primary">About GDU</h2>
+<p class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Institutional Excellence</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg px-4 py-3 transition-colors duration-150" href="#our-story">
+<span class="material-symbols-outlined">history_edu</span>
+                    Our Story
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#statement-of-faith">
+<span class="material-symbols-outlined">menu_book</span>
+                    Statement of Faith
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#accreditation">
+<span class="material-symbols-outlined">verified</span>
+                    Accreditation
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150" href="#faculty">
+<span class="material-symbols-outlined">school</span>
+                    Faculty
+                </a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 px-margin-mobile md:px-margin-desktop py-12">
+<!-- SECTION: OUR STORY -->
+<section class="mb-24 scroll-mt-24" id="our-story">
+<div class="mb-12">
+<span class="font-tagline text-tagline text-secondary uppercase block mb-2">Heritage &amp; Vision</span>
+<h1 class="font-display-lg text-display-lg text-primary mb-8 border-b border-outline-variant pb-4">Our Story</h1>
+<div class="bg-surface-container-low p-10 md:p-16 border border-outline-variant">
+<p class="font-headline-sm text-headline-sm italic text-secondary mb-8">"Rooted in the Great Commission, established for the global diaspora."</p>
+<div class="space-y-6 text-on-surface-variant leading-relaxed">
+<p class="font-body-lg text-body-lg">Global Diaspora University was born from a divine mandate to provide world-class academic training to leaders within the global movement of peoples. Founded in 1998, our institution has stood as a beacon of Christian scholarship, navigating the complexities of modern displacement with the timeless truth of the Gospel.</p>
+<p class="font-body-lg text-body-lg">We serve those who are far from home, yet close to the heart of God. Our origins trace back to a small prayer circle of academics and missionaries who recognized that the greatest intellectual and spiritual potential often resides within the diaspora. Today, we are a global campus, uniting students across six continents in a rigorous pursuit of truth, beauty, and goodness.</p>
+</div>
+</div>
+</div>
+<div class="grid md:grid-cols-3 gap-gutter">
+<div class="bg-primary text-on-primary p-8 flex flex-col justify-between hover:bg-primary-container transition-all group">
+<div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-4">school</span>
+<h3 class="font-headline-sm text-headline-sm mb-4">Educate</h3>
+</div>
+<p class="font-body-md text-body-md opacity-80">Providing rigorous academic programs that challenge the mind and integrate faith into every discipline of study.</p>
+</div>
+<div class="bg-primary text-on-primary p-8 flex flex-col justify-between hover:bg-primary-container transition-all group">
+<div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-4">construction</span>
+<h3 class="font-headline-sm text-headline-sm mb-4">Equip</h3>
+</div>
+<p class="font-body-md text-body-md opacity-80">Developing practical skills and leadership competencies required to excel in the global marketplace and vocational ministry.</p>
+</div>
+<div class="bg-primary text-on-primary p-8 flex flex-col justify-between hover:bg-primary-container transition-all group">
+<div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-4">bolt</span>
+<h3 class="font-headline-sm text-headline-sm mb-4">Empower</h3>
+</div>
+<p class="font-body-md text-body-md opacity-80">Sending out graduates as cultural architects who advocate for justice and spread the hope of Christ in their communities.</p>
+</div>
+</div>
+</section>
+<!-- SECTION: STATEMENT OF FAITH -->
+<section class="mb-24 scroll-mt-24" id="statement-of-faith">
+<div class="flex items-center gap-6 mb-12">
+<h2 class="font-display-lg text-display-lg text-primary whitespace-nowrap">Statement of Faith</h2>
+<div class="h-[2px] w-full bg-secondary"></div>
+</div>
+<div class="mb-12 text-center py-16 px-8 border border-secondary border-opacity-30 relative overflow-hidden">
+<div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+<span class="material-symbols-outlined text-[300px]">auto_stories</span>
+</div>
+<p class="font-headline-md text-headline-md italic font-serif max-w-3xl mx-auto text-primary">
+                        "For from him and through him and to him are all things. To him be glory forever. Amen."
+                    </p>
+<p class="font-tagline text-tagline text-secondary mt-4">— Romans 11:36</p>
+</div>
+<div class="space-y-4">
+<details class="tenet-accordion group bg-white border border-outline-variant p-6 transition-all" open="">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-sm text-headline-sm text-primary">
+<span>Authority of Scripture</span>
+<span class="material-symbols-outlined tenet-icon transition-transform text-secondary">expand_more</span>
+</summary>
+<div class="pt-6 text-on-surface-variant font-body-md border-t border-outline-variant mt-4">
+                            We believe the Bible, consisting of the Old and New Testaments, to be the only inspired, inerrant, infallible, and authoritative Word of God. It is the supreme and final authority in all matters of faith and conduct.
+                        </div>
+</details>
+<details class="tenet-accordion group bg-white border border-outline-variant p-6 transition-all">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-sm text-headline-sm text-primary">
+<span>The Triune God</span>
+<span class="material-symbols-outlined tenet-icon transition-transform text-secondary">expand_more</span>
+</summary>
+<div class="pt-6 text-on-surface-variant font-body-md border-t border-outline-variant mt-4">
+                            We believe that there is one God, eternally existent in three persons: Father, Son, and Holy Spirit. One in essence, yet distinct in personhood and function.
+                        </div>
+</details>
+<details class="tenet-accordion group bg-white border border-outline-variant p-6 transition-all">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-sm text-headline-sm text-primary">
+<span>The Person and Work of Jesus Christ</span>
+<span class="material-symbols-outlined tenet-icon transition-transform text-secondary">expand_more</span>
+</summary>
+<div class="pt-6 text-on-surface-variant font-body-md border-t border-outline-variant mt-4">
+                            We believe in the deity of our Lord Jesus Christ, His virgin birth, His sinless life, His miracles, His vicarious and atoning death through His shed blood, His bodily resurrection, and His personal return in power and glory.
+                        </div>
+</details>
+<details class="tenet-accordion group bg-white border border-outline-variant p-6 transition-all">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-sm text-headline-sm text-primary">
+<span>Kingdom Leadership &amp; Marketplace Ethics</span>
+<span class="material-symbols-outlined tenet-icon transition-transform text-secondary">expand_more</span>
+</summary>
+<div class="pt-6 text-on-surface-variant font-body-md border-t border-outline-variant mt-4">
+                            We believe that every believer is called to be a steward of God's grace in the world. This includes the pursuit of professional excellence and the highest ethical standards in every sphere of influence.
+                        </div>
+</details>
+</div>
+</section>
+<!-- SECTION: ACCREDITATION -->
+<section class="mb-24 scroll-mt-24 bg-white border border-outline-variant overflow-hidden" id="accreditation">
+<div class="flex flex-col lg:flex-row">
+<div class="lg:w-2/5 bg-primary p-12 flex flex-col items-center justify-center text-center">
+<div class="w-48 h-48 border-2 border-secondary p-4 flex items-center justify-center mb-6">
+<img alt="QAHE Certification" class="w-full h-full object-contain filter grayscale invert brightness-200" data-alt="A formal institutional certification seal or badge with gold metallic foil details and intricate engravings on a dark textured background. The emblem radiates authority and global recognition, featuring a laurel wreath and a torch icon symbolizing knowledge and international academic excellence. Professional studio lighting highlights the metallic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhw-DEo5TsgzaNovmHCxp_hwc3FsK9I9WC1qqzPY31hAGJNQkio26C1eYO0V4xuWB0oYv-7cPHXViCNhwYOIDcLXT3doORjqsHpf9nTyuE_GzSUBO45aeWXjOaJ7XwzCRHcuYUVFp_RRXQNZkRJWK5RCq2lvnIrsb9IS05_Z_isEeDl28-v6tByukUqv04jwp7A-jOakr-IqabxXZZDBeCUqFk5gj3dElJIWC4jwrLodVAQMLT2tei1r9GF9_RGP_BbeVA67WQeo"/>
+</div>
+<h3 class="font-tagline text-tagline text-secondary mb-2">QAHE ACCREDITED</h3>
+<p class="text-on-primary opacity-70 font-label-sm uppercase tracking-widest">Global Certification No. GDU-2024-X</p>
+</div>
+<div class="lg:w-3/5 p-12 lg:p-16">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Academic Standards</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">Global Diaspora University is fully accredited by the International Association for Quality Assurance in Pre-Tertiary &amp; Higher Education (QAHE), ensuring that our degrees meet rigorous international benchmarks for academic excellence.</p>
+<ul class="space-y-4 mb-12">
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="font-body-md text-on-surface">Curriculum aligned with European Higher Education Standards (ECTS).</span>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="font-body-md text-on-surface">Continuous faculty development and research audit programs.</span>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="font-body-md text-on-surface">Partnerships with globally recognized theological seminaries.</span>
+</li>
+</ul>
+<div class="relative roadmap-line pb-4">
+<div class="space-y-8">
+<div class="flex items-center gap-6 relative z-10">
+<div class="w-4 h-4 rounded-full bg-secondary border-4 border-white shadow-sm"></div>
+<div>
+<h4 class="font-bold text-primary font-body-md">2024 Expansion</h4>
+<p class="text-on-surface-variant text-label-sm">Launch of the Global Diaspora Leadership Institute in London.</p>
+</div>
+</div>
+<div class="flex items-center gap-6 relative z-10">
+<div class="w-4 h-4 rounded-full bg-secondary border-4 border-white shadow-sm"></div>
+<div>
+<h4 class="font-bold text-primary font-body-md">2025 Hybrid Initiative</h4>
+<p class="text-on-surface-variant text-label-sm">Integration of VR-based global classroom experiences.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: FACULTY & LEADERSHIP -->
+<section class="mb-24 scroll-mt-24" id="faculty">
+<div class="mb-12">
+<span class="font-tagline text-tagline text-secondary uppercase block mb-2">Our Mentors</span>
+<h2 class="font-display-lg text-display-lg text-primary">Faculty &amp; Leadership</h2>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Faculty Card 1 -->
+<div class="bg-white border border-outline-variant p-2 group hover:border-secondary transition-colors">
+<div class="h-64 overflow-hidden mb-6 relative">
+<img alt="Dr. Sarah Nkosi" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional portrait of a woman in her late 40s with a warm, confident expression. She is wearing professional academic attire in a bright, modern office with books in the background. The lighting is soft and flattering, emphasizing a mood of wisdom, authority, and approachability within a prestigious university setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCQ27M9VISLooHTHV8TO6yxvctStq1eHzUA-A5htNAEFI43sgdljxwQyiASJdBasUF3qNYuSBhH4B8pq0mQ9zuYuqW45HU49Oto1SjYo7zmcycqLlz6IzA7mScRpxxJ9RXrjUR1Y5MjYqUIoP-WYsutMftKrWVVNsr4OKxg6nMpZZAb75MTvMX294gQYApkzFaIL5IXTgsxzBVRZBqGj1iR7mYsfiFPwAIFoMHnCSvwm1H5Ws1dDhtw91XJ4jIfEykNfkbY6XliF0"/>
+<div class="absolute bottom-0 right-0 bg-secondary text-primary px-3 py-1 font-tagline text-xs">Provost</div>
+</div>
+<div class="p-4">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Dr. Sarah Nkosi</h4>
+<p class="text-secondary font-label-sm mb-4 uppercase tracking-wider">PhD in Systematic Theology</p>
+<p class="text-on-surface-variant font-body-md line-clamp-3">Dr. Nkosi leads our academic board with 20 years of experience in cross-cultural missiology and theological education in Southern Africa.</p>
+</div>
+</div>
+<!-- Faculty Card 2 -->
+<div class="bg-white border border-outline-variant p-2 group hover:border-secondary transition-colors">
+<div class="h-64 overflow-hidden mb-6 relative">
+<img alt="Pastor David Chen" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A headshot of an experienced male professor with glasses, looking thoughtfully towards the camera. He is in a classical library setting with warm, golden wood bookshelves. The atmosphere is academic and prestigious, using deep navy and gold tones in the environment. High-end editorial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC18Ga6VtGMEs6ko7BzyHFPcqlaYa_e1dCdo3BVRrYccnVoEhdqGvWl-1KOvinzchd6LxC9olB3FRP758w2adXvZilkNbRMqdfJD_c1kBXsT0GmNx1_zjs741QPcFAI6Z1sunpaswRxpflY_Jl_2AICYh1A0mMVMm-uD-QBm2T_jRUTXxccQobd7ZU4kht-9FNwFZJR_u3JwusyCbbY-SnLeQG_OZtXQRh5pccIJJdQ6btAnho6yk_cbG8-hrQFlMwgjsQY8QUcjMs"/>
+<div class="absolute bottom-0 right-0 bg-secondary text-primary px-3 py-1 font-tagline text-xs">Dean of Students</div>
+</div>
+<div class="p-4">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Ps. David Chen</h4>
+<p class="text-secondary font-label-sm mb-4 uppercase tracking-wider">MBA, MDiv</p>
+<p class="text-on-surface-variant font-body-md line-clamp-3">A marketplace minister who bridge the gap between business ethics and biblical principles for the diaspora workforce.</p>
+</div>
+</div>
+<!-- Faculty Card 3 -->
+<div class="bg-white border border-outline-variant p-2 group hover:border-secondary transition-colors">
+<div class="h-64 overflow-hidden mb-6 relative">
+<img alt="Dr. Elena Rodriguez" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional studio portrait of a female academic with a kind, intelligent gaze. She is wearing a dark navy blazer. The background is a soft, out-of-focus ivory texture that complements the university's color palette. Lighting is elegant and sophisticated, highlighting her professional stature." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIcIdH1ozKE0jZGXwJhze7PpZvqwKOVev753Z5VUs5w0Yv7Aknr8ECCOwqNRy0LxXXZ6lbeuSH_mJrH3ivjQlbV6Mb0yRNnuQKAXOixKhJL_oL_Wu5m913bsdugW-02zX-b0R2smea_2FqeKTl8VGpeOfTEttwVJU7gFDybzIhxCXlt7x9ruwXwn-Ugkgd6xYvNP6_JH1ULSSsXlLRehM_-GxkcG4zoMRk71oC8ASGZFushBfE5Bi-DobOB4fBIwB3HsfrIozWJTM"/>
+<div class="absolute bottom-0 right-0 bg-secondary text-primary px-3 py-1 font-tagline text-xs">Research Chair</div>
+</div>
+<div class="p-4">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Dr. Elena Rodriguez</h4>
+<p class="text-secondary font-label-sm mb-4 uppercase tracking-wider">PhD in Diaspora Studies</p>
+<p class="text-on-surface-variant font-body-md line-clamp-3">Dr. Rodriguez specializes in the socio-economic impacts of migration and the role of faith-based communities in integration.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-primary dark:bg-surface-container-highest text-on-primary dark:text-on-surface w-full py-12 px-margin-desktop">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-headline-md text-headline-md text-secondary">Global Diaspora University</span>
+<p class="mt-4 font-body-md text-body-md text-on-primary-container dark:text-on-surface-variant max-w-md text-center md:text-left">
+                    © 2024 Global Diaspora University. All rights reserved. Founded on Faith, Committed to Excellence.
+                </p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-on-primary-container dark:text-on-surface-variant hover:text-white transition-colors font-body-md" href="#">Privacy Policy</a>
+<a class="text-on-primary-container dark:text-on-surface-variant hover:text-white transition-colors font-body-md" href="#">Terms of Service</a>
+<a class="text-on-primary-container dark:text-on-surface-variant hover:text-white transition-colors font-body-md" href="#">Campus Safety</a>
+<a class="text-on-primary-container dark:text-on-surface-variant hover:text-white transition-colors font-body-md" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth scrolling for sidebar links
+        document.querySelectorAll('aside nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                // Update active state
+                document.querySelectorAll('aside nav a').forEach(a => {
+                    a.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+                    a.classList.add('text-on-surface-variant', 'hover:bg-surface-variant');
+                });
+                this.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+                this.classList.remove('text-on-surface-variant', 'hover:bg-surface-variant');
+
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple Intersection Observer to update active nav state on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('aside nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+                link.classList.add('text-on-surface-variant', 'hover:bg-surface-variant');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+                    link.classList.remove('text-on-surface-variant', 'hover:bg-surface-variant');
+                }
+            });
+        });
+    </script>
+</body></html>

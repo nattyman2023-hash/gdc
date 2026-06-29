@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admissions Guide | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .timeline-line {
+            background: linear-gradient(to bottom, transparent, #fdc355 15%, #fdc355 85%, transparent);
+        }
+        .academic-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(7, 29, 58, 0.05);
+        }
+        body {
+            scroll-behavior: smooth;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed-variant": "#354766",
+                        "tertiary": "#00030d",
+                        "on-tertiary-container": "#6a85bb",
+                        "secondary-fixed": "#ffdea9",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "surface-tint": "#4c5f7f",
+                        "secondary": "#7d5800",
+                        "surface-dim": "#dcdad4",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "surface-container-high": "#ebe8e2",
+                        "secondary-container": "#fdc355",
+                        "on-primary-fixed": "#051b38",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "background": "#fcf9f3",
+                        "surface-variant": "#e5e2dc",
+                        "primary-container": "#071d3a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "primary-fixed": "#d6e3ff",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "surface-container": "#f0eee8",
+                        "primary": "#00030c",
+                        "inverse-surface": "#31312d",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-background": "#1c1c18",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "tertiary-container": "#001c43",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fcf9f3",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e5e2dc",
+                        "inverse-primary": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline": "#74777e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf9f3",
+                        "on-secondary-container": "#725000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<header class="bg-surface sticky top-0 z-50 border-b border-outline-variant">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-display-lg text-[24px] md:text-display-lg text-primary">Global Diaspora University</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-primary border-b-2 border-secondary-container font-bold pb-1 font-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md" href="#">Academics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md" href="#">Research</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md" href="#">Faith</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300 font-body-md" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer">language</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-DEFAULT font-tagline text-label-sm uppercase tracking-widest hover:bg-primary-container transition-all">Apply Now</button>
+</div>
+</nav>
+</header>
+<main>
+<section class="relative h-[614px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover brightness-50" data-alt="A grand, traditional university campus featuring historic stone architecture with gothic windows and lush green ivy climbing the walls. The scene is captured during the golden hour, with warm, soft sunlight illuminating the majestic structures, creating a prestigious and scholarly atmosphere rooted in centuries of academic tradition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfCQT-BehNpkJ51hmGF6po-xHCJXHw8yp4hDKFb-e3LzG8KpISVeCWQSUbMvR5RV89hYwPzHxmbCTsZ3G2EwFemz8nq6GGms_7nyQEJS2H1duxXyi7xymT7gz69Tc8jxp1_FWppJJV3jeTjT348UCOZJ_CXONDY6PK3hOUJ08YlyJzsTHFG1oV29UXYWr2uRvc26n8R9ixoOuAjj9vM5V1ZbOoqbIbfF2pXdlXTaGZBByWm-pA610UbqcgxxN_NhaHUlLfz6CCunU"/>
+</div>
+<div class="relative z-10 text-center px-margin-mobile">
+<p class="font-tagline text-secondary-container text-tagline mb-4 uppercase">Your Academic Journey Begins Here</p>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-6">Admissions Process</h1>
+<div class="w-24 h-1 bg-secondary-container mx-auto"></div>
+</div>
+</section>
+<section class="py-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid md:grid-cols-2 gap-16 items-start">
+<div>
+<h2 class="font-headline-md text-headline-md mb-8 text-primary">A Legacy of Excellence</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6 leading-relaxed">
+                        At Global Diaspora University, we seek students who are not only academically gifted but also driven by a sense of divine purpose. Our admissions process is designed to identify individuals who will contribute to our community of faith and scholarship.
+                    </p>
+<div class="border-l-4 border-secondary-container pl-6 py-2 italic font-headline-sm text-on-surface-variant my-10">
+                        "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."
+                    </div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-lg border border-outline-variant shadow-sm">
+<h3 class="font-tagline text-tagline text-primary uppercase mb-6 tracking-widest">Entry Requirements</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-on-surface">Official high school transcripts or equivalent with a minimum 3.5 GPA.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-on-surface">Statement of Faith and Personal Testimony.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-on-surface">Two letters of recommendation (one academic, one pastoral/spiritual).</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-on-surface">Standardized test scores (SAT or ACT preferred, but optional for international diaspora applicants).</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-on-surface">Proof of English proficiency for non-native speakers.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="bg-surface-container py-24">
+<div class="max-w-4xl mx-auto px-margin-mobile">
+<div class="text-center mb-16">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">The Pathway to Enrollment</h2>
+<p class="font-body-md text-on-surface-variant max-w-2xl mx-auto">Follow these four critical steps to complete your application for the upcoming academic session.</p>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 h-full w-px timeline-line hidden md:block"></div>
+<div class="space-y-12 relative">
+<div class="flex flex-col md:flex-row items-center group">
+<div class="md:w-1/2 md:pr-16 text-center md:text-right mb-4 md:mb-0">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Apply Online</h3>
+<p class="text-on-surface-variant font-body-md">Complete the digital application form via our secure portal. Include your personal details, academic history, and initial essays.</p>
+</div>
+<div class="z-10 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 border-surface shadow-md">1</div>
+<div class="md:w-1/2 md:pl-16 hidden md:block">
+<div class="bg-white p-4 academic-glass rounded-lg">
+<span class="material-symbols-outlined text-secondary text-4xl">edit_document</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row-reverse items-center group">
+<div class="md:w-1/2 md:pl-16 text-center md:text-left mb-4 md:mb-0">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Document Review</h3>
+<p class="text-on-surface-variant font-body-md">Our admissions committee conducts a thorough evaluation of your transcripts and recommendation letters to ensure academic alignment.</p>
+</div>
+<div class="z-10 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 border-surface shadow-md">2</div>
+<div class="md:w-1/2 md:pr-16 hidden md:block text-right">
+<div class="bg-white p-4 academic-glass rounded-lg inline-block">
+<span class="material-symbols-outlined text-secondary text-4xl">verified</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center group">
+<div class="md:w-1/2 md:pr-16 text-center md:text-right mb-4 md:mb-0">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Background Interview</h3>
+<p class="text-on-surface-variant font-body-md">A virtual or in-person interview with a faculty member to discuss your goals, faith journey, and commitment to the GDU mission.</p>
+</div>
+<div class="z-10 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 border-surface shadow-md">3</div>
+<div class="md:w-1/2 md:pl-16 hidden md:block">
+<div class="bg-white p-4 academic-glass rounded-lg">
+<span class="material-symbols-outlined text-secondary text-4xl">forum</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row-reverse items-center group">
+<div class="md:w-1/2 md:pl-16 text-center md:text-left mb-4 md:mb-0">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Enrollment</h3>
+<p class="text-on-surface-variant font-body-md">Successful candidates receive a Letter of Admission. Secure your place by submitting the enrollment deposit and choosing your courses.</p>
+</div>
+<div class="z-10 bg-secondary text-white w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 border-surface shadow-md">4</div>
+<div class="md:w-1/2 md:pr-16 hidden md:block text-right">
+<div class="bg-white p-4 academic-glass rounded-lg inline-block">
+<span class="material-symbols-outlined text-secondary text-4xl">school</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+<div class="bg-primary text-on-primary p-12 md:p-20 rounded-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 opacity-10">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-6 relative z-10">Secure Your Future Today</h2>
+<p class="font-body-lg text-on-primary-container max-w-2xl mx-auto mb-10 opacity-90 relative z-10">
+                    Join a global network of scholars dedicated to excellence and service. Applications for the Fall 2024 semester are currently open.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
+<button class="bg-secondary-container text-on-secondary-container px-10 py-4 rounded-DEFAULT font-tagline text-tagline uppercase tracking-widest hover:brightness-110 transition-all shadow-lg">Start My Application</button>
+<button class="border border-white/30 text-white px-10 py-4 rounded-DEFAULT font-tagline text-tagline uppercase tracking-widest hover:bg-white/10 transition-all">Request Information</button>
+</div>
+</div>
+</section>
+<section class="pb-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-10 text-center">Frequently Asked Questions</h3>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="p-6 border-b border-outline-variant">
+<h4 class="font-body-lg font-bold text-primary mb-2">What is the application deadline?</h4>
+<p class="text-on-surface-variant font-body-md">Early action deadline is November 15th. Regular decision applications are accepted until February 1st.</p>
+</div>
+<div class="p-6 border-b border-outline-variant">
+<h4 class="font-body-lg font-bold text-primary mb-2">Are scholarships available?</h4>
+<p class="text-on-surface-variant font-body-md">Yes, over 85% of our diaspora students receive some form of merit-based or mission-focused financial aid.</p>
+</div>
+<div class="p-6 border-b border-outline-variant">
+<h4 class="font-body-lg font-bold text-primary mb-2">Can I transfer credits?</h4>
+<p class="text-on-surface-variant font-body-md">GDU accepts transfer credits from accredited institutions globally, subject to a formal transcript evaluation.</p>
+</div>
+<div class="p-6 border-b border-outline-variant">
+<h4 class="font-body-lg font-bold text-primary mb-2">Do you offer online programs?</h4>
+<p class="text-on-surface-variant font-body-md">We offer a hybrid learning model designed to accommodate students living across different time zones.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-primary text-on-primary w-full py-12 px-margin-mobile md:px-margin-desktop mt-auto border-t border-on-primary-fixed-variant/20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
+<div class="max-w-sm">
+<div class="font-display-lg text-display-lg text-on-primary mb-4">GDU</div>
+<p class="font-tagline text-tagline text-secondary-fixed mb-4">COMMISSIONED FOR A HIGHER PURPOSE</p>
+<p class="font-body-md opacity-70">Empowering the global diaspora through transformative Christian education and rigorous academic inquiry.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+<div class="flex flex-col gap-3">
+<span class="font-tagline text-tagline uppercase opacity-50 mb-2">Admissions</span>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">How to Apply</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Tuition & Fees</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Scholarships</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-tagline text-tagline uppercase opacity-50 mb-2">University</span>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">About Us</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Faculties</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Alumni</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-tagline text-tagline uppercase opacity-50 mb-2">Contact</span>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Help Center</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Campus Visit</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed transition-colors" href="#">Global Offices</a>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-on-primary-fixed-variant/20 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="font-body-md opacity-60 text-sm text-center md:text-left">© 2024 Global Diaspora University. All Rights Reserved. Commissioned for a Higher Purpose.</p>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-body-md opacity-80 hover:text-secondary-fixed text-sm transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed text-sm transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed text-sm transition-colors" href="#">Accreditation</a>
+<a class="font-body-md opacity-80 hover:text-secondary-fixed text-sm transition-colors" href="#">Accessibility</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'ease-out', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+
+        // Instant opacity for hero
+        const hero = document.querySelector('section.relative.h-\\[60vh\\]');
+        hero.classList.remove('opacity-0', 'translate-y-10');
+        hero.classList.add('opacity-100', 'translate-y-0');
+    </script>
+</body></html>

@@ -1,0 +1,73 @@
+<section class="relative bg-primary text-on-primary py-16 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="/img/generated/gdcu-student-admissions-video.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/78"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/50"></div>
+  <div class="relative max-w-3xl mx-auto">
+    <a href="/scholarships" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All scholarships</a>
+    <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest">Scholarship</p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-4"><%= scholarship.title %></h1>
+    <p class="font-body text-body-lg text-on-primary-container"><%= scholarship.summary %></p>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-12 gap-10 lg:gap-16 items-start">
+    <!-- Main -->
+    <div class="md:col-span-7 lg:col-span-8">
+      <h2 class="font-headline text-headline-md text-primary mb-4">About this award</h2>
+      <div class="font-body text-body-lg text-on-surface-variant leading-relaxed whitespace-pre-line"><%= scholarship.description || scholarship.summary %></div>
+
+      <h3 class="font-headline text-headline-sm text-primary mt-10 mb-4">Eligibility</h3>
+      <% if (scholarship.eligibility) { %>
+        <div class="font-body text-body-md text-on-surface-variant leading-relaxed whitespace-pre-line mb-6"><%= scholarship.eligibility %></div>
+      <% } else { %>
+        <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-6">Open to applicants who meet the programme entry requirements. Speak to our admissions team to confirm your eligibility.</p>
+      <% } %>
+
+      <h3 class="font-headline text-headline-sm text-primary mt-10 mb-4">How to apply</h3>
+      <ol class="relative border-l-2 border-secondary/40 space-y-6 pl-8">
+        <% [
+          ['Start your application','Apply to your chosen programme and mention this award in your personal statement.'],
+          ['Submit supporting details','Include any references or evidence requested for the award.'],
+          ['Assessment','Our scholarships panel reviews eligible applicants and notifies outcomes by email.']
+        ].forEach(function(step, i){ %>
+        <li class="relative">
+          <span class="absolute -left-[42px] w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-bold"><%= i+1 %></span>
+          <p class="font-bold text-primary"><%= step[0] %></p>
+          <p class="text-on-surface-variant text-body-md"><%= step[1] %></p>
+        </li>
+        <% }) %>
+      </ol>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="md:col-span-5 lg:col-span-4">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 space-y-5 sticky top-28 shadow-sm border-t-4 border-t-secondary">
+        <div class="text-center pb-4 border-b border-outline-variant/50">
+          <span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings:'FILL' 1;">volunteer_activism</span>
+          <p class="font-headline text-headline-sm text-primary mt-1"><%= scholarship.award || 'Funding available' %></p>
+          <p class="font-tagline text-label-sm text-on-surface-variant uppercase">Award value</p>
+        </div>
+        <% if (scholarship.deadline) { %>
+        <div class="flex items-start gap-3"><span class="material-symbols-outlined text-on-surface-variant">event</span><div><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Deadline</p><p class="font-bold text-primary"><%= formatDate(scholarship.deadline) %></p></div></div>
+        <% } %>
+        <div class="space-y-2 pt-1">
+          <a href="/admissions/apply" class="block text-center bg-secondary text-on-secondary px-5 py-3 rounded-lg font-bold hover:opacity-90">Apply &amp; mention this award</a>
+          <a href="/contact" class="block text-center border border-outline text-primary px-5 py-3 rounded-lg font-bold hover:bg-surface-container-low">Ask about eligibility</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- More scholarships CTA -->
+<section class="py-16 bg-primary text-on-primary text-center px-margin-mobile">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="font-headline text-headline-md mb-4">Invest in your calling</h2>
+    <p class="text-on-primary-container mb-8">Explore other scholarships and funding options, or begin your application today.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/scholarships" class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-bold">All scholarships</a>
+      <a href="/admissions/apply" class="border-2 border-secondary-fixed text-secondary-fixed px-8 py-3 rounded-lg font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Apply now</a>
+    </div>
+  </div>
+</section>

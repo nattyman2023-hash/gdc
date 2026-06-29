@@ -1,0 +1,143 @@
+<a href="/portal/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
+
+<div class="grid lg:grid-cols-4 gap-6">
+  <!-- Lesson index -->
+  <aside class="lg:col-span-1 order-2 lg:order-1">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden sticky top-24">
+      <p class="px-4 py-3 font-tagline text-label-sm text-on-surface-variant uppercase border-b border-outline-variant">Lesson Index</p>
+      <div class="max-h-[72vh] overflow-y-auto py-1">
+        <% function partLabel(l){ return l.type==='video' ? 'Watch (video)' : (/^Study/i.test(l.title) ? 'Scripture study' : 'Reading'); } %>
+        <% structure.forEach(function(m, mi){
+             var modOpen = (m.id === lesson.module_id);
+             var usesBlocks = m.lessons.some(function(l){ return l.block_no; });
+        %>
+        <details <%= modOpen ? 'open' : '' %> class="group/mod border-b border-outline-variant/40 last:border-0">
+          <summary class="flex items-center justify-between gap-2 px-4 py-2.5 cursor-pointer list-none select-none hover:bg-surface-container-low">
+            <span class="text-xs font-bold text-secondary uppercase truncate"><%= m.title.replace(/^Year \d+ · /,'') %></span>
+            <span class="material-symbols-outlined text-base text-on-surface-variant transition-transform group-open/mod:rotate-180">expand_more</span>
+          </summary>
+          <% if (usesBlocks) {
+               var blockNos = [...new Set(m.lessons.map(function(l){ return l.block_no; }).filter(Boolean))].sort(function(a,b){ return a-b; });
+          %>
+            <% blockNos.forEach(function(b){
+                 var ls = m.lessons.filter(function(l){ return l.block_no === b; });
+                 var bt = (ls[0] && ls[0].block_title) ? ls[0].block_title : ('Lesson ' + b);
+                 var bOpen = (m.id === lesson.module_id && b === lesson.block_no);
+                 var allDone = ls.every(function(l){ return l.completed; });
+            %>
+            <details <%= bOpen ? 'open' : '' %> class="group/blk">
+              <summary class="flex items-center justify-between gap-2 pl-6 pr-3 py-1.5 cursor-pointer list-none select-none hover:bg-surface-container-low">
+                <span class="flex items-center gap-1.5 text-sm truncate <%= bOpen ? 'text-primary font-bold' : 'text-on-surface' %>">
+                  <% if (allDone) { %><span class="material-symbols-outlined text-sm text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span><% } %>
+                  Lesson <%= b %> — <%= bt %>
+                </span>
+                <span class="material-symbols-outlined text-sm text-on-surface-variant transition-transform group-open/blk:rotate-180">expand_more</span>
+              </summary>
+              <% ls.forEach(function(l){ %>
+              <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 pl-10 pr-3 py-1.5 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
+                <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : 'radio_button_unchecked' %></span>
+                <span class="flex-1 truncate"><%= partLabel(l) %></span>
+              </a>
+              <% }) %>
+            </details>
+            <% }) %>
+          <% } else { %>
+            <% m.lessons.forEach(function(l){ %>
+            <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 px-4 py-2 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
+              <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : 'radio_button_unchecked' %></span>
+              <span class="flex-1 truncate"><%= l.title %></span>
+            </a>
+            <% }) %>
+          <% } %>
+        </details>
+        <% }) %>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Lesson content -->
+  <div class="lg:col-span-3 order-1 lg:order-2">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 lg:p-10">
+      <p class="font-tagline text-label-sm text-secondary uppercase"><%= lesson.module_title %></p>
+      <h1 class="font-headline text-headline-md text-primary mb-2"><%= lesson.title %></h1>
+      <p class="text-sm text-on-surface-variant mb-6"><span class="material-symbols-outlined text-base align-middle"><%= lesson.type==='live' ? 'live_tv' : (lesson.type==='video' ? 'play_circle' : 'article') %></span> <%= lesson.type %> · <%= lesson.duration_min %> min</p>
+
+      <% if (lesson.image_url) { %>
+        <img src="<%= lesson.image_url %>" alt="" class="w-full max-h-72 object-cover rounded-lg mb-6" loading="lazy" onerror="this.style.display='none'" />
+      <% } %>
+
+      <% if (lesson.video_url) { var embed = videoEmbed(lesson.video_url); %>
+        <% if (embed) { %>
+          <div class="mb-6"><%- embed %></div>
+        <% } else { %>
+          <div class="bg-primary rounded-lg aspect-video flex flex-col items-center justify-center text-on-primary mb-6">
+            <span class="material-symbols-outlined text-secondary-fixed-dim" style="font-size:64px;">smart_display</span>
+            <a href="<%= lesson.video_url %>" target="_blank" rel="noopener" class="mt-2 bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Open <%= lesson.type==='live' ? 'session' : 'video' %></a>
+          </div>
+        <% } %>
+      <% } %>
+
+      <div class="prose-gdcu font-body text-body-lg text-on-surface leading-relaxed space-y-4"><%- lesson.content %></div>
+
+      <!-- Lesson Materials -->
+      <% if (materials && materials.length) { %>
+      <div class="mt-8 bg-surface-container-low border border-outline-variant rounded-lg p-5">
+        <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">folder_open</span> Lesson Materials</h2>
+        <ul class="space-y-2">
+          <% materials.forEach(function(m){ var icon = m.type==='slides'?'slideshow':(m.type==='pdf'?'picture_as_pdf':(m.type==='video'?'smart_display':'link')); %>
+          <li><a href="<%= m.url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-secondary font-bold hover:underline"><span class="material-symbols-outlined text-base"><%= icon %></span> <%= m.label %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
+
+      <!-- Actions -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-10 pt-6 border-t border-outline-variant/50">
+        <div>
+          <% if (prev) { %><a href="/portal/courses/<%= course.slug %>/lessons/<%= prev.id %>" class="inline-flex items-center gap-1 text-primary font-bold"><span class="material-symbols-outlined">chevron_left</span> Previous</a><% } %>
+        </div>
+        <div class="flex items-center gap-3">
+          <% if (!completed) { %>
+            <form action="/portal/courses/<%= course.slug %>/lessons/<%= lesson.id %>/complete" method="post">
+              <% if (next) { %><input type="hidden" name="next" value="/portal/courses/<%= course.slug %>/lessons/<%= next.id %>" /><% } %>
+              <button class="bg-secondary text-on-secondary px-6 py-2 rounded font-bold hover:opacity-90"><span class="material-symbols-outlined align-middle text-base">check</span> Mark complete<%= next ? ' & continue' : '' %></button>
+            </form>
+          <% } else { %>
+            <span class="inline-flex items-center gap-1 text-secondary font-bold"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span> Completed</span>
+            <% if (next) { %><a href="/portal/courses/<%= course.slug %>/lessons/<%= next.id %>" class="inline-flex items-center gap-1 text-primary font-bold">Next <span class="material-symbols-outlined">chevron_right</span></a><% } %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Notes (private) -->
+    <div id="notes" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 lg:p-8 mt-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">edit_note</span> My Notes <span class="font-tagline text-label-sm text-on-surface-variant uppercase">(private)</span></h2>
+      <form action="/portal/courses/<%= course.slug %>/lessons/<%= lesson.id %>/note" method="post">
+        <textarea name="body" rows="4" placeholder="Jot down your own notes for this lesson…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= note ? note.body : '' %></textarea>
+        <div class="flex justify-end mt-2"><button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Save notes</button></div>
+      </form>
+    </div>
+
+    <!-- Community Discussion -->
+    <div id="discussion" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 lg:p-8 mt-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">forum</span> Community Discussion</h2>
+      <form action="/portal/courses/<%= course.slug %>/lessons/<%= lesson.id %>/comment" method="post" class="mb-5">
+        <textarea name="body" rows="2" required placeholder="Ask a question or share a thought…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea>
+        <div class="flex justify-end mt-2"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Post Comment</button></div>
+      </form>
+      <div class="space-y-3">
+        <% if (!comments.length) { %><p class="text-on-surface-variant text-sm">Be the first to start the discussion.</p><% } %>
+        <% comments.forEach(function(c){ %>
+        <div class="flex gap-3">
+          <div class="w-9 h-9 rounded-full <%= c.is_staff ? 'bg-secondary text-on-secondary' : 'bg-secondary-container text-on-secondary-container' %> flex items-center justify-center font-bold shrink-0"><%= (c.author_name||'?').charAt(0) %></div>
+          <div class="flex-1">
+            <p class="text-sm"><span class="font-bold text-primary"><%= c.author_name || 'Student' %></span><% if (c.is_staff) { %> <span class="font-tagline text-[10px] bg-secondary text-on-secondary px-1.5 py-0.5 rounded uppercase">Faculty</span><% } %> <span class="text-on-surface-variant text-xs"><%= formatDate(c.created_at) %></span></p>
+            <p class="text-on-surface-variant text-sm mt-1 whitespace-pre-line"><%= c.body %></p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>

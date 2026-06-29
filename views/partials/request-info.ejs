@@ -1,0 +1,50 @@
+<%
+  // Reusable lead-capture / inquiry form. Expects optional `programs` and `compact` flag.
+  var progs = (typeof programs !== 'undefined' && programs) ? programs : [];
+  var isCompact = (typeof compact !== 'undefined') && compact;
+  var inputCls = 'w-full px-4 py-3 rounded-lg border border-outline bg-surface-container-lowest outline-none focus:border-primary focus:ring-2 focus:ring-secondary/40 transition-shadow placeholder:text-on-surface-variant/60';
+%>
+<div data-inquiry class="relative overflow-hidden rounded-2xl border border-outline-variant/60 bg-surface shadow-sm">
+  <!-- warm accent header -->
+  <div class="bg-primary text-on-primary px-8 pt-7 pb-6">
+    <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest mb-1">Let’s talk</p>
+    <p class="font-headline text-headline-sm leading-tight">Take the first step — it’s free 🌍</p>
+    <p class="text-on-primary-container text-sm mt-1">Tell us a little about you and a real person from our team will reach out. No pressure, no obligation.</p>
+  </div>
+
+  <!-- success state (revealed by JS after a seamless submit) -->
+  <div data-inquiry-done class="hidden p-10 text-center">
+    <span class="material-symbols-outlined text-secondary text-5xl">mark_email_read</span>
+    <h3 class="font-headline text-headline-sm text-primary mt-3 mb-1">Thank you — we’ve got it!</h3>
+    <p class="text-on-surface-variant text-sm">Someone from our admissions team will be in touch within one working day. Check your inbox for a hello from us.</p>
+    <a href="/programs" class="inline-block mt-5 text-secondary font-bold">Explore programmes while you wait →</a>
+  </div>
+
+  <form data-inquiry-form action="/admissions/request-info" method="post" class="p-8 space-y-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input name="first_name" required placeholder="First name *" class="<%= inputCls %>" />
+      <input name="last_name" placeholder="Last name" class="<%= inputCls %>" />
+    </div>
+    <input type="email" name="email" required placeholder="Email address *" class="<%= inputCls %>" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input name="phone" placeholder="Phone (optional)" class="<%= inputCls %>" />
+      <input name="country" placeholder="Your country" class="<%= inputCls %>" />
+    </div>
+    <select name="program_id" class="<%= inputCls %>">
+      <option value="">What would you like to study?</option>
+      <% progs.forEach(function(p){ %><option value="<%= p.id %>"><%= p.title %></option><% }) %>
+    </select>
+    <% if (!isCompact) { %>
+    <textarea name="message" rows="3" placeholder="Anything you’d like to ask? (optional)" class="<%= inputCls %>"></textarea>
+    <% } %>
+    <button class="group w-full bg-secondary text-on-secondary px-6 py-3.5 rounded-lg font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all">
+      Send my enquiry
+      <span class="material-symbols-outlined text-base group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+    </button>
+    <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[11px] text-on-surface-variant pt-1">
+      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span> Free &amp; no obligation</span>
+      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">schedule</span> Reply within 1 working day</span>
+      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">lock</span> Your details stay private</span>
+    </div>
+  </form>
+</div>

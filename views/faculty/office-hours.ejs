@@ -1,0 +1,39 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Mentorship</p><h1 class="font-headline text-headline-md text-primary">Office Hours</h1></div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1">
+    <form action="/faculty/office-hours" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3 sticky top-24">
+      <h2 class="font-headline text-headline-sm text-primary">Add availability</h2>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Starts *</label><input name="starts_at" type="datetime-local" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Ends</label><input name="ends_at" type="datetime-local" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Mode</label><select name="mode" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"><option value="online">Online</option><option value="in_person">In person</option></select></div>
+        <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Capacity</label><input name="capacity" type="number" value="1" min="1" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      </div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Join URL</label><input name="join_url" placeholder="https://…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Topic</label><input name="topic" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold w-full">Add slot</button>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2 space-y-3">
+    <h2 class="font-headline text-headline-sm text-primary mb-1">Your slots</h2>
+    <% if (!slots.length) { %><p class="text-on-surface-variant text-sm">No availability yet. Add a slot for students to book.</p><% } %>
+    <% slots.forEach(function(s){ %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <p class="font-bold text-primary"><%= formatDateTime(s.starts_at) %></p>
+          <p class="text-xs text-on-surface-variant"><%= s.mode === 'online' ? 'Online' : 'In person' %> · <%= s.bookings.length %>/<%= s.capacity %> booked<% if (s.topic) { %> · <%= s.topic %><% } %></p>
+        </div>
+        <form action="/faculty/office-hours/<%= s.id %>/delete" method="post" onsubmit="return confirm('Remove this slot?');"><button class="text-error font-bold text-sm">Remove</button></form>
+      </div>
+      <% if (s.bookings.length) { %>
+      <div class="mt-2 pt-2 border-t border-outline-variant/30 text-sm text-on-surface-variant">
+        <% s.bookings.forEach(function(b){ %><p>• <%= b.first_name %> <%= b.last_name %><% if (b.note) { %> — <span class="italic"><%= b.note %></span><% } %></p><% }) %>
+      </div>
+      <% } %>
+    </div>
+    <% }) %>
+  </div>
+</div>

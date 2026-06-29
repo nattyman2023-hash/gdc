@@ -1,0 +1,134 @@
+<a href="/admin/users" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All users</a>
+<h1 class="font-headline text-headline-md text-primary mb-6"><%= isNew ? 'New User' : 'Edit User' %></h1>
+
+<div class="max-w-2xl space-y-6">
+  <form action="<%= isNew ? '/admin/users' : '/admin/users/'+user.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-5">
+    <% const f = (k)=> (user && user[k]!=null) ? user[k] : ''; %>
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">First name *</label>
+        <input name="first_name" required value="<%= f('first_name') %>" class="w-full px-3 py-2 rounded border <%= errors.first_name ? 'border-error' : 'border-outline' %> outline-none focus:border-primary" />
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Last name *</label>
+        <input name="last_name" required value="<%= f('last_name') %>" class="w-full px-3 py-2 rounded border <%= errors.last_name ? 'border-error' : 'border-outline' %> outline-none focus:border-primary" />
+      </div>
+    </div>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Email *</label>
+      <% if (isNew) { %>
+        <input type="email" name="email" required value="<%= f('email') %>" class="w-full px-3 py-2 rounded border <%= errors.email ? 'border-error' : 'border-outline' %> outline-none focus:border-primary" />
+        <% if (errors.email) { %><p class="text-error text-sm mt-1"><%= errors.email %></p><% } %>
+      <% } else { %>
+        <input type="email" value="<%= f('email') %>" disabled class="w-full px-3 py-2 rounded border border-outline bg-surface-container-high text-on-surface-variant" />
+        <p class="text-xs text-on-surface-variant mt-1">Email is the login identifier and cannot be changed here.</p>
+      <% } %>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Role *</label>
+        <select name="role" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <% roles.forEach(function(r){ %><option value="<%= r %>" <%= f('role')===r?'selected':'' %>><%= r %></option><% }) %>
+        </select>
+      </div>
+      <div>
+        <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Status</label>
+        <select name="status" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="active" <%= f('status')!=='inactive'?'selected':'' %>>Active</option>
+          <option value="inactive" <%= f('status')==='inactive'?'selected':'' %>>Inactive</option>
+        </select>
+      </div>
+    </div>
+    <% if (isNew) { %>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Temporary password *</label>
+      <input name="password" required minlength="8" class="w-full px-3 py-2 rounded border <%= errors.password ? 'border-error' : 'border-outline' %> outline-none focus:border-primary" />
+      <% if (errors.password) { %><p class="text-error text-sm mt-1"><%= errors.password %></p><% } else { %><p class="text-xs text-on-surface-variant mt-1">At least 8 characters. Share it securely; the user should change it after first login.</p><% } %>
+    </div>
+    <% } %>
+    <div class="flex gap-3 pt-2 border-t border-outline-variant/40">
+      <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold"><%= isNew ? 'Create user' : 'Save changes' %></button>
+      <a href="/admin/users" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+    </div>
+  </form>
+
+  <% if (!isNew) {
+       var p = (k)=> (typeof profile !== 'undefined' && profile && profile[k]!=null) ? profile[k] : '';
+       var dob = p('date_of_birth') ? String(p('date_of_birth')).slice(0,10) : '';
+  %>
+  <!-- Role-specific profile -->
+  <form action="/admin/users/<%= user.id %>/profile" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-5">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-secondary">badge</span>
+      <h2 class="font-headline text-headline-sm text-primary"><%= user.role.charAt(0).toUpperCase()+user.role.slice(1) %> profile</h2>
+    </div>
+
+    <% if (user.role === 'student') { %>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div><label class="field-label">Phone</label><input name="phone" value="<%= p('phone') %>" class="field" /></div>
+        <div><label class="field-label">Date of birth</label><input type="date" name="date_of_birth" value="<%= dob %>" class="field" /></div>
+        <div><label class="field-label">Country</label><input name="country" value="<%= p('country') %>" class="field" /></div>
+        <div><label class="field-label">Nationality</label><input name="nationality" value="<%= p('nationality') %>" class="field" /></div>
+      </div>
+      <div><label class="field-label">Address</label><input name="address" value="<%= p('address') %>" class="field" /></div>
+      <div class="grid sm:grid-cols-3 gap-5">
+        <div><label class="field-label">Programme</label>
+          <select name="program_id" class="field"><option value="">—</option>
+            <% (programs||[]).forEach(function(pr){ %><option value="<%= pr.id %>" <%= String(p('program_id'))===String(pr.id)?'selected':'' %>><%= pr.title %></option><% }) %>
+          </select>
+        </div>
+        <div><label class="field-label">Intake</label><input name="intake" value="<%= p('intake') %>" placeholder="e.g. Sept 2026" class="field" /></div>
+        <div><label class="field-label">Year of study</label><input type="number" name="year_of_study" min="1" max="7" value="<%= p('year_of_study') %>" class="field" /></div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div><label class="field-label">Student reference</label><input name="student_ref" value="<%= p('student_ref') %>" class="field" /></div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div><label class="field-label">Emergency contact name</label><input name="emergency_name" value="<%= p('emergency_name') %>" class="field" /></div>
+        <div><label class="field-label">Emergency contact phone</label><input name="emergency_phone" value="<%= p('emergency_phone') %>" class="field" /></div>
+      </div>
+      <div><label class="field-label">Bio / notes</label><textarea name="bio" rows="3" class="field"><%= p('bio') %></textarea></div>
+
+    <% } else if (user.role === 'faculty') { %>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div><label class="field-label">Title</label>
+          <select name="title" class="field"><option value="">—</option>
+            <% ['Dr','Prof','Rev','Mr','Mrs','Ms'].forEach(function(t){ %><option <%= p('title')===t?'selected':'' %>><%= t %></option><% }) %>
+          </select>
+        </div>
+        <div><label class="field-label">Phone</label><input name="phone" value="<%= p('phone') %>" class="field" /></div>
+        <div><label class="field-label">Specialism</label><input name="specialism" value="<%= p('specialism') %>" placeholder="e.g. New Testament" class="field" /></div>
+        <div><label class="field-label">Department / School</label><input name="department" value="<%= p('department') %>" class="field" /></div>
+      </div>
+      <div><label class="field-label">Qualifications</label><input name="qualifications" value="<%= p('qualifications') %>" placeholder="e.g. PhD, MTh" class="field" /></div>
+      <div>
+        <label class="field-label">Photo URL</label>
+        <input name="photo_url" id="fac-photo" value="<%= p('photo_url') %>" class="field" placeholder="https://… or upload →" />
+        <button type="button" data-upload-target="#fac-photo" class="mt-2 inline-flex items-center gap-1 text-sm border border-outline rounded px-3 py-1.5 hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm">upload</span> Upload photo</button>
+      </div>
+      <div><label class="field-label">Bio</label><textarea name="bio" rows="3" class="field"><%= p('bio') %></textarea></div>
+      <label class="flex items-center gap-2 text-sm text-primary font-bold"><input type="checkbox" name="public_profile" <%= p('public_profile') ? 'checked' : '' %> /> Show on the public faculty page</label>
+
+    <% } else { %>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div><label class="field-label">Job title</label><input name="job_title" value="<%= p('job_title') %>" class="field" /></div>
+        <div><label class="field-label">Department</label><input name="department" value="<%= p('department') %>" class="field" /></div>
+        <div><label class="field-label">Phone</label><input name="phone" value="<%= p('phone') %>" class="field" /></div>
+      </div>
+      <div><label class="field-label">Bio / notes</label><textarea name="bio" rows="3" class="field"><%= p('bio') %></textarea></div>
+    <% } %>
+
+    <div class="pt-2 border-t border-outline-variant/40">
+      <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold">Save profile</button>
+    </div>
+  </form>
+
+  <form action="/admin/users/<%= user.id %>/password" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Reset password</h2>
+    <div class="flex gap-2">
+      <input name="password" minlength="8" required placeholder="New password (min 8 chars)" class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      <button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Reset</button>
+    </div>
+  </form>
+  <% } %>
+</div>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard Gateway | Global Diaspora University</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Montserrat:wght@500;600&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed": "#051b38",
+                        "tertiary-container": "#291a00",
+                        "on-background": "#1c1c18",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-surface-variant": "#44474d",
+                        "on-error": "#ffffff",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#001a40",
+                        "surface-container": "#f0eee8",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#040200",
+                        "surface-bright": "#fcf9f3",
+                        "secondary-container": "#a8c4fe",
+                        "inverse-surface": "#31312d",
+                        "outline-variant": "#c4c6ce",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#ebe8e2",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-primary-container": "#7386a8",
+                        "tertiary-fixed": "#ffdea9",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary-container": "#ad7c0e",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#294678",
+                        "inverse-on-surface": "#f3f0ea",
+                        "background": "#fcf9f3",
+                        "outline": "#74777e",
+                        "secondary-fixed": "#d7e2ff",
+                        "on-tertiary-fixed-variant": "#5e4100",
+                        "primary-container": "#071d3a",
+                        "tertiary-fixed-dim": "#f6bd50",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#acc7ff",
+                        "on-secondary-container": "#345083",
+                        "surface-variant": "#e5e2dc",
+                        "surface": "#fcf9f3",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary": "#425e92",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "on-tertiary-fixed": "#271900"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "base": "8px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "tagline": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "tagline": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .hero-overlay {
+            background: linear-gradient(rgba(7, 29, 58, 0.85), rgba(7, 29, 58, 0.85));
+        }
+        .text-university-gold {
+            color: #ad7c0e; /* Tying to on-tertiary-container for GDU Gold */
+        }
+        .btn-primary {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+<!-- Login Context Shell: Following Suppression Rule (No Top/Bottom Nav for Login) -->
+<main class="relative min-h-screen flex items-center justify-center px-margin-mobile md:px-0 overflow-hidden">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 hero-overlay z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A panoramic view of the majestic Ethiopian Simien Mountains at dawn, featuring sharp plateaus and deep valleys under a soft morning mist. The lighting is cinematic and high-contrast, with golden sunlight breaking through clouds to highlight the rugged textures of the landscape. The overall mood is one of prestigious stability and timeless natural beauty, colored with deep navy and atmospheric gold tones to match the Global Diaspora University brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaBi7muHINkMtNyUgtwWLTxNIht5Z6HEw-x72uMFRUiLUespTfFRI2ZxJ-6gmeaJdViNrVWnUELERtqlHJBCCXpfnMHN1yZxqjLDS9t5AhVPg_4zlP64l6uHD0c7331wKZl_5wZ95G4brL1m2MHqNuGGZukNOo7Q2Xfs8hxUkFDfbpACFytxSC-p0voQ9OLng2ubk-ENI2ovyn6Axe78SfpiQDGO-FhWNjFOJVDfC33ZcvQT9q8SZNW4xJSrd9EVwhfcR6PEgzUDo"/>
+</div>
+<!-- Centered Login Card -->
+<section class="relative z-20 w-full max-w-[440px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+<div class="bg-surface-container-lowest shadow-[0px_4px_20px_rgba(7,29,58,0.08)] border border-on-surface-variant/10 rounded-lg overflow-hidden">
+<!-- Institutional Header -->
+<div class="pt-stack-lg pb-stack-md px-stack-lg flex flex-col items-center text-center">
+<img alt="Global Diaspora University" class="h-20 w-auto mb-stack-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0kbXyk5kWCKu5sg8CSGonH2xsMas7LQoqNJE_bDBZooq3kC7w3tnzjCOAv32YZ4C6fe6UzKNxRJgs143hfwh-_Fpi2u24uKnXiKcX4J2U3zBN5PSNTeGJY5hnzT8aYlhVnKXxoKA7WZI7mWV9vO3UOSyJktNx014oBjcx4tGtn5DgexwHVluLLOqB9J_EHV4AN3ficGbzhov6PXsVVBE1zubFRVpZLsTPpVOrVJw1zGlrbW275ZFPvYdbew5gmr_VuukfslC7zZE"/>
+<h1 class="font-headline-md text-headline-md text-primary-container tracking-tight">Student Portal</h1>
+<p class="font-body-md text-on-surface-variant mt-2">Access your global learning environment</p>
+</div>
+<!-- Form Section -->
+<form class="px-stack-lg pb-stack-lg space-y-stack-md" onsubmit="event.preventDefault();">
+<div class="space-y-base">
+<label class="block font-label-sm text-label-sm text-on-primary-fixed uppercase tracking-wider" for="student_id">Student ID or Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">person</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-[4px] focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all font-body-md" id="student_id" name="student_id" placeholder="e.g. GDU-123456" type="text"/>
+</div>
+</div>
+<div class="space-y-base">
+<div class="flex justify-between items-center">
+<label class="block font-label-sm text-label-sm text-on-primary-fixed uppercase tracking-wider" for="password">Password</label>
+<a class="font-label-sm text-label-sm text-tertiary-fixed-dim hover:text-on-tertiary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full pl-10 pr-10 py-3 bg-surface-container-lowest border border-outline-variant rounded-[4px] focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all font-body-md" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center space-x-2 py-1">
+<input class="w-4 h-4 text-primary-container border-outline-variant rounded-sm focus:ring-primary-container" id="remember" type="checkbox"/>
+<label class="font-body-md text-on-surface-variant text-[14px]" for="remember">Keep me signed in on this device</label>
+</div>
+<div class="pt-base">
+<button class="w-full bg-primary-container text-surface-white font-tagline text-tagline py-4 rounded-[2px] btn-primary hover:bg-on-primary-fixed-variant shadow-sm flex items-center justify-center gap-2" type="submit">
+<span>LOGIN TO VIRTUAL CLASSROOM</span>
+<span class="material-symbols-outlined text-[18px]">login</span>
+</button>
+</div>
+</form>
+<!-- Footer Support -->
+<div class="bg-surface-container-low px-stack-lg py-stack-md flex justify-center items-center border-t border-on-surface-variant/5">
+<p class="font-body-md text-[13px] text-on-surface-variant">
+                        Need assistance? 
+                        <a class="text-tertiary-fixed-dim font-semibold hover:underline" href="#">Contact Student Support</a>
+</p>
+</div>
+</div>
+<!-- Branding Sub-label -->
+<div class="mt-stack-lg text-center">
+<p class="font-tagline text-[11px] text-surface-lowest/60 uppercase tracking-[0.2em]">
+                    © 2024 Global Diaspora University • Academic Rigor • Global Access
+                </p>
+</div>
+</section>
+<!-- Decorative Elements: Academic Heritage -->
+<div class="absolute bottom-margin-desktop left-margin-desktop hidden lg:block opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-surface-lowest" style="font-variation-settings: 'wght' 100;">school</span>
+</div>
+<div class="absolute top-margin-desktop right-margin-desktop hidden lg:block opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-surface-lowest" style="font-variation-settings: 'wght' 100;">public</span>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for password visibility toggle
+        document.querySelector('button[type="button"]').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('.material-symbols-outlined');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        });
+
+        // Entrance animation enhancement
+        window.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('section');
+            card.classList.add('opacity-100');
+        });
+    </script>
+</body></html>

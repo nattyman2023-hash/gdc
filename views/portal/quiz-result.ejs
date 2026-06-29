@@ -1,0 +1,42 @@
+<div class="max-w-3xl mx-auto">
+  <!-- Result banner -->
+  <div class="rounded-lg p-8 mb-8 text-center <%= attempt.passed ? 'bg-secondary-fixed' : 'bg-error-container' %>">
+    <span class="material-symbols-outlined <%= attempt.passed ? 'text-secondary' : 'text-error' %>" style="font-size:56px; font-variation-settings:'FILL' 1;"><%= attempt.passed ? 'verified' : 'replay' %></span>
+    <h1 class="font-headline text-headline-md <%= attempt.passed ? 'text-on-secondary-fixed' : 'text-on-error-container' %> mt-2"><%= attempt.passed ? 'Well done — you passed!' : 'Keep going' %></h1>
+    <p class="font-display text-display-lg-mobile <%= attempt.passed ? 'text-secondary' : 'text-error' %> my-2"><%= attempt.score %>%</p>
+    <p class="<%= attempt.passed ? 'text-on-secondary-fixed' : 'text-on-error-container' %>">Pass mark: <%= quiz.pass_mark %>%</p>
+  </div>
+
+  <h2 class="font-headline text-headline-sm text-primary mb-4">Remediation &amp; Review</h2>
+  <div class="space-y-4">
+    <% questions.forEach(function(q, qi){ %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <p class="font-bold text-primary mb-3 flex items-start gap-2">
+        <span class="material-symbols-outlined <%= q.gotCorrect ? 'text-secondary' : 'text-error' %>" style="font-variation-settings:'FILL' 1;"><%= q.gotCorrect ? 'check_circle' : 'cancel' %></span>
+        <span><%= qi+1 %>. <%= q.prompt %></span>
+      </p>
+      <div class="space-y-2 ml-8">
+        <% q.options.forEach(function(o){ %>
+        <%
+          const isChosen = q.chosen === o.id;
+          let cls = 'border-outline-variant';
+          if (o.is_correct) cls = 'border-secondary bg-secondary-fixed/40';
+          else if (isChosen && !o.is_correct) cls = 'border-error bg-error-container/40';
+        %>
+        <div class="flex items-center gap-2 px-4 py-2 rounded border <%= cls %>">
+          <% if (o.is_correct) { %><span class="material-symbols-outlined text-secondary text-base">check</span><% } else if (isChosen) { %><span class="material-symbols-outlined text-error text-base">close</span><% } else { %><span class="w-4"></span><% } %>
+          <span class="text-on-surface text-sm"><%= o.text %></span>
+          <% if (isChosen) { %><span class="ml-auto text-xs font-bold text-on-surface-variant uppercase">Your answer</span><% } %>
+        </div>
+        <% }) %>
+      </div>
+      <% if (q.explanation) { %><p class="ml-8 mt-3 text-sm text-on-surface-variant bg-surface-container-low rounded p-3"><span class="font-bold">Explanation:</span> <%= q.explanation %></p><% } %>
+    </div>
+    <% }) %>
+  </div>
+
+  <div class="flex gap-4 mt-8">
+    <a href="/portal/quizzes/<%= quiz.id %>" class="bg-primary text-on-primary px-6 py-3 rounded font-bold">Retake Quiz</a>
+    <a href="/portal/courses/<%= course.slug %>" class="border border-outline text-primary px-6 py-3 rounded font-bold">Back to course</a>
+  </div>
+</div>

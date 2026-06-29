@@ -1,0 +1,104 @@
+<a href="/faculty" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Dashboard</a>
+
+<div class="mb-6">
+  <span class="font-tagline text-label-sm text-secondary uppercase"><%= course.code || 'Course' %></span>
+  <h1 class="font-headline text-headline-md text-primary"><%= course.title %></h1>
+</div>
+
+<!-- Gradebook -->
+<h2 class="font-headline text-headline-sm text-primary mb-3">Gradebook &amp; Progress</h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto mb-8">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr>
+        <th class="px-4 py-3">Student</th>
+        <th class="px-4 py-3">Progress</th>
+        <% quizzes.forEach(function(q){ %><th class="px-4 py-3 hidden md:table-cell" title="<%= q.title %>"><%= truncate(q.title, 18) %></th><% }) %>
+        <th class="px-4 py-3">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (!roster.length) { %><tr><td colspan="<%= 3 + quizzes.length %>" class="px-4 py-6 text-center text-on-surface-variant">No students enrolled.</td></tr><% } %>
+      <% roster.forEach(function(s){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 font-bold text-primary"><%= s.first_name %> <%= s.last_name %></td>
+        <td class="px-4 py-3 w-32"><div class="flex items-center gap-2"><div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= s.progress_pct %>%"></div></div><span class="text-xs"><%= s.progress_pct %>%</span></div></td>
+        <% quizzes.forEach(function(q){ var sc = s.scores[q.id]; %>
+        <td class="px-4 py-3 hidden md:table-cell <%= sc===null ? 'text-on-surface-variant' : (sc>=q.pass_mark ? 'text-secondary font-bold' : 'text-error font-bold') %>"><%= sc===null ? '—' : sc+'%' %></td>
+        <% }) %>
+        <td class="px-4 py-3"><%- include('../admin/_badge', { status: s.status==='completed' ? 'paid' : (s.status==='active'?'sent':'void') }) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Assessments -->
+<div class="mb-8">
+  <div class="flex justify-between items-center mb-3"><h2 class="font-headline text-headline-sm text-primary">Assessments</h2></div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <% if (!quizzes.length) { %><p class="text-on-surface-variant text-sm mb-4">No quizzes yet. Create one below.</p><% } %>
+    <div class="space-y-2 mb-4">
+      <% quizzes.forEach(function(q){ %>
+      <div class="flex items-center justify-between border-b border-outline-variant/30 pb-2 last:border-0">
+        <div><p class="font-bold text-primary text-sm"><%= q.title %></p><p class="text-xs text-on-surface-variant">Pass mark <%= q.pass_mark %>%</p></div>
+        <a href="/faculty/quizzes/<%= q.id %>/edit" class="text-secondary font-bold text-sm">Edit / questions →</a>
+      </div>
+      <% }) %>
+    </div>
+    <form action="/faculty/courses/<%= course.slug %>/quizzes" method="post" class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end border-t border-outline-variant/40 pt-4">
+      <div class="sm:col-span-6"><input name="title" required placeholder="New quiz title" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="sm:col-span-3"><input name="pass_mark" type="number" value="60" min="1" max="100" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" placeholder="Pass %" /></div>
+      <div class="sm:col-span-3"><button class="w-full bg-primary text-on-primary px-3 py-2 rounded font-bold text-sm">Create quiz</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- Assignments -->
+<div class="mb-8">
+  <h2 class="font-headline text-headline-sm text-primary mb-3">Assignments</h2>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <% if (!assignments.length) { %><p class="text-on-surface-variant text-sm mb-4">No assignments yet.</p><% } %>
+    <div class="space-y-2 mb-4">
+      <% assignments.forEach(function(asg){ %>
+      <div class="flex items-center justify-between border-b border-outline-variant/30 pb-2 last:border-0">
+        <div><p class="font-bold text-primary text-sm"><%= asg.title %></p><p class="text-xs text-on-surface-variant"><% if (asg.due_date) { %>Due <%= formatDate(asg.due_date) %> · <% } %><%= asg.submission_count %> submitted · <%= asg.graded_count %> graded</p></div>
+        <a href="/faculty/assignments/<%= asg.id %>" class="text-secondary font-bold text-sm">Review &amp; grade →</a>
+      </div>
+      <% }) %>
+    </div>
+    <form action="/faculty/courses/<%= course.slug %>/assignments" method="post" class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end border-t border-outline-variant/40 pt-4">
+      <div class="sm:col-span-5"><input name="title" required placeholder="Assignment title" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="sm:col-span-3"><input name="due_date" type="date" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="sm:col-span-2"><input name="max_points" type="number" value="100" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" placeholder="Points" /></div>
+      <div class="sm:col-span-2"><button class="w-full bg-primary text-on-primary px-3 py-2 rounded font-bold text-sm">Create</button></div>
+      <div class="sm:col-span-12"><textarea name="instructions" rows="2" placeholder="Instructions (optional)" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"></textarea></div>
+    </form>
+  </div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6">
+  <!-- Post announcement -->
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Post an announcement</h2>
+    <form action="/faculty/courses/<%= course.slug %>/announce" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3">
+      <input name="title" required placeholder="Title" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+      <textarea name="body" required rows="3" placeholder="Message to your students…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea>
+      <div class="flex justify-end"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Post</button></div>
+    </form>
+  </div>
+  <!-- Recent announcements -->
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Recent announcements</h2>
+    <div class="space-y-3">
+      <% if (!announcements.length) { %><p class="text-on-surface-variant text-sm">None yet.</p><% } %>
+      <% announcements.forEach(function(a){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+        <p class="font-bold text-primary text-sm"><%= a.title %></p>
+        <p class="text-on-surface-variant text-sm my-1"><%= a.body %></p>
+        <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= formatDate(a.published_at) %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

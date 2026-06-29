@@ -1,0 +1,41 @@
+<a href="/portal/support" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All tickets</a>
+
+<div class="max-w-3xl">
+  <div class="flex justify-between items-start gap-3 mb-4">
+    <div><h1 class="font-headline text-headline-sm text-primary"><%= ticket.subject %></h1><p class="text-xs text-on-surface-variant"><%= ticket.reference %> · <%= ticket.category %> · priority <%= ticket.priority %></p></div>
+    <div class="flex items-center gap-2">
+      <%- include('../admin/_badge', { status: ticket.status==='resolved'||ticket.status==='closed' ? 'paid' : (ticket.status==='pending'?'sent':'new') }) %>
+      <% if (ticket.status === 'closed') { %>
+        <form action="/portal/support/<%= ticket.id %>/reopen" method="post"><button class="text-secondary font-bold text-sm">Reopen</button></form>
+      <% } else { %>
+        <form action="/portal/support/<%= ticket.id %>/close" method="post" onsubmit="return confirm('Close this ticket?');"><button class="text-on-surface-variant hover:text-primary font-bold text-sm">Close</button></form>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="space-y-3 mb-6">
+    <% replies.forEach(function(r){ %>
+    <div class="rounded-lg p-4 <%= r.is_staff ? 'bg-secondary-fixed/40 border border-secondary/40 ml-6' : 'bg-surface-container-lowest border border-outline-variant mr-6' %>">
+      <div class="flex justify-between items-center mb-1">
+        <p class="font-bold text-primary text-sm"><%= r.author_name || (r.is_staff?'Support':'You') %><% if (r.is_staff) { %> <span class="font-tagline text-[10px] bg-secondary text-on-secondary px-1.5 py-0.5 rounded uppercase">Staff</span><% } %></p>
+        <p class="text-[11px] text-on-surface-variant"><%= formatDate(r.created_at) %><% if (r.edited_at) { %> · edited<% } %><% if (r.author_id === currentUser.id && editReply !== r.id) { %> · <a href="/portal/support/<%= ticket.id %>?editReply=<%= r.id %>" class="text-secondary font-bold">Edit</a><% } %></p>
+      </div>
+      <% if (editReply === r.id) { %>
+        <form action="/portal/ticket-replies/<%= r.id %>" method="post" class="space-y-2">
+          <textarea name="body" rows="3" class="field"><%= r.body %></textarea>
+          <div class="flex gap-2"><button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Save</button><a href="/portal/support/<%= ticket.id %>" class="px-4 py-1.5 rounded font-bold text-sm border border-outline text-on-surface-variant">Cancel</a></div>
+        </form>
+      <% } else { %>
+        <p class="text-on-surface text-sm whitespace-pre-line"><%= r.body %></p>
+      <% } %>
+    </div>
+    <% }) %>
+  </div>
+
+  <% if (ticket.status !== 'closed') { %>
+  <form action="/portal/support/<%= ticket.id %>/reply" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+    <textarea name="body" required rows="3" placeholder="Add a reply…" class="field"></textarea>
+    <div class="flex justify-end mt-2"><button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Send reply</button></div>
+  </form>
+  <% } else { %><p class="text-on-surface-variant text-sm bg-surface-container-low rounded-lg p-4">This ticket is closed. <form action="/portal/support/<%= ticket.id %>/reopen" method="post" class="inline"><button class="text-secondary font-bold">Reopen it</button></form> to continue the conversation.</p><% } %>
+</div>

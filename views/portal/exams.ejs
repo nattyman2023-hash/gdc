@@ -1,0 +1,28 @@
+<div class="mb-6">
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Assessments</p>
+  <h1 class="font-headline text-headline-md text-primary">Final Exams</h1>
+  <p class="text-on-surface-variant mt-1">Year and programme-wide exams for your programme. Course final exams appear on each course page.</p>
+</div>
+
+<% if (!exams.length) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center">
+    <span class="material-symbols-outlined text-secondary text-4xl">workspace_premium</span>
+    <p class="text-on-surface-variant mt-2">No programme or year exams are available to you yet.</p>
+  </div>
+<% } %>
+
+<div class="space-y-4">
+  <% exams.forEach(function(e){ var passed = e.best && e.best.passed; %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="font-tagline text-[11px] uppercase px-2 py-1 rounded <%= e.exam_scope==='programme' ? 'bg-primary text-on-primary' : 'bg-secondary-container text-on-secondary-container' %>"><%= e.exam_scope==='programme' ? 'Programme' : ('Year ' + (e.exam_year||'')) %></span>
+        <h3 class="font-headline text-headline-sm text-primary"><%= e.title %></h3>
+      </div>
+      <p class="text-on-surface-variant text-sm"><%= e.program_title %> · <%= e.questionCount %> question<%= e.questionCount===1?'':'s' %> · Pass mark <%= e.pass_mark %>%<% if (e.time_limit_min) { %> · <%= e.time_limit_min %> min<% } %></p>
+      <% if (e.best) { %><p class="text-sm mt-1 <%= passed ? 'text-secondary' : 'text-error' %>">Best score: <%= e.best.score %>% <%= passed ? '(passed)' : '(not yet passed)' %></p><% } %>
+    </div>
+    <a href="/portal/quizzes/<%= e.id %>" class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= e.best ? 'Retake' : 'Start exam' %></a>
+  </div>
+  <% }) %>
+</div>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admissions &amp; Onboarding | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-secondary-container": "#725000",
+                    "surface-variant": "#e5e2dc",
+                    "surface": "#fcf9f3",
+                    "primary-fixed": "#d6e3ff",
+                    "secondary": "#7d5800",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4c5f7f",
+                    "surface-dim": "#dcdad4",
+                    "primary": "#00030c",
+                    "on-tertiary-fixed": "#001a40",
+                    "outline": "#74777e",
+                    "secondary-fixed": "#ffdea9",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "primary-container": "#071d3a",
+                    "surface-container-high": "#ebe8e2",
+                    "on-primary-fixed-variant": "#354766",
+                    "on-primary-container": "#7386a8",
+                    "tertiary-fixed": "#d7e2ff",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "on-tertiary-container": "#6a85bb",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "inverse-on-surface": "#f3f0ea",
+                    "background": "#fcf9f3",
+                    "surface-container-low": "#f6f3ed",
+                    "on-primary-fixed": "#051b38",
+                    "tertiary-container": "#001c43",
+                    "on-background": "#1c1c18",
+                    "inverse-primary": "#b4c7ec",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-surface-variant": "#44474d",
+                    "on-error": "#ffffff",
+                    "on-surface": "#1c1c18",
+                    "on-secondary-fixed": "#271900",
+                    "surface-container": "#f0eee8",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#00030d",
+                    "surface-bright": "#fcf9f3",
+                    "secondary-container": "#fdc355",
+                    "inverse-surface": "#31312d",
+                    "outline-variant": "#c4c6ce",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"],
+                    "tagline": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface dark:bg-primary-container border-b border-outline-variant dark:border-primary-fixed-variant">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Global Diaspora University</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-primary dark:text-secondary-fixed font-bold border-b-2 border-secondary-container font-body-md text-body-md py-1" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Programs</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Mission</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 font-body-md text-body-md" href="#">Spirituality</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md px-2 w-48" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">help_outline</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-tagline text-tagline rounded-lg hover:bg-primary-container transition-all uppercase tracking-widest">Student Portal</button>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[600px] flex items-center overflow-hidden bg-primary-container">
+<div class="absolute inset-0 opacity-40">
+<img class="w-full h-full object-cover" data-alt="A majestic historical university campus at dusk, with gothic stone architecture and glowing windows reflecting a scholarly atmosphere. The scene is lit with warm amber light against a deep navy sky, capturing the prestige and heritage of a traditional academic institution. The overall aesthetic is formal, stable, and deeply rooted in excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGcFNo84UF0z1vOEzTc7A2se0TvsxihhRiTC-Vdl47eYeHydVi6vQSiQ_x0HgXwxC_j-Joams5kijslptMfarhu-FoCI0Nmrw3-67ILKK0urxee0Q6-vKlNFm_JfwtaHKy0BnKBGZ_BZIxhdfj14stxgmBFa-Odq_AXU8u2oafB1DuvvYZbcgpRDUZuHmlbKbwtBhJVuWd_qk7HcMAFompNU0_RxGVuB-CR9RTPEl3GL2iQ9Z8TLfluP7HVCR7i2Rd9WgD66llVZw"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container via-primary-container/80 to-transparent"></div>
+<div class="relative z-10 max-w-container-max mx-auto px-margin-desktop w-full">
+<div class="max-w-2xl">
+<span class="font-tagline text-tagline text-secondary-fixed-dim bg-secondary-container/10 px-3 py-1 border border-secondary-fixed-dim/20 inline-block mb-6">ESTABLISHED IN EXCELLENCE</span>
+<h1 class="font-display-lg text-display-lg text-surface mb-6 leading-tight">Admissions &amp; <br/>Student Onboarding</h1>
+<p class="font-body-lg text-body-lg text-surface-variant mb-10 max-w-lg">Join a global fellowship of scholars. Our onboarding process is designed to welcome you into our spiritual and academic community with clarity and support.</p>
+<div class="flex gap-4">
+<a class="bg-secondary-container text-on-secondary-container px-8 py-4 font-tagline text-tagline rounded-lg hover:scale-[1.02] transition-transform flex items-center gap-3" href="#apply">
+                            START MY APPLICATION <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<a class="border border-surface-variant text-surface px-8 py-4 font-tagline text-tagline rounded-lg hover:bg-surface/10 transition-all" href="#tiers">
+                            VIEW TUITION
+                        </a>
+</div>
+</div>
+</div>
+</section>
+<!-- 3-Step Guide -->
+<section class="py-24 bg-surface px-margin-desktop scroll-reveal">
+<div class="max-w-container-max mx-auto text-center mb-16">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Your Journey to Enrollment</h2>
+<div class="w-24 h-1 bg-secondary-container mx-auto"></div>
+</div>
+<div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+<!-- Connecting Line (Desktop Only) -->
+<div class="hidden md:block absolute top-12 left-1/4 right-1/4 h-[1px] bg-outline-variant z-0"></div>
+<!-- Step 1 -->
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-surface-container-low border-2 border-secondary-container flex items-center justify-center mb-6 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-4xl">edit_note</span>
+</div>
+<span class="font-tagline text-tagline text-secondary mb-2">STEP 01</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Apply Online</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Complete our comprehensive digital application form and submit your academic credentials and personal testimony.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-surface-container-low border-2 border-secondary-container flex items-center justify-center mb-6 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-4xl">verified_user</span>
+</div>
+<span class="font-tagline text-tagline text-secondary mb-2">STEP 02</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Background Review</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Our admissions committee conducts a thorough review of your profile to ensure alignment with GDU's mission and standards.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative z-10 flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-6 shadow-md">
+<span class="material-symbols-outlined text-4xl">payments</span>
+</div>
+<span class="font-tagline text-tagline text-secondary mb-2">STEP 03</span>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Enroll &amp; Pay</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Once accepted, finalize your enrollment by selecting your payment plan and accessing your student workspace.</p>
+</div>
+</div>
+</section>
+<!-- Tuition Comparison Section -->
+<section class="py-24 bg-surface-container-low px-margin-desktop scroll-reveal" id="tiers">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Investment &amp; Support</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">We believe in making quality Christian education accessible. Our tiered structure ensures equitable opportunities for students across the globe.</p>
+</div>
+<div class="bg-white p-4 rounded-lg border border-outline-variant flex items-center gap-4">
+<img class="h-16 w-16 object-contain" data-alt="A formal official accreditation badge or seal representing academic excellence and institutional quality. The image features elegant gold embossed text and a classic crest, set against a clean white professional background to convey authority, trust, and global recognition in higher education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvb6fzav7JfUlBEcNh_T7eGqLyWk06SHqwtCIIbDAfWFOk3tQmOr3ZCdYdILOtRBXvJBQo0Epglmpkc0e62Dpc8IdkW-M-3vfTD9FolL6WUmlwcOcqVMuRVrf7CtaDSICwIOVbDN2H1ve3l5um2p850gBN5d8Xpe9YY--UZI51U2pegzsdVxbE5SIl2k586STP3TL4-vhGPkEzVigttZ5n5yv3EnT0sPo2S_iJK6sbNp_sc7JcmaS7vpnhjiJPMHsVb_uREX8995w"/>
+<div>
+<p class="font-tagline text-[12px] text-secondary uppercase">Accredited Member</p>
+<p class="font-label-sm text-label-sm font-bold">QAHE Global Quality Assurance</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Tier 1 -->
+<div class="bg-surface border-2 border-secondary-container rounded-xl p-10 flex flex-col hover:shadow-lg transition-shadow">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 font-tagline text-[12px] rounded mb-4 inline-block">SUBSIDIZED TIER</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Regional Support (East Africa)</h4>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary">$450</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">per semester</p>
+</div>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-start gap-3 font-body-md text-body-md">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+                                Fully subsidized tuition for residents of East African partner nations.
+                            </li>
+<li class="flex items-start gap-3 font-body-md text-body-md">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+                                Access to local university fellowship centers.
+                            </li>
+<li class="flex items-start gap-3 font-body-md text-body-md">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+                                Specialized regional mentorship programs.
+                            </li>
+</ul>
+<button class="w-full border-2 border-primary text-primary py-4 font-tagline text-tagline rounded hover:bg-primary hover:text-on-primary transition-all">CHECK ELIGIBILITY</button>
+</div>
+<!-- Tier 2 -->
+<div class="bg-primary-container text-surface rounded-xl p-10 flex flex-col hover:shadow-lg transition-shadow">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="bg-surface/10 text-secondary-fixed-dim border border-secondary-fixed-dim/30 px-3 py-1 font-tagline text-[12px] rounded mb-4 inline-block">STANDARD RATE</span>
+<h4 class="font-headline-sm text-headline-sm">Global Diaspora</h4>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md">$1,200</span>
+<p class="font-label-sm text-label-sm text-surface-variant">per semester</p>
+</div>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-start gap-3 font-body-md text-body-md text-surface-variant">
+<span class="material-symbols-outlined text-secondary-fixed-dim">public</span>
+                                Flexible online learning for students worldwide.
+                            </li>
+<li class="flex items-start gap-3 font-body-md text-body-md text-surface-variant">
+<span class="material-symbols-outlined text-secondary-fixed-dim">public</span>
+                                International networking with global diaspora professionals.
+                            </li>
+<li class="flex items-start gap-3 font-body-md text-body-md text-surface-variant">
+<span class="material-symbols-outlined text-secondary-fixed-dim">public</span>
+                                Priority access to global academic conferences.
+                            </li>
+</ul>
+<button class="w-full bg-secondary-container text-on-secondary-container py-4 font-tagline text-tagline rounded hover:scale-[1.01] transition-transform">PROCEED TO APPLY</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Quote & Trust Section -->
+<section class="py-24 bg-surface px-margin-desktop scroll-reveal">
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+<div class="relative group">
+<div class="absolute -inset-4 bg-secondary-container opacity-20 blur-xl group-hover:opacity-30 transition-opacity"></div>
+<img class="relative rounded-lg shadow-2xl w-full h-[500px] object-cover" data-alt="A professional portrait of a distinguished African female professor in an academic setting. She is smiling warmly, wearing elegant formal attire, and is surrounded by leather-bound books in a sunlit university library. The lighting is soft and golden, highlighting a sense of wisdom, approachable authority, and a commitment to global education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp_XBM0nSGO_oUEpGlcxNu8XbqZUEalQvxzfZNiFMG4WYzUl93KHO2GEtLR--IUdtvsHQvsBOyfIWk3_VGr_EwFAJovWU8Li7W7L1-XvhMpxKChTzSMTUF8KqLSwuo3J7UAxgCCnqENROndNTh0-tNI3LAESJ4zEir4hRglAh2C3g-jmQ-x0dL42Uwb8msFojJj6t-JTuB90U0fND5UrdHl8n9sKK1lOaFqr8arLu8xUIAL26vGt4wd5ute8Cbm8TpVEVeX4W4ikg"/>
+<div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-6 border-l-4 border-secondary shadow-lg">
+<p class="font-body-md text-body-md italic text-primary mb-2">"GDU isn't just an institution; it's a bridge between your heritage and your future. We are building a sanctuary of knowledge."</p>
+<p class="font-tagline text-[12px] font-bold uppercase text-secondary">Dr. Elizabeth Mwangi • Dean of Student Life</p>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Why Choose Global Diaspora University?</h2>
+<div class="space-y-8">
+<div class="flex gap-4">
+<div class="text-secondary-container">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-[20px] text-primary mb-2">Faith-Based Excellence</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Education rooted in Christian values, preparing you for leadership with a moral compass.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="text-secondary-container">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-[20px] text-primary mb-2">Global Community</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Connect with peers across continents, creating a truly diverse academic tapestry.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="text-secondary-container">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-[20px] text-primary mb-2">Accelerated Success</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Practical, industry-aligned curriculums designed for immediate impact in your community.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 bg-primary px-margin-desktop overflow-hidden relative" id="apply">
+<!-- Subtle Decorative Element -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-secondary opacity-10 rounded-full blur-[120px] -mr-48 -mt-48"></div>
+<div class="max-w-container-max mx-auto text-center relative z-10">
+<h2 class="font-display-lg text-display-lg text-surface mb-8">Begin Your Academic Testimony</h2>
+<p class="font-body-lg text-body-lg text-surface-variant max-w-2xl mx-auto mb-12">Admissions for the Winter 2024 session are now open. Start your multi-step application today and secure your place in the next cohort.</p>
+<button class="bg-secondary-container text-on-secondary-container px-12 py-5 font-tagline text-tagline rounded-lg hover:scale-[1.05] hover:shadow-2xl transition-all uppercase tracking-[0.2em] font-bold">
+                    Start My Application
+                </button>
+<p class="mt-8 font-label-sm text-label-sm text-surface-variant/60 italic">Estimated completion time: 15-20 minutes</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col items-center gap-6 bg-primary dark:bg-primary-container text-on-primary">
+<div class="flex flex-col items-center gap-4">
+<span class="font-headline-sm text-headline-sm text-secondary-fixed">Global Diaspora University</span>
+<p class="font-tagline text-tagline opacity-80 text-center max-w-md">Equipping the Diaspora, Transforming the World Through Christ-Centered Education.</p>
+</div>
+<nav class="flex flex-wrap justify-center gap-8 mt-4">
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Accreditation</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Compliance</a>
+<a class="text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Contact Us</a>
+</nav>
+<div class="w-full max-w-container-max h-[1px] bg-white/10 my-4"></div>
+<p class="font-body-md text-body-md opacity-60 text-center">© 2024 Global Diaspora University. Committed to Excellence in Christian Education.</p>
+</footer>
+<script>
+        // Micro-interactions and Scroll Animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+            // Smooth Scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,25 @@
+<%
+  // Colour-coded status pill. Expects `status` (string).
+  const map = {
+    new: 'bg-tertiary-container text-on-tertiary-container',
+    contacted: 'bg-secondary-fixed text-on-secondary-fixed',
+    qualified: 'bg-secondary-fixed text-on-secondary-fixed',
+    nurturing: 'bg-surface-container-high text-on-surface-variant',
+    in_review: 'bg-secondary-fixed text-on-secondary-fixed',
+    interview: 'bg-secondary-fixed text-on-secondary-fixed',
+    offer: 'bg-secondary-container text-on-secondary-container',
+    converted: 'bg-secondary text-on-secondary',
+    accepted: 'bg-secondary text-on-secondary',
+    active: 'bg-secondary-container text-on-secondary-container',
+    inactive: 'bg-surface-container-high text-on-surface-variant',
+    paid: 'bg-secondary text-on-secondary',
+    sent: 'bg-surface-container-high text-on-surface-variant',
+    draft: 'bg-surface-container-high text-on-surface-variant',
+    declined: 'bg-error-container text-on-error-container',
+    lost: 'bg-error-container text-on-error-container',
+    overdue: 'bg-error-container text-on-error-container',
+    withdrawn: 'bg-error-container text-on-error-container',
+    void: 'bg-error-container text-on-error-container',
+  };
+  const cls = map[status] || 'bg-surface-container-high text-on-surface-variant';
+%><span class="inline-block font-tagline text-[11px] uppercase px-2 py-1 rounded <%= cls %>"><%= String(status).replace('_',' ') %></span>

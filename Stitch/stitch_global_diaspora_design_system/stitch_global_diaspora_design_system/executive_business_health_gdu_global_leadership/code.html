@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Executive Business Health & Profitability Report | GDU</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#ebe8e2",
+                    "on-primary-fixed-variant": "#354766",
+                    "on-tertiary-container": "#6a85bb",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "tertiary-fixed": "#d7e2ff",
+                    "on-primary-container": "#7386a8",
+                    "background": "#fcf9f3",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "inverse-on-surface": "#f3f0ea",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#001c43",
+                    "on-background": "#1c1c18",
+                    "surface-container-low": "#f6f3ed",
+                    "on-primary-fixed": "#051b38",
+                    "inverse-primary": "#b4c7ec",
+                    "on-surface": "#1c1c18",
+                    "on-secondary-fixed": "#271900",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-surface-variant": "#44474d",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#c4c6ce",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#00030d",
+                    "surface-bright": "#fcf9f3",
+                    "secondary-container": "#fdc355",
+                    "inverse-surface": "#31312d",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f0eee8",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-secondary-container": "#725000",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e5e2dc",
+                    "on-primary": "#ffffff",
+                    "secondary": "#7d5800",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fcf9f3",
+                    "primary-fixed": "#d6e3ff",
+                    "primary": "#00030c",
+                    "on-tertiary-fixed": "#001a40",
+                    "surface-tint": "#4c5f7f",
+                    "surface-dim": "#dcdad4",
+                    "outline": "#74777e",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "secondary-fixed": "#ffdea9",
+                    "primary-container": "#071d3a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "container-max": "1280px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "tagline": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-grid {
+            background-image: linear-gradient(to right, #c4c6ce 1px, transparent 1px),
+                              linear-gradient(to bottom, #c4c6ce 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+        }
+        .bento-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Global Diaspora University</div>
+<div class="hidden md:flex items-center gap-8 font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Academics</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Research</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Global Reach</a>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:block relative">
+<input class="bg-surface-container-low border-none border-b border-primary text-body-md px-4 py-2 w-64 focus:ring-0 focus:border-secondary" placeholder="Search report..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-surface-variant">search</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:opacity-80 transition-all uppercase text-label-sm tracking-widest">Apply Now</button>
+</div>
+</nav>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-12">
+<!-- Dashboard Header -->
+<div class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-tagline text-tagline text-secondary uppercase block mb-2">Zone 4 • Page 76</span>
+<h1 class="font-display-lg text-display-lg text-primary">Executive Business Health & Profitability Report</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 italic font-headline-sm italic">Institutional fiscal performance and strategic enrollment metrics.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 border border-outline px-4 py-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">download</span>
+<span class="font-label-sm text-label-sm uppercase">Export PDF</span>
+</button>
+<button class="flex items-center gap-2 border border-outline px-4 py-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">print</span>
+<span class="font-label-sm text-label-sm uppercase">Print Archive</span>
+</button>
+</div>
+</div>
+<div class="h-px w-full bg-secondary mt-8 opacity-30"></div>
+</div>
+<!-- 4-Card Header Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-12">
+<!-- MRR -->
+<div class="bento-card bg-white p-6 border border-outline-variant relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-label-sm font-tagline text-on-surface-variant">+12.4% vs LY</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Monthly Recurring Revenue</div>
+<div class="font-headline-md text-headline-md text-primary">$1,245,800</div>
+<div class="mt-4 h-1 bg-surface-container-high w-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4"></div>
+</div>
+</div>
+<!-- Enrollment Growth -->
+<div class="bento-card bg-white p-6 border border-outline-variant relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="text-label-sm font-tagline text-on-surface-variant">Active Target</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Enrollment Growth %</div>
+<div class="font-headline-md text-headline-md text-primary">18.5%</div>
+<div class="mt-4 h-1 bg-surface-container-high w-full overflow-hidden">
+<div class="h-full bg-primary w-1/2"></div>
+</div>
+</div>
+<!-- Operational Costs -->
+<div class="bento-card bg-white p-6 border border-outline-variant relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="text-label-sm font-tagline text-on-surface-variant">-2.1% optimized</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Operational Costs</div>
+<div class="font-headline-md text-headline-md text-primary">$842,300</div>
+<div class="mt-4 h-1 bg-surface-container-high w-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-2/3"></div>
+</div>
+</div>
+<!-- Net Profit Margin -->
+<div class="bento-card bg-white p-6 border border-outline-variant relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span class="text-label-sm font-tagline text-on-surface-variant">Stable Fiscal Health</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Net Profit Margin</div>
+<div class="font-headline-md text-headline-md text-primary">32.4%</div>
+<div class="mt-4 h-1 bg-surface-container-high w-full overflow-hidden">
+<div class="h-full bg-secondary w-4/5"></div>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Chart & Table -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Revenue vs Expenses Chart Area -->
+<div class="lg:col-span-2 bento-card bg-white border border-outline-variant p-8 relative min-h-[500px] flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Revenue vs. Operational Expenses</h2>
+<p class="font-body-md text-on-surface-variant">Year-to-date fiscal trajectory</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-primary rounded-full"></span>
+<span class="font-label-sm text-label-sm">Revenue</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-secondary rounded-full"></span>
+<span class="font-label-sm text-label-sm">Expenses</span>
+</div>
+</div>
+</div>
+<div class="flex-grow relative border-l border-b border-outline-variant">
+<div class="absolute inset-0 chart-grid"></div>
+<!-- Mock Chart Visualization -->
+<svg class="w-full h-full preserve-3d" viewbox="0 0 800 300">
+<!-- Revenue Area -->
+<path d="M0,280 Q100,240 200,220 T400,160 T600,100 T800,40 L800,300 L0,300 Z" fill="rgba(0, 3, 12, 0.05)"></path>
+<path d="M0,280 Q100,240 200,220 T400,160 T600,100 T800,40" fill="none" stroke="#00030c" stroke-linecap="round" stroke-width="3"></path>
+<!-- Expenses Area -->
+<path d="M0,290 Q100,270 200,265 T400,240 T600,220 T800,200 L800,300 L0,300 Z" fill="rgba(125, 88, 0, 0.05)"></path>
+<path d="M0,290 Q100,270 200,265 T400,240 T600,220 T800,200" fill="none" stroke="#7d5800" stroke-dasharray="8 4" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex justify-between mt-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">
+<span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span><span>OCT</span><span>NOV</span><span>DEC</span>
+</div>
+</div>
+<!-- Side Sidebar: Regional Impact -->
+<div class="bento-card bg-surface-container-low border border-outline-variant p-8 flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Regional Impact</h2>
+<p class="font-body-md text-on-surface-variant mb-6">Global density of active contributors</p>
+<div class="flex-grow bg-surface-container-high relative rounded overflow-hidden mb-6 border border-outline-variant">
+<img alt="Global density map" class="w-full h-full object-cover opacity-80 grayscale" data-alt="A sophisticated dark-themed world map displayed on a high-resolution digital interface. The continents are rendered in deep charcoal greys, while active student hubs glow with soft golden and ivory light points. The image has a cinematic lighting quality, suggesting an elite global command center. The aesthetic is clean, academic, and authoritative, perfectly aligning with the Global Diaspora University's prestigious brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4Qvx8_KH8S5bzkmVcStOtThguT6JGcE4SDCTDxCpMmwb_WZDSzp0hU4kkBvnwu2iXJAaLO0jvw4YayVxUlAIN0V3VLXknAn2KYrdUVzs1jN3JMAmmCVSYQzILT69Ask77EsYmW0p1-zkX8SzFA3QBulR_gn154z2TJFrbZdqeR0vPSqvnkP6dIaynjYZprcIRdGmz_MAUmJBKwXhzEEvlsqQvffTfLxLSSaNgWmag3aTfm8XipR_XtC5zXQzt4imLEPin1cLnkM4"/>
+<div class="absolute top-4 left-4 flex flex-col gap-2">
+<div class="bg-primary text-on-primary text-[10px] px-2 py-1 uppercase tracking-widest font-bold">Live Data Feed</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-md">Sub-Saharan Africa</span>
+<span class="font-tagline text-secondary">42%</span>
+</div>
+<div class="w-full bg-white h-1">
+<div class="bg-secondary h-full w-[42%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md">North America</span>
+<span class="font-tagline text-secondary">28%</span>
+</div>
+<div class="w-full bg-white h-1">
+<div class="bg-secondary h-full w-[28%]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md">European Union</span>
+<span class="font-tagline text-secondary">15%</span>
+</div>
+<div class="w-full bg-white h-1">
+<div class="bg-secondary h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Lower Section: Program Performance -->
+<div class="mt-12 bento-card bg-white border border-outline-variant overflow-hidden">
+<div class="p-8 border-b border-outline-variant flex justify-between items-center">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Top Performing Programs</h2>
+<p class="font-body-md text-on-surface-variant">Course-level revenue and engagement ranking</p>
+</div>
+<button class="text-primary font-tagline text-sm uppercase flex items-center gap-2 hover:text-secondary transition-colors">
+                    View Full Catalog <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant uppercase font-tagline text-[12px] tracking-widest">
+<tr>
+<th class="px-8 py-4 font-semibold">Program Name</th>
+<th class="px-8 py-4 font-semibold text-center">Active Enrollees</th>
+<th class="px-8 py-4 font-semibold text-center">Completion Rate</th>
+<th class="px-8 py-4 font-semibold text-right">Revenue (YTD)</th>
+<th class="px-8 py-4 font-semibold text-right">Trend</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-8 py-6">
+<div class="font-headline-sm text-lg text-primary">Global Diaspora Leadership</div>
+<div class="text-on-surface-variant text-sm">Faculty of Humanities</div>
+</td>
+<td class="px-8 py-6 text-center font-body-md">1,240</td>
+<td class="px-8 py-6 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-on-surface-variant">94%</span>
+<div class="w-12 bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[94%]"></div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right font-headline-sm text-lg">$420,000</td>
+<td class="px-8 py-6 text-right text-secondary">
+<span class="material-symbols-outlined align-middle">trending_up</span>
+<span class="font-tagline text-xs">8%</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-8 py-6">
+<div class="font-headline-sm text-lg text-primary">Digital Kingdom Economics</div>
+<div class="text-on-surface-variant text-sm">School of Business</div>
+</td>
+<td class="px-8 py-6 text-center font-body-md">890</td>
+<td class="px-8 py-6 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-on-surface-variant">88%</span>
+<div class="w-12 bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[88%]"></div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right font-headline-sm text-lg">$312,500</td>
+<td class="px-8 py-6 text-right text-secondary">
+<span class="material-symbols-outlined align-middle">trending_up</span>
+<span class="font-tagline text-xs">12%</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-8 py-6">
+<div class="font-headline-sm text-lg text-primary">Missiology & Global Impact</div>
+<div class="text-on-surface-variant text-sm">Theological Studies</div>
+</td>
+<td class="px-8 py-6 text-center font-body-md">2,100</td>
+<td class="px-8 py-6 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="text-on-surface-variant">91%</span>
+<div class="w-12 bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[91%]"></div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right font-headline-sm text-lg">$285,000</td>
+<td class="px-8 py-6 text-right text-on-tertiary-container">
+<span class="material-symbols-outlined align-middle">trending_flat</span>
+<span class="font-tagline text-xs">2%</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Side Navigation Menu (Fixed Left) -->
+<aside class="hidden xl:flex fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-surface-container-low border-r border-outline-variant flex-col gap-2 p-4 z-40">
+<div class="mb-8 px-4">
+<h3 class="font-headline-sm text-primary">About GDU</h3>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-wider">Institutional Excellence</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">history_edu</span>
+<span class="font-label-sm uppercase tracking-wider">Our Story</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">menu_book</span>
+<span class="font-label-sm uppercase tracking-wider">Statement of Faith</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">verified</span>
+<span class="font-label-sm uppercase tracking-wider">Accreditation</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">school</span>
+<span class="font-label-sm uppercase tracking-wider">Faculty</span>
+</a>
+<div class="h-px bg-outline-variant my-4 mx-4"></div>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg px-4 py-3 active:scale-95 duration-100 transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm uppercase tracking-wider">Business Health</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-primary text-on-primary rounded-xl overflow-hidden relative">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-8xl">account_balance</span>
+</div>
+<div class="font-tagline text-[10px] uppercase tracking-widest mb-1 opacity-70">Fiscal Year 2024</div>
+<div class="font-headline-sm text-sm">Strategic Surplus</div>
+<div class="font-headline-md mt-1 text-secondary">$3.2M</div>
+</div>
+</aside>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary py-12 px-margin-desktop mt-20 relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none chart-grid"></div>
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
+<div class="flex flex-col items-center md:items-start">
+<div class="font-headline-md text-headline-md text-secondary mb-4">Global Diaspora University</div>
+<p class="font-body-md text-on-primary-container max-w-md text-center md:text-left opacity-80 italic">
+                    "Founded on Faith, Committed to Excellence. Empowering the global diaspora through accessible, elite education."
+                </p>
+</div>
+<div class="flex flex-col items-center md:items-end gap-6">
+<div class="flex gap-8">
+<a class="text-on-primary-container hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-primary-container hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-on-primary-container hover:text-white transition-colors" href="#">Campus Safety</a>
+<a class="text-on-primary-container hover:text-white transition-colors" href="#">Contact Us</a>
+</div>
+<div class="font-body-md text-sm opacity-60">
+                    © 2024 Global Diaspora University. All rights reserved.
+                </div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for chart values
+        const cards = document.querySelectorAll('.bento-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const metric = card.querySelector('.text-headline-md');
+                if (metric) metric.style.opacity = '0.8';
+            });
+            card.addEventListener('mouseleave', () => {
+                const metric = card.querySelector('.text-headline-md');
+                if (metric) metric.style.opacity = '1';
+            });
+        });
+    </script>
+</body></html>

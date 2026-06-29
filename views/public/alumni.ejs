@@ -1,0 +1,62 @@
+<%- include('../partials/page-hero', { heroTitle: 'Alumni Network', heroTagline: 'Empowering Global Generations', heroText: 'Connect with graduates serving across the diaspora — find a mentor, give back, and grow together.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-8">Distinguished Mentors</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% if (!mentors.length) { %><p class="text-on-surface-variant">Mentor profiles coming soon.</p><% } %>
+      <% mentors.forEach(function(m){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 border-t-4 border-t-secondary">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline text-headline-sm"><%= m.name.charAt(0) %></div>
+          <div><p class="font-bold text-primary"><%= m.name %></p><p class="text-xs text-on-surface-variant"><%= m.role %><% if (m.organisation) { %> · <%= m.organisation %><% } %></p></div>
+        </div>
+        <p class="text-on-surface-variant text-sm mb-2"><%= m.bio %></p>
+        <p class="font-tagline text-[11px] text-secondary uppercase"><%= m.program %><% if (m.graduation_year) { %> · Class of <%= m.graduation_year %><% } %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<% if (vacancies && vacancies.length) { %>
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="flex justify-between items-end mb-6"><h2 class="font-headline text-headline-md text-primary">Partner &amp; Network Opportunities</h2><a href="/careers" class="text-secondary font-bold text-sm">All careers →</a></div>
+    <div class="space-y-3">
+      <% vacancies.forEach(function(v){ %>
+      <a href="/careers/<%= v.slug %>" class="block bg-surface-container-lowest border border-outline-variant rounded-lg p-4 hover:border-secondary transition-colors">
+        <div class="flex justify-between items-center"><div><p class="font-bold text-primary"><%= v.title %></p><p class="text-xs text-on-surface-variant"><%= v.type %><% if (v.location) { %> · <%= v.location %><% } %></p></div><span class="material-symbols-outlined text-secondary">chevron_right</span></div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="py-16 bg-surface-container-low">
+  <div class="max-w-2xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+      <h2 class="font-headline text-headline-sm text-primary mb-2">Are you a GDCU graduate?</h2>
+      <p class="text-on-surface-variant text-body-md mb-6">Join the alumni network and optionally offer to mentor current students.</p>
+      <% if (Object.keys(errors).length) { %><div class="bg-error-container text-on-error-container px-3 py-2 rounded mb-4 text-sm">Please correct the highlighted fields.</div><% } %>
+      <form action="/alumni/join" method="post" class="space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Name *</label><input name="name" value="<%= form.name||'' %>" class="w-full px-3 py-2 rounded border <%= errors.name?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Email *</label><input type="email" name="email" value="<%= form.email||'' %>" class="w-full px-3 py-2 rounded border <%= errors.email?'border-error':'border-outline' %> outline-none focus:border-primary" /></div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Grad year</label><input name="graduation_year" type="number" value="<%= form.graduation_year||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          <div class="sm:col-span-2"><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Programme</label><input name="program" value="<%= form.program||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Role</label><input name="role" value="<%= form.role||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Organisation</label><input name="organisation" value="<%= form.organisation||'' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+        </div>
+        <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Short bio</label><textarea name="bio" rows="3" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= form.bio||'' %></textarea></div>
+        <label class="flex items-center gap-2"><input type="checkbox" name="is_mentor" class="rounded text-secondary" /> <span class="text-sm text-on-surface-variant">I'm willing to mentor current students</span></label>
+        <button class="bg-primary text-on-primary px-6 py-3 rounded font-bold">Join the network</button>
+      </form>
+    </div>
+  </div>
+</section>

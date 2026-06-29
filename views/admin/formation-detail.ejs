@@ -1,0 +1,44 @@
+<div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+  <a href="/admin/formation" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> All groups</a>
+  <a href="/admin/formation/<%= group.id %>/edit" class="inline-flex items-center gap-1 border border-outline text-primary px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">edit</span> Edit group</a>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1 space-y-5">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <div class="flex items-center gap-2 mb-3"><h1 class="font-headline text-headline-sm text-primary"><%= group.name %></h1><%- include('_badge', { status: group.active ? 'active' : 'inactive' }) %></div>
+      <dl class="divide-y divide-outline-variant/40 text-sm">
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Facilitator</dt><dd class="font-bold text-primary"><%= group.fac_first ? (group.fac_first+' '+group.fac_last) : '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Meets</dt><dd class="font-bold text-primary"><%= group.meeting_day %><%= group.meeting_time ? (' · '+group.meeting_time) : '' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Members</dt><dd class="font-bold text-primary"><%= members.length %><% if (group.capacity) { %> / <%= group.capacity %><% } %></dd></div>
+      </dl>
+      <% if (group.description) { %><p class="text-on-surface-variant text-sm mt-3"><%= group.description %></p><% } %>
+    </div>
+
+    <!-- Add a student -->
+    <form action="/admin/formation/<%= group.id %>/add" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="field-label">Add a student</label>
+      <div class="flex gap-2">
+        <select name="student_id" class="field flex-1">
+          <option value="">Select a student…</option>
+          <% available.forEach(function(s){ %><option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %></option><% }) %>
+        </select>
+        <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Add</button>
+      </div>
+      <% if (!available.length) { %><p class="text-on-surface-variant text-xs mt-2">All students are already assigned to a group.</p><% } %>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Members <span class="text-on-surface-variant font-normal">(<%= members.length %>)</span></h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!members.length) { %><p class="p-4 text-on-surface-variant text-sm">No members yet. Add students individually, or use <strong>Auto-assign</strong> on the groups page.</p><% } %>
+      <% members.forEach(function(m){ %>
+      <div class="flex items-center justify-between p-4">
+        <div><p class="font-bold text-primary"><%= m.first_name %> <%= m.last_name %></p><p class="text-sm text-on-surface-variant"><%= m.email %></p></div>
+        <form action="/admin/formation/members/<%= m.member_id %>/remove" method="post" onsubmit="return confirm('Remove this student from the group?');"><button class="text-on-surface-variant hover:text-error material-symbols-outlined" title="Remove">person_remove</button></form>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

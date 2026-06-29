@@ -1,0 +1,236 @@
+<section class="relative bg-primary text-on-primary py-14 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="/img/generated/gdcu-student-admissions-video.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/78"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-primary/65 via-primary/78 to-primary/88"></div>
+  <div class="relative max-w-3xl mx-auto text-center">
+    <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest">Apply Now</p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-3">Begin Your Application</h1>
+    <p class="text-on-primary-container">A complete application helps us understand your calling. It takes about 10–15 minutes. A non-refundable application fee is payable on submission<% if (stripePublishableKey) { %> via secure card payment<% } %>.</p>
+  </div>
+</section>
+
+<section class="py-12 bg-surface-bright">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <% function v(k){ return (form && form[k] != null) ? form[k] : ''; } %>
+    <% function err(k){ return errors && errors[k]; } %>
+    <% if (Object.keys(errors).length) { %>
+      <div class="bg-error-container border-l-4 border-error text-on-error-container px-4 py-3 mb-6 rounded">Please complete the highlighted fields below.</div>
+    <% } %>
+
+    <div id="apply-progress" class="mb-6"></div>
+
+    <form id="apply-form" novalidate action="/admissions/apply" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-10 space-y-10 shadow-sm">
+
+      <!-- 1. Personal details -->
+      <fieldset class="space-y-5">
+        <legend class="font-headline text-headline-sm text-primary">1 · Personal details</legend>
+        <p class="text-on-surface-variant text-sm -mt-2">Tell us who you are. Names should match your official ID.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+          <div>
+            <label class="field-label">Title</label>
+            <select name="title" class="field">
+              <% ['','Mr','Mrs','Ms','Miss','Dr','Rev','Pastor','Prof'].forEach(function(o){ %><option <%= v('title')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+          <div class="col-span-2 sm:col-span-3"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label class="field-label">First name *</label>
+            <input name="first_name" value="<%= v('first_name') %>" class="field <%= err('first_name') ? 'field-error' : '' %>" />
+            <% if (err('first_name')) { %><p class="field-msg"><%= err('first_name') %></p><% } %>
+          </div>
+          <div>
+            <label class="field-label">Middle name</label>
+            <input name="middle_name" value="<%= v('middle_name') %>" class="field" />
+          </div>
+          <div>
+            <label class="field-label">Last name *</label>
+            <input name="last_name" value="<%= v('last_name') %>" class="field <%= err('last_name') ? 'field-error' : '' %>" />
+            <% if (err('last_name')) { %><p class="field-msg"><%= err('last_name') %></p><% } %>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label class="field-label">Preferred name</label>
+            <input name="preferred_name" value="<%= v('preferred_name') %>" placeholder="What we should call you" class="field" />
+          </div>
+          <div>
+            <label class="field-label">Date of birth *</label>
+            <input type="date" name="date_of_birth" value="<%= v('date_of_birth') %>" class="field <%= err('date_of_birth') ? 'field-error' : '' %>" />
+            <% if (err('date_of_birth')) { %><p class="field-msg"><%= err('date_of_birth') %></p><% } %>
+          </div>
+          <div>
+            <label class="field-label">Gender</label>
+            <select name="gender" class="field">
+              <% ['','Female','Male','Prefer not to say'].forEach(function(o){ %><option <%= v('gender')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">Nationality *</label>
+            <input name="nationality" value="<%= v('nationality') %>" class="field <%= err('nationality') ? 'field-error' : '' %>" />
+            <% if (err('nationality')) { %><p class="field-msg"><%= err('nationality') %></p><% } %>
+          </div>
+          <div>
+            <label class="field-label">Country of residence *</label>
+            <input name="country" value="<%= v('country') %>" class="field <%= err('country') ? 'field-error' : '' %>" />
+            <% if (err('country')) { %><p class="field-msg"><%= err('country') %></p><% } %>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 2. Contact & address -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">2 · Contact &amp; address</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">Email *</label>
+            <input type="email" name="email" value="<%= v('email') %>" class="field <%= err('email') ? 'field-error' : '' %>" />
+            <% if (err('email')) { %><p class="field-msg"><%= err('email') %></p><% } %>
+          </div>
+          <div>
+            <label class="field-label">Phone *</label>
+            <input name="phone" value="<%= v('phone') %>" placeholder="Include country code" class="field <%= err('phone') ? 'field-error' : '' %>" />
+            <% if (err('phone')) { %><p class="field-msg"><%= err('phone') %></p><% } %>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div><label class="field-label">Address line 1</label><input name="address_line1" value="<%= v('address_line1') %>" class="field" /></div>
+          <div><label class="field-label">Address line 2</label><input name="address_line2" value="<%= v('address_line2') %>" class="field" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div><label class="field-label">City / Town</label><input name="city" value="<%= v('city') %>" class="field" /></div>
+          <div><label class="field-label">State / Region</label><input name="region" value="<%= v('region') %>" class="field" /></div>
+          <div><label class="field-label">Postal code</label><input name="postal_code" value="<%= v('postal_code') %>" class="field" /></div>
+        </div>
+      </fieldset>
+
+      <!-- 3. Programme choice -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">3 · Programme choice</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">Programme *</label>
+            <select name="program_id" class="field <%= err('program_id') ? 'field-error' : '' %>">
+              <option value="">— Select a programme —</option>
+              <% programs.forEach(function(p){ %><option value="<%= p.id %>" <%= String(selectedProgram)===String(p.id) ? 'selected' : '' %>><%= p.title %> (<%= p.level %>)</option><% }) %>
+            </select>
+            <% if (err('program_id')) { %><p class="field-msg"><%= err('program_id') %></p><% } %>
+          </div>
+          <div>
+            <label class="field-label">Preferred intake</label>
+            <select name="intake" class="field">
+              <% ['September 2026','January 2027','September 2027'].forEach(function(o){ %><option <%= v('intake')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 4. Education history -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">4 · Education history</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">Highest qualification *</label>
+            <input name="prev_qualification" value="<%= v('prev_qualification') %>" placeholder="e.g. Bachelor of Arts, Diploma" class="field <%= err('prev_qualification') ? 'field-error' : '' %>" />
+            <% if (err('prev_qualification')) { %><p class="field-msg"><%= err('prev_qualification') %></p><% } %>
+          </div>
+          <div><label class="field-label">Institution</label><input name="prev_institution" value="<%= v('prev_institution') %>" class="field" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div><label class="field-label">Grade / classification</label><input name="prev_grade" value="<%= v('prev_grade') %>" class="field" /></div>
+          <div><label class="field-label">Year completed</label><input name="prev_year" value="<%= v('prev_year') %>" placeholder="e.g. 2021" class="field" /></div>
+          <div>
+            <label class="field-label">English proficiency</label>
+            <select name="english_proficiency" class="field">
+              <% ['','Native speaker','Fluent','Intermediate','IELTS/TOEFL certified','Other'].forEach(function(o){ %><option <%= v('english_proficiency')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 5. Experience & background -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">5 · Experience &amp; background</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label class="field-label">Employment status</label>
+            <select name="employment_status" class="field">
+              <% ['','Employed','Self-employed','In ministry','Student','Not currently working','Retired'].forEach(function(o){ %><option <%= v('employment_status')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+          <div><label class="field-label">Occupation</label><input name="occupation" value="<%= v('occupation') %>" class="field" /></div>
+          <div><label class="field-label">Employer / organisation</label><input name="employer" value="<%= v('employer') %>" class="field" /></div>
+        </div>
+        <div>
+          <label class="field-label">Church / ministry involvement</label>
+          <textarea name="church_involvement" rows="3" placeholder="Your church, role and any ministry experience" class="field"><%= v('church_involvement') %></textarea>
+        </div>
+      </fieldset>
+
+      <!-- 6. Personal statement -->
+      <fieldset class="space-y-3 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">6 · Personal statement</legend>
+        <p class="text-on-surface-variant text-sm">Tell us about your calling, your goals, and why you want to study this programme at GDCU.</p>
+        <textarea name="statement" rows="7" class="field <%= err('statement') ? 'field-error' : '' %>"><%= v('statement') %></textarea>
+        <% if (err('statement')) { %><p class="field-msg"><%= err('statement') %></p><% } %>
+      </fieldset>
+
+      <!-- 7. References -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">7 · References</legend>
+        <p class="text-on-surface-variant text-sm -mt-2">Provide at least one referee (e.g. a pastor, employer or academic tutor).</p>
+        <div class="rounded-lg border border-outline-variant/60 p-4 space-y-4">
+          <p class="font-tagline text-label-sm text-secondary uppercase">Referee 1 (required)</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div>
+              <label class="field-label">Full name *</label>
+              <input name="ref1_name" value="<%= v('ref1_name') %>" class="field <%= err('ref1_name') ? 'field-error' : '' %>" />
+              <% if (err('ref1_name')) { %><p class="field-msg"><%= err('ref1_name') %></p><% } %>
+            </div>
+            <div>
+              <label class="field-label">Email *</label>
+              <input type="email" name="ref1_email" value="<%= v('ref1_email') %>" class="field <%= err('ref1_email') ? 'field-error' : '' %>" />
+              <% if (err('ref1_email')) { %><p class="field-msg"><%= err('ref1_email') %></p><% } %>
+            </div>
+            <div><label class="field-label">Relationship</label><input name="ref1_relationship" value="<%= v('ref1_relationship') %>" placeholder="e.g. Pastor" class="field" /></div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-outline-variant/60 p-4 space-y-4">
+          <p class="font-tagline text-label-sm text-on-surface-variant uppercase">Referee 2 (optional)</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div><label class="field-label">Full name</label><input name="ref2_name" value="<%= v('ref2_name') %>" class="field" /></div>
+            <div><label class="field-label">Email</label><input type="email" name="ref2_email" value="<%= v('ref2_email') %>" class="field" /></div>
+            <div><label class="field-label">Relationship</label><input name="ref2_relationship" value="<%= v('ref2_relationship') %>" class="field" /></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 8. Finishing up -->
+      <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+        <legend class="font-headline text-headline-sm text-primary">8 · Finishing up</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">How did you hear about us?</label>
+            <select name="how_heard" class="field">
+              <% ['','Search engine','Social media','A friend or family member','My church','An alumnus','Event or webinar','Other'].forEach(function(o){ %><option <%= v('how_heard')===o?'selected':'' %>><%= o %></option><% }) %>
+            </select>
+          </div>
+        </div>
+        <label class="flex items-start gap-3"><input type="checkbox" name="sponsorship_interest" class="mt-1 rounded text-secondary" /> <span class="text-sm text-on-surface-variant">I would like information about scholarships, bursaries or diaspora sponsorship.</span></label>
+        <label class="flex items-start gap-3"><input type="checkbox" name="consent" class="mt-1 rounded text-secondary" /> <span class="text-sm text-on-surface-variant">I confirm the information provided is true and complete, and I agree to the <a href="#" class="text-secondary font-bold">terms</a> and <a href="#" class="text-secondary font-bold">privacy policy</a>. *</span></label>
+        <% if (err('consent')) { %><p class="field-msg"><%= err('consent') %></p><% } %>
+      </fieldset>
+
+      <div data-submit-row class="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-outline-variant/40 pt-6">
+        <p class="text-on-surface-variant text-sm">Fields marked * are required. Your progress is saved automatically on this device.</p>
+        <button class="bg-primary text-on-primary px-10 py-3 rounded font-bold hover:opacity-90 active:scale-95 transition-all w-full sm:w-auto">
+          <% if (stripePublishableKey) { %>Submit &amp; Pay Fee<% } else { %>Submit Application<% } %>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+<script src="/js/apply-wizard.js?v=<%= assetVersion %>"></script>

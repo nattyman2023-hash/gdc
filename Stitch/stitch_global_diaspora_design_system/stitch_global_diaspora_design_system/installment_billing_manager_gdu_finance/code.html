@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recurring Installment Manager - Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .seal-watermark {
+            opacity: 0.03;
+            pointer-events: none;
+            position: absolute;
+            right: -5%;
+            top: 10%;
+            width: 600px;
+            z-index: 0;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#d7e2ff",
+                      "outline": "#74777e",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#fcf9f3",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#7386a8",
+                      "on-background": "#1c1c18",
+                      "tertiary-container": "#001c43",
+                      "surface-variant": "#e5e2dc",
+                      "secondary-fixed": "#ffdea9",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "surface-container-low": "#f6f3ed",
+                      "on-surface-variant": "#44474d",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "on-secondary-container": "#725000",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1c1c18",
+                      "secondary-container": "#fdc355",
+                      "inverse-on-surface": "#f3f0ea",
+                      "error": "#ba1a1a",
+                      "surface-container": "#f0eee8",
+                      "on-primary-fixed-variant": "#354766",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "secondary": "#7d5800",
+                      "inverse-surface": "#31312d",
+                      "on-secondary-fixed": "#271900",
+                      "on-primary-fixed": "#051b38",
+                      "primary": "#00030c",
+                      "surface-tint": "#4c5f7f",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "on-tertiary-container": "#6a85bb",
+                      "tertiary": "#00030d",
+                      "surface-container-highest": "#e5e2dc",
+                      "background": "#fcf9f3",
+                      "outline-variant": "#c4c6ce",
+                      "on-tertiary-fixed": "#001a40",
+                      "surface-dim": "#dcdad4",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#ebe8e2",
+                      "surface-bright": "#fcf9f3",
+                      "primary-container": "#071d3a",
+                      "primary-fixed": "#d6e3ff",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b4c7ec",
+                      "error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "container-max": "1280px",
+                      "unit": "8px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "tagline": ["Montserrat"],
+                      "headline-sm": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg-mobile": ["Playfair Display"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Playfair Display"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-surface-container-low border-r border-outline-variant w-64 hidden md:flex">
+<div class="mb-8">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-1">LMS Workspace</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Academic Session 2024</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">My Courses</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">local_library</span>
+<span class="font-label-sm text-label-sm">Library</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">grade</span>
+<span class="font-label-sm text-label-sm">Grades</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-sm text-label-sm">Schedule</span>
+</a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-semibold scale-[0.99] transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-4 space-y-1">
+<button class="w-full text-left flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</button>
+<button class="w-full text-left flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Sign Out</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 min-h-screen relative overflow-hidden pb-20">
+<!-- Visual Seal Watermark -->
+<div class="seal-watermark">
+<img alt="University Seal" data-alt="A highly detailed, intricate university seal watermark featuring a shield, a cross, and an open book. The style is classic line art, rendered in a very faint, elegant grey that blends into the ivory background of the academic web application, signifying heritage and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVnZr0d7V4K4vzfO95P3V1YjyluUuzEVSaryYZpJ63EME-vRKQ-eqbfB5sIuvI88qzyuz8Ka5mtJ33MmkoBMeA-Exbpyy2ouN3zxBTnRcgaUjpW6frk8EuZnxuYsxSeQTWT1juSWKfNOtkhUnxHBp_OFQmAyiu4fhHJbQz3FfKtUEdkyPGWozHeYi86osEivyOWgqqSDM-IfMKGrTtNt80GJNHF2eYryVf036JqreDLfYnNLNuoYkLpqSWrfZPHSbohVymVhxUKfg"/>
+</div>
+<!-- Top Header -->
+<header class="w-full px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="font-tagline text-tagline text-secondary uppercase tracking-[0.2em] mb-2 block">Financial Stewardship</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Recurring Installment Manager</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl italic">"Plan your steps, for the Lord establishes your path." — Managing your academic investment with integrity.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 bg-surface-container-high border border-outline-variant text-primary font-semibold rounded hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                    Download Statement
+                </button>
+<button class="px-8 py-3 bg-primary text-on-primary font-bold rounded shadow-sm hover:opacity-90 transition-opacity">
+                    Make Early Payment
+                </button>
+</div>
+</header>
+<!-- Bento Grid Content -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter relative z-10">
+<!-- Payment Progress Card -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-outline-variant p-8 rounded-lg shadow-[0_4px_20px_rgba(7,29,58,0.04)]">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-sm text-headline-sm text-primary">Degree Funding Progress</h3>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-tagline text-tagline rounded">65% COMPLETED</span>
+</div>
+<div class="relative w-full h-4 bg-surface-container rounded-full mb-6 overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary transition-all duration-1000 ease-out" style="width: 65%;"></div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+<div>
+<p class="font-tagline text-[12px] text-on-surface-variant uppercase mb-1">Total Tuition</p>
+<p class="font-headline-sm text-headline-sm text-primary">$48,000.00</p>
+</div>
+<div>
+<p class="font-tagline text-[12px] text-on-surface-variant uppercase mb-1">Total Paid</p>
+<p class="font-headline-sm text-headline-sm text-secondary">$31,200.00</p>
+</div>
+<div>
+<p class="font-tagline text-[12px] text-on-surface-variant uppercase mb-1">Remaining</p>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant opacity-60">$16,800.00</p>
+</div>
+</div>
+</div>
+<!-- Next Debit Card -->
+<div class="md:col-span-4 bg-primary text-on-primary p-8 rounded-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-4 opacity-80">
+<span class="material-symbols-outlined text-[20px]">event_repeat</span>
+<span class="font-tagline text-tagline">UPCOMING AUTO-DEBIT</span>
+</div>
+<h3 class="font-display-lg-mobile text-display-lg-mobile mb-2">$1,200.00</h3>
+<p class="font-body-md text-body-md opacity-90">Scheduled for <span class="font-bold">October 15, 2024</span></p>
+</div>
+<div class="mt-8 pt-6 border-t border-on-primary/20">
+<button class="flex items-center gap-2 text-secondary-fixed font-semibold hover:underline">
+<span>Reschedule or Pause</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Payment Method Card -->
+<div class="md:col-span-4 bg-surface-container-low border border-outline-variant p-6 rounded-lg">
+<div class="flex justify-between items-start mb-6">
+<h4 class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-on-surface-variant">Active Payment Method</h4>
+<button class="text-secondary hover:underline font-label-sm text-label-sm">Edit</button>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-lowest p-4 border border-outline-variant rounded">
+<div class="w-12 h-8 bg-primary-container rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">credit_card</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-primary">VISA •••• 8821</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant">Expires 12/26</p>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-2 p-3 bg-secondary-container/10 border border-secondary/20 rounded">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified_user</span>
+<p class="font-label-sm text-[11px] text-on-secondary-container">Encrypted and secured by GDU Finance.</p>
+</div>
+</div>
+<!-- Past Invoices List -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Payment History</h3>
+<button class="font-label-sm text-label-sm text-secondary font-semibold hover:underline">View All</button>
+</div>
+<div class="divide-y divide-outline-variant/30">
+<!-- History Row 1 -->
+<div class="p-6 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-primary">September Installment</p>
+<p class="font-label-sm text-[12px] text-on-surface-variant">Paid on Sep 15, 2024</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<span class="font-label-sm text-label-sm font-bold text-primary">$1,200.00</span>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="font-label-sm text-[12px]">PDF</span>
+</button>
+</div>
+</div>
+<!-- History Row 2 -->
+<div class="p-6 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-primary">August Installment</p>
+<p class="font-label-sm text-[12px] text-on-surface-variant">Paid on Aug 15, 2024</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<span class="font-label-sm text-label-sm font-bold text-primary">$1,200.00</span>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="font-label-sm text-[12px]">PDF</span>
+</button>
+</div>
+</div>
+<!-- History Row 3 -->
+<div class="p-6 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-primary">July Installment</p>
+<p class="font-label-sm text-[12px] text-on-surface-variant">Paid on Jul 15, 2024</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<span class="font-label-sm text-label-sm font-bold text-primary">$1,200.00</span>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="font-label-sm text-[12px]">PDF</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Scripture/Inspiration Block -->
+<div class="md:col-span-12 py-12 text-center">
+<div class="w-24 h-px bg-secondary-container mx-auto mb-6"></div>
+<p class="font-headline-md italic text-primary max-w-3xl mx-auto px-4">
+                    "Honor the Lord with your wealth, with the firstfruits of all your crops; then your barns will be filled to overflowing."
+                </p>
+<p class="font-tagline text-tagline text-secondary mt-4">— Proverbs 3:9-10</p>
+<div class="w-24 h-px bg-secondary-container mx-auto mt-6"></div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-12 px-margin-mobile md:px-margin-desktop mt-auto border-t border-on-primary-fixed-variant/20 bg-primary">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+<div class="md:w-1/3">
+<h2 class="font-display-lg text-[32px] text-on-primary mb-2">Global Diaspora University</h2>
+<p class="font-tagline text-tagline text-on-primary-fixed-variant opacity-80 uppercase">Commissioned for a Higher Purpose.</p>
+</div>
+<div class="flex flex-wrap gap-x-8 gap-y-4 md:w-2/3 justify-start md:justify-end">
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accessibility</a>
+<a class="font-body-md text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-12 pt-8 border-t border-on-primary-fixed-variant/20">
+<p class="font-body-md text-on-primary-fixed-variant opacity-60 text-center md:text-left">
+                © 2024 Global Diaspora University. All Rights Reserved. Committed to Excellence in Christian Education.
+            </p>
+</div>
+</footer>
+<!-- Simple Interactivity -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Button interaction feedback
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousedown', () => btn.classList.add('opacity-80'));
+                btn.addEventListener('mouseup', () => btn.classList.remove('opacity-80'));
+                btn.addEventListener('mouseleave', () => btn.classList.remove('opacity-80'));
+            });
+
+            // Smooth entrance animation for grid items
+            const gridItems = document.querySelectorAll('section > div');
+            gridItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

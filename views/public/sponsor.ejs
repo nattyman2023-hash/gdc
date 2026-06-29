@@ -1,0 +1,43 @@
+<% const target = sponsorship.target_amount ? Number(sponsorship.target_amount) : 0; const pct = target ? Math.min(100, Math.round((raised/target)*100)) : 0; %>
+<section class="py-16 bg-surface-bright min-h-[70vh]">
+  <div class="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="text-center mb-8">
+      <span class="material-symbols-outlined text-secondary text-5xl" style="font-variation-settings:'FILL' 1;">volunteer_activism</span>
+      <p class="font-tagline text-tagline text-secondary uppercase tracking-widest mt-2">Diaspora Sponsorship</p>
+      <h1 class="font-display text-display-lg-mobile md:text-headline-md text-primary mt-2">Sponsor <%= sponsorship.first_name %>'s Education</h1>
+      <% if (sponsorship.message) { %><p class="font-body text-body-lg text-on-surface-variant italic max-w-2xl mx-auto mt-4">"<%= sponsorship.message %>"</p><% } %>
+    </div>
+
+    <% if (target) { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 mb-6">
+      <div class="flex justify-between text-sm mb-2"><span class="font-bold text-primary"><%= formatMoney(raised, sponsorship.currency) %> raised</span><span class="text-on-surface-variant">Goal: <%= formatMoney(target, sponsorship.currency) %></span></div>
+      <div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= pct %>%"></div></div>
+    </div>
+    <% } %>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+        <h2 class="font-headline text-headline-sm text-primary mb-4">Make a contribution</h2>
+        <form action="/sponsor/<%= sponsorship.token %>/pledge" method="post" class="space-y-4">
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Your name *</label><input name="sponsor_name" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Email</label><input type="email" name="sponsor_email" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Amount (£) *</label><input name="amount" type="number" step="0.01" min="1" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+          <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Message of encouragement</label><textarea name="message" rows="2" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea></div>
+          <button class="w-full bg-secondary text-on-secondary px-6 py-3 rounded font-bold">Contribute<% if (stripePublishableKey) { %> securely<% } %></button>
+        </form>
+      </div>
+      <div>
+        <h2 class="font-headline text-headline-sm text-primary mb-4">Recent supporters</h2>
+        <div class="space-y-2">
+          <% if (!supporters.length) { %><p class="text-on-surface-variant text-sm">Be the first to contribute!</p><% } %>
+          <% supporters.forEach(function(s){ %>
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+            <div class="flex justify-between"><span class="font-bold text-primary text-sm"><%= s.sponsor_name %></span><span class="font-bold text-secondary text-sm"><%= formatMoney(s.amount, sponsorship.currency) %></span></div>
+            <% if (s.message) { %><p class="text-xs text-on-surface-variant italic mt-1">"<%= s.message %>"</p><% } %>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

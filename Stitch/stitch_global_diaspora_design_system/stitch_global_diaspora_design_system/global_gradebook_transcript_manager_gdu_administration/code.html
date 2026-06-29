@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Diaspora University | Gradebook Administration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#44474d",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-secondary-container": "#725000",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e5e2dc",
+                        "secondary": "#7d5800",
+                        "primary": "#00030c",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#ebe8e2",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "surface-container": "#f0eee8",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-secondary-fixed": "#271900",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#071d3a",
+                        "tertiary-container": "#001c43",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e5e2dc",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "surface": "#fcf9f3",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline-variant": "#c4c6ce",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "background": "#fcf9f3",
+                        "surface-bright": "#fcf9f3",
+                        "surface-container-low": "#f6f3ed",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-tint": "#4c5f7f",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-primary-fixed-variant": "#354766",
+                        "surface-dim": "#dcdad4",
+                        "secondary-container": "#fdc355",
+                        "outline": "#74777e",
+                        "on-primary-container": "#7386a8",
+                        "tertiary": "#00030d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "container-max": "1280px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "tagline": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .academic-outline {
+            border: 1px solid rgba(7, 29, 58, 0.1);
+        }
+        .gold-accent-border {
+            border: 1px solid #7d5800;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="mb-8 flex flex-col items-center">
+<div class="w-16 h-16 bg-primary flex items-center justify-center rounded-lg mb-4">
+<span class="material-symbols-outlined text-on-primary text-4xl" data-icon="school">school</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight text-center">Administration</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Academic Affairs</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-sm text-label-sm">Student Directory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Curriculum</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-sm text-label-sm">Financials</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm">Faculty Registry</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">System Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-2">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-lg font-bold text-label-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Registration
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-30 bg-surface h-20 border-b border-outline-variant flex justify-between items-center px-margin-desktop shadow-sm">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Global Diaspora University</h1>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<nav class="hidden md:flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Directory</a>
+<a class="font-label-sm text-label-sm text-primary border-b-2 border-secondary-container font-bold pb-1 transition-all duration-150" href="#">Records</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Faculty</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container-low border-b border-primary text-body-md py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-0" placeholder="Search Global Records..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="account_balance">account_balance</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="help_outline">help_outline</span></button>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant">
+<img alt="Administrator" class="w-full h-full object-cover" data-alt="A professional portrait of a senior university administrator, an older man with gray hair and glasses, wearing a tailored navy suit and white shirt. The background is a soft-focus academic office with mahogany bookshelves and a warm, prestigious atmosphere. The lighting is flattering and high-key, conveying authority and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQAMcaa_Tzeof9_lOLHZzFGfW74ZwZCzRnDA73gMOhxkFl0txJd7lgSO1VKGDOU8nvKFG0rSJ9xfGFOmL-tbcFEmTLIMvm5KeTWFuUbbZrTqoJ0iiqHGFDklNdyaTbeTnOgkehZYpswv2vN7K-a0DepelkHE1cPHs28gXDATBuGR_pDuQk61Rm1bf6LlavBHSXJVCCl5JLpD_ZPuSgr2RqhxmP201qsiO-rG6owON2v1qU62Exi-pXiyZ_ZE-UOh_OMX1chRTD-_4"/>
+</div>
+</div>
+</header>
+<!-- Gradebook Dashboard Content -->
+<div class="flex-1 p-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Page Header & Actions -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="font-tagline text-tagline bg-secondary-container text-on-secondary-container px-3 py-1 uppercase rounded-sm">Confidential</span>
+<span class="font-tagline text-tagline text-on-surface-variant">Academic Year 2024-2025</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-primary">Global Administrative Gradebook</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 italic font-display-lg">Empowering excellence through detailed academic oversight.</p>
+</div>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center bg-surface-container border border-outline-variant px-4 py-2 rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant mr-3 uppercase tracking-tighter">Mass Grade Release</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-sm font-bold text-label-sm flex items-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+                        Export Master Data
+                    </button>
+</div>
+</section>
+<!-- Filters & Bento Insights -->
+<div class="grid grid-cols-12 gap-gutter mb-8">
+<!-- Filters Panel -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low p-6 rounded-lg academic-outline">
+<h3 class="font-label-sm text-label-sm uppercase tracking-widest text-primary mb-4 border-b border-outline-variant pb-2">Filter Records</h3>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Department</label>
+<select class="w-full bg-surface border-none border-b border-primary text-body-md py-2 focus:ring-0">
+<option>All Departments</option>
+<option>Theology & Ministry</option>
+<option>Global Leadership</option>
+<option>Diaspora Studies</option>
+<option>Sustainable Economics</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Cohort Year</label>
+<select class="w-full bg-surface border-none border-b border-primary text-body-md py-2 focus:ring-0">
+<option>2024</option>
+<option>2023</option>
+<option>2022</option>
+</select>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Status</label>
+<select class="w-full bg-surface border-none border-b border-primary text-body-md py-2 focus:ring-0">
+<option>Active</option>
+<option>On Leave</option>
+<option>Alumni</option>
+</select>
+</div>
+</div>
+<button class="w-full gold-accent-border text-secondary font-bold py-3 text-label-sm hover:bg-secondary-fixed transition-colors mt-2">Apply Parameters</button>
+</div>
+</div>
+<!-- Stats Bento -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface p-6 rounded-lg academic-outline flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary" data-icon="analytics">analytics</span>
+<div>
+<p class="font-display-lg text-headline-md text-primary">3.82</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Global Avg GPA</p>
+</div>
+</div>
+<div class="bg-surface p-6 rounded-lg academic-outline flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary" data-icon="pending_actions">pending_actions</span>
+<div>
+<p class="font-display-lg text-headline-md text-primary">12</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Pending Reviews</p>
+</div>
+</div>
+<div class="bg-secondary-container p-6 rounded-lg flex flex-col justify-between">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="verified">verified</span>
+<div>
+<p class="font-display-lg text-headline-md text-on-secondary-container">94%</p>
+<p class="font-label-sm text-label-sm text-on-secondary-container uppercase">Completion Rate</p>
+</div>
+</div>
+<div class="bg-primary-container p-6 rounded-lg flex flex-col justify-between">
+<span class="material-symbols-outlined text-inverse-primary" data-icon="public">public</span>
+<div>
+<p class="font-display-lg text-headline-md text-white">42</p>
+<p class="font-label-sm text-label-sm text-on-primary-container uppercase">Active Cohorts</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Gradebook Table Container -->
+<div class="bg-surface rounded-lg academic-outline overflow-hidden shadow-sm mb-12">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<h3 class="font-headline-sm text-headline-sm text-primary">Student Records Master List</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container transition-colors rounded-sm"><span class="material-symbols-outlined" data-icon="print">print</span></button>
+<button class="p-2 hover:bg-surface-container transition-colors rounded-sm"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+</div>
+<div class="overflow-x-auto hide-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Student Name</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Program ID</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mod 01</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mod 02</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mod 03</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Current GPA</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-sm bg-primary text-white flex items-center justify-center font-bold text-xs">AA</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-primary">Amara Adebayo</p>
+<p class="text-[11px] text-on-surface-variant uppercase font-medium">Lagos Cohort '24</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-label-sm text-label-sm text-on-surface-variant">THL-GL-2024</td>
+<td class="px-6 py-5"><span class="font-bold text-primary">94</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">88</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">91</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5 text-center">
+<span class="inline-block bg-secondary-container text-on-secondary-container font-bold px-3 py-1 rounded-sm text-body-md">3.91</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-secondary font-bold text-label-sm hover:underline flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                                        Transcript
+                                    </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-sm bg-surface-container-highest text-primary flex items-center justify-center font-bold text-xs">JS</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-primary">Julian Schmidt</p>
+<p class="text-[11px] text-on-surface-variant uppercase font-medium">Berlin Cohort '24</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-label-sm text-label-sm text-on-surface-variant">GLD-INT-2023</td>
+<td class="px-6 py-5"><span class="font-bold text-primary">82</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">85</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5 font-italic text-on-error italic">Incomplete</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-block bg-surface-container-high text-on-surface-variant font-bold px-3 py-1 rounded-sm text-body-md">3.40</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-secondary font-bold text-label-sm hover:underline flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                                        Transcript
+                                    </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-sm bg-primary text-white flex items-center justify-center font-bold text-xs">CY</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-primary">Chen Yu</p>
+<p class="text-[11px] text-on-surface-variant uppercase font-medium">Shanghai Cohort '24</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-label-sm text-label-sm text-on-surface-variant">THL-MIS-2024</td>
+<td class="px-6 py-5"><span class="font-bold text-primary">98</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">96</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">99</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5 text-center">
+<span class="inline-block bg-secondary-container text-on-secondary-container font-bold px-3 py-1 rounded-sm text-body-md">4.00</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-secondary font-bold text-label-sm hover:underline flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                                        Transcript
+                                    </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-sm bg-surface-container-highest text-primary flex items-center justify-center font-bold text-xs">MR</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-primary">Mateo Rodriguez</p>
+<p class="text-[11px] text-on-surface-variant uppercase font-medium">Lima Cohort '23</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-label-sm text-label-sm text-on-surface-variant">ECO-GL-2023</td>
+<td class="px-6 py-5"><span class="font-bold text-primary">76</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">79</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5"><span class="font-bold text-primary">81</span><span class="text-on-surface-variant text-xs">/100</span></td>
+<td class="px-6 py-5 text-center">
+<span class="inline-block bg-surface-container-high text-on-surface-variant font-bold px-3 py-1 rounded-sm text-body-md">3.12</span>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-secondary font-bold text-label-sm hover:underline flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+                                        Transcript
+                                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Showing 1-4 of 1,248 Records Across Global Cohorts</p>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface academic-outline text-label-sm font-bold disabled:opacity-50" disabled="">Previous</button>
+<button class="px-4 py-2 bg-surface academic-outline text-label-sm font-bold">Next</button>
+</div>
+</div>
+</div>
+<!-- Scripture Callout Footer Section -->
+<section class="max-w-3xl mx-auto text-center mb-16">
+<div class="w-24 h-px bg-secondary mx-auto mb-6"></div>
+<p class="font-headline-md text-headline-md italic text-primary leading-relaxed">
+                    "And whatever you do, do it heartily, as to the Lord and not to men, knowing that from the Lord you will receive the reward of the inheritance."
+                </p>
+<p class="font-tagline text-tagline text-secondary uppercase tracking-[0.2em] mt-4">— Colossians 3:23-24</p>
+<div class="w-24 h-px bg-secondary mx-auto mt-6"></div>
+</section>
+</div>
+<!-- Site Footer -->
+<footer class="w-full py-12 px-margin-desktop bg-surface border-t border-outline-variant mt-auto">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-tagline text-tagline text-primary uppercase">Global Diaspora University</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2 text-center md:text-left">
+                        © 2024 Global Diaspora University. All Rights Reserved. Established for Divine Purpose.
+                    </p>
+</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Institutional Accreditation</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Logic for selecting a student would go here
+            });
+        });
+
+        // Search bar animation focus
+        const searchInput = document.querySelector('header input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.classList.remove('w-64');
+            searchInput.classList.add('w-80');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.classList.remove('w-80');
+            searchInput.classList.add('w-64');
+        });
+    </script>
+</body></html>

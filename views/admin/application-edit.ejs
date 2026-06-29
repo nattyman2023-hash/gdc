@@ -1,0 +1,102 @@
+<% var isNew = typeof isNew !== 'undefined' ? isNew : false; %>
+<a href="<%= isNew ? '/admin/applications' : '/admin/applications/'+application.id %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= isNew ? 'All applications' : 'Back to application' %></a>
+<h1 class="font-headline text-headline-md text-primary mb-6"><%= isNew ? 'New Application' : 'Edit Application' %> <% if (!isNew) { %><span class="font-mono text-base text-on-surface-variant"><%= application.reference %></span><% } %></h1>
+
+<% function v(k){ return (application && application[k] != null) ? application[k] : ''; } %>
+<form action="<%= isNew ? '/admin/applications' : '/admin/applications/'+application.id+'/edit' %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 max-w-3xl space-y-8">
+
+  <fieldset class="space-y-5">
+    <legend class="font-headline text-headline-sm text-primary">Personal</legend>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+      <div><label class="field-label">Title</label>
+        <select name="title" class="field"><% ['','Mr','Mrs','Ms','Miss','Dr','Rev','Pastor','Prof'].forEach(function(o){ %><option <%= v('title')===o?'selected':'' %>><%= o %></option><% }) %></select>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">First name *</label><input name="first_name" required value="<%= v('first_name') %>" class="field" /></div>
+      <div><label class="field-label">Middle name</label><input name="middle_name" value="<%= v('middle_name') %>" class="field" /></div>
+      <div><label class="field-label">Last name *</label><input name="last_name" required value="<%= v('last_name') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">Preferred name</label><input name="preferred_name" value="<%= v('preferred_name') %>" class="field" /></div>
+      <div><label class="field-label">Date of birth</label><input type="date" name="date_of_birth" value="<%= v('date_of_birth') ? String(v('date_of_birth')).slice(0,10) : '' %>" class="field" /></div>
+      <div><label class="field-label">Gender</label>
+        <select name="gender" class="field"><% ['','Female','Male','Prefer not to say'].forEach(function(o){ %><option <%= v('gender')===o?'selected':'' %>><%= o %></option><% }) %></select>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Nationality</label><input name="nationality" value="<%= v('nationality') %>" class="field" /></div>
+      <div><label class="field-label">Country of residence</label><input name="country" value="<%= v('country') %>" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-6">
+    <legend class="font-headline text-headline-sm text-primary">Contact &amp; address</legend>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Email *</label><input type="email" name="email" required value="<%= v('email') %>" class="field" /></div>
+      <div><label class="field-label">Phone</label><input name="phone" value="<%= v('phone') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Address line 1</label><input name="address_line1" value="<%= v('address_line1') %>" class="field" /></div>
+      <div><label class="field-label">Address line 2</label><input name="address_line2" value="<%= v('address_line2') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">City</label><input name="city" value="<%= v('city') %>" class="field" /></div>
+      <div><label class="field-label">Region</label><input name="region" value="<%= v('region') %>" class="field" /></div>
+      <div><label class="field-label">Postal code</label><input name="postal_code" value="<%= v('postal_code') %>" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-6">
+    <legend class="font-headline text-headline-sm text-primary">Programme &amp; education</legend>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Programme</label>
+        <select name="program_id" class="field"><option value="">—</option><% programs.forEach(function(p){ %><option value="<%= p.id %>" <%= String(v('program_id'))===String(p.id)?'selected':'' %>><%= p.title %></option><% }) %></select>
+      </div>
+      <div><label class="field-label">Intake</label><input name="intake" value="<%= v('intake') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Highest qualification</label><input name="prev_qualification" value="<%= v('prev_qualification') || v('prior_education') %>" class="field" /></div>
+      <div><label class="field-label">Institution</label><input name="prev_institution" value="<%= v('prev_institution') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">Grade</label><input name="prev_grade" value="<%= v('prev_grade') %>" class="field" /></div>
+      <div><label class="field-label">Year</label><input name="prev_year" value="<%= v('prev_year') %>" class="field" /></div>
+      <div><label class="field-label">English</label><input name="english_proficiency" value="<%= v('english_proficiency') %>" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-6">
+    <legend class="font-headline text-headline-sm text-primary">Experience &amp; references</legend>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">Employment</label><input name="employment_status" value="<%= v('employment_status') %>" class="field" /></div>
+      <div><label class="field-label">Occupation</label><input name="occupation" value="<%= v('occupation') %>" class="field" /></div>
+      <div><label class="field-label">Employer</label><input name="employer" value="<%= v('employer') %>" class="field" /></div>
+    </div>
+    <div><label class="field-label">Church / ministry involvement</label><textarea name="church_involvement" rows="2" class="field"><%= v('church_involvement') %></textarea></div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">Referee 1 name</label><input name="ref1_name" value="<%= v('ref1_name') %>" class="field" /></div>
+      <div><label class="field-label">Referee 1 email</label><input name="ref1_email" value="<%= v('ref1_email') %>" class="field" /></div>
+      <div><label class="field-label">Relationship</label><input name="ref1_relationship" value="<%= v('ref1_relationship') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div><label class="field-label">Referee 2 name</label><input name="ref2_name" value="<%= v('ref2_name') %>" class="field" /></div>
+      <div><label class="field-label">Referee 2 email</label><input name="ref2_email" value="<%= v('ref2_email') %>" class="field" /></div>
+      <div><label class="field-label">Relationship</label><input name="ref2_relationship" value="<%= v('ref2_relationship') %>" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-6">
+    <legend class="font-headline text-headline-sm text-primary">Statement &amp; other</legend>
+    <div><label class="field-label">Personal statement</label><textarea name="statement" rows="6" class="field"><%= v('statement') %></textarea></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">How they heard</label><input name="how_heard" value="<%= v('how_heard') %>" class="field" /></div>
+    </div>
+    <label class="flex items-center gap-2"><input type="checkbox" name="sponsorship_interest" <%= application.sponsorship_interest ? 'checked' : '' %> class="rounded text-secondary" /> <span class="text-sm text-on-surface-variant">Interested in funding / sponsorship</span></label>
+  </fieldset>
+
+  <div class="flex gap-3 pt-2 border-t border-outline-variant/40">
+    <button class="bg-primary text-on-primary px-6 py-2.5 rounded font-bold"><%= isNew ? 'Create application' : 'Save changes' %></button>
+    <a href="<%= isNew ? '/admin/applications' : '/admin/applications/'+application.id %>" class="px-6 py-2.5 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "surface-variant": "#e5e2dc",
+                        "surface": "#fcf9f3",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary": "#7d5800",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "on-tertiary-fixed": "#001a40",
+                        "outline": "#74777e",
+                        "secondary-fixed": "#ffdea9",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "primary-container": "#071d3a",
+                        "surface-container-high": "#ebe8e2",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-primary-container": "#7386a8",
+                        "tertiary-fixed": "#d7e2ff",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "on-tertiary-container": "#6a85bb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "inverse-on-surface": "#f3f0ea",
+                        "background": "#fcf9f3",
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed": "#051b38",
+                        "tertiary-container": "#001c43",
+                        "on-background": "#1c1c18",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-surface-variant": "#44474d",
+                        "on-error": "#ffffff",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "surface-container": "#f0eee8",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#00030d",
+                        "surface-bright": "#fcf9f3",
+                        "secondary-container": "#fdc355",
+                        "inverse-surface": "#31312d",
+                        "outline-variant": "#c4c6ce",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "tagline": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .academic-border {
+            border: 1px solid rgba(125, 88, 0, 0.2);
+        }
+        .gold-accent {
+            color: #7d5800;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary">Global Diaspora University</span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Admissions</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Programs</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Mission</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Spirituality</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">help_outline</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded font-label-sm text-label-sm uppercase tracking-wider hover:opacity-80 transition-opacity">
+                Student Portal
+            </button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional studio headshot of a mature university student of diverse heritage, wearing a clean white shirt. The background is a soft-focus library with leather-bound books and warm, classic ambient lighting. The overall mood is academic, serious, and focused, aligning with the Global Diaspora University's prestigious and traditional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYTteDhVJB94gABiGm5bJudj-6Hldn4lL53NT8mPjCP92y4kq9AIDepUHLj6CWs6LWGpYFsBLP0FxlgGEFu7trHcBa5f97slfulEdv-DEQrox5cOJtY5z7p_bSmyLGpcI8oKLBWvM9O9FpEvEz1h6w7U0EUsvJwzCEvYg4qbCt_BRVeJZQCPIgugT2aOrHRbZkOR29z3mGVOBObPTSKStZ55XtR-X6cEHsclzY---AK8Odxj4U3E_8p9_PESpvlj7Ed_dMQJDzfIg"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-80px)] flex flex-col p-4 z-40 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="mb-8 px-2">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h2 class="font-tagline text-tagline text-secondary">Student Workspace</h2>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Academic Year 2024</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<!-- Dashboard is active -->
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">My Courses</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">video_chat</span>
+<span class="font-label-sm text-label-sm">Virtual Classroom</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-label-sm text-label-sm">Quiz Portal</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label-sm text-label-sm">Grades</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm text-label-sm">Community</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant flex flex-col gap-2">
+<button class="w-full bg-primary text-on-primary py-3 rounded mb-4 font-label-sm text-label-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                Curriculum Builder
+            </button>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-2 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-2 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 mt-20 min-h-screen">
+<!-- High Contrast Alert Banner -->
+<section class="bg-[#0B2E5F] text-white py-3 px-margin-desktop flex justify-between items-center sticky top-20 z-30 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-container animate-pulse">broadcast_on_personal</span>
+<span class="font-body-md text-body-md font-semibold tracking-wide">Next Live Session: Saturday at 10:00 AM</span>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-5 py-1.5 rounded-full font-label-sm text-label-sm font-bold uppercase tracking-widest hover:brightness-110 transition-all">
+                Register for Live Session
+            </button>
+</section>
+<div class="max-w-[1280px] mx-auto p-margin-desktop space-y-12">
+<!-- Welcome Section -->
+<section class="relative">
+<div class="absolute -left-12 top-0 opacity-10">
+<span class="material-symbols-outlined text-[120px] text-secondary">menu_book</span>
+</div>
+<div class="space-y-2">
+<span class="font-tagline text-tagline text-secondary uppercase">Academic Dashboard</span>
+<h1 class="font-display-lg text-display-lg text-primary">Welcome back, Marcus Aurelius</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Continue your journey toward spiritual and academic excellence. Your current term is 68% complete.</p>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="bento-grid">
+<!-- Active Courses (Large Slot) -->
+<div class="col-span-8 bg-surface border border-outline-variant p-8 space-y-6">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm text-primary">Active Courses</h3>
+<a class="font-label-sm text-label-sm text-secondary underline underline-offset-4" href="#">View All Curriculum</a>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<!-- Course Card 1 -->
+<div class="academic-border bg-surface-container-lowest p-6 space-y-4 hover:shadow-md transition-shadow group">
+<div class="flex justify-between">
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 text-[10px] font-tagline uppercase tracking-widest">Diploma</span>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<h4 class="font-headline-sm text-[20px] text-primary">Diploma in Church Leadership</h4>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Progress</span>
+<span>72%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[72%]"></div>
+</div>
+</div>
+<button class="w-full mt-2 bg-primary text-on-primary py-2 font-label-sm text-label-sm uppercase tracking-widest hover:opacity-90">Resume Learning</button>
+</div>
+<!-- Course Card 2 -->
+<div class="academic-border bg-surface-container-lowest p-6 space-y-4 hover:shadow-md transition-shadow group">
+<div class="flex justify-between">
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 text-[10px] font-tagline uppercase tracking-widest">Mastery</span>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<h4 class="font-headline-sm text-[20px] text-primary">Biblical Hermeneutics II</h4>
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Progress</span>
+<span>45%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[45%]"></div>
+</div>
+</div>
+<button class="w-full mt-2 bg-primary text-on-primary py-2 font-label-sm text-label-sm uppercase tracking-widest hover:opacity-90">Resume Learning</button>
+</div>
+</div>
+</div>
+<!-- Quick Stats: Upcoming Deadlines -->
+<div class="col-span-4 bg-primary-container text-on-primary p-8 space-y-6">
+<div class="flex items-center gap-3 border-b border-on-primary-fixed-variant pb-4">
+<span class="material-symbols-outlined text-secondary-fixed">event_upcoming</span>
+<h3 class="font-headline-sm text-headline-sm text-secondary-fixed">Deadlines</h3>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-14 bg-surface text-primary flex flex-col items-center justify-center rounded">
+<span class="text-[10px] font-bold uppercase">Oct</span>
+<span class="text-xl font-bold">24</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-md text-on-primary font-semibold">Final Thesis Proposal</p>
+<p class="text-[12px] text-on-primary-container">Systematic Theology • 11:59 PM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-14 bg-surface text-primary flex flex-col items-center justify-center rounded opacity-80">
+<span class="text-[10px] font-bold uppercase">Oct</span>
+<span class="text-xl font-bold">28</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-md text-on-primary font-semibold">Quiz: Greek Participles</p>
+<p class="text-[12px] text-on-primary-container">Language Studies • 5:00 PM</p>
+</div>
+</div>
+</div>
+<button class="w-full border border-secondary-fixed text-secondary-fixed py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-secondary-fixed hover:text-primary-container transition-all">
+                        Open Calendar
+                    </button>
+</div>
+<!-- Recent Grades (Left Column) -->
+<div class="col-span-6 bg-surface border border-outline-variant p-8">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6">Recent Academic Standing</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center py-3 border-b border-outline-variant">
+<div>
+<p class="font-body-md font-semibold">Introduction to Missiology</p>
+<p class="text-[12px] text-on-surface-variant">Module 4 Exam</p>
+</div>
+<div class="text-right">
+<p class="text-2xl font-bold text-secondary">A-</p>
+<p class="text-[10px] uppercase font-tagline">92/100</p>
+</div>
+</div>
+<div class="flex justify-between items-center py-3 border-b border-outline-variant">
+<div>
+<p class="font-body-md font-semibold">Global History of Christianity</p>
+<p class="text-[12px] text-on-surface-variant">Short Essay #2</p>
+</div>
+<div class="text-right">
+<p class="text-2xl font-bold text-secondary">A+</p>
+<p class="text-[10px] uppercase font-tagline">98/100</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Cloud Library Access (Right Column) -->
+<div class="col-span-6 relative overflow-hidden bg-surface-container border border-outline-variant p-8 flex flex-col justify-between">
+<div class="absolute -right-8 -bottom-8 opacity-5">
+<span class="material-symbols-outlined text-[240px]">cloud_done</span>
+</div>
+<div>
+<span class="font-tagline text-tagline text-secondary mb-2 block uppercase">Digital Repository</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Cloud Library Access</h3>
+<p class="font-body-md text-on-surface-variant mt-4 max-w-sm">Access over 50,000 digital volumes, peer-reviewed journals, and archival diaspora research papers.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary text-on-primary px-6 py-3 font-label-sm text-label-sm uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">search</span>
+                            Search Library
+                        </button>
+<button class="border border-primary text-primary px-6 py-3 font-label-sm text-label-sm uppercase tracking-widest">
+                            My Saved Refs
+                        </button>
+</div>
+</div>
+</div>
+<!-- Scripture Callout Component -->
+<section class="py-12 border-y border-outline-variant text-center max-w-4xl mx-auto">
+<div class="w-16 h-[1px] bg-secondary-container mx-auto mb-6"></div>
+<p class="font-headline-md italic text-primary leading-relaxed">
+                    "And whatever you do, in word or deed, do everything in the name of the Lord Jesus, giving thanks to God the Father through him."
+                </p>
+<p class="font-tagline text-tagline text-secondary mt-4 uppercase tracking-widest">Colossians 3:17</p>
+<div class="w-16 h-[1px] bg-secondary-container mx-auto mt-6"></div>
+</section>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col items-center gap-6 bg-primary text-on-primary">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary-fixed text-4xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-headline-sm text-headline-sm text-secondary-fixed">Global Diaspora University</span>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Compliance</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+<div class="h-px w-32 bg-on-primary-fixed-variant"></div>
+<p class="font-tagline text-tagline text-surface-variant opacity-60 text-center">
+            © 2024 Global Diaspora University. Committed to Excellence in Christian Education.
+        </p>
+</footer>
+<script>
+        // Micro-interactions for the cards
+        document.querySelectorAll('.bento-grid > div').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

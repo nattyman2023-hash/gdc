@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="bg-surface-container-low text-on-surface font-body text-body-md min-h-screen">
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-inverse-surface text-inverse-on-surface flex-col -translate-x-full lg:translate-x-0 transition-transform flex">
+    <div class="px-6 py-5 border-b border-on-surface-variant/30">
+      <a href="/admin" class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary-fixed-dim text-2xl" style="font-variation-settings:'FILL' 1;">hub</span>
+        <span class="font-headline text-headline-sm font-bold leading-tight">GDCU<br/><span class="font-tagline text-label-sm text-secondary-fixed uppercase">Staff CRM</span></span>
+      </a>
+    </div>
+    <nav class="flex-1 py-4 space-y-1 overflow-y-auto">
+      <% const groups = [
+        ['', [
+          ['dashboard','/admin','Dashboard','dashboard'],
+          ['analytics','/admin/analytics','Executive Analytics','insights','admin']
+        ]],
+        ['Admissions', [
+          ['leads','/admin/leads','Leads','contact_phone'],
+          ['applications','/admin/applications','Applications','description'],
+          ['interviews','/admin/interviews','Interviews','event_available'],
+          ['slots','/admin/interview-slots','Interview Slots','schedule'],
+          ['opendays','/admin/open-days','Open Days','co_present'],
+          ['calendar','/admin/calendar','Calendar Sync','calendar_month'],
+          ['grants','/admin/grants','Research Grants','science']
+        ]],
+        ['People', [
+          ['students','/admin/students','Students','groups'],
+          ['attendance','/admin/attendance','Attendance','fact_check'],
+          ['faculty','/admin/faculty','Faculty','co_present'],
+          ['users','/admin/users','Staff & Users','manage_accounts']
+        ]],
+        ['Spiritual Life', [
+          ['chapel','/admin/chapel','Chapel','church'],
+          ['formation','/admin/formation','Formation Groups','diversity_3']
+        ]],
+        ['Finance & Support', [
+          ['finance','/admin/finance','Finance','payments'],
+          ['support','/admin/support','Support','support_agent'],
+          ['messages','/admin/messages','Messages','inbox'],
+          ['emails','/admin/emails','Email Outbox','outgoing_mail']
+        ]],
+        ['Governance', [
+          ['payroll','/admin/payroll','Payroll','account_balance_wallet','admin'],
+          ['budget','/admin/budget','Budget','savings','admin'],
+          ['governance','/admin/governance','Compliance & Board','gavel','admin']
+        ]],
+        ['Content — Marketing', [
+          ['schedule','/admin/schedule','Academic Calendar','date_range'],
+          ['programs','/admin/content/programs','Programs','school'],
+          ['news','/admin/content/news','News','feed'],
+          ['events','/admin/content/events','Events','event'],
+          ['scholarships','/admin/content/scholarships','Scholarships','volunteer_activism'],
+          ['careers','/admin/content/careers','Careers','work'],
+          ['alumni','/admin/content/alumni','Alumni','diversity_3'],
+          ['faqs','/admin/content/faqs','FAQs','quiz'],
+          ['kb','/admin/content/kb','Knowledge Base','help_center']
+        ]],
+        ['Content — Learning', [
+          ['webinars','/admin/content/webinars','Webinars','podcasts'],
+          ['resources','/admin/content/resources','Library','local_library'],
+          ['announcements','/admin/content/announcements','Announcements','campaign']
+        ]],
+        ['LMS Management', [
+          ['lms-courses','/admin/courses','Course Builder','school'],
+          ['exams','/admin/exams','Final Exams','workspace_premium'],
+          ['essays','/admin/essays','Essay Grading','edit_note']
+        ]]
+      ]; %>
+      <%
+        function itemLink(it) {
+          var active = adminActive === it[0];
+          return '<a href="' + it[1] + '" class="flex items-center gap-3 px-6 py-2 text-body-md ' +
+            (active ? 'bg-on-surface-variant/20 border-l-4 border-secondary font-bold' : 'text-inverse-on-surface/80 hover:bg-on-surface-variant/10') +
+            '"><span class="material-symbols-outlined text-xl">' + it[3] + '</span>' + it[2] + '</a>';
+        }
+      %>
+      <% groups.forEach(function(g){ %>
+        <% const visible = g[1].filter(function(it){ return it[4] !== 'admin' || (currentUser && currentUser.role === 'admin'); }); %>
+        <% if (!visible.length) { return; } %>
+        <% if (!g[0]) { %>
+          <%# Ungrouped (Dashboard / Analytics) — always visible %>
+          <% visible.forEach(function(it){ %><%- itemLink(it) %><% }) %>
+        <% } else { %>
+          <% const isOpen = visible.some(function(it){ return adminActive === it[0]; }); %>
+          <details class="group" <%= isOpen ? 'open' : '' %>>
+            <summary class="flex items-center justify-between px-6 pt-3 pb-1 cursor-pointer list-none select-none">
+              <span class="font-tagline text-[11px] text-secondary-fixed uppercase tracking-wider"><%= g[0] %></span>
+              <span class="material-symbols-outlined text-base text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="pb-1"><% visible.forEach(function(it){ %><%- itemLink(it) %><% }) %></div>
+          </details>
+        <% } %>
+      <% }) %>
+    </nav>
+  </aside>
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-surface-container-lowest border-b border-outline-variant px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <button id="admin-menu-btn" class="lg:hidden text-primary" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
+      <form action="/admin/search" method="get" class="flex-1 max-w-md mx-2 lg:mx-4">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">search</span>
+          <input name="q" value="<%= typeof q !== 'undefined' ? q : '' %>" placeholder="Search leads, applications, students…" class="w-full pl-10 pr-3 py-2 rounded-full border border-outline outline-none focus:border-primary bg-surface-container-low text-sm" />
+        </div>
+      </form>
+      <div class="flex items-center gap-4">
+        <a href="/" class="hidden sm:flex items-center gap-1 text-xs text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">public</span> Main site</a>
+        <form action="/logout" method="post" class="hidden sm:block"><button class="flex items-center gap-1 text-xs text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-sm">logout</span> Sign out</button></form>
+        <%- include('../partials/bell') %>
+        <div class="w-9 h-9 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-center font-bold"><%= (currentUser.name||'A').charAt(0) %></div>
+        <div class="hidden sm:block leading-tight">
+          <p class="font-bold text-primary text-sm"><%= currentUser.name %></p>
+          <p class="font-tagline text-[11px] text-secondary uppercase"><%= currentUser.role %></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 lg:p-8 max-w-7xl w-full mx-auto">
+      <% if (flash.success.length || flash.error.length || flash.info.length) { %>
+        <%- include('../partials/flash') %>
+      <% } %>
+      <%- body %>
+    </main>
+  </div>
+</div>
+<div id="admin-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+
+<!-- Quick-view drawer -->
+<div id="drawer" class="fixed inset-0 z-[60] hidden">
+  <div data-drawer-close class="absolute inset-0 bg-black/40"></div>
+  <div id="drawer-panel" class="absolute top-0 right-0 h-full w-full max-w-xl bg-surface-container-low shadow-2xl translate-x-full transition-transform duration-250 overflow-y-auto">
+    <div id="drawer-body"></div>
+  </div>
+</div>
+<script src="/js/drawer.js?v=<%= assetVersion %>"></script>
+<script src="/js/bulk.js?v=<%= assetVersion %>"></script>
+<script src="/js/async-list.js?v=<%= assetVersion %>"></script>
+<script src="/js/rich-editor.js?v=<%= assetVersion %>"></script>
+<style>
+  .re-btn{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 6px;border-radius:4px;color:#3f4b5b;font-size:14px}
+  .re-btn:hover{background:#e7e3d9}
+  .re-editor [contenteditable]:focus{outline:none}
+</style>
+<script>
+  (function(){
+    var btn=document.getElementById('admin-menu-btn'), sb=document.getElementById('admin-sidebar'), ov=document.getElementById('admin-overlay');
+    function open(){sb.classList.remove('-translate-x-full');ov.classList.remove('hidden');}
+    function close(){sb.classList.add('-translate-x-full');ov.classList.add('hidden');}
+    if(btn) btn.addEventListener('click',open);
+    if(ov) ov.addEventListener('click',close);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<%
+  // Notification bell dropdown. Uses res.locals.unreadCount + recentNotifications.
+  var icons = { application:'description', payment:'payments', message:'forum', success:'celebration', info:'notifications' };
+%>
+<div class="relative group">
+  <button class="relative flex items-center text-on-surface-variant hover:text-primary" aria-label="Notifications">
+    <span class="material-symbols-outlined">notifications</span>
+    <% if (unreadCount > 0) { %><span class="absolute -top-1 -right-1 bg-error text-on-error text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center"><%= unreadCount > 9 ? '9+' : unreadCount %></span><% } %>
+  </button>
+  <div class="absolute right-0 top-full pt-2 hidden group-hover:block z-50">
+    <div class="w-80 bg-surface-container-lowest border border-outline-variant rounded-lg shadow-xl overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-outline-variant">
+        <p class="font-bold text-primary text-sm">Notifications</p>
+        <% if (unreadCount > 0) { %><form action="/notifications/read-all" method="post"><button class="text-secondary text-xs font-bold">Mark all read</button></form><% } %>
+      </div>
+      <div class="max-h-80 overflow-y-auto">
+        <% if (!recentNotifications.length) { %>
+          <p class="px-4 py-6 text-center text-on-surface-variant text-sm">No notifications yet.</p>
+        <% } %>
+        <% recentNotifications.forEach(function(n){ %>
+        <a href="/notifications/go/<%= n.id %>" class="flex items-start gap-3 px-4 py-3 border-b border-outline-variant/40 hover:bg-surface-container-low <%= n.read ? '' : 'bg-secondary-fixed/20' %>">
+          <span class="material-symbols-outlined text-secondary text-xl mt-0.5"><%= icons[n.type] || 'notifications' %></span>
+          <div class="min-w-0">
+            <p class="text-sm font-bold text-primary leading-tight"><%= n.title %></p>
+            <% if (n.body) { %><p class="text-xs text-on-surface-variant truncate"><%= n.body %></p><% } %>
+            <p class="text-[11px] text-on-surface-variant mt-0.5"><%= formatDate(n.created_at) %></p>
+          </div>
+          <% if (!n.read) { %><span class="ml-auto w-2 h-2 rounded-full bg-secondary shrink-0 mt-1"></span><% } %>
+        </a>
+        <% }) %>
+      </div>
+      <a href="/notifications" class="block text-center px-4 py-3 text-secondary font-bold text-sm hover:bg-surface-container-low">View all</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How Online Learning Works | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#271900",
+                        "surface-container-low": "#f6f3ed",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf9f3",
+                        "tertiary": "#00030d",
+                        "surface-container": "#f0eee8",
+                        "secondary-container": "#fdc355",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "surface-variant": "#e5e2dc",
+                        "secondary": "#7d5800",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-bright": "#fcf9f3",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#001c43",
+                        "on-surface-variant": "#44474d",
+                        "on-surface": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6ce",
+                        "surface-container-high": "#ebe8e2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "tertiary-fixed": "#d7e2ff",
+                        "surface": "#fcf9f3",
+                        "error": "#ba1a1a",
+                        "primary-container": "#071d3a",
+                        "outline": "#74777e",
+                        "on-primary-fixed-variant": "#354766"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "tagline": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-shadow-sm {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .ivory-gradient {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8F5EF 100%);
+        }
+        .card-gold-border {
+            border: 1px solid rgba(125, 88, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<nav class="bg-background dark:bg-on-background border-b border-outline-variant dark:border-outline sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="font-display-lg text-display-lg text-primary dark:text-primary-fixed">GDU</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Admissions</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Programs</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Research</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">About</a>
+</div>
+<div class="flex items-center space-x-6">
+<div class="hidden md:block relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none focus:ring-1 focus:ring-secondary text-body-md w-48 rounded-lg" placeholder="Search resources..." type="text"/>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary font-tagline text-tagline rounded-lg active:scale-95 transition-transform duration-200">
+                    Student Portal
+                </button>
+</div>
+</div>
+</nav>
+<main class="w-full">
+<!-- Hero Section: Editorial Intro -->
+<section class="relative h-[819px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A serene academic setting where a diverse group of modern scholars are engaged with digital devices in a sun-drenched, high-ceiling library. The lighting is soft and golden, emphasizing a prestigious light-mode aesthetic. The color palette features deep navy blue accents against ivory surfaces, creating a formal yet technologically advanced atmosphere of scholarly pursuit and global connection." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GK5JSwcjesZGo9htz8mIr7lIxvXIUtQTQNrs1gtOSnUuvPfIXpsTanh1tBzXGm6KJ4fVSJ6lpeN9QLh_excdzS9hr5VttwNb71NDjEaoKW-7TtPEWWNzakNXTAfhUjAKLU9Gx_ALJnXv4I8qbCj2Nu1r9AoWWuCmrkFBLHA8Emxu2p_k_BtSzLj28PBnraKBUUcBrFt-47EmdyZEYPcTryqfOkTixzemHjfnkCqDkfBRFujnY3_qRUcq66zBn6VtwllpzOy-pe0"/>
+<div class="absolute inset-0 bg-primary-container/40 mix-blend-multiply"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-container-max mx-auto px-margin-desktop w-full text-left">
+<div class="max-w-2xl">
+<span class="font-tagline text-tagline text-secondary-container mb-4 block uppercase">Global Educational Infrastructure</span>
+<h1 class="font-display-lg text-display-lg md:text-[64px] text-white leading-tight mb-6">
+                        Bridging the <span class="italic font-normal">Physical</span> and the <span class="text-secondary-fixed">Digital</span>
+</h1>
+<p class="font-body-lg text-body-lg text-white/90 max-w-lg mb-8">
+                        The GDU Online Experience is engineered for the global scholar. Discover a platform that balances cutting-edge technology with our rich academic heritage.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Scripture Callout -->
+<section class="py-20 bg-background text-center">
+<div class="max-w-3xl mx-auto px-margin-mobile">
+<div class="w-16 h-[1px] bg-secondary-container mx-auto mb-8"></div>
+<blockquote class="font-headline-md text-headline-md italic text-primary px-8">
+                    "The heart of the discerning acquires knowledge, for the ears of the wise seek it out."
+                </blockquote>
+<cite class="font-tagline text-tagline text-secondary mt-4 block">— Proverbs 18:15</cite>
+<div class="w-16 h-[1px] bg-secondary-container mx-auto mt-8"></div>
+</div>
+</section>
+<!-- Feature 1: Native Video Player (Bento Style) -->
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="lg:col-span-7 rounded-xl overflow-hidden shadow-sm bg-surface-container-low p-1 card-gold-border">
+<div class="aspect-video relative rounded-lg overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="A high-fidelity mockup of a sophisticated online video learning interface. The player features clean navy blue controls and gold highlights, displaying a lecture on global ethics. The video itself is crisp and professionally lit, showing a professor in a traditional mahogany-walled office, reflecting academic prestige and high-end digital architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoy04TkLb7hy85BwODx3FnF-j1RYOZB3MJLKARdkqXjXtjockjjohOm4zNqwCJVXBk3XDDcqx6HcodUn1CvXsai8AQIpWyyRVuwYQuY_TXROKPSboWtHDzOGCdVWrnKun0Si0hYWan7Zg1LjIDYsCJlHEgduPKPYbSFrszaUPDMMPZrLdtjtid6cRT4uz_HQDii3spC1DG03HiP-RGykiL-dWxaudh0LifpUCyRx-U_6hej4v03vdULGnGgx-pE8WhobV-tPYExZ4"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-7xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col justify-center">
+<span class="font-tagline text-tagline text-secondary mb-2">FEATURE 01</span>
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Native Video Architecture</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
+                        Our proprietary player is optimized for low-bandwidth environments. Experience high-definition lectures even in areas with limited connectivity, ensuring your education is never interrupted.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-body-md">Adaptive bitrate streaming technology</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary pt-1">check_circle</span>
+<span class="font-body-md text-body-md">Embedded transcripts and live annotations</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Feature 2 & 3: Offline Mode & Mobile-First (Asymmetric Layout) -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-16">
+<!-- Offline Mode -->
+<div class="space-y-8">
+<div class="h-[400px] rounded-xl overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A student sitting in a remote, peaceful garden setting, studying from a tablet without an internet connection. The scene is bright and airy with soft natural lighting. The tablet screen shows a GDU lesson interface with a green 'Downloaded' status icon, emphasizing the convenience of offline learning in a prestigious academic context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCty9n9DQm5UtZNE2CiE4A2JC5b8oaBW_nKKI4LxcVKts4x4ZEEIDYDYj5S5l-tmWrjDsRXJuEMLqVG5f9H1C-ICVTesAEOxAVHzpi-PnyUw-PhVD5gCnrhSjzMNlHVDBkHVjSF7gkvM-Q5BQPWAfFFZF_BlbV9eAV_s9GXyXG6Q-R0_VcdRjD3E9ALwlBu4GfdimotOPfAlZQVXrudLDbilZC4k-AOAPl3vutfc1sf2IlW0t-SAaCHDgxA3qxBo780sWLpquQuRgQ"/>
+</div>
+<div>
+<span class="font-tagline text-tagline text-secondary mb-2">FEATURE 02</span>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-4">True Offline Independence</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            Download entire modules to your device. Whether you're commuting or in a location without service, your classroom stays with you. Sync your progress the moment you're back online.
+                        </p>
+</div>
+</div>
+<!-- Mobile-First -->
+<div class="space-y-8 md:pt-24">
+<div class="h-[400px] rounded-xl overflow-hidden shadow-sm border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A close-up shot of a smartphone displaying the Global Diaspora University mobile app. The interface is elegant, utilizing deep navy backgrounds and crisp white typography with gold accents. The phone is held by a person in a professional suit, reflecting the academic and corporate heritage of the institution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR0Dcz3KewuKCkQZyiiayagqKDM_cIO9pqc-4f5esxr_hhFDmlX9elRZ55y9orLRrEN5FD5OVSGeu6l5BypcgJMFDHwqw-mNjYO_LtYt9EsBZeO5SZ10Pvod2t2_Rs1V8VuEKlZtUF6kUO9CwGODY_IZGhixJvtZifMPx3sARcCli8peCpv6ANI7qWMzNOUMcnBmqeTSUacP8HKeH0cTcl-e2eF_7klwwfChtKl5bI4licjX_KEXLmjEtYF4o-ntMzP_Tlclc2uW8"/>
+</div>
+<div>
+<span class="font-tagline text-tagline text-secondary mb-2">FEATURE 03</span>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-4">A Mobile-First Sanctuary</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            The GDU app is not just a companion; it's the full experience. Hand-crafted for small screens, every interaction is designed for focused, distraction-free scholarship on the go.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature 4: Community (Full Width Visual) -->
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto overflow-hidden">
+<div class="bg-primary-container rounded-xl flex flex-col md:flex-row overflow-hidden text-on-primary">
+<div class="p-12 md:w-1/2 flex flex-col justify-center">
+<span class="font-tagline text-tagline text-secondary-fixed mb-4">FEATURE 04</span>
+<h2 class="font-headline-md text-headline-md mb-6">Collective Wisdom: Community Groups</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-8">
+                        Online doesn't mean alone. Our learning groups connect you with peers from around the globe for moderated discussions, peer review, and collective prayer.
+                    </p>
+<button class="w-fit px-8 py-3 bg-secondary text-on-secondary font-tagline text-tagline rounded-lg hover:bg-secondary-fixed-dim transition-colors">
+                        Explore Communities
+                    </button>
+</div>
+<div class="md:w-1/2 h-[400px] md:h-auto relative">
+<img class="w-full h-full object-cover" data-alt="A diverse group of students smiling and laughing during a high-quality video conference call. Each student is in a unique global location, from a modern apartment in Seoul to a sunny courtyard in Nairobi. The UI overlay shows GDU branding and 'Group Session' in elegant typography, highlighting the warmth and prestige of the community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy9F7nfBnYGuzu1O5gye8VU_z_IJt5PRDl_Ds3NOxSIk6hkMxCX7tqmZg5Sax3nxLGiaU1xXyqHrS0YXYj2pttgtEOhA-PvcMl8FVHZmNfgElMO7jS5AlDIHo-NOmdCdqNzGc-mOE3bOWzYuMAFTRorbmfgTjzs7NT5RvGBwOC6ZK36DqjVlZa192gX_8Z0vHoyuKRX9VhbUSYWQUhQ6ierTS7iGhgEe8-MmvZFmIxQfyEz1uw9sjP74HbpdFEV8t21m_tS6a2p_w"/>
+</div>
+</div>
+</section>
+<!-- Steps Guide: Editorial Layout -->
+<section class="py-24 bg-white border-t border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-display-lg text-display-lg text-primary">Your Journey Forward</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-4">Simple, structured, and intentional.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<!-- Step 1 -->
+<div class="relative group p-6 hover:bg-surface-container transition-colors rounded-xl">
+<div class="text-[64px] font-display-lg text-secondary-container/30 absolute -top-8 -left-2 z-0">01</div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">how_to_reg</span>
+<h3 class="font-headline-sm text-headline-sm mb-2">Enroll</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Submit your application and receive your GDU Credentials.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative group p-6 hover:bg-surface-container transition-colors rounded-xl">
+<div class="text-[64px] font-display-lg text-secondary-container/30 absolute -top-8 -left-2 z-0">02</div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">settings_suggest</span>
+<h3 class="font-headline-sm text-headline-sm mb-2">Setup</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Download the GDU App and configure your study preferences.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative group p-6 hover:bg-surface-container transition-colors rounded-xl">
+<div class="text-[64px] font-display-lg text-secondary-container/30 absolute -top-8 -left-2 z-0">03</div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">local_library</span>
+<h3 class="font-headline-sm text-headline-sm mb-2">Learn</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Access modules, join groups, and engage with faculty.</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="relative group p-6 hover:bg-surface-container transition-colors rounded-xl">
+<div class="text-[64px] font-display-lg text-secondary-container/30 absolute -top-8 -left-2 z-0">04</div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">auto_stories</span>
+<h3 class="font-headline-sm text-headline-sm mb-2">Graduate</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Earn your credentials and join our global alumni network.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto bg-primary-container dark:bg-tertiary-container border-t border-secondary dark:border-secondary-fixed-dim">
+<div class="flex flex-col space-y-4">
+<div class="font-headline-md text-headline-md text-on-primary-container">GDU</div>
+<p class="font-body-md text-body-md text-on-primary-container opacity-80">
+                Empowering the global diaspora through Christ-centered academic excellence.
+            </p>
+</div>
+<div class="flex flex-col space-y-2">
+<h4 class="font-tagline text-tagline text-secondary-fixed">Resources</h4>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Accreditation</a>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Library</a>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Global Contact</a>
+</div>
+<div class="flex flex-col space-y-2">
+<h4 class="font-tagline text-tagline text-secondary-fixed">Legal</h4>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Privacy Policy</a>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Terms of Service</a>
+<a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Ethical Standards</a>
+</div>
+<div class="flex flex-col space-y-4">
+<h4 class="font-tagline text-tagline text-secondary-fixed">Stay Connected</h4>
+<div class="flex space-x-4">
+<span class="material-symbols-outlined text-on-primary-container">public</span>
+<span class="material-symbols-outlined text-on-primary-container">school</span>
+<span class="material-symbols-outlined text-on-primary-container">mail</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-primary-container opacity-80">
+                © 2024 Global Diaspora University. All Rights Reserved. Christ-Centered Excellence.
+            </p>
+</div>
+</footer>
+<script>
+        // Micro-interaction for smooth scrolling and scroll reveals
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple intersection observer for reveal effects
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

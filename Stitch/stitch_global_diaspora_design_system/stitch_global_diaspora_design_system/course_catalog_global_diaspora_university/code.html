@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Course Catalog | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dcdad4",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ea",
+                    "surface-container-low": "#f6f3ed",
+                    "tertiary": "#00030d",
+                    "on-primary-fixed-variant": "#354766",
+                    "secondary-fixed": "#ffdea9",
+                    "on-tertiary-container": "#6a85bb",
+                    "surface-tint": "#4c5f7f",
+                    "secondary": "#7d5800",
+                    "on-tertiary-fixed": "#001a40",
+                    "on-primary-container": "#7386a8",
+                    "on-secondary-fixed": "#271900",
+                    "on-surface": "#1c1c18",
+                    "background": "#fcf9f3",
+                    "surface-variant": "#e5e2dc",
+                    "surface-container-high": "#ebe8e2",
+                    "secondary-container": "#fdc355",
+                    "on-primary-fixed": "#051b38",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "primary": "#00030c",
+                    "inverse-surface": "#31312d",
+                    "surface-container": "#f0eee8",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1c1c18",
+                    "primary-container": "#071d3a",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "primary-fixed": "#d6e3ff",
+                    "on-error": "#ffffff",
+                    "surface": "#fcf9f3",
+                    "on-secondary-container": "#725000",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "tertiary-container": "#001c43",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fcf9f3",
+                    "outline-variant": "#c4c6ce",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e5e2dc",
+                    "inverse-primary": "#b4c7ec",
+                    "tertiary-fixed": "#d7e2ff",
+                    "outline": "#74777e",
+                    "on-surface-variant": "#44474d",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "margin-desktop": "64px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .course-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(7, 29, 58, 0.08);
+        }
+        .gold-leaf-list li {
+            position: relative;
+            padding-left: 28px;
+        }
+        .gold-leaf-list li::before {
+            content: 'check_circle';
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            left: 0;
+            color: #7d5800;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Navigation -->
+<header class="bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-50 shadow-sm">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">
+                Global Diaspora University
+            </div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">About GDU</a>
+<a class="text-primary border-b-2 border-secondary font-bold pb-1 font-label-sm text-label-sm" href="#">Academic Programs</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-200 font-label-sm text-label-sm" href="#">Student Life</a>
+</nav>
+<div class="flex gap-4">
+<button class="px-4 py-2 border border-primary text-primary font-bold text-label-sm hover:bg-surface-container-low transition-all">Student Login</button>
+<button class="px-4 py-2 bg-primary-container text-on-primary font-bold text-label-sm hover:opacity-90 transition-all">Apply Now</button>
+</div>
+</div>
+</header>
+<main class="min-h-screen">
+<!-- Hero / Header Section -->
+<section class="py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest text-center max-w-container-max mx-auto">
+<div class="max-w-3xl mx-auto space-y-6">
+<span class="font-tagline text-tagline text-secondary uppercase tracking-widest block">Educate • Equip • Empower</span>
+<h1 class="font-display-lg text-display-lg md:text-display-lg text-primary leading-tight">Equipping You to Impact the World</h1>
+<div class="w-24 h-1 bg-secondary-container mx-auto"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant italic font-serif">
+                    "Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."
+                </p>
+</div>
+</section>
+<!-- Filter Controls -->
+<section class="pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-wrap justify-center gap-2 p-1.5 bg-surface-container-low rounded-lg w-fit mx-auto border border-outline-variant">
+<button class="filter-btn active px-6 py-2.5 font-label-sm text-label-sm transition-all duration-200 rounded-[2px]" id="btn-all" onclick="filterCourses('all')">
+                    Show All Programs
+                </button>
+<button class="filter-btn px-6 py-2.5 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all duration-200 rounded-[2px]" id="btn-diploma" onclick="filterCourses('diploma')">
+                    Fast-Track Diplomas
+                </button>
+<button class="filter-btn px-6 py-2.5 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all duration-200 rounded-[2px]" id="btn-masters" onclick="filterCourses('masters')">
+                    Postgraduate Masters
+                </button>
+</div>
+</section>
+<!-- Course Grid -->
+<section class="pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="course-grid">
+<!-- Card 1 -->
+<div class="course-item diploma group flex flex-col bg-surface-container-lowest border border-outline-variant course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A group of diverse professionals sitting around a modern conference table in a sunlit academic office, collaborating on a social project. The lighting is soft and golden, emphasizing a collaborative and scholarly atmosphere with deep navy and ivory color tones consistent with high-end academic branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAz9u_M3PiUmrWxG6lpuXNp4YH504y4EhqXqYCkHzaxMzRT8qx0J3PiCuqraQPvpr82XEhf96EPA6TD7A7YNs3vJ8ku0WisQRgx-hy8RUxf2-wK78Ta8pM7Hn9kT6LUrRjXNJ09tg2JrJzAM9owkEUxCUHT4IVpFPy_jnW-vSUyS3I7l7BnYb0C3i9tsHX2x_ODNhOITDY6-Jb2ivuiP_yCd6njbcBFD-M1enevjjsuUmNwoqs30SCRx6-l4VtpUu1p8U11ZqlMUk"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Level 4/5</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Diploma in Community Leadership</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">Focus on project management, cross-cultural mobilization, and conflict resolution in global contexts.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    12 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="course-item diploma group flex flex-col bg-surface-container-lowest border border-outline-variant course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="An interior view of a modern chapel with minimalist wooden pews and large windows overlooking a serene landscape. The scene is lit with natural, ethereal light, creating a mood of sacred reflection and divine mission, using a palette of warm wood, soft gold, and deep charcoal navies." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq-jeW-sfbbjx3NsiuhZlYhyqc9NQgQ7oGabSGmTtlqH42svOKcpoDxntwfbfmNbj8ijMmET2bBUWtokQ2MgQMnGSL0Y92zSwkYZdip87f6lnTr6MYj4C_vQ9bniXRhQLd7gcCN7xwvYnq3vQoY9EWBZwCDQ5YzNTU5hPPeFfXJLX7auBkkOqbwoZHntPPcF1zP_8O3WN8XZa93rZ2ARU7kq1nZR9ZMjpZFfPTFv-vGn4Q4OAl-WW4J-6CJ1OpkU4kYEDzHatyY7o"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Level 4/5</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Diploma in Church Leadership</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">Focus on practical church administration, biblical governance, and digital ministry tools for the modern age.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    12 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="course-item diploma group flex flex-col bg-surface-container-lowest border border-outline-variant course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A desk setup featuring a leather-bound journal, a classic fountain pen, and a high-end laptop showing financial charts. The composition is highly structured and symmetrical, conveying a sense of academic precision and kingdom-minded business excellence, illuminated by cool morning window light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdRB9AszA3GOrRBclLmYubXSmz26NqYoWk2xX0TkT5N5Y4-7pof6oYSZbL5ftSQhf8ok9s1tGhiOSCMmjFpIczeytmL7LYHEbhsaK0-TNDw8J5JiFTf8p6bVT1eQReMj1DMxEMu8gTmZ2K2qhXF7FrQ-CLI4rNqc4cPrgDQZzMKfeUfkcWeXNvPEYOg7dlKPu_H5aT36vefKCLc1a7wZPhKoNhIm0IxJcxoOW05bRROgZxFe4HDpAifLCS4MciHv_LJvOA-UgihuI"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Level 4/5</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Diploma in Business Leadership</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">Focus on kingdom-minded enterprises, financial literacy, and global e-commerce strategies.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    12 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="course-item masters group flex flex-col bg-surface-container-lowest border border-secondary course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="An expansive, high-ceilinged university library with mahogany shelves and glowing green lamps. A lone scholar is deeply focused on an ancient manuscript, surrounded by a sophisticated atmosphere of centuries-old knowledge and transformative vision. Deep navy shadows and soft ivory highlights define the space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGE474CPRvbF4Gy9V26zVrwV9QKsqkXP8EJU0nSf90RSEUHII81t9002dEKlq3vwQ-2n-7vlAiTEy38Bgfk0eAq_ZZSYxaHmqr9Zcb0Qbsc6sxzKbcV1g388TohRhSYnUPrZ_VMlLTzC6N6NsmwWiBzkTdK5wVbwl1GdeYgeUuy86oOL3zWxkBuc3SQrBc7yzOKm23JFd1grE7b7-bKbUl2vRoWNdIGovOfeoi2szk5Un_YFRo2wvuXk-gKv9A9FFkkpAd0ybYUKg"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-on-primary font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Postgraduate</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Master in Transformational Leadership</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">In-depth study of organizational psychology, vision-casting, and advanced strategic leadership models.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    18 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="course-item masters group flex flex-col bg-surface-container-lowest border border-secondary course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A global map overlaying a diverse group of people from different cultures walking through a modern transit hub. The lighting is cinematic and high-contrast, conveying the movement of people and the mission of diaspora care with a prestigious and compassionate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY4qH-Hph_EOOme12byAUoqI0Y69ECuj0_GmPsgPSDriAWIItnYzerXYGdI-lk_0o38LZ6exXV_kiYGytj6GmUADiMHNIpI9RFgyZUMe25QqjVXKfd_qGw3qoa9COhPCN1qte7K_wOqOTSUOM1vgARweoNOgPceoa2RaXydk_fvmv072hiprrLPRtskQlHnKb3Q28H-WAu7Gpe7MoQMHTPbQZjUmyl9vTiMANZbsWPWQNlU9Og8Px1YAZLH995XXxNPFc-_h9iPOc"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-on-primary font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Postgraduate</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Master in Diaspora Care</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">Specialized curriculum focused on migration counseling, cultural integration, and refugee support systems.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    18 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="course-item masters group flex flex-col bg-surface-container-lowest border border-secondary course-card-hover transition-all duration-300">
+<div class="relative h-48 overflow-hidden bg-primary-container">
+<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A vibrant, multi-ethnic marketplace where a modern academic is engaging in deep conversation with locals. The image captures the essence of missional contextualization and global gospel planting, presented in a crisp, high-end editorial photography style with rich colors and deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzon2a0PQ7kK48C70k7g0pZg9eGWQdKku5qqcS8XPQ-0G-krFiJ5FqMuU31oxP3Fc3EjaACYYM0T0sLUYdzrUdY1XMiozPAY_xTQpYd7oAUK45O3ZCap7UCSTV9ILZreHVXcTbtsi6zBi2E7uIxjLON3BaEiTF-whzlbT_RVkT4cv5N8uVYqGWwcEr0kB0h1Qu0_lXMBZNPcBe-q96n5VkgFVvZNFTsbW2XdowyPE737xgbmly0bQeJIghrLX0jXB2mgKj72SP9pw"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-on-primary font-tagline text-[10px] px-3 py-1 uppercase tracking-tighter">Postgraduate</span>
+</div>
+</div>
+<div class="p-8 flex-grow flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-3">Master in Missional Leadership</h3>
+<p class="text-on-surface-variant font-body-md mb-6 leading-relaxed">Focus on global missiology, contextualizing the Gospel in diverse cultures, and church planting strategies.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/30 text-label-sm font-label-sm text-secondary italic">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    18 Months
+                                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">language</span>
+                                    100% Online
+                                </div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full py-3 bg-primary-container text-on-primary font-bold text-label-sm hover:bg-primary transition-colors">View Syllabus</button>
+<a class="text-primary font-bold text-center text-label-sm hover:text-secondary transition-colors py-1" href="#">Apply for Next Cohort →</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Certification Strip -->
+<section class="max-w-container-max mx-auto px-margin-desktop mb-24">
+<div class="py-8 border-y border-secondary/30 flex flex-col md:flex-row justify-between items-center gap-6 bg-surface-container-low/50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="font-tagline text-label-sm uppercase tracking-wider text-primary">QAHE Quality Assured</p>
+<p class="text-on-surface-variant text-label-sm">International Academic Excellence Framework</p>
+</div>
+</div>
+<div class="h-px w-12 bg-outline-variant hidden md:block"></div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">school</span>
+<div>
+<p class="font-tagline text-label-sm uppercase tracking-wider text-primary">Digital Certification</p>
+<p class="text-on-surface-variant text-label-sm">Verifiable credentials for global impact</p>
+</div>
+</div>
+<div class="h-px w-12 bg-outline-variant hidden md:block"></div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">public</span>
+<div>
+<p class="font-tagline text-label-sm uppercase tracking-wider text-primary">Global Diaspora Network</p>
+<p class="text-on-surface-variant text-label-sm">Connect with leaders in 40+ nations</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container text-on-primary">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto">
+<div class="space-y-4">
+<div class="font-headline-sm text-headline-sm text-on-primary-fixed">Global Diaspora University</div>
+<p class="font-tagline text-tagline text-secondary-fixed opacity-80">Educate. Equip. Empower. Impact the World.</p>
+<div class="pt-4 text-surface-variant font-body-md">
+                    © 2024 Global Diaspora University. All rights reserved.
+                </div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col gap-3">
+<a class="text-surface-variant hover:text-secondary-fixed transition-colors font-body-md" href="#">News & Insights</a>
+<a class="text-surface-variant hover:text-secondary-fixed transition-colors font-body-md" href="#">FAQs</a>
+<a class="text-secondary-fixed underline font-body-md" href="#">Academic Programs</a>
+</div>
+<div class="flex flex-col gap-3">
+<a class="text-surface-variant hover:text-secondary-fixed transition-colors font-body-md" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-secondary-fixed transition-colors font-body-md" href="#">Terms & Conditions</a>
+<a class="text-surface-variant hover:text-secondary-fixed transition-colors font-body-md" href="#">Accessibility Statement</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        function filterCourses(category) {
+            const items = document.querySelectorAll('.course-item');
+            const btns = document.querySelectorAll('.filter-btn');
+            
+            // Update buttons styling
+            btns.forEach(btn => {
+                btn.classList.remove('active', 'bg-primary-container', 'text-on-primary');
+                btn.classList.add('text-on-surface-variant');
+            });
+
+            const activeBtn = document.getElementById(`btn-${category}`);
+            activeBtn.classList.add('active', 'bg-primary-container', 'text-on-primary');
+            activeBtn.classList.remove('text-on-surface-variant');
+
+            // Filter items with simple animation
+            items.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.95)';
+                
+                setTimeout(() => {
+                    if (category === 'all' || item.classList.contains(category)) {
+                        item.style.display = 'flex';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }, 200);
+            });
+        }
+
+        // Initialize state
+        window.onload = () => {
+            const initialBtn = document.getElementById('btn-all');
+            initialBtn.classList.add('bg-primary-container', 'text-on-primary');
+            initialBtn.classList.remove('text-on-surface-variant');
+        }
+    </script>
+</body></html>

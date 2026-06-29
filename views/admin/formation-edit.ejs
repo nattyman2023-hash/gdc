@@ -1,0 +1,47 @@
+<%
+  var action = isNew ? '/admin/formation' : ('/admin/formation/'+group.id+'/edit');
+%>
+<div class="flex items-center gap-2 mb-6">
+  <a href="/admin/formation" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> Formation groups</a>
+</div>
+<h1 class="font-headline text-headline-md text-primary mb-6"><%= isNew ? 'New formation group' : 'Edit group' %></h1>
+
+<form action="<%= action %>" method="post" class="max-w-2xl space-y-5 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+  <div>
+    <label class="field-label">Group name *</label>
+    <input name="name" required value="<%= group.name || '' %>" placeholder="e.g. Tuesday Group A" class="field" />
+  </div>
+  <div>
+    <label class="field-label">Description</label>
+    <textarea name="description" rows="3" class="field" placeholder="Focus, format, anything helpful…"><%= group.description || '' %></textarea>
+  </div>
+  <div>
+    <label class="field-label">Facilitator</label>
+    <select name="facilitator_id" class="field">
+      <option value="">— None —</option>
+      <% facilitators.forEach(function(u){ %><option value="<%= u.id %>" <%= String(group.facilitator_id)===String(u.id)?'selected':'' %>><%= u.first_name %> <%= u.last_name %></option><% }) %>
+    </select>
+  </div>
+  <div class="grid sm:grid-cols-3 gap-4">
+    <div>
+      <label class="field-label">Meeting day</label>
+      <select name="meeting_day" class="field">
+        <% ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].forEach(function(d){ %><option <%= (group.meeting_day||'Tuesday')===d?'selected':'' %>><%= d %></option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label class="field-label">Meeting time</label>
+      <input type="time" name="meeting_time" value="<%= group.meeting_time || '' %>" class="field" />
+    </div>
+    <div>
+      <label class="field-label">Capacity</label>
+      <input type="number" min="1" name="capacity" value="<%= group.capacity || '' %>" class="field" placeholder="∞" />
+    </div>
+  </div>
+  <label class="flex items-center gap-2 text-sm text-primary font-bold"><input type="checkbox" name="active" <%= group.active ? 'checked' : '' %> /> Active</label>
+  <div class="flex items-center gap-3 pt-2">
+    <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold"><%= isNew ? 'Create group' : 'Save changes' %></button>
+    <a href="/admin/formation" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+    <% if (!isNew) { %><form action="/admin/formation/<%= group.id %>/delete" method="post" class="ml-auto" onsubmit="return confirm('Delete this group? Members will be unassigned.');"><button class="text-error font-bold text-sm">Delete group</button></form><% } %>
+  </div>
+</form>

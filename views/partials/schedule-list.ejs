@@ -1,0 +1,45 @@
+<%
+  // Expects: groups (from calendar.groupByMonth), cats (calendar.CATEGORIES).
+  // Optional: showAudience (bool) to badge who each item is for.
+  var _showAud = (typeof showAudience !== 'undefined') && showAudience;
+  function fmtDay(v){ var d=new Date(v); return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'}); }
+  function fmtRange(e){
+    var s=new Date(e.starts_at);
+    var out=s.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    if(!e.all_day){ out+=' · '+s.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+    if(e.ends_at){ var en=new Date(e.ends_at); out+=' – '+en.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+    return out;
+  }
+%>
+<% if (!groups.length) { %>
+  <div class="bg-surface-container-low border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">
+    <span class="material-symbols-outlined text-4xl text-secondary">event_upcoming</span>
+    <p class="mt-2">Nothing on the calendar yet. Please check back soon.</p>
+  </div>
+<% } %>
+<div class="space-y-8">
+  <% groups.forEach(function(g){ %>
+  <div>
+    <h3 class="font-tagline text-label-sm text-secondary uppercase tracking-widest mb-3"><%= g.label %></h3>
+    <div class="space-y-2">
+      <% g.events.forEach(function(e){ var c = cats[e.category] || cats.event; %>
+      <div class="flex items-start gap-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+        <div class="flex flex-col items-center justify-center w-14 shrink-0 text-center">
+          <span class="font-display text-headline-md text-primary leading-none"><%= new Date(e.starts_at).getDate() %></span>
+          <span class="font-tagline text-[11px] uppercase text-on-surface-variant"><%= new Date(e.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <span class="inline-flex items-center gap-1 font-tagline text-[11px] uppercase px-2 py-0.5 rounded <%= c.tone %>"><span class="material-symbols-outlined text-sm"><%= c.icon %></span> <%= c.label %></span>
+            <% if (_showAud && e.audience && e.audience !== 'all') { %><span class="font-tagline text-[10px] uppercase px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant"><%= e.audience %></span><% } %>
+          </div>
+          <p class="font-headline text-headline-sm text-primary leading-tight"><%= e.title %></p>
+          <p class="text-on-surface-variant text-sm"><%= fmtRange(e) %><% if (e.location) { %> · <%= e.location %><% } %></p>
+          <% if (e.description) { %><p class="text-on-surface-variant text-sm mt-1"><%= e.description %></p><% } %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% }) %>
+</div>

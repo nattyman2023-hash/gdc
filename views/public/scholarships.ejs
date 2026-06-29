@@ -1,0 +1,20 @@
+<%- include('../partials/page-hero', { heroTitle: 'Scholarships & Funding', heroTagline: 'Invest In Your Calling', heroText: 'We are committed to making education accessible. Explore scholarships and bursaries for diaspora students.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <% if (!scholarships.length) { %><p class="text-on-surface-variant">No scholarships are open right now. Please check back soon.</p><% } %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% scholarships.forEach(function(s){ %>
+      <a href="/scholarships/<%= s.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col group hover:border-secondary hover:shadow-md transition-all border-t-4 border-t-secondary">
+        <span class="material-symbols-outlined text-secondary text-3xl mb-2" style="font-variation-settings:'FILL' 1;">volunteer_activism</span>
+        <h3 class="font-headline text-headline-sm text-primary mb-2 group-hover:text-secondary"><%= s.title %></h3>
+        <p class="text-on-surface-variant text-body-md mb-4 flex-1"><%= truncate(s.summary, 110) %></p>
+        <div class="border-t border-outline-variant/40 pt-3 flex justify-between items-center">
+          <span class="font-bold text-primary"><%= s.award || 'Funding' %></span>
+          <% if (s.deadline) { %><span class="font-tagline text-[11px] text-on-surface-variant uppercase">By <%= formatDate(s.deadline) %></span><% } %>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>

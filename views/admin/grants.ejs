@@ -1,0 +1,30 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Research</p><h1 class="font-headline text-headline-md text-primary">Research Grants</h1></div>
+
+<form method="get" class="flex flex-wrap gap-3 mb-5">
+  <select name="status" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All statuses</option>
+    <% ['submitted','under_review','awarded','declined'].forEach(function(s){ %><option value="<%= s %>" <%= filters.status===s?'selected':'' %>><%= s.replace('_',' ') %></option><% }) %>
+  </select>
+  <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Filter</button>
+  <a href="/admin/grants" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+</form>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Ref</th><th class="px-4 py-3">Project</th><th class="px-4 py-3 hidden md:table-cell">Applicant</th><th class="px-4 py-3 hidden lg:table-cell">Requested</th><th class="px-4 py-3">Status</th></tr>
+    </thead>
+    <tbody>
+      <% if (!grants.length) { %><tr><td colspan="5" class="px-4 py-6 text-center text-on-surface-variant">No grant applications.</td></tr><% } %>
+      <% grants.forEach(function(g){ %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low cursor-pointer" data-drawer="/admin/grants/<%= g.id %>/drawer">
+        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><a href="/admin/grants/<%= g.id %>" class="hover:text-secondary"><%= g.reference %></a></td>
+        <td class="px-4 py-3 font-bold text-primary"><a href="/admin/grants/<%= g.id %>" class="hover:text-secondary"><%= g.title %></a></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= g.first_name %> <%= g.last_name %></td>
+        <td class="px-4 py-3 hidden lg:table-cell text-on-surface-variant"><%= g.amount_requested ? formatMoney(g.amount_requested,'GBP') : '—' %></td>
+        <td class="px-4 py-3"><%- include('_badge', { status: g.status==='awarded' ? 'paid' : (g.status==='declined' ? 'declined' : (g.status==='under_review'?'sent':'new')) }) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

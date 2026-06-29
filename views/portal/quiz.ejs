@@ -1,0 +1,29 @@
+<a href="<%= typeof backUrl !== 'undefined' && backUrl ? backUrl : (course ? '/portal/courses/' + course.slug : '/portal/exams') %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course ? course.title : 'Back to exams' %></a>
+
+<div class="max-w-3xl mx-auto">
+  <div class="mb-6">
+    <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Assessment</p>
+    <h1 class="font-headline text-headline-md text-primary"><%= quiz.title %></h1>
+    <p class="text-on-surface-variant mt-1"><%= quiz.description %></p>
+    <p class="text-sm text-on-surface-variant mt-2"><%= questions.length %> questions · Pass mark <%= quiz.pass_mark %>%<% if (quiz.time_limit_min) { %> · <%= quiz.time_limit_min %> min<% } %></p>
+  </div>
+
+  <form action="/portal/quizzes/<%= quiz.id %>/submit" method="post" class="space-y-6">
+    <% questions.forEach(function(q, qi){ %>
+    <fieldset class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <legend class="font-bold text-primary mb-4"><span class="text-secondary"><%= qi+1 %>.</span> <%= q.prompt %></legend>
+      <div class="space-y-2">
+        <% q.options.forEach(function(o){ %>
+        <label class="flex items-center gap-3 px-4 py-3 rounded border border-outline-variant hover:border-secondary cursor-pointer has-[:checked]:border-secondary has-[:checked]:bg-secondary-fixed/40">
+          <input type="radio" name="q_<%= q.id %>" value="<%= o.id %>" class="text-secondary focus:ring-secondary" required />
+          <span class="text-on-surface"><%= o.text %></span>
+        </label>
+        <% }) %>
+      </div>
+    </fieldset>
+    <% }) %>
+    <div class="flex justify-end">
+      <button class="bg-primary text-on-primary px-8 py-3 rounded font-bold hover:opacity-90">Submit Answers</button>
+    </div>
+  </form>
+</div>

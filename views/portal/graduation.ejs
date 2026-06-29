@@ -1,0 +1,70 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Your Journey Culminates Here</p><h1 class="font-headline text-headline-md text-primary">Graduation & Commencement</h1></div>
+
+<!-- Degree audit -->
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
+  <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Degree Audit</h2>
+    <% const pct = Math.min(100, Math.round((creditsEarned/required)*100)); %>
+    <div class="flex justify-between text-sm mb-1"><span class="text-on-surface-variant"><%= creditsEarned %> of <%= required %> credits earned</span><span class="font-bold text-primary"><%= pct %>%</span></div>
+    <div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden mb-4"><div class="h-full bg-secondary rounded-full" style="width: <%= pct %>%"></div></div>
+    <div class="space-y-2">
+      <% enrollments.forEach(function(e){ %>
+      <div class="flex items-center justify-between text-sm border-b border-outline-variant/30 pb-1 last:border-0">
+        <span class="text-primary"><span class="material-symbols-outlined text-base align-middle <%= e.status==='completed' ? 'text-secondary' : 'text-outline' %>"><%= e.status==='completed' ? 'check_circle' : 'radio_button_unchecked' %></span> <%= e.title %></span>
+        <span class="text-on-surface-variant"><%= e.credits %> cr · <%= e.progress_pct %>%</span>
+      </div>
+      <% }) %>
+      <% if (!enrollments.length) { %><p class="text-on-surface-variant text-sm">Enrol in courses to begin your journey.</p><% } %>
+    </div>
+  </div>
+  <div class="bg-primary text-on-primary rounded-lg p-6 flex flex-col">
+    <span class="material-symbols-outlined text-secondary-fixed-dim text-4xl" style="font-variation-settings:'FILL' 1;"><%= eligible ? 'workspace_premium' : 'hourglass_top' %></span>
+    <h2 class="font-headline text-headline-sm mt-2 mb-1"><%= eligible ? 'You are eligible to graduate!' : 'Keep going' %></h2>
+    <p class="text-on-primary-container text-sm flex-1"><%= eligible ? 'Congratulations — complete the steps below to register for commencement.' : 'Complete your remaining courses to qualify for graduation.' %></p>
+    <% if (certificates.length) { %><a href="/portal/certificates" class="mt-3 bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm text-center">View digital diplomas</a><% } %>
+  </div>
+</div>
+
+<!-- Road to commencement -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <% const steps = [['Degree audit', eligible, 'fact_check'],['Register', !!registration, 'how_to_reg'],['Regalia', registration && registration.regalia_size, 'checkroom'],['Digital diploma', certificates.length>0, 'workspace_premium']]; %>
+  <% steps.forEach(function(s, i){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 text-center">
+    <span class="material-symbols-outlined <%= s[1] ? 'text-secondary' : 'text-outline' %>" style="<%= s[1] ? "font-variation-settings:'FILL' 1;" : '' %>"><%= s[2] %></span>
+    <p class="font-bold text-primary text-sm mt-2"><%= i+1 %>. <%= s[0] %></p>
+    <p class="font-tagline text-[10px] uppercase mt-1 <%= s[1] ? 'text-secondary' : 'text-on-surface-variant' %>"><%= s[1] ? 'Done' : 'Pending' %></p>
+  </div>
+  <% }) %>
+</div>
+
+<!-- Registration -->
+<div class="max-w-2xl bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+  <h2 class="font-headline text-headline-sm text-primary mb-4">Commencement Registration</h2>
+  <form action="/portal/graduation/register" method="post" class="space-y-4">
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Ceremony</label>
+        <select name="ceremony" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option <%= registration && registration.ceremony==='Annual Commencement'?'selected':'' %>>Annual Commencement</option>
+          <option <%= registration && registration.ceremony==='Online Commencement'?'selected':'' %>>Online Commencement</option>
+        </select>
+      </div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Attending?</label>
+        <select name="attending" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="yes" <%= registration && !registration.attending ? '' : 'selected' %>>Yes, I'll attend</option>
+          <option value="no" <%= registration && !registration.attending ? 'selected' : '' %>>Not attending</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Regalia (gown) size</label>
+        <select name="regalia_size" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">Select…</option>
+          <% ['S','M','L','XL','XXL'].forEach(function(sz){ %><option <%= registration && registration.regalia_size===sz?'selected':'' %>><%= sz %></option><% }) %>
+        </select>
+      </div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Guests</label><input name="guests" type="number" min="0" max="10" value="<%= registration ? registration.guests : 0 %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+    </div>
+    <button class="bg-primary text-on-primary px-6 py-3 rounded font-bold"><%= registration ? 'Update registration' : 'Register for commencement' %></button>
+    <% if (registration) { %><span class="text-secondary text-sm font-bold ml-3"><span class="material-symbols-outlined text-base align-middle">check_circle</span> Registered</span><% } %>
+  </form>
+</div>

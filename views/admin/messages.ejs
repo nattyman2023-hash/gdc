@@ -1,0 +1,22 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Operations</p><h1 class="font-headline text-headline-md text-primary">Messages</h1></div>
+
+<div class="space-y-3">
+  <% if (!messages.length) { %><p class="text-on-surface-variant">No messages.</p><% } %>
+  <% messages.forEach(function(m){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 <%= m.handled ? 'opacity-60' : '' %>">
+    <div class="flex justify-between items-start gap-3 mb-2">
+      <div>
+        <p class="font-bold text-primary"><%= m.name %> <span class="font-normal text-on-surface-variant text-sm">&lt;<%= m.email %>&gt;</span></p>
+        <% if (m.subject) { %><p class="text-sm text-secondary font-bold"><%= m.subject %></p><% } %>
+      </div>
+      <span class="font-tagline text-[11px] text-on-surface-variant uppercase whitespace-nowrap"><%= formatDate(m.created_at) %></span>
+    </div>
+    <p class="text-on-surface-variant text-sm whitespace-pre-line mb-3"><%= m.message %></p>
+    <div class="flex items-center gap-4">
+      <a href="mailto:<%= m.email %>" class="text-secondary font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">reply</span> Reply</a>
+      <form action="/admin/messages/<%= m.id %>/handled" method="post"><button class="text-on-surface-variant font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base"><%= m.handled ? 'undo' : 'check' %></span> <%= m.handled ? 'Mark unhandled' : 'Mark handled' %></button></form>
+      <form action="/admin/messages/<%= m.id %>/delete" method="post" onsubmit="return confirm('Delete this message?');"><button class="text-error font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">delete</span> Delete</button></form>
+    </div>
+  </div>
+  <% }) %>
+</div>

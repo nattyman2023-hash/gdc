@@ -1,0 +1,128 @@
+<a href="/admin/courses" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Back to Courses</a>
+
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-start justify-between gap-4 mb-6">
+    <div>
+      <h1 class="font-headline text-headline-lg text-primary mb-2"><%= isNew ? 'Create Course' : 'Edit Course' %></h1>
+      <p class="text-on-surface-variant"><%= isNew ? 'Set up a new LMS course.' : 'Update course details and settings.' %></p>
+    </div>
+    <% if (!isNew) { %>
+    <div class="flex gap-2 shrink-0">
+      <a href="/admin/courses/<%= course.id %>/preview" target="_blank" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span> Preview</a>
+      <a href="/admin/courses/<%= course.id %>/modules" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">view_module</span> Build content</a>
+    </div>
+    <% } %>
+  </div>
+
+  <% if (flash.success && flash.success.length) { %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div>
+  <% } %>
+
+  <form method="POST" class="space-y-6">
+    <!-- Basic Info -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="font-semibold text-lg mb-4">Course Information</h2>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Title *</label>
+          <input type="text" name="title" value="<%= course.title || '' %>" required class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Course Code</label>
+          <input type="text" name="code" value="<%= course.code || '' %>" placeholder="e.g. THEO101" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Summary</label>
+        <textarea name="summary" rows="2" class="w-full px-3 py-2 border rounded"><%= course.summary || '' %></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Description</label>
+        <textarea name="description" data-rich rows="4" class="w-full px-3 py-2 border rounded"><%= course.description || '' %></textarea>
+      </div>
+      <!-- Featured image -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Featured image URL</label>
+        <div class="flex gap-4 items-start">
+          <div class="flex-1">
+            <input type="url" name="featured_image" id="featured_image" value="<%= course.featured_image || '' %>" placeholder="https://… or upload →" class="w-full px-3 py-2 border rounded" oninput="document.getElementById('fi-preview').src=this.value||'/img/generated/gdcu-online-learning.png'">
+            <button type="button" data-upload-target="#featured_image" data-upload-preview="#fi-preview" class="mt-2 inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm">upload</span> Upload image</button>
+          </div>
+          <img id="fi-preview" src="<%= course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-40 h-24 object-cover rounded-lg border border-outline-variant bg-surface-container-low" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+        </div>
+        <p class="text-xs text-on-surface-variant mt-1">Shown on the course card, hero and student page. Paste a URL or upload (max 6&nbsp;MB).</p>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Credits</label>
+          <input type="number" name="credits" value="<%= course.credits || 15 %>" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Icon</label>
+          <input type="text" name="icon" value="<%= course.icon || '' %>" placeholder="e.g. diversity_3" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Sort Order</label>
+          <input type="number" name="sort_order" value="<%= course.sort_order || 0 %>" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+    </div>
+
+    <!-- Program & Instructor -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="font-semibold text-lg mb-4">Program & Instructor</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Program</label>
+          <select name="program_id" class="w-full px-3 py-2 border rounded">
+            <option value="">None</option>
+            <% programs.forEach(function(p){ %>
+              <option value="<%= p.id %>" <% if (course.program_id === p.id) { %>selected<% } %>><%= p.title %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Instructor</label>
+          <select name="instructor_id" class="w-full px-3 py-2 border rounded">
+            <option value="">None</option>
+            <% instructors.forEach(function(i){ %>
+              <option value="<%= i.id %>" <% if (course.instructor_id === i.id) { %>selected<% } %>><%= i.first_name %> <%= i.last_name %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drip Feed Settings -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="font-semibold text-lg mb-4">Drip Feed Settings</h2>
+      <div class="flex items-center gap-4 mb-4">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" name="drip_feed_enabled" value="1" <%= course.drip_feed_enabled ? 'checked' : '' %> class="sr-only peer" onchange="document.getElementById('drip-interval').classList.toggle('hidden', !this.checked)">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          <span class="ms-3 text-sm font-medium">Enable Drip Feed</span>
+        </label>
+      </div>
+      <div id="drip-interval" class="<%= course.drip_feed_enabled ? '' : 'hidden' %>">
+        <label class="block text-sm font-medium mb-2">Unlock Interval (hours)</label>
+        <input type="number" name="drip_feed_interval_hours" value="<%= course.drip_feed_interval_hours || 4 %>" min="1" max="168" class="w-32 px-3 py-2 border rounded">
+        <p class="text-xs text-on-surface-variant mt-1">How many hours after completing a lesson before the next one unlocks.</p>
+      </div>
+    </div>
+
+    <!-- Publishing -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="font-semibold text-lg mb-4">Publishing</h2>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" name="published" value="1" <%= course.published ? 'checked' : '' %> class="sr-only peer">
+        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+        <span class="ms-3 text-sm font-medium">Published</span>
+      </label>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <a href="/admin/courses" class="px-6 py-3 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest">Cancel</a>
+      <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded font-bold hover:opacity-90"><%= isNew ? 'Create Course' : 'Save Changes' %></button>
+    </div>
+  </form>
+</div>

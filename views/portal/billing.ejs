@@ -1,0 +1,52 @@
+<div class="mb-6">
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Account</p>
+  <h1 class="font-headline text-headline-md text-primary">Billing &amp; Payments</h1>
+</div>
+
+<!-- Outstanding balance -->
+<div class="grid sm:grid-cols-2 gap-4 mb-8">
+  <div class="bg-primary text-on-primary rounded-lg p-6">
+    <p class="font-tagline text-label-sm text-secondary-fixed uppercase">Outstanding balance</p>
+    <p class="font-display text-display-lg-mobile mt-1"><%= formatMoney(outstanding, 'GBP') %></p>
+    <% if (outstanding > 0) { %><p class="text-on-primary-container text-sm mt-2">Pay your instalments below to stay enrolled.</p><% } else { %><p class="text-secondary-fixed text-sm mt-2">You're all paid up. Thank you!</p><% } %>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-center">
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Payment method</p>
+    <% if (paymentsEnabled) { %>
+      <p class="text-on-surface text-sm flex items-center gap-2"><span class="material-symbols-outlined text-secondary">credit_card</span> Secure card payment via Stripe</p>
+    <% } else { %>
+      <p class="text-on-surface-variant text-sm flex items-center gap-2"><span class="material-symbols-outlined">info</span> Online card payments are not enabled in this environment. Contact the finance office to pay.</p>
+    <% } %>
+  </div>
+</div>
+
+<h2 class="font-headline text-headline-sm text-primary mb-3">Your invoices</h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Reference</th><th class="px-4 py-3">Description</th><th class="px-4 py-3 hidden sm:table-cell">Due</th><th class="px-4 py-3">Amount</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Action</th></tr>
+    </thead>
+    <tbody>
+      <% if (!invoices.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">You have no invoices.</td></tr><% } %>
+      <% invoices.forEach(function(i){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><%= i.reference %></td>
+        <td class="px-4 py-3 text-primary"><%= i.description %></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant <%= i.is_overdue ? 'text-error font-bold' : '' %>"><%= formatDate(i.due_date) %><% if (i.is_overdue) { %> (overdue)<% } %></td>
+        <td class="px-4 py-3 font-bold text-primary"><%= formatMoney(i.amount, i.currency) %></td>
+        <td class="px-4 py-3"><%- include('../admin/_badge', { status: i.is_overdue ? 'overdue' : i.status }) %></td>
+        <td class="px-4 py-3 text-right">
+          <% if (i.status === 'paid') { %>
+            <span class="text-secondary font-bold text-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">check_circle</span> Paid</span>
+          <% } else if (i.status === 'void') { %>
+            <span class="text-on-surface-variant text-xs">—</span>
+          <% } else { %>
+            <form action="/portal/invoices/<%= i.id %>/pay" method="post"><button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-xs hover:opacity-90">Pay now</button></form>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<p class="text-xs text-on-surface-variant mt-3">Need help with fees, instalment plans or sponsorship? <a href="/contact" class="text-secondary font-bold">Contact the finance office</a>.</p>

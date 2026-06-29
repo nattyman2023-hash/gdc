@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Claim Your Digital Certificate | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#ebe8e2",
+                    "surface-bright": "#fcf9f3",
+                    "primary-container": "#071d3a",
+                    "on-tertiary-fixed": "#001a40",
+                    "surface-dim": "#dcdad4",
+                    "on-secondary": "#ffffff",
+                    "background": "#fcf9f3",
+                    "outline-variant": "#c4c6ce",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#b4c7ec",
+                    "primary-fixed": "#d6e3ff",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#4c5f7f",
+                    "on-secondary-fixed": "#271900",
+                    "on-primary-fixed": "#051b38",
+                    "primary": "#00030c",
+                    "surface-container-highest": "#e5e2dc",
+                    "tertiary": "#00030d",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-tertiary-container": "#6a85bb",
+                    "inverse-on-surface": "#f3f0ea",
+                    "on-surface": "#1c1c18",
+                    "secondary-container": "#fdc355",
+                    "on-surface-variant": "#44474d",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-secondary-container": "#725000",
+                    "on-primary": "#ffffff",
+                    "secondary": "#7d5800",
+                    "inverse-surface": "#31312d",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "surface-container": "#f0eee8",
+                    "on-primary-fixed-variant": "#354766",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#7386a8",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fcf9f3",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#d7e2ff",
+                    "outline": "#74777e",
+                    "surface-container-low": "#f6f3ed",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "secondary-fixed": "#ffdea9",
+                    "on-background": "#1c1c18",
+                    "tertiary-container": "#001c43",
+                    "surface-variant": "#e5e2dc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "unit": "8px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .certificate-foil {
+            background: linear-gradient(135deg, #f6bd50 0%, #ffdea9 50%, #7d5800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .certificate-border {
+            border: 12px double #f6bd50;
+            position: relative;
+        }
+        .certificate-border::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border: 1px solid #f6bd50;
+        }
+        .subtle-grid {
+            background-image: radial-gradient(#f6bd50 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant h-20 fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-gutter w-full max-w-container-max mx-auto h-full">
+<div class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">
+                Global Diaspora University
+            </div>
+<nav class="hidden md:flex space-x-8">
+<a class="text-on-surface-variant font-body-md hover:text-secondary transition-colors" href="#">Admissions</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary transition-colors" href="#">Programs</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary transition-colors" href="#">Research</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary transition-colors" href="#">About</a>
+</nav>
+<button class="bg-primary text-on-primary px-6 py-2 font-body-md rounded hover:opacity-90 transition-all scale-95 duration-150">
+                Apply Now
+            </button>
+</div>
+</header>
+<!-- SideNavBar (Suppressed for focused task-flow as per instructions, but kept as placeholder for navigation shell logic if needed. Here we prioritize the content canvas) -->
+<main class="flex-grow pt-32 pb-24 px-gutter w-full max-w-container-max mx-auto relative">
+<!-- Background Decoration -->
+<div class="absolute inset-0 subtle-grid opacity-10 pointer-events-none"></div>
+<!-- Hero Congratulations Section -->
+<section class="text-center mb-16 relative z-10">
+<div class="inline-block mb-4">
+<span class="font-tagline text-tagline bg-secondary-container text-on-secondary-container px-4 py-1 uppercase tracking-widest">Achievement Verified</span>
+</div>
+<h1 class="font-display-lg text-display-lg md:text-display-lg mb-4">Congratulations, David K. Richards</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto italic">
+                "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
+            </p>
+<div class="w-24 h-px bg-secondary mx-auto mt-6"></div>
+</section>
+<div class="grid lg:grid-cols-12 gap-12 items-start">
+<!-- Certificate Preview - Bento Style Column -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Main Certificate Card -->
+<div class="bg-surface-container-lowest shadow-2xl p-8 md:p-12 border border-outline-variant relative overflow-hidden">
+<!-- Subtle Watermark -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+<img class="w-96 h-96 grayscale" data-alt="A highly detailed close-up of a traditional university seal featuring an open book and a glowing cross emblem. The image is rendered in a monochromatic grey tone with intricate line work and engravings, conveying a sense of heritage, academic excellence, and religious devotion. The lighting is soft and even, highlighting the fine metallic texture of the embossed seal against a pristine white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4MrvHqQl9cRHIj4YIv7Z58P1h_6f54wzrb-0Y0DYtF9mLCMxEpRKCiK9uvo7ccC2WBq27N5_FGaQUmosRoo7V7-WtgsWzrLeeaTgghFDaesrAR-6D6gVTZdRvab01zbuo68g2Simt5fFx-k_A_ELfSHA0Q0X1DXZ2raO43xLRRnHA0_xn8CysiIIuAmexN9eFYeJM3zUbafIRFmbP3t5q0JuvfSjQ3Wqh-p85iyHsczEduADycewlGprroLupUE61-Ja5kjQtAPU"/>
+</div>
+<div class="certificate-border p-8 md:p-16 flex flex-col items-center text-center bg-white">
+<div class="mb-8">
+<span class="font-headline-sm text-headline-sm text-primary uppercase tracking-widest border-b border-primary pb-2">Global Diaspora University</span>
+</div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-6">THIS CERTIFIES THAT</p>
+<h2 class="font-display-lg text-display-lg mb-8 text-primary">David K. Richards</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-4">HAS SUCCESSFULLY COMPLETED THE PRESCRIBED COURSE OF STUDY AND IS HEREBY GRANTED THE</p>
+<h3 class="font-display-lg text-3xl md:text-5xl mb-12 certificate-foil">Graduate Certificate in Global Leadership</h3>
+<div class="flex justify-between w-full mt-12 border-t border-outline-variant pt-8 px-4">
+<div class="text-left">
+<p class="font-body-md border-b border-on-surface w-32 mb-1"></p>
+<p class="font-tagline text-[10px] uppercase">University Chancellor</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 bg-secondary-fixed opacity-20 rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-secondary text-3xl">verified</span>
+</div>
+<p class="font-tagline text-[8px] uppercase tracking-tighter">Official GDU Seal</p>
+</div>
+<div class="text-right">
+<p class="font-body-md border-b border-on-surface w-32 mb-1"></p>
+<p class="font-tagline text-[10px] uppercase">Academic Dean</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Verification Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 border border-outline-variant rounded-lg">
+<div class="flex items-center space-y-1 mb-4">
+<span class="material-symbols-outlined text-primary mr-2">link</span>
+<span class="font-tagline text-xs uppercase tracking-wider text-on-surface-variant">Blockchain ID</span>
+</div>
+<p class="font-mono text-xs break-all text-primary font-bold">GDU-BC-2024-X92-FK32-1L9P</p>
+</div>
+<div class="bg-surface-container-low p-6 border border-outline-variant rounded-lg">
+<div class="flex items-center space-y-1 mb-4">
+<span class="material-symbols-outlined text-primary mr-2">calendar_today</span>
+<span class="font-tagline text-xs uppercase tracking-wider text-on-surface-variant">Issue Date</span>
+</div>
+<p class="font-body-md text-primary font-bold">October 24, 2024</p>
+</div>
+<div class="bg-surface-container-low p-6 border border-outline-variant rounded-lg">
+<div class="flex items-center space-y-1 mb-4">
+<span class="material-symbols-outlined text-primary mr-2">verified_user</span>
+<span class="font-tagline text-xs uppercase tracking-wider text-on-surface-variant">Status</span>
+</div>
+<p class="font-body-md text-secondary font-bold flex items-center">
+<span class="w-2 h-2 bg-secondary rounded-full mr-2 animate-pulse"></span>
+                            Verified
+                        </p>
+</div>
+</div>
+</div>
+<!-- Action Sidebar -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Claim Badge Card -->
+<div class="bg-primary-container text-on-primary-fixed p-8 rounded-xl relative overflow-hidden group">
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-secondary opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
+<h4 class="font-headline-sm text-headline-sm text-white mb-4">Digital Badge</h4>
+<p class="font-body-md text-on-primary-container mb-6">Share your achievement instantly on LinkedIn and other professional networks with our cryptographically secure digital badge.</p>
+<button class="w-full bg-secondary-container text-on-secondary-container py-4 font-tagline text-tagline hover:bg-secondary-fixed transition-colors flex items-center justify-center space-x-2">
+<span>CLAIM DIGITAL BADGE</span>
+<span class="material-symbols-outlined">workspace_premium</span>
+</button>
+</div>
+<!-- Physical Copy Form -->
+<div class="bg-surface-container p-8 border border-outline-variant">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Request Physical Copy</h4>
+<p class="font-body-md text-on-surface-variant mb-6 text-sm">Order a high-quality parchment print with embossed gold foil seal.</p>
+<form class="space-y-4">
+<div>
+<label class="font-tagline text-[10px] uppercase text-on-surface-variant mb-1 block">Full Mailing Address</label>
+<textarea class="w-full bg-surface-container-low border-0 border-b border-primary p-3 focus:ring-0 text-body-md" placeholder="Enter delivery address..." rows="3"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-tagline text-[10px] uppercase text-on-surface-variant mb-1 block">City</label>
+<input class="w-full bg-surface-container-low border-0 border-b border-primary p-3 focus:ring-0 text-body-md" type="text"/>
+</div>
+<div>
+<label class="font-tagline text-[10px] uppercase text-on-surface-variant mb-1 block">Postal Code</label>
+<input class="w-full bg-surface-container-low border-0 border-b border-primary p-3 focus:ring-0 text-body-md" type="text"/>
+</div>
+</div>
+<div class="pt-4">
+<label class="flex items-center space-x-3 cursor-pointer">
+<input class="form-checkbox text-primary rounded-sm focus:ring-0 h-4 w-4" type="checkbox"/>
+<span class="font-body-md text-sm">Include leatherette presentation folder ($15.00)</span>
+</label>
+</div>
+<button class="w-full border-2 border-secondary text-primary py-3 font-tagline text-tagline hover:bg-secondary hover:text-white transition-all mt-6 uppercase" type="button">
+                            Submit Request
+                        </button>
+</form>
+</div>
+<!-- Security Assurance -->
+<div class="flex items-start space-x-3 p-4 opacity-70">
+<span class="material-symbols-outlined text-primary">shield_lock</span>
+<p class="font-body-md text-xs text-on-surface-variant">GDU certificates are permanently recorded on the blockchain. Authenticity can be verified by any third party with your unique ID.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container">
+<div class="w-full py-12 px-gutter flex flex-col items-center space-y-6 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md text-secondary-fixed">GDU</div>
+<nav class="flex flex-wrap justify-center gap-8">
+<a class="font-tagline text-tagline text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors" href="#">Accreditation</a>
+<a class="font-tagline text-tagline text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+<a class="font-tagline text-tagline text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors" href="#">Giving</a>
+<a class="font-tagline text-tagline text-on-primary-fixed-variant hover:text-secondary-fixed-dim transition-colors" href="#">Contact Us</a>
+</nav>
+<div class="w-full border-t border-on-primary-fixed-variant/20 pt-6 text-center">
+<p class="font-tagline text-tagline opacity-80">© 2024 Global Diaspora University. Commissioned for a Higher Purpose.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Foil shine effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const foils = document.querySelectorAll('.certificate-foil');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            foils.forEach(foil => {
+                foil.style.backgroundImage = `linear-gradient(${135 + (x * 10)}deg, #f6bd50 0%, #ffdea9 ${50 + (y * 5)}%, #7d5800 100%)`;
+            });
+        });
+
+        // Simulation of claiming badge
+        document.querySelector('.group button').addEventListener('click', function() {
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span><span>Processing...</span>';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                this.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span>BADGE CLAIMED</span>';
+                this.classList.remove('bg-secondary-container');
+                this.classList.add('bg-green-600', 'text-white');
+            }, 2000);
+        });
+    </script>
+</body></html>

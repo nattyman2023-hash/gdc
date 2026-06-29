@@ -1,0 +1,67 @@
+<section class="relative bg-primary text-on-primary py-16 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="/img/generated/gdcu-student-admissions-video.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/78"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/50"></div>
+  <div class="relative max-w-3xl mx-auto">
+    <a href="/careers" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All positions</a>
+    <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest"><%= job.type %><% if (job.department) { %> · <%= job.department %><% } %></p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-4"><%= job.title %></h1>
+    <p class="text-on-primary-container"><span class="material-symbols-outlined text-base align-middle">location_on</span> <%= job.location || 'Remote' %><% if (job.closes_on) { %> · Closes <%= formatDate(job.closes_on) %><% } %></p>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-12 gap-10 lg:gap-16 items-start">
+    <!-- Main -->
+    <div class="md:col-span-7">
+      <h2 class="font-headline text-headline-md text-primary mb-4">About the role</h2>
+      <div class="font-body text-body-lg text-on-surface-variant leading-relaxed whitespace-pre-line"><%= job.description || job.summary %></div>
+
+      <h3 class="font-headline text-headline-sm text-primary mt-10 mb-4">Why join GDCU</h3>
+      <ul class="grid sm:grid-cols-2 gap-4">
+        <% [
+          ['public','Global, mission-driven impact'],
+          ['diversity_3','A supportive, faith-centred team'],
+          ['schedule','Flexible, mostly remote working'],
+          ['volunteer_activism','Serve students across the diaspora']
+        ].forEach(function(it){ %>
+        <li class="flex items-start gap-3 bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;"><%= it[0] %></span>
+          <span class="font-body text-body-md text-on-surface"><%= it[1] %></span>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <!-- Apply sidebar -->
+    <div class="md:col-span-5">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm sticky top-28">
+        <div class="pb-4 mb-4 border-b border-outline-variant/50">
+          <p class="font-tagline text-label-sm text-secondary uppercase"><%= job.type %></p>
+          <h2 class="font-headline text-headline-sm text-primary">Apply for this role</h2>
+          <p class="text-sm text-on-surface-variant mt-1"><span class="material-symbols-outlined text-base align-middle">location_on</span> <%= job.location || 'Remote' %><% if (job.closes_on) { %> · Closes <%= formatDate(job.closes_on) %><% } %></p>
+        </div>
+        <% if (Object.keys(errors).length) { %><div class="bg-error-container text-on-error-container px-3 py-2 rounded mb-4 text-sm">Please correct the highlighted fields.</div><% } %>
+        <form action="/careers/<%= job.slug %>/apply" method="post" class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <input name="first_name" value="<%= form.first_name || '' %>" placeholder="First name *" class="field <%= errors.first_name?'field-error':'' %>" />
+            <input name="last_name" value="<%= form.last_name || '' %>" placeholder="Last name *" class="field <%= errors.last_name?'field-error':'' %>" />
+          </div>
+          <input type="email" name="email" value="<%= form.email || '' %>" placeholder="Email *" class="field <%= errors.email?'field-error':'' %>" />
+          <input name="phone" value="<%= form.phone || '' %>" placeholder="Phone" class="field" />
+          <input name="cv_url" value="<%= form.cv_url || '' %>" placeholder="Link to CV / LinkedIn" class="field" />
+          <textarea name="cover_note" rows="4" placeholder="Why are you a good fit?" class="field"><%= form.cover_note || '' %></textarea>
+          <button class="w-full bg-primary text-on-primary px-5 py-3 rounded-lg font-bold hover:opacity-90">Submit application</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-primary text-on-primary text-center px-margin-mobile">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="font-headline text-headline-md mb-4">Serve a global calling</h2>
+    <p class="text-on-primary-container mb-8">Explore other opportunities to join the GDCU team and community.</p>
+    <a href="/careers" class="inline-block bg-secondary text-on-secondary px-8 py-3 rounded-lg font-bold">View all positions</a>
+  </div>
+</section>

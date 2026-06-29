@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GDU Insights | Global Diaspora University Media Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface-variant": "#44474d",
+                      "on-tertiary-fixed": "#001a40",
+                      "on-secondary-container": "#725000",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#e5e2dc",
+                      "secondary": "#7d5800",
+                      "primary": "#00030c",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#ebe8e2",
+                      "inverse-primary": "#b4c7ec",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#1c1c18",
+                      "inverse-surface": "#31312d",
+                      "surface-container": "#f0eee8",
+                      "on-tertiary-container": "#6a85bb",
+                      "on-secondary-fixed": "#271900",
+                      "inverse-on-surface": "#f3f0ea",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#071d3a",
+                      "tertiary-container": "#001c43",
+                      "on-tertiary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e5e2dc",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "surface": "#fcf9f3",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed": "#d7e2ff",
+                      "outline-variant": "#c4c6ce",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "background": "#fcf9f3",
+                      "surface-bright": "#fcf9f3",
+                      "surface-container-low": "#f6f3ed",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#1c1c18",
+                      "on-primary-fixed": "#051b38",
+                      "secondary-fixed": "#ffdea9",
+                      "surface-tint": "#4c5f7f",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "primary-fixed": "#d6e3ff",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "on-primary-fixed-variant": "#354766",
+                      "surface-dim": "#dcdad4",
+                      "secondary-container": "#fdc355",
+                      "outline": "#74777e",
+                      "on-primary-container": "#7386a8",
+                      "tertiary": "#00030d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "margin-desktop": "64px",
+                      "margin-mobile": "20px",
+                      "container-max": "1280px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Playfair Display"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "tagline": ["Montserrat"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "display-lg": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 4px 20px rgba(7, 29, 58, 0.08);
+        }
+        .texture-overlay {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            opacity: 0.4;
+        }
+        .hover-gold-transition:hover {
+            border-color: #fdc355;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<header class="w-full z-50 flex flex-col items-center bg-primary-container shadow-sm sticky top-0 border-b border-white/10">
+<nav class="max-w-container-max w-full px-margin-desktop py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-surface-lowest tracking-tight">Global Diaspora University</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest transition-colors duration-200" href="#">About</a>
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest transition-colors duration-200" href="#">Catalog</a>
+<a class="font-tagline text-tagline text-surface-lowest/80 hover:text-surface-lowest transition-colors duration-200" href="#">Enrollment</a>
+<a class="font-tagline text-tagline text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Learning</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2 text-surface-lowest">
+<span class="material-symbols-outlined cursor-pointer hover:text-tertiary-fixed">support</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-tertiary-fixed">volunteer_activism</span>
+</div>
+<button class="bg-secondary-container text-on-secondary-fixed px-6 py-2 rounded-lg font-tagline text-tagline uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Apply Now</button>
+</div>
+</nav>
+</header>
+<main class="relative overflow-hidden">
+<!-- Hero Section: Featured Insight -->
+<section class="relative min-h-[819px] flex items-center bg-primary-container overflow-hidden">
+<div class="absolute inset-0 opacity-40">
+<img alt="Featured Article Header" class="w-full h-full object-cover" data-alt="A majestic, traditional university library hall with high vaulted ceilings and rows of classical wooden study tables. The lighting is warm and cinematic, casting long shadows that emphasize the academic prestige. The image has a deep navy and gold tone to reflect the institutional branding, evoking a sense of heritage and global scholarship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBzrqOyNMvl3pA8hqWnZ55OPGZZqjLL0unp6vX0K6D5f9YccUsxcci5a9IXdqm-arbqBKcVNgSfVhEYoiRtZ-s5ondjB8f2N-wPGH_DP1Y6YJX5yf3TYUgZtze-oeYg8x75VE-5z3KrJRawl4YG2RsPc-RUgIztElHFbU0LZ6r3E5K9DJUKQHnMHMbO-PNSTaqC5nz3Br8pG_S0yJwvsvIYe426Vnmzi0EXlbeSpQp-sV24cHeZSjf6Vb56XUwSLZD2BWiQJBKkXQ"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container via-primary-container/80 to-transparent"></div>
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10 grid grid-cols-12 gap-gutter items-center">
+<div class="col-span-12 md:col-span-7">
+<div class="inline-block bg-secondary-container text-on-secondary-fixed px-3 py-1 rounded-sm mb-6 font-tagline text-tagline">
+                        FEATURED INSIGHT
+                    </div>
+<h1 class="font-display-lg text-display-lg text-surface-lowest mb-6 leading-tight">
+                        The Diaspora Mandate: Theology in a Globalized Age
+                    </h1>
+<p class="font-body-lg text-body-lg text-surface-lowest/90 mb-8 max-w-xl">
+                        Dr. Elias Thorne explores how the movement of people groups across borders is not merely a social phenomenon, but a divine catalyst for theological renewal and global leadership.
+                    </p>
+<div class="flex items-center gap-6">
+<button class="bg-surface-lowest text-primary-container px-8 py-3 font-tagline text-tagline tracking-widest uppercase hover:bg-tertiary-fixed transition-colors">
+                            Read Article
+                        </button>
+<span class="text-surface-lowest/60 font-tagline text-tagline">October 24, 2024 — 12 MIN READ</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Insights Grid Section -->
+<section class="py-24 bg-surface relative">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div class="max-w-2xl">
+<span class="font-tagline text-tagline text-secondary tracking-[0.2em] uppercase block mb-4">GDU Insights</span>
+<h2 class="font-headline-md text-headline-md text-primary">Voices from the Global Mission</h2>
+<div class="w-24 h-1 bg-secondary-container mt-6"></div>
+</div>
+<div class="flex gap-4">
+<button class="border border-outline/30 px-6 py-2 font-tagline text-tagline hover:border-secondary transition-all">Latest</button>
+<button class="border border-outline/30 px-6 py-2 font-tagline text-tagline hover:border-secondary transition-all">Most Read</button>
+</div>
+</div>
+<!-- Bento-inspired Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Article Card 1 -->
+<article class="col-span-12 md:col-span-4 group cursor-pointer bg-surface-container-lowest border border-outline/10 editorial-shadow hover-gold-transition p-2 flex flex-col">
+<div class="relative overflow-hidden aspect-[4/3] mb-6">
+<img alt="Global Reach Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A diverse group of young graduate students from different ethnic backgrounds engaged in a vibrant discussion around a modern tablet in an ivory-walled seminar room. The morning sunlight pours in through tall windows, highlighting the intellectual energy. The color palette is composed of soft creams, navy accents, and professional warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbPBu8ckx4TONOg52KECHPLTIIX7sMTcCGvtexPNn4Kl6zaNAzbO_Ndnhs2DDiOcMdIt8f7XukS18SxZeiFtPJhmzefzE-7FSDiY-YClXZneDDV2a7enkiUA0LoYDRJOtKbWjyX8lEtduUrvFiBvS1zM6rNRClNk0lmDodQlXN8y_QxFzt2VH9bDe1j6x8vfnIFsZXD728aWAzqc_yMDXRkfchNd5EZPLoc8crgB9EnmlUUO5GUOTVX3ALk5pEc_3bqb8c0lDFRWQ"/>
+<div class="absolute top-4 left-4 bg-primary-container text-surface-lowest px-3 py-1 font-tagline text-[10px] tracking-widest uppercase">Global Reach</div>
+</div>
+<div class="px-6 pb-8 flex-grow flex flex-col">
+<div class="font-label-sm text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 18, 2024
+                            </div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4 leading-tight group-hover:text-secondary-fixed-dim transition-colors">
+                                Breaking Borders: Student Impact in Southeast Asia
+                            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">
+                                How GDU graduates are transforming local economies and spiritual landscapes through ethical leadership initiatives.
+                            </p>
+<div class="mt-auto flex items-center text-secondary font-tagline text-tagline group-hover:translate-x-2 transition-transform">
+                                READ FULL STORY <span class="material-symbols-outlined ml-2">arrow_right_alt</span>
+</div>
+</div>
+</article>
+<!-- Article Card 2 -->
+<article class="col-span-12 md:col-span-4 group cursor-pointer bg-surface-container-lowest border border-outline/10 editorial-shadow hover-gold-transition p-2 flex flex-col">
+<div class="relative overflow-hidden aspect-[4/3] mb-6">
+<img alt="Faith &amp; Society Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A close-up shot of an open, ancient leather-bound manuscript resting on a dark wood table, with a modern digital stylus pen nearby. The lighting is focused and dramatic, highlighting the texture of the old parchment and the sleekness of the technology. The mood represents the fusion of tradition and modernity at the heart of diaspora theology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBFgl6xa73NcGgJoVXrFSyKrRrgRurL7JsRa9aquKjNxiqv43zqBFflVGo-s9x6k1uMbF47XUfn6yQpaBH8poOiufbVM_sgUQVcXelElKPl09oreww5vUoPTs0PktBfHGLv-KFWlxvbshCekbEuBzUBTzK3iESfpUU0Wy920F__U0QHrob5RrNpwaCcyH_wMgdmzKrR-_f4r2HlPNV_SkmCjQLZClaZ1QhSD_HKsFO7Ez30GQojme6Urp00ycgF-cx3V46QOJrq34"/>
+<div class="absolute top-4 left-4 bg-primary-container text-surface-lowest px-3 py-1 font-tagline text-[10px] tracking-widest uppercase">Faith &amp; Society</div>
+</div>
+<div class="px-6 pb-8 flex-grow flex flex-col">
+<div class="font-label-sm text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 12, 2024
+                            </div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4 leading-tight group-hover:text-secondary-fixed-dim transition-colors">
+                                Reclaiming the Narrative: Diaspora and Identity
+                            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">
+                                A critical review of how modern diaspora communities are redefining religious participation in secular environments.
+                            </p>
+<div class="mt-auto flex items-center text-secondary font-tagline text-tagline group-hover:translate-x-2 transition-transform">
+                                READ FULL STORY <span class="material-symbols-outlined ml-2">arrow_right_alt</span>
+</div>
+</div>
+</article>
+<!-- Article Card 3 -->
+<article class="col-span-12 md:col-span-4 group cursor-pointer bg-surface-container-lowest border border-outline/10 editorial-shadow hover-gold-transition p-2 flex flex-col">
+<div class="relative overflow-hidden aspect-[4/3] mb-6">
+<img alt="Success Stories Article" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A wide-angle shot of a contemporary urban skyline at sunset, with the silhouette of a university spire in the foreground. The sky is a gradient of deep orange and soft violet. The image conveys a sense of global vision and the limitless potential of leadership across cityscapes. It is sophisticated, clean, and aspirational." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADkLydC2GxGmhV9VwnjWqusmK6L0TXZtQ8C0kH8N0PNVT0-vnkrbeXP9MjdPmKDDuvH8VlpKll9wf0yh6aZZHRLI-ACCKxlKZvkQ2skDAQomGsXOPJcDxltOmmmDpfKYZbaVajtoMW1b91-oXl3_T9wmRjsdUxFETS8x04n5nZp1mw99bjsdd4SrURAChYhux24WqhdnucCk3ikr2aGD31ZVwoo6Ty5BMqqh4t6I0YWA20wxCzmeJK1MkbxLqLP4tNwbF1RNzcXIg"/>
+<div class="absolute top-4 left-4 bg-primary-container text-surface-lowest px-3 py-1 font-tagline text-[10px] tracking-widest uppercase">Leadership</div>
+</div>
+<div class="px-6 pb-8 flex-grow flex flex-col">
+<div class="font-label-sm text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 05, 2024
+                            </div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4 leading-tight group-hover:text-secondary-fixed-dim transition-colors">
+                                Global Trends: The Rise of Servant-Entrepreneurship
+                            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">
+                                Exploring the intersection of kingdom values and marketplace innovation in developing nations.
+                            </p>
+<div class="mt-auto flex items-center text-secondary font-tagline text-tagline group-hover:translate-x-2 transition-transform">
+                                READ FULL STORY <span class="material-symbols-outlined ml-2">arrow_right_alt</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- Media Kit Section -->
+<section class="py-24 bg-surface-container overflow-hidden relative">
+<div class="absolute inset-0 texture-overlay pointer-events-none"></div>
+<div class="max-w-container-max mx-auto px-margin-desktop grid grid-cols-12 gap-gutter items-center relative z-10">
+<div class="col-span-12 md:col-span-5">
+<h2 class="font-display-lg text-display-lg text-primary mb-8">Press &amp; Media Resources</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12 italic border-l-4 border-secondary-container pl-6 py-2">
+                        "For members of the press and institutional partners, we provide comprehensive resources to accurately reflect the GDU mission and brand identity."
+                    </p>
+<div class="space-y-4">
+<div class="flex items-center gap-4 bg-surface-lowest p-4 border border-outline/10 shadow-sm hover:border-secondary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-3xl">download</span>
+<div>
+<h4 class="font-tagline text-tagline text-primary">GDU Brand Guidelines (PDF)</h4>
+<p class="font-label-sm text-on-surface-variant">Visual standards, logo usage, and voice.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-surface-lowest p-4 border border-outline/10 shadow-sm hover:border-secondary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-3xl">photo_library</span>
+<div>
+<h4 class="font-tagline text-tagline text-primary">Official Imagery Gallery</h4>
+<p class="font-label-sm text-on-surface-variant">High-resolution campus and faculty photos.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-surface-lowest p-4 border border-outline/10 shadow-sm hover:border-secondary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-3xl">article</span>
+<div>
+<h4 class="font-tagline text-tagline text-primary">2024 Fact Sheet</h4>
+<p class="font-label-sm text-on-surface-variant">University statistics, leadership bios, and reach.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 md:offset-1 mt-12 md:mt-0">
+<div class="relative group">
+<div class="absolute -inset-4 border-2 border-secondary-container/20 group-hover:border-secondary-container transition-all"></div>
+<img alt="Media Kit Context" class="w-full relative z-10 editorial-shadow grayscale hover:grayscale-0 transition-all duration-700" data-alt="A sophisticated professional office setting where a silver laptop displays the Global Diaspora University logo. On the desk, there is a physical GDU brochure and a gold university seal paperweight. The background is softly blurred showing a modern boardroom. The lighting is bright and clean, emphasizing a corporate-academic fusion style with ivory and navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyan6yBCOKf3Y4O3nskHsRaHPZb4EtS04F_FMDx449ICLP1DEwZDmxGXSb6lLIp1WDH3mQ5ZPmdNUiH2mCFU3KrqIX9sMSbUe6ew1K-H2lcUnybGdGsL0GjGmCggjwZZVRyR8Gbs8pqwsBy2RqJF8p4krAEb-3bfn3s7DkmX15oPxMk0ruVPE5xAf7d1HyG86QXTqFovCu9hlzvJFOjLk0Lq-9y1YmiLksj-6KXY3InRsNAipvTIZqMzEPjf1A8EdOviBs55hqBKg"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter CTA -->
+<section class="bg-primary-container py-24 relative overflow-hidden">
+<!-- Subtle atmospheric shader background -->
+
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10 text-center">
+<div class="max-w-3xl mx-auto">
+<span class="material-symbols-outlined text-tertiary-fixed text-5xl mb-8">auto_stories</span>
+<h2 class="font-display-lg text-display-lg text-surface-lowest mb-6">Join the Spirit's Movement</h2>
+<p class="font-body-lg text-body-lg text-tertiary-fixed/80 mb-12">
+                        Receive monthly insights on diaspora missiology and global leadership trends delivered directly to your inbox.
+                    </p>
+<form class="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
+<input class="flex-grow bg-surface-lowest/10 border-b-2 border-surface-lowest/30 text-surface-lowest px-4 py-3 focus:outline-none focus:border-secondary-container transition-all placeholder:text-surface-lowest/40 font-body-md" placeholder="Enter your email address" type="email"/>
+<button class="bg-secondary-container text-on-secondary-fixed px-10 py-3 font-tagline text-tagline uppercase tracking-widest hover:bg-secondary-fixed transition-all active:scale-95">Subscribe</button>
+</form>
+<p class="mt-6 font-label-sm text-surface-lowest/40 italic">
+                        By subscribing, you agree to our Privacy Policy and to receive academic updates.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container text-on-primary-fixed border-t border-white/5">
+<div class="max-w-container-max mx-auto px-margin-desktop py-16 flex flex-col md:flex-row justify-between gap-gutter">
+<div class="max-w-sm">
+<span class="font-headline-md text-headline-md text-surface-lowest block mb-6">Global Diaspora University</span>
+<p class="font-body-md text-surface-lowest/70 mb-8">
+                    Empowering the global church through rigorous academic scholarship and missiological practice.
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-surface-lowest/60 hover:text-surface-lowest cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined text-surface-lowest/60 hover:text-surface-lowest cursor-pointer transition-colors">diversity_3</span>
+<span class="material-symbols-outlined text-surface-lowest/60 hover:text-surface-lowest cursor-pointer transition-colors">hub</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div class="flex flex-col gap-4">
+<h5 class="font-tagline text-tagline text-surface-lowest">University</h5>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Governance</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Roadmap</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Research</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-tagline text-tagline text-surface-lowest">Resources</h5>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">FAQs</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Student Portal</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Media Kit</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-tagline text-tagline text-surface-lowest">Legal</h5>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-surface-lowest/70 hover:text-surface-lowest transition-colors" href="#">Contact</a>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-desktop py-8 border-t border-white/5 flex justify-between items-center text-label-sm text-surface-lowest/40">
+<span>© 2024 Global Diaspora University. All rights reserved. Registered in the UK.</span>
+<div class="flex gap-4 italic">
+<span>Solas Propter Christum</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple scroll interaction for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-lg');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.add('shadow-sm');
+                header.classList.remove('shadow-lg');
+            }
+        });
+
+        // Hover effects for cards
+        document.querySelectorAll('article').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

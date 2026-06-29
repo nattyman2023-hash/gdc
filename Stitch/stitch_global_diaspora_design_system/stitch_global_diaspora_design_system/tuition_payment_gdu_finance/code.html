@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tuition Matrix & Payment Gateway | GDU</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind Config from Style Guidance -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#271900",
+                    "surface-container-low": "#f6f3ed",
+                    "error-container": "#ffdad6",
+                    "background": "#fcf9f3",
+                    "tertiary": "#00030d",
+                    "surface-container": "#f0eee8",
+                    "secondary-container": "#fdc355",
+                    "inverse-primary": "#b4c7ec",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#6a85bb",
+                    "on-background": "#1c1c18",
+                    "inverse-surface": "#31312d",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-secondary-container": "#725000",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "surface-dim": "#dcdad4",
+                    "primary": "#00030c",
+                    "surface-variant": "#e5e2dc",
+                    "secondary": "#7d5800",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ea",
+                    "on-tertiary-fixed": "#001a40",
+                    "on-primary-container": "#7386a8",
+                    "secondary-fixed": "#ffdea9",
+                    "surface-bright": "#fcf9f3",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#001c43",
+                    "on-surface-variant": "#44474d",
+                    "on-surface": "#1c1c18",
+                    "on-primary-fixed": "#051b38",
+                    "primary-fixed": "#d6e3ff",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c4c6ce",
+                    "surface-container-high": "#ebe8e2",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#4c5f7f",
+                    "tertiary-fixed": "#d7e2ff",
+                    "surface": "#fcf9f3",
+                    "error": "#ba1a1a",
+                    "primary-container": "#071d3a",
+                    "outline": "#74777e",
+                    "on-primary-fixed-variant": "#354766"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            background: rgba(252, 249, 243, 0.85);
+        }
+        .institutional-border {
+            border: 1px solid rgba(125, 88, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- TopNavBar (Shared Component Logic) -->
+<nav class="bg-background dark:bg-on-background border-b border-outline-variant dark:border-outline sticky top-0 z-50 shadow-sm">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="font-display-lg text-display-lg text-primary dark:text-primary-fixed cursor-pointer">GDU</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Admissions</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-secondary dark:text-secondary-fixed border-b-2 border-secondary pb-1" href="#">Programs</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Research</a>
+<a class="font-body-md text-body-md font-bold uppercase tracking-wider text-on-background dark:text-inverse-on-surface hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">About</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:bg-primary-container transition-all active:scale-95 duration-200">
+                Student Portal
+            </button>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- Header Section -->
+<header class="text-center mb-16">
+<div class="flex justify-center mb-4">
+<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-tagline text-tagline uppercase rounded">Academic Year 2024-2025</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Tuition Matrix</h1>
+<div class="w-24 h-1 bg-secondary mx-auto mb-6"></div>
+<p class="font-headline-sm text-headline-sm italic text-on-surface-variant max-w-2xl mx-auto">
+                "For the worker is worthy of his support." — 1 Timothy 5:18
+            </p>
+</header>
+<!-- Pricing Cards Section (Asymmetric Layout) -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-20 items-stretch">
+<!-- Left: Context / Mission Statement -->
+<div class="md:col-span-4 flex flex-col justify-center space-y-6">
+<h2 class="font-headline-md text-headline-md text-primary">Global Equity in Education</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                    Our dual-tier pricing model ensures that the Global Diaspora University remains accessible to our brothers and sisters in East Africa while sustaining world-class institutional standards through diaspora contributions.
+                </p>
+<div class="bg-surface-container p-6 rounded-xl border border-outline-variant italic">
+                    All tuition funds are directly reinvested into campus development, theological research, and student scholarships.
+                </div>
+</div>
+<!-- Middle: East Africa Tier -->
+<div class="md:col-span-4 institutional-border bg-white rounded-xl overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
+<div class="bg-surface-container-low p-8 text-center border-b border-outline-variant">
+<span class="font-tagline text-tagline text-secondary uppercase block mb-2">Tier 1 Subsidized</span>
+<h3 class="font-headline-md text-headline-md text-primary">East Africa Rates</h3>
+</div>
+<div class="p-8 flex-grow flex flex-col items-center justify-center space-y-4">
+<div class="text-center">
+<span class="font-display-lg text-display-lg text-primary">$450</span>
+<span class="font-body-md text-on-surface-variant">/ Semester</span>
+</div>
+<ul class="space-y-3 w-full border-t border-outline-variant pt-6">
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span>Full Academic Enrollment</span>
+</li>
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span>Digital Library Access</span>
+</li>
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span>On-Campus Resource Access</span>
+</li>
+</ul>
+<div class="mt-6 text-sm text-center text-on-surface-variant">
+                        Eligibility: Residing in Kenya, Uganda, Tanzania, Rwanda, Burundi, or South Sudan.
+                    </div>
+</div>
+</div>
+<!-- Right: Global Diaspora Tier -->
+<div class="md:col-span-4 border-2 border-secondary bg-primary-container text-on-primary rounded-xl overflow-hidden flex flex-col shadow-xl transition-transform hover:-translate-y-1">
+<div class="bg-primary p-8 text-center border-b border-on-primary-fixed-variant relative">
+<div class="absolute top-0 right-0 p-2">
+<span class="bg-secondary text-on-secondary-fixed text-[10px] font-bold px-2 py-1 rounded">MOST COMMON</span>
+</div>
+<span class="font-tagline text-tagline text-secondary-fixed uppercase block mb-2">Tier 2 Institutional</span>
+<h3 class="font-headline-md text-headline-md text-white">Global Diaspora</h3>
+</div>
+<div class="p-8 flex-grow flex flex-col items-center justify-center space-y-4">
+<div class="text-center">
+<span class="font-display-lg text-display-lg text-white">$1,200</span>
+<span class="font-body-md text-on-primary-container">/ Semester</span>
+</div>
+<ul class="space-y-3 w-full border-t border-on-primary-fixed-variant pt-6">
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary-fixed">verified</span>
+<span>All Academic Benefits</span>
+</li>
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary-fixed">verified</span>
+<span>Diaspora Networking Portal</span>
+</li>
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary-fixed">verified</span>
+<span>Global Alumni Association</span>
+</li>
+<li class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-secondary-fixed">verified</span>
+<span>Sponsorship Recognition</span>
+</li>
+</ul>
+<div class="mt-6 text-sm text-center text-on-primary-container">
+                        Eligibility: International students and diaspora residents contributing to regional growth.
+                    </div>
+</div>
+</div>
+</section>
+<!-- Payment Gateway Section -->
+<section class="bg-white rounded-2xl shadow-sm border border-outline-variant overflow-hidden" id="payment-gateway">
+<div class="grid grid-cols-1 lg:grid-cols-2">
+<!-- Left: Payment Selection -->
+<div class="p-8 md:p-12 border-r border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-4xl">lock</span>
+                        Secure Payment Gateway
+                    </h2>
+<div class="space-y-6">
+<div class="flex flex-col space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Select Payment Method</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-6 border-2 border-secondary bg-surface-container-low rounded-lg transition-all" id="btn-transfer" onclick="switchTab('transfer')">
+<span class="material-symbols-outlined text-3xl mb-2 text-secondary">account_balance</span>
+<span class="font-bold">Local Bank Transfer</span>
+<span class="text-xs text-on-surface-variant">Recommended for East Africa</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 border-2 border-outline-variant hover:border-secondary rounded-lg transition-all" id="btn-online" onclick="switchTab('online')">
+<span class="material-symbols-outlined text-3xl mb-2 text-primary">payments</span>
+<span class="font-bold">Online Payment</span>
+<span class="text-xs text-on-surface-variant">Credit Card / Diaspora</span>
+</button>
+</div>
+</div>
+<!-- Tab: Bank Transfer -->
+<div class="space-y-4 animate-in fade-in duration-500" id="tab-transfer">
+<div class="bg-surface-container p-6 rounded-lg border-l-4 border-secondary">
+<h4 class="font-bold text-primary mb-4">Official Bank Details</h4>
+<div class="space-y-3 font-mono text-sm">
+<div class="flex justify-between border-b border-outline-variant pb-2">
+<span class="text-on-surface-variant uppercase tracking-tighter">Bank Name:</span>
+<span class="font-bold text-primary">KCB Bank Kenya</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-2">
+<span class="text-on-surface-variant uppercase tracking-tighter">Account Name:</span>
+<span class="font-bold text-primary">Global Diaspora Univ.</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-2">
+<span class="text-on-surface-variant uppercase tracking-tighter">Account No:</span>
+<span class="font-bold text-primary">12398405928</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-2">
+<span class="text-on-surface-variant uppercase tracking-tighter">Swift Code:</span>
+<span class="font-bold text-primary">KCBLKENA</span>
+</div>
+</div>
+<div class="mt-6 text-xs italic text-on-surface-variant">
+                                    *Please include your Student ID in the transaction reference to ensure automatic reconciliation.
+                                </div>
+</div>
+</div>
+<!-- Tab: Online Payment (Hidden by default) -->
+<div class="hidden space-y-6 animate-in fade-in duration-500" id="tab-online">
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">CARDHOLDER NAME</label>
+<input class="w-full bg-surface-container-low border-b border-primary px-0 py-3 focus:outline-none focus:border-secondary transition-colors" placeholder="John Doe" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">CARD NUMBER</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b border-primary px-0 py-3 focus:outline-none focus:border-secondary transition-colors" placeholder="**** **** **** ****" type="text"/>
+<div class="absolute right-0 bottom-3 flex space-x-2">
+<span class="material-symbols-outlined text-on-surface-variant">credit_card</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">EXPIRY</label>
+<input class="w-full bg-surface-container-low border-b border-primary px-0 py-3 focus:outline-none focus:border-secondary transition-colors" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">CVV</label>
+<input class="w-full bg-surface-container-low border-b border-primary px-0 py-3 focus:outline-none focus:border-secondary transition-colors" placeholder="***" type="text"/>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-secondary-fixed py-4 rounded font-bold uppercase tracking-widest hover:bg-secondary-fixed transition-colors">
+                                    Process Secure Payment
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Confirmation / Receipt Preview -->
+<div class="p-8 md:p-12 bg-surface-container-low relative">
+<div class="absolute inset-0 opacity-5 pointer-events-none overflow-hidden">
+<!-- Background Pattern or Seal -->
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-[300px]">verified_user</span>
+</div>
+</div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-10">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Summary</h3>
+<p class="text-on-surface-variant">Order #GDU-2024-8832</p>
+</div>
+<img alt="University Seal" class="h-16 w-16 opacity-80" data-alt="A macro photograph of an official embossed gold university seal on a heavy ivory parchment document. The lighting is soft and directional, highlighting the metallic texture and the intricate circular design. The style is professional and authoritative, conveying institutional trust and academic heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu1y5iNpUqekiGiTN_7oAT4WFNQ1VlhpNWpEiHgmejy2cvFM9yz2pHxgCuygTdgIgIt8Hwud4znEV0zQVGStT7gMQSfpznue-NL2h4spoyc-5EXKvwruYgBL6MLQn0O72SUy0a2nUXMoDlv-AIajGlv3ZldrI5SkK0Raik4WYvpTcc6ukbHLIU4sCtng831CvaU7rRmYksomifpH0pnmbnxXPx8Of6dz8xXR-2fl-dDMcCw4xEThBrDJlCLDMSxrjSAxy2OFSogFo"/>
+</div>
+<div class="space-y-4 bg-white p-6 rounded shadow-sm border border-outline-variant">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Tuition (Tier 1 - Subsidized)</span>
+<span class="font-bold">$450.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Technology & Lab Fee</span>
+<span class="font-bold">$25.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Student Union Levy</span>
+<span class="font-bold">$10.00</span>
+</div>
+<div class="border-t border-dashed border-outline-variant my-4 pt-4 flex justify-between">
+<span class="font-headline-sm text-primary">Total Amount Due</span>
+<span class="font-headline-sm text-secondary">$485.00</span>
+</div>
+</div>
+<div class="mt-8 flex items-start space-x-3 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">info</span>
+<p>Once payment is confirmed, a digital receipt will be sent to your student email. For bank transfers, please allow 48-72 hours for verification.</p>
+</div>
+<div class="mt-12 flex justify-center">
+<button class="flex items-center space-x-2 text-primary font-bold border-b-2 border-primary hover:text-secondary hover:border-secondary transition-all">
+<span class="material-symbols-outlined">print</span>
+<span>Download PDF Quote</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Scripture Footer Divider -->
+<section class="mt-24 text-center max-w-3xl mx-auto">
+<div class="w-16 h-px bg-secondary-fixed-dim mx-auto mb-6"></div>
+<p class="font-headline-md italic text-primary leading-relaxed">
+                "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
+            </p>
+<div class="w-16 h-px bg-secondary-fixed-dim mx-auto mt-6"></div>
+<p class="font-tagline text-tagline text-secondary mt-4 uppercase">Colossians 3:23</p>
+</section>
+</main>
+<!-- Footer (Shared Component Logic) -->
+<footer class="bg-primary-container dark:bg-tertiary-container border-t border-secondary dark:border-secondary-fixed-dim mt-24">
+<div class="w-full py-12 px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-md text-headline-md text-on-primary-container mb-4">GDU</div>
+<p class="text-on-primary-container opacity-80 text-body-md">Christ-Centered Excellence in the heart of East Africa, connecting the diaspora with heritage and purpose.</p>
+</div>
+<div class="col-span-1">
+<h4 class="font-bold text-on-primary-container mb-6 uppercase tracking-wider">Quick Links</h4>
+<ul class="space-y-3">
+<li><a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Accreditation</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Privacy Policy</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Terms of Service</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:text-secondary-fixed transition-opacity" href="#">Global Contact</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="font-bold text-on-primary-container mb-6 uppercase tracking-wider">Connect</h4>
+<div class="flex space-x-4">
+<span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-fixed">public</span>
+<span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-fixed">mail</span>
+<span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-fixed">phone</span>
+</div>
+</div>
+<div class="col-span-1">
+<h4 class="font-bold text-on-primary-container mb-6 uppercase tracking-wider">Newsletter</h4>
+<div class="flex">
+<input class="bg-transparent border-b border-on-primary-container text-on-primary-container p-2 w-full focus:outline-none placeholder:opacity-50" placeholder="Email Address" type="email"/>
+<button class="material-symbols-outlined text-on-primary-container ml-2">send</button>
+</div>
+</div>
+</div>
+<div class="w-full py-6 text-center text-on-primary-container opacity-60 text-sm border-t border-on-primary-fixed-variant max-w-container-max mx-auto px-margin-desktop">
+            © 2024 Global Diaspora University. All Rights Reserved. Christ-Centered Excellence.
+        </div>
+</footer>
+<script>
+        function switchTab(tab) {
+            const transferTab = document.getElementById('tab-transfer');
+            const onlineTab = document.getElementById('tab-online');
+            const btnTransfer = document.getElementById('btn-transfer');
+            const btnOnline = document.getElementById('btn-online');
+
+            if (tab === 'transfer') {
+                transferTab.classList.remove('hidden');
+                onlineTab.classList.add('hidden');
+                btnTransfer.classList.add('border-secondary', 'bg-surface-container-low');
+                btnTransfer.classList.remove('border-outline-variant');
+                btnOnline.classList.remove('border-secondary', 'bg-surface-container-low');
+                btnOnline.classList.add('border-outline-variant');
+                // Change icon colors
+                btnTransfer.querySelector('.material-symbols-outlined').classList.add('text-secondary');
+                btnTransfer.querySelector('.material-symbols-outlined').classList.remove('text-primary');
+                btnOnline.querySelector('.material-symbols-outlined').classList.add('text-primary');
+                btnOnline.querySelector('.material-symbols-outlined').classList.remove('text-secondary');
+            } else {
+                transferTab.classList.add('hidden');
+                onlineTab.classList.remove('hidden');
+                btnOnline.classList.add('border-secondary', 'bg-surface-container-low');
+                btnOnline.classList.remove('border-outline-variant');
+                btnTransfer.classList.remove('border-secondary', 'bg-surface-container-low');
+                btnTransfer.classList.add('border-outline-variant');
+                // Change icon colors
+                btnOnline.querySelector('.material-symbols-outlined').classList.add('text-secondary');
+                btnOnline.querySelector('.material-symbols-outlined').classList.remove('text-primary');
+                btnTransfer.querySelector('.material-symbols-outlined').classList.add('text-primary');
+                btnTransfer.querySelector('.material-symbols-outlined').classList.remove('text-secondary');
+            }
+        }
+    </script>
+</body></html>

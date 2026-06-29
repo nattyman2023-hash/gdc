@@ -1,0 +1,39 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Academic Analytics</p><h1 class="font-headline text-headline-md text-primary">My Performance</h1></div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <% const cards = [['Avg. progress', avgProgress+'%', 'trending_up'],['Courses completed', completed, 'task_alt'],['Avg. quiz score', avgScore+'%', 'quiz'],['Quizzes passed', passed, 'verified']]; %>
+  <% cards.forEach(function(c){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <span class="material-symbols-outlined text-secondary"><%= c[2] %></span>
+    <p class="font-headline text-headline-md text-primary leading-none mt-2"><%= c[1] %></p>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1"><%= c[0] %></p>
+  </div>
+  <% }) %>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6">
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Course progress</h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-4">
+      <% if (!enrollments.length) { %><p class="text-on-surface-variant text-sm">No courses yet.</p><% } %>
+      <% enrollments.forEach(function(e){ %>
+      <div>
+        <div class="flex justify-between text-sm mb-1"><span class="text-primary font-medium"><%= e.course_title %></span><span class="font-bold text-primary"><%= e.progress_pct %>%</span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= e.progress_pct %>%"></div></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Quiz results</h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3">
+      <% if (!bestAttempts.length) { %><p class="text-on-surface-variant text-sm">No quiz attempts yet.</p><% } %>
+      <% bestAttempts.forEach(function(a){ %>
+      <div class="flex justify-between items-center border-b border-outline-variant/30 pb-2 last:border-0">
+        <span class="text-sm text-primary"><%= a.quiz_title %></span>
+        <span class="font-bold <%= a.passed ? 'text-secondary' : 'text-error' %>"><%= a.score %>% <%= a.passed ? '✓' : '' %></span>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

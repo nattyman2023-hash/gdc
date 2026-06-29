@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quiz Results | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#001c43",
+                    "on-surface-variant": "#44474d",
+                    "on-surface": "#1c1c18",
+                    "on-primary-fixed": "#051b38",
+                    "primary-fixed": "#d6e3ff",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c4c6ce",
+                    "surface-container-high": "#ebe8e2",
+                    "on-tertiary-fixed": "#001a40",
+                    "on-primary-container": "#7386a8",
+                    "secondary-fixed": "#ffdea9",
+                    "surface-bright": "#fcf9f3",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#4c5f7f",
+                    "tertiary-fixed": "#d7e2ff",
+                    "surface": "#fcf9f3",
+                    "error": "#ba1a1a",
+                    "primary-container": "#071d3a",
+                    "outline": "#74777e",
+                    "on-primary-fixed-variant": "#354766",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f0eee8",
+                    "secondary-container": "#fdc355",
+                    "inverse-primary": "#b4c7ec",
+                    "surface-container-highest": "#e5e2dc",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#6a85bb",
+                    "on-background": "#1c1c18",
+                    "inverse-surface": "#31312d",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-secondary-fixed": "#271900",
+                    "surface-container-low": "#f6f3ed",
+                    "error-container": "#ffdad6",
+                    "background": "#fcf9f3",
+                    "tertiary": "#00030d",
+                    "surface-dim": "#dcdad4",
+                    "primary": "#00030c",
+                    "surface-variant": "#e5e2dc",
+                    "secondary": "#7d5800",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ea",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "on-secondary-container": "#725000",
+                    "on-tertiary-fixed-variant": "#294678"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "tagline": ["Montserrat"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg-mobile": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .remediation-gradient {
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(246,243,237,1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface-container-low border-r border-outline-variant/10 w-64">
+<div class="p-6">
+<h1 class="font-headline-md text-headline-md text-primary">Student Portal</h1>
+<p class="font-tagline text-tagline text-on-surface-variant uppercase tracking-widest mt-1">Global Diaspora University</p>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container font-bold px-4 py-3 rounded-none" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+<span>Academic Record</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span>Financials</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">book</span>
+<span>Library</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span>Support</span>
+</a>
+</nav>
+<div class="p-6 border-t border-outline-variant/10">
+<button class="w-full py-3 bg-primary-container text-surface-container-lowest font-tagline text-tagline rounded-none shadow-sm hover:opacity-90 transition-opacity">
+                WhatsApp Support
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-primary-container text-on-primary sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 border-b border-outline-variant/15 shadow-sm">
+<div class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest">GDU</div>
+<div class="hidden md:flex gap-gutter">
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Research</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Faculty</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">About</a>
+</div>
+<button class="bg-secondary text-on-secondary px-6 py-2 font-tagline text-tagline rounded-none uppercase tracking-widest hover:bg-secondary-container hover:text-on-secondary-container transition-all">Apply Now</button>
+</header>
+<!-- Quiz Hero / Score Section -->
+<section class="max-w-[1000px] mx-auto px-margin-mobile md:px-gutter py-12">
+<div class="mb-12 border-b border-outline-variant/20 pb-8">
+<nav class="flex items-center gap-2 text-on-surface-variant font-label-sm mb-4">
+<span>Courses</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>THEO 304: Diaspora Missiology</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Quiz 4 Results</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Quiz 4: Theological Foundations</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Completed on October 24, 2024 • Attempt 1 of 2</p>
+</div>
+<div class="flex items-center gap-6 bg-surface-container-low p-6 border border-outline-variant/20 rounded-none">
+<div class="text-center">
+<p class="font-tagline text-tagline text-on-surface-variant uppercase mb-1">Score</p>
+<p class="font-display-lg text-display-lg text-secondary">85<span class="text-headline-sm text-on-surface-variant">/100</span></p>
+</div>
+<div class="h-16 w-px bg-outline-variant/30"></div>
+<div class="text-center">
+<p class="font-tagline text-tagline text-on-surface-variant uppercase mb-1">Status</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">Passed</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Question Breakdown -->
+<div class="space-y-8">
+<!-- Question 1: Correct -->
+<div class="group relative bg-surface-container-lowest border border-outline-variant/10 p-8 hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
+<div class="flex justify-between items-start mb-6">
+<span class="font-tagline text-tagline text-on-surface-variant uppercase">Question 1 — Correct</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">What biblical narrative serves as the primary archetype for the "scattering" described in Diaspora Missiology?</h3>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-4 p-4 bg-surface-container border border-secondary-container/30">
+<span class="w-6 h-6 flex items-center justify-center border border-on-surface rounded-full text-xs">A</span>
+<span class="font-body-md text-on-surface">The Tower of Babel (Genesis 11)</span>
+</div>
+<div class="flex items-center gap-4 p-4 border border-outline-variant/10 opacity-60">
+<span class="w-6 h-6 flex items-center justify-center border border-outline rounded-full text-xs">B</span>
+<span class="font-body-md">The Exodus from Egypt</span>
+</div>
+<div class="flex items-center gap-4 p-4 border border-outline-variant/10 opacity-60">
+<span class="w-6 h-6 flex items-center justify-center border border-outline rounded-full text-xs">C</span>
+<span class="font-body-md">The Babylonian Captivity</span>
+</div>
+</div>
+</div>
+<!-- Question 2: Incorrect / Remediation -->
+<div class="bg-surface-container-lowest border border-error/20 p-8 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<span class="font-tagline text-tagline text-error uppercase">Question 2 — Incorrect</span>
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">According to Dr. Arisaka's lecture, what is the 'Centripetal' movement in biblical mission?</h3>
+<div class="space-y-3 mb-8">
+<div class="flex items-center gap-4 p-4 border border-error/40 bg-error-container/10">
+<span class="w-6 h-6 flex items-center justify-center border border-error rounded-full text-xs text-error">A</span>
+<span class="font-body-md text-on-surface">The outward movement of believers into the world. (Your Answer)</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-secondary-container/10 border border-secondary-container/30">
+<span class="w-6 h-6 flex items-center justify-center border border-secondary rounded-full text-xs text-secondary">B</span>
+<span class="font-body-md text-on-surface font-semibold">The inward movement of nations toward the light of God. (Correct Answer)</span>
+</div>
+</div>
+<!-- Remediation Block -->
+<div class="mt-12 bg-surface-container-low border-l-4 border-secondary p-8">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary">auto_stories</span>
+<h4 class="font-tagline text-tagline text-primary uppercase tracking-widest">Remediation & Review</h4>
+</div>
+<!-- Scripture Callout -->
+<div class="mb-8 text-center px-4 md:px-12">
+<div class="w-12 h-px bg-secondary mx-auto mb-4"></div>
+<p class="font-headline-sm italic text-on-surface-variant leading-relaxed mb-4">
+                                "Nations will come to your light, and kings to the brightness of your dawn."
+                            </p>
+<p class="font-tagline text-tagline text-secondary uppercase">— Isaiah 60:3</p>
+<div class="w-12 h-px bg-secondary mx-auto mt-4"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-gutter">
+<div class="space-y-6">
+<p class="font-body-md text-on-surface">
+                                    The <span class="font-bold">Centripetal</span> focus in the Old Testament emphasizes Israel as a beacon. Unlike the <span class="italic">Centrifugal</span> (outward) focus seen in the Great Commission, this movement describes people being drawn toward God's presence in Zion.
+                                </p>
+<div class="flex flex-col gap-2">
+<p class="font-label-sm text-on-surface-variant uppercase">Reading Resource</p>
+<a class="flex items-center gap-3 text-secondary hover:underline group" href="#">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+<span class="font-body-md">Chapter 4: The Inward Call, Global Diaspora Textbook (p. 88-92)</span>
+</a>
+</div>
+</div>
+<div class="relative group cursor-pointer overflow-hidden rounded-none border border-outline-variant/30">
+<img class="w-full h-48 object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="A professional academic lecture setting with a professor speaking behind a wooden lectern. The lighting is warm and focused, casting soft shadows in a large lecture hall. The atmosphere is intellectual and formal, capturing the essence of a prestigious university environment with traditional architectural details in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUijsZQumKNTxgQPjd0jdyxGoz1ERTv7Ps3HwGYEvojZ_yPaHGr5vyYq37LM3lzE3bk506cprSWh1EOmyb9wE9aGZAvMYOl--0qPBP3dgfvVwvEbc1sMpbhDgtJa8EN0IByqetlchnwMlxYAX2SGpIkIoKkJlXn6xeNe-2ccPQR7nuCJe9xZ12OkMke0oI5YWFqrbz88RsY1qmSnzvZHGXoiP1CDYRZwCr13iPGiGpamt10lNvr6Hwcldmbl_DNEsXWiiG4M74Iw8"/>
+<div class="absolute inset-0 bg-primary-container/40 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-white text-5xl mb-2" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<p class="text-white font-tagline text-tagline uppercase tracking-wider">Watch: Lecture 04 at 12:45</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Question 3: Correct -->
+<div class="group relative bg-surface-container-lowest border border-outline-variant/10 p-8 hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
+<div class="flex justify-between items-start mb-6">
+<span class="font-tagline text-tagline text-on-surface-variant uppercase">Question 3 — Correct</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">True or False: The 'voluntary diaspora' refers to those who choose to migrate for economic or educational opportunities.</h3>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-4 p-4 bg-surface-container border border-secondary-container/30">
+<span class="w-6 h-6 flex items-center justify-center border border-on-surface rounded-full text-xs">T</span>
+<span class="font-body-md text-on-surface">True</span>
+</div>
+<div class="flex items-center gap-4 p-4 border border-outline-variant/10 opacity-60">
+<span class="w-6 h-6 flex items-center justify-center border border-outline rounded-full text-xs">F</span>
+<span class="font-body-md">False</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Final Encouragement & Actions -->
+<div class="mt-16 text-center border-t border-outline-variant/20 pt-12 max-w-2xl mx-auto">
+<h4 class="font-headline-md text-headline-md text-primary mb-4">Excellent progress, Michael</h4>
+<p class="font-body-lg text-on-surface-variant mb-8">
+                    Your understanding of biblical scattering narratives is strong. We recommend reviewing the 'Centripetal' concepts before moving on to Module 5. You have one attempt remaining if you wish to improve your score.
+                </p>
+<div class="flex flex-col sm:flex-row justify-center gap-gutter">
+<button class="bg-primary-container text-surface-container-lowest px-12 py-4 font-tagline text-tagline uppercase tracking-widest hover:opacity-90 transition-all shadow-sm">
+                        Retake Quiz
+                    </button>
+<button class="border border-secondary text-secondary px-12 py-4 font-tagline text-tagline uppercase tracking-widest hover:bg-secondary hover:text-on-secondary transition-all">
+                        Next Module
+                    </button>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-16 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter bg-primary-container text-surface-container-lowest border-t-4 border-tertiary-fixed-dim">
+<div class="col-span-1">
+<div class="font-display-lg text-headline-md text-surface-container-lowest mb-4">GDU</div>
+<p class="font-body-md text-surface-variant max-w-xs">
+                    Developing global leaders through academic excellence and Christian devotion since 1924.
+                </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Careers</a>
+<a class="font-body-md text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Alumni</a>
+</div>
+<div class="flex flex-col justify-between">
+<div class="flex gap-4 mb-8 md:mb-0">
+<a class="w-10 h-10 border border-surface-variant/30 flex items-center justify-center hover:bg-tertiary-fixed-dim hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">public</span>
+</a>
+<a class="w-10 h-10 border border-surface-variant/30 flex items-center justify-center hover:bg-tertiary-fixed-dim hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</a>
+</div>
+<p class="font-body-md text-surface-variant text-sm opacity-70">
+                    © 2024 Global Diaspora University. Accredited by International Academic Council.
+                </p>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for quiz breakdown
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateY(-2px)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

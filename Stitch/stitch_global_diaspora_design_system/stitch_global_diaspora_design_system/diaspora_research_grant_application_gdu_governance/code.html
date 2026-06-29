@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Research Grant Application | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #00030c; /* primary */
+            box-shadow: 0 0 0 1px #00030c;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#294678",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#4c5f7f",
+                      "on-primary-fixed": "#051b38",
+                      "surface-variant": "#e5e2dc",
+                      "surface-container-high": "#ebe8e2",
+                      "surface-container": "#f0eee8",
+                      "secondary-fixed": "#ffdea9",
+                      "on-secondary-container": "#725000",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed-variant": "#5e4100",
+                      "on-secondary-fixed": "#271900",
+                      "error-container": "#ffdad6",
+                      "on-background": "#1c1c18",
+                      "inverse-surface": "#31312d",
+                      "surface": "#fcf9f3",
+                      "outline": "#74777e",
+                      "primary-fixed": "#d6e3ff",
+                      "on-surface": "#1c1c18",
+                      "inverse-primary": "#b4c7ec",
+                      "secondary": "#7d5800",
+                      "on-surface-variant": "#44474d",
+                      "on-primary-fixed-variant": "#354766",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f6f3ed",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#f6bd50",
+                      "primary": "#00030c",
+                      "on-tertiary-fixed": "#001a40",
+                      "tertiary": "#00030d",
+                      "on-primary-container": "#7386a8",
+                      "secondary-container": "#fdc355",
+                      "surface-dim": "#dcdad4",
+                      "primary-container": "#071d3a",
+                      "outline-variant": "#c4c6ce",
+                      "tertiary-fixed": "#d7e2ff",
+                      "tertiary-container": "#001c43",
+                      "tertiary-fixed-dim": "#acc7ff",
+                      "surface-container-highest": "#e5e2dc",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "on-tertiary-container": "#6a85bb",
+                      "surface-bright": "#fcf9f3",
+                      "background": "#fcf9f3",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f3f0ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "tagline": ["Montserrat"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg-mobile": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Playfair Display"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<nav class="flex justify-between items-center px-gutter w-full max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">Global Diaspora University</span>
+</div>
+<div class="hidden md:flex space-x-8">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">Programs</a>
+<a class="text-primary font-bold border-b-2 border-secondary font-body-md text-body-md" href="#">Research</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md text-body-md" href="#">About</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-tagline text-tagline hover:opacity-90 transition-all uppercase">
+                Apply Now
+            </button>
+</nav>
+</header>
+<!-- Main Content: Wizard Application -->
+<main class="flex-grow pt-32 pb-24 px-gutter max-w-4xl mx-auto w-full">
+<!-- Header & Identity -->
+<div class="text-center mb-12">
+<div class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-container font-tagline text-tagline mb-4">GRANT APPLICATION</div>
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Diaspora Research Grant</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant italic">Commissioned for a Higher Purpose: Advancing Scholarly Inquiry</p>
+</div>
+<!-- Progress Tracker -->
+<nav class="flex items-center justify-between mb-16 relative">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-surface-container-high -z-10 transform -translate-y-1/2"></div>
+<!-- Step 1: Proposal -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary text-on-primary font-bold shadow-md transition-all" id="step-marker-1">1</div>
+<span class="mt-2 font-tagline text-[10px] uppercase text-primary">Proposal</span>
+</div>
+<!-- Step 2: Methodology -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-on-surface-variant font-bold transition-all" id="step-marker-2">2</div>
+<span class="mt-2 font-tagline text-[10px] uppercase text-on-surface-variant">Design</span>
+</div>
+<!-- Step 3: Budget -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-on-surface-variant font-bold transition-all" id="step-marker-3">3</div>
+<span class="mt-2 font-tagline text-[10px] uppercase text-on-surface-variant">Budget</span>
+</div>
+<!-- Step 4: Documents -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-on-surface-variant font-bold transition-all" id="step-marker-4">4</div>
+<span class="mt-2 font-tagline text-[10px] uppercase text-on-surface-variant">Review</span>
+</div>
+</nav>
+<!-- Step Container -->
+<div class="relative overflow-hidden min-h-[600px]" id="application-wizard">
+<!-- STEP 1: Proposal Overview -->
+<section class="step-transition w-full space-y-8" id="step-1">
+<div class="bg-white border border-outline-variant p-8 shadow-sm">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Proposal Overview</h2>
+<div class="space-y-6">
+<div class="group">
+<label class="block font-tagline text-tagline text-on-surface-variant mb-2 uppercase">Research Question</label>
+<textarea class="w-full bg-surface-container-low border-b-2 border-primary-container p-4 font-body-md text-on-surface placeholder:italic" placeholder="What core academic inquiry drives this project?" rows="4"></textarea>
+</div>
+<div class="group">
+<label class="block font-tagline text-tagline text-on-surface-variant mb-2 uppercase">Intended Impact & Mission Alignment</label>
+<textarea class="w-full bg-surface-container-low border-b-2 border-primary-container p-4 font-body-md text-on-surface placeholder:italic" placeholder="Describe how this research serves the global diaspora and aligns with GDU's core mission..." rows="6"></textarea>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP 2: Methodology & Ethics (Hidden initially) -->
+<section class="step-transition hidden w-full space-y-8" id="step-2">
+<div class="bg-white border border-outline-variant p-8 shadow-sm">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Methodology & Ethics</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<label class="block font-tagline text-tagline text-on-surface-variant uppercase">Research Design</label>
+<select class="w-full bg-surface-container-low border-b-2 border-primary-container p-3 font-body-md">
+<option>Qualitative Analysis</option>
+<option>Quantitative Empirical Study</option>
+<option>Mixed Methods</option>
+<option>Ethnographic Fieldwork</option>
+<option>Archival/Historical Research</option>
+</select>
+</div>
+<div class="space-y-4">
+<label class="block font-tagline text-tagline text-on-surface-variant uppercase">Ethics Approval Status</label>
+<div class="flex gap-4">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-primary focus:ring-primary" name="ethics" type="radio"/>
+<span>Approved</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="text-primary focus:ring-primary" name="ethics" type="radio"/>
+<span>Pending</span>
+</label>
+</div>
+</div>
+<div class="md:col-span-2 space-y-4">
+<label class="block font-tagline text-tagline text-on-surface-variant uppercase">Data Protection Plan</label>
+<textarea class="w-full bg-surface-container-low border-b-2 border-primary-container p-4 font-body-md text-on-surface" placeholder="Detail how sensitive data will be secured and participant anonymity maintained..." rows="4"></textarea>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP 3: Budget Line-Item Builder (Hidden initially) -->
+<section class="step-transition hidden w-full space-y-8" id="step-3">
+<div class="bg-white border border-outline-variant p-8 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-primary">Budget Line-Item Builder</h2>
+<button class="flex items-center gap-2 text-secondary font-tagline text-tagline hover:text-primary transition-colors" onclick="addBudgetRow()">
+<span class="material-symbols-outlined">add_circle</span>
+                            ADD LINE ITEM
+                        </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant">
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant">Description</th>
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant w-32">Category</th>
+<th class="py-4 font-tagline text-[12px] uppercase text-on-surface-variant w-32 text-right">Amount (USD)</th>
+<th class="py-4 w-12"></th>
+</tr>
+</thead>
+<tbody id="budget-body">
+<tr class="border-b border-surface-container">
+<td class="py-4"><input class="bg-transparent border-none w-full font-body-md p-0" type="text" value="Travel to Regional Archives"/></td>
+<td class="py-4">
+<select class="bg-transparent border-none text-on-surface-variant text-sm p-0">
+<option>Logistics</option>
+<option>Materials</option>
+<option>Staffing</option>
+</select>
+</td>
+<td class="py-4 text-right font-body-md">1,200.00</td>
+<td class="py-4 text-right">
+<button class="text-error hover:opacity-70"><span class="material-symbols-outlined text-sm">delete</span></button>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td class="py-6 font-bold text-primary text-right uppercase font-tagline" colspan="2">Total Request:</td>
+<td class="py-6 text-right font-bold text-primary font-body-lg">$1,200.00</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</section>
+<!-- STEP 4: Reference Upload (Hidden initially) -->
+<section class="step-transition hidden w-full space-y-8" id="step-4">
+<div class="bg-white border border-outline-variant p-8 shadow-sm">
+<h2 class="font-headline-md text-headline-md text-primary mb-6">Supporting Documentation</h2>
+<p class="font-body-md text-on-surface-variant mb-8">Please provide your Curriculum Vitae, Letters of Support, and preliminary data charts if available. Files must be in PDF format.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-10 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-4">upload_file</span>
+<span class="font-tagline text-tagline text-primary">ACADEMIC CV</span>
+<span class="text-[10px] text-on-surface-variant mt-1 italic">PDF, Max 10MB</span>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-10 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-4">verified_user</span>
+<span class="font-tagline text-tagline text-primary">LETTER OF SUPPORT</span>
+<span class="text-[10px] text-on-surface-variant mt-1 italic">PDF, Max 5MB</span>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-10 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-4">analytics</span>
+<span class="font-tagline text-tagline text-primary">PRELIMINARY FINDINGS</span>
+<span class="text-[10px] text-on-surface-variant mt-1 italic">PDF/XLSX, Max 20MB</span>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-10 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-4">folder_shared</span>
+<span class="font-tagline text-tagline text-primary">OTHER APPENDIX</span>
+<span class="text-[10px] text-on-surface-variant mt-1 italic">Optional</span>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary-fixed mt-1">info</span>
+<div>
+<h4 class="font-tagline text-[12px] text-on-primary-container uppercase">Declaration of Integrity</h4>
+<p class="text-on-tertiary-container text-sm mt-1">By submitting this application, I certify that the information provided is accurate and that the research will be conducted according to GDU's ethical standards and Christian principles of academic honesty.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex justify-between mt-12">
+<button class="invisible flex items-center gap-2 px-8 py-3 border-2 border-outline text-on-surface-variant font-tagline text-tagline hover:bg-surface-container transition-all uppercase" id="btn-prev" onclick="moveStep(-1)">
+<span class="material-symbols-outlined">arrow_back</span>
+                Previous
+            </button>
+<button class="flex items-center gap-2 px-10 py-3 bg-primary text-on-primary font-tagline text-tagline hover:opacity-90 transition-all uppercase shadow-md" id="btn-next" onclick="moveStep(1)">
+                Next Step
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Callout Scripture Section -->
+<div class="mt-24 text-center max-w-2xl mx-auto border-t border-b border-secondary-fixed py-12">
+<p class="font-headline-md text-headline-md italic text-primary-container px-4">
+                "It is the glory of God to conceal a matter; to search out a matter is the glory of kings."
+            </p>
+<p class="mt-4 font-tagline text-[12px] text-secondary uppercase tracking-[0.2em]">— Proverbs 25:2</p>
+</div>
+</main>
+<!-- Footer Component -->
+<footer class="bg-primary text-on-primary w-full py-12 px-gutter flex flex-col items-center space-y-6">
+<div class="font-headline-md text-headline-md text-secondary-fixed">Global Diaspora University</div>
+<div class="flex flex-wrap justify-center gap-8 text-on-primary-fixed-variant font-tagline text-tagline">
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Accreditation</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Giving</a>
+<a class="hover:text-secondary-fixed-dim transition-colors" href="#">Contact Us</a>
+</div>
+<p class="text-on-primary-fixed-variant opacity-80 font-tagline text-[12px]">© 2024 Global Diaspora University. Commissioned for a Higher Purpose.</p>
+</footer>
+<script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function moveStep(delta) {
+            const newStep = currentStep + delta;
+            if (newStep < 1 || newStep > totalSteps) return;
+
+            // Hide current
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            
+            // Update markers
+            updateMarkers(newStep);
+
+            // Update state
+            currentStep = newStep;
+
+            // Show new
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            // Handle button visibility & text
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            if (currentStep === 1) {
+                btnPrev.classList.add('invisible');
+            } else {
+                btnPrev.classList.remove('invisible');
+            }
+
+            if (currentStep === totalSteps) {
+                btnNext.innerHTML = `Submit Application <span class="material-symbols-outlined">send</span>`;
+                btnNext.classList.replace('bg-primary', 'bg-secondary');
+            } else {
+                btnNext.innerHTML = `Next Step <span class="material-symbols-outlined">arrow_forward</span>`;
+                btnNext.classList.replace('bg-secondary', 'bg-primary');
+            }
+
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        }
+
+        function updateMarkers(newStep) {
+            for (let i = 1; i <= totalSteps; i++) {
+                const marker = document.getElementById(`step-marker-${i}`);
+                if (i < newStep) {
+                    marker.classList.remove('bg-surface-container-highest', 'text-on-surface-variant', 'bg-primary', 'text-on-primary');
+                    marker.classList.add('bg-secondary', 'text-on-secondary');
+                    marker.innerHTML = '<span class="material-symbols-outlined">check</span>';
+                } else if (i === newStep) {
+                    marker.classList.remove('bg-surface-container-highest', 'text-on-surface-variant', 'bg-secondary', 'text-on-secondary');
+                    marker.classList.add('bg-primary', 'text-on-primary');
+                    marker.innerHTML = i;
+                } else {
+                    marker.classList.remove('bg-primary', 'text-on-primary', 'bg-secondary', 'text-on-secondary');
+                    marker.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+                    marker.innerHTML = i;
+                }
+            }
+        }
+
+        function addBudgetRow() {
+            const body = document.getElementById('budget-body');
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-surface-container';
+            tr.innerHTML = `
+                <td class="py-4"><input type="text" placeholder="New Item" class="bg-transparent border-none w-full font-body-md p-0 italic"></td>
+                <td class="py-4">
+                    <select class="bg-transparent border-none text-on-surface-variant text-sm p-0">
+                        <option>Logistics</option>
+                        <option>Materials</option>
+                        <option>Staffing</option>
+                    </select>
+                </td>
+                <td class="py-4 text-right font-body-md">0.00</td>
+                <td class="py-4 text-right">
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-error hover:opacity-70"><span class="material-symbols-outlined text-sm">delete</span></button>
+                </td>
+            `;
+            body.appendChild(tr);
+        }
+    </script>
+</body></html>

@@ -1,0 +1,31 @@
+<%
+  // Expects: heroTitle, heroTagline (optional), heroText (optional), heroImage (optional)
+  const heroTitleText = typeof heroTitle !== 'undefined' ? heroTitle : '';
+  const titleForImage = heroTitleText.toLowerCase();
+  const resolvedHeroImage = typeof heroImage !== 'undefined' && heroImage
+    ? heroImage
+    : titleForImage.includes('program') || titleForImage.includes('learning')
+      ? '/img/generated/gdcu-student-video-lesson-home.png'
+      : titleForImage.includes('student life') || titleForImage.includes('events') || titleForImage.includes('alumni')
+        ? '/img/generated/gdcu-teacher-living-room-v2.png'
+        : titleForImage.includes('news') || titleForImage.includes('knowledge') || titleForImage.includes('research') || titleForImage.includes('accreditation')
+          ? '/img/generated/gdcu-news-accreditation-park-v2.png'
+          : titleForImage.includes('admissions') || titleForImage.includes('scholarships') || titleForImage.includes('careers') || titleForImage.includes('contact')
+            ? '/img/generated/gdcu-student-admissions-video.png'
+            : '/img/generated/gdcu-student-courtyard-learning.png';
+%>
+<section class="relative bg-primary text-on-primary py-24 md:py-28 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="<%= resolvedHeroImage %>" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/55"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-primary/40 via-primary/55 to-primary/85"></div>
+  <div class="relative max-w-container-max mx-auto text-center">
+    <% if (typeof heroTagline !== 'undefined' && heroTagline) { %>
+      <p class="font-tagline text-tagline text-secondary-fixed mb-4 uppercase tracking-[0.25em]"><%= heroTagline %></p>
+    <% } %>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-5 leading-tight"><%= heroTitle %></h1>
+    <div class="w-20 h-px bg-secondary mx-auto<%= (typeof heroText !== 'undefined' && heroText) ? ' mb-6' : '' %>"></div>
+    <% if (typeof heroText !== 'undefined' && heroText) { %>
+      <p class="font-body text-body-lg text-on-primary-container max-w-2xl mx-auto leading-relaxed"><%= heroText %></p>
+    <% } %>
+  </div>
+</section>

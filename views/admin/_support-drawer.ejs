@@ -1,0 +1,37 @@
+<div class="sticky top-0 bg-primary text-on-primary px-6 py-4 flex items-center justify-between z-10">
+  <div>
+    <p class="font-tagline text-[11px] text-secondary-fixed uppercase tracking-wider">Ticket · <%= ticket.reference %></p>
+    <h2 class="font-headline text-headline-sm leading-tight"><%= ticket.subject %></h2>
+  </div>
+  <button data-drawer-close class="material-symbols-outlined hover:text-secondary-fixed" title="Close">close</button>
+</div>
+
+<div class="p-6 space-y-5">
+  <div class="flex items-center gap-2 flex-wrap">
+    <%- include('_badge', { status: (ticket.status==='resolved'||ticket.status==='closed') ? 'paid' : (ticket.status==='pending'?'sent':'new') }) %>
+    <span class="text-sm text-on-surface-variant"><%= ticket.category %> · <%= ticket.priority %></span>
+    <a href="/admin/support/<%= ticket.id %>" class="ml-auto text-secondary font-bold text-sm inline-flex items-center gap-1">Full record <span class="material-symbols-outlined text-base">open_in_new</span></a>
+  </div>
+  <p class="text-sm text-on-surface-variant">From: <strong class="text-primary"><%= ticket.first_name ? (ticket.first_name+' '+ticket.last_name) : (ticket.email || 'Guest') %></strong></p>
+
+  <div class="space-y-2">
+    <% replies.forEach(function(r){ %>
+    <div class="rounded-lg p-3 text-sm <%= r.is_staff ? 'bg-secondary-fixed/40 border border-secondary/40 ml-4' : 'bg-surface-container-lowest border border-outline-variant mr-4' %>">
+      <div class="flex justify-between mb-1"><p class="font-bold text-primary text-xs"><%= r.author_name || (r.is_staff?'Staff':'Student') %></p><p class="text-[11px] text-on-surface-variant"><%= formatDate(r.created_at) %></p></div>
+      <p class="text-on-surface whitespace-pre-line"><%= r.body %></p>
+    </div>
+    <% }) %>
+  </div>
+
+  <form data-drawer-form action="/admin/support/<%= ticket.id %>/reply" method="post" class="space-y-2">
+    <textarea name="body" rows="3" placeholder="Reply to the student…" class="field"></textarea>
+    <div class="flex items-center justify-between gap-2">
+      <select name="status" class="field" style="width:auto">
+        <% ['open','pending','resolved','closed'].forEach(function(s){ %><option value="<%= s %>" <%= ticket.status===s?'selected':'' %>>Set: <%= s %></option><% }) %>
+      </select>
+      <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold text-sm">Send &amp; update</button>
+    </div>
+  </form>
+
+  <form data-drawer-form data-reload-page action="/admin/support/<%= ticket.id %>/delete" method="post"><button class="text-error border border-error/40 px-4 py-2 rounded font-bold text-sm">Delete ticket</button></form>
+</div>

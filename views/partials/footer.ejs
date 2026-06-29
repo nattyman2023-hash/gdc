@@ -1,0 +1,61 @@
+<!-- Footer CTA (pages with their own closing CTA can opt out via hideFooterCta) -->
+<% if (typeof hideFooterCta === 'undefined' || !hideFooterCta) { %>
+<section class="bg-surface-bright py-16">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <div class="bg-primary text-on-primary rounded-xl px-8 py-12 md:px-16 md:py-14 text-center relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-56 h-56 border-t-8 border-r-8 border-secondary-fixed-dim/20 -translate-y-8 translate-x-8"></div>
+      <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-[0.25em]">Ready to answer the call?</p>
+      <h2 class="font-display text-display-lg-mobile md:text-display-lg mb-6 max-w-2xl mx-auto leading-tight">Begin your GDCU journey today</h2>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/admissions/apply" class="bg-secondary text-on-secondary px-10 py-3.5 rounded font-bold hover:shadow-lg active:scale-95 transition-all">Apply Now</a>
+        <a href="/open-days" class="border-2 border-secondary-fixed text-on-primary px-10 py-3.5 rounded font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-all">Book an open day</a>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<footer class="bg-primary-container text-on-primary-container mt-auto">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile lg:px-margin-desktop py-16 max-w-container-max mx-auto">
+    <div class="space-y-6 md:col-span-2">
+      <div class="font-headline text-headline-sm text-on-primary-fixed">Global Diaspora Christian University</div>
+      <p class="font-tagline text-tagline text-surface-bright max-w-sm uppercase">Educate. Equip. Empower. Impact the World.</p>
+      <form action="/newsletter" method="post" class="flex max-w-sm gap-2 pt-2">
+        <input type="email" name="email" required placeholder="Your email" class="flex-1 px-4 py-2 rounded bg-on-primary-fixed-variant/30 border border-outline-variant/40 text-surface-bright placeholder:text-outline-variant focus:outline-none focus:border-secondary" />
+        <button class="bg-secondary text-on-secondary px-4 py-2 rounded font-tagline text-label-sm font-bold hover:opacity-90">Subscribe</button>
+      </form>
+    </div>
+    <div>
+      <h4 class="font-bold text-on-primary-fixed mb-4 font-tagline text-label-sm uppercase tracking-wider">Explore</h4>
+      <ul class="space-y-3 font-body text-body-md">
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/programs">Programs</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/admissions">Admissions &amp; Tuition</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/scholarships">Scholarships</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/how-it-works">How Online Learning Works</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/accreditation">Accreditation</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/events">Events</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/news">News &amp; Insights</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold text-on-primary-fixed mb-4 font-tagline text-label-sm uppercase tracking-wider">Support</h4>
+      <ul class="space-y-3 font-body text-body-md">
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/knowledge-base">Knowledge Base</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/faq">FAQs</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/contact">Contact Us</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/student-life">Student Life</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/careers">Careers — Join GDCU</a></li>
+        <li><a class="text-surface-variant hover:text-secondary-fixed-dim transition-colors" href="/login">Student Login</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-on-primary-fixed-variant/30 py-8 max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+    <p class="font-body text-sm text-outline-variant opacity-80">© <%= year %> Global Diaspora Christian University. All rights reserved.</p>
+    <div class="flex items-center gap-5">
+      <a href="/contact" class="inline-flex items-center gap-1 text-sm text-outline-variant hover:text-secondary-fixed-dim"><span class="material-symbols-outlined text-base">mail</span> Contact</a>
+      <a href="#" class="text-sm text-outline-variant hover:text-secondary-fixed-dim">Privacy</a>
+      <a href="#" class="text-sm text-outline-variant hover:text-secondary-fixed-dim">Terms</a>
+      <a href="#" class="text-sm text-outline-variant hover:text-secondary-fixed-dim">Accessibility</a>
+    </div>
+  </div>
+</footer>

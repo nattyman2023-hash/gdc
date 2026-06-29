@@ -1,0 +1,13 @@
+<%
+  // Expects: pg ({page,pages,total,perPage}), baseUrl (path + existing query, no page param)
+  if (pg && pg.pages > 1) {
+    var mk = function (n) { return baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + 'page=' + n; };
+%>
+<div class="flex items-center justify-between mt-4 text-sm">
+  <p class="text-on-surface-variant">Page <%= pg.page %> of <%= pg.pages %> · <%= pg.total %> total</p>
+  <div class="flex items-center gap-2">
+    <% if (pg.page > 1) { %><a href="<%= mk(pg.page - 1) %>" class="px-3 py-1.5 rounded border border-outline text-primary font-bold">← Prev</a><% } %>
+    <% if (pg.page < pg.pages) { %><a href="<%= mk(pg.page + 1) %>" class="px-3 py-1.5 rounded border border-outline text-primary font-bold">Next →</a><% } %>
+  </div>
+</div>
+<% } %>

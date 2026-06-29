@@ -1,0 +1,40 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Governance</p><h1 class="font-headline text-headline-md text-primary">Budget & Asset Allocation</h1></div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+  <div class="bg-primary text-on-primary rounded-lg p-5"><p class="font-tagline text-label-sm text-secondary-fixed uppercase">Allocated</p><p class="font-display text-headline-md mt-1"><%= formatMoney(totals.allocated,'GBP') %></p></div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5"><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Spent</p><p class="font-display text-headline-md text-primary mt-1"><%= formatMoney(totals.spent,'GBP') %></p></div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5"><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Remaining</p><p class="font-display text-headline-md <%= totals.remaining<0?'text-error':'text-secondary' %> mt-1"><%= formatMoney(totals.remaining,'GBP') %></p></div>
+</div>
+
+<details class="bg-surface-container-lowest border border-outline-variant rounded-lg mb-6 group">
+  <summary class="cursor-pointer px-5 py-4 font-bold text-primary list-none flex items-center gap-2"><span class="material-symbols-outlined text-secondary">add_circle</span> New budget line</summary>
+  <form action="/admin/budget" method="post" class="p-5 pt-0 grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+    <div class="sm:col-span-2"><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Category *</label><input name="category" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+    <div class="sm:col-span-1"><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Year</label><input name="fiscal_year" value="2026" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Allocated (£)</label><input name="allocated" type="number" step="0.01" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Spent (£)</label><input name="spent" type="number" step="0.01" value="0" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+    <div class="sm:col-span-5"><button class="bg-primary text-on-primary px-6 py-2 rounded font-bold">Add line</button></div>
+  </form>
+</details>
+
+<div class="space-y-3">
+  <% if (!lines.length) { %><p class="text-on-surface-variant">No budget lines.</p><% } %>
+  <% lines.forEach(function(l){ var pct = Number(l.allocated)>0 ? Math.min(100, Math.round((Number(l.spent)/Number(l.allocated))*100)) : 0; var over = Number(l.spent) > Number(l.allocated); %>
+  <form action="/admin/budget/<%= l.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+      <div class="flex-1">
+        <input name="category" value="<%= l.category %>" class="font-bold text-primary bg-transparent border-b border-transparent hover:border-outline focus:border-primary outline-none w-full" />
+        <div class="flex justify-between text-xs text-on-surface-variant mt-2 mb-1"><span><%= formatMoney(l.spent, l.currency) %> of <%= formatMoney(l.allocated, l.currency) %></span><span class="<%= over?'text-error font-bold':'' %>"><%= pct %>%</span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full <%= over?'bg-error':'bg-secondary' %> rounded-full" style="width: <%= pct %>%"></div></div>
+      </div>
+      <div class="flex items-end gap-2">
+        <div><label class="block font-tagline text-[10px] text-on-surface-variant uppercase">Allocated</label><input name="allocated" type="number" step="0.01" value="<%= l.allocated %>" class="w-28 px-2 py-1 rounded border border-outline text-sm" /></div>
+        <div><label class="block font-tagline text-[10px] text-on-surface-variant uppercase">Spent</label><input name="spent" type="number" step="0.01" value="<%= l.spent %>" class="w-28 px-2 py-1 rounded border border-outline text-sm" /></div>
+        <input type="hidden" name="description" value="<%= l.description || '' %>" />
+        <button class="bg-primary text-on-primary px-3 py-1.5 rounded font-bold text-sm">Save</button>
+      </div>
+    </div>
+    <div class="text-right mt-1"><a href="#" onclick="event.preventDefault(); if(confirm('Delete this line?')){var f=document.createElement('form');f.method='post';f.action='/admin/budget/<%= l.id %>/delete';document.body.appendChild(f);f.submit();}" class="text-error text-xs font-bold">Delete</a></div>
+  </form>
+  <% }) %>
+</div>

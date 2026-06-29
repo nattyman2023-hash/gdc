@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>East Africa Local Applicant Portal | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&family=Montserrat:wght@500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .text-shadow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        /* Optimized for fast loading - no heavy transitions */
+        .fast-fade { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#071d3a",
+                      "outline": "#74777e",
+                      "on-primary-fixed-variant": "#354766",
+                      "tertiary-fixed": "#ffdea9",
+                      "surface": "#fcf9f3",
+                      "surface-tint": "#4c5f7f",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#fcf9f3",
+                      "on-tertiary-fixed": "#271900",
+                      "on-primary-container": "#7386a8",
+                      "secondary-fixed": "#d7e2ff",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#ebe8e2",
+                      "outline-variant": "#c4c6ce",
+                      "on-primary-fixed": "#051b38",
+                      "tertiary-container": "#291a00",
+                      "on-surface-variant": "#44474d",
+                      "on-surface": "#1c1c18",
+                      "primary-fixed": "#d6e3ff",
+                      "on-secondary-container": "#345083",
+                      "secondary-fixed-dim": "#acc7ff",
+                      "on-tertiary-fixed-variant": "#5e4100",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#dcdad4",
+                      "primary": "#00030c",
+                      "surface-variant": "#e5e2dc",
+                      "secondary": "#425e92",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f3f0ea",
+                      "background": "#fcf9f3",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#040200",
+                      "on-secondary-fixed": "#001a40",
+                      "surface-container-low": "#f6f3ed",
+                      "on-tertiary-container": "#ad7c0e",
+                      "on-background": "#1c1c18",
+                      "inverse-surface": "#31312d",
+                      "surface-container-highest": "#e5e2dc",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#f6bd50",
+                      "on-secondary-fixed-variant": "#294678",
+                      "primary-fixed-dim": "#b4c7ec",
+                      "surface-container": "#f0eee8",
+                      "inverse-primary": "#b4c7ec",
+                      "secondary-container": "#a8c4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "margin-desktop": "48px",
+                      "stack-lg": "32px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Playfair Display"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "tagline": ["Montserrat"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "tagline": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden fast-fade">
+<!-- Top Navigation Shell -->
+<header class="bg-primary-container dark:bg-primary-container text-on-primary-container font-tagline text-tagline uppercase tracking-widest sticky top-0 z-50 shadow-sm border-b border-outline-variant/15">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest dark:text-surface-bright leading-none">GDU</span>
+</div>
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Admissions</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">About</a>
+<button class="bg-primary-container text-on-primary-container border border-tertiary-fixed-dim px-4 py-2 text-label-sm font-tagline hover:bg-tertiary-fixed-dim hover:text-primary-container transition-all">Apply Now</button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-surface-container-lowest">menu</span>
+</div>
+</nav>
+</header>
+<main class="w-full">
+<!-- Hero Section: Lightweight, Typography Focused -->
+<section class="relative px-margin-mobile md:px-margin-desktop py-stack-lg md:py-24 bg-surface flex flex-col items-center text-center">
+<div class="max-w-4xl mx-auto space-y-stack-md">
+<div class="inline-block bg-primary-container text-tertiary-fixed-dim px-3 py-1 text-label-sm font-tagline uppercase mb-2">East Africa Applicant Portal</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">World-Class Education for Ethiopian & Eritrean Leaders</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    Achieve a UK-standard qualification with flexible online learning. Pay in local currency via CBE or Nakfa, and study anytime with our data-efficient mobile platform.
+                </p>
+<div class="pt-stack-md flex flex-col sm:flex-row gap-stack-md justify-center">
+<a class="bg-primary-container text-surface-container-lowest px-8 py-4 font-tagline uppercase tracking-widest text-tagline font-bold transition-all hover:opacity-90 active:scale-95 shadow-lg border-2 border-primary-container" href="#apply">
+                        Start Your Application
+                    </a>
+<a class="bg-transparent border-2 border-primary-container text-primary px-8 py-4 font-tagline uppercase tracking-widest text-tagline font-bold hover:bg-surface-container-low transition-all" href="#programs">
+                        View Diplomas
+                    </a>
+</div>
+</div>
+<!-- Trust Indicators -->
+<div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-gutter w-full max-w-5xl">
+<div class="p-4 border-b md:border-b-0 md:border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-on-tertiary-container block mb-2">verified</span>
+<span class="font-tagline text-label-sm font-bold block">UK Standards</span>
+</div>
+<div class="p-4 border-b md:border-b-0 md:border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-on-tertiary-container block mb-2">payments</span>
+<span class="font-tagline text-label-sm font-bold block">Local Bank Transfer</span>
+</div>
+<div class="p-4 border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-on-tertiary-container block mb-2">signal_wifi_off</span>
+<span class="font-tagline text-label-sm font-bold block">Offline Study Mode</span>
+</div>
+<div class="p-4">
+<span class="material-symbols-outlined text-on-tertiary-container block mb-2">groups</span>
+<span class="font-tagline text-label-sm font-bold block">Local Support</span>
+</div>
+</div>
+</section>
+<!-- Value Proposition Bento -->
+<section class="bg-surface-container-low px-margin-mobile md:px-margin-desktop py-stack-lg">
+<div class="max-w-6xl mx-auto">
+<h2 class="font-headline-md text-headline-md text-primary mb-stack-lg text-center">Built for Your Reality</h2>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Feature 1 -->
+<div class="md:col-span-8 bg-surface-container-lowest p-stack-lg border border-outline-variant/10 shadow-sm flex flex-col md:flex-row gap-stack-lg items-center">
+<div class="w-full md:w-1/2">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-stack-sm">Flexible Financials</h3>
+<p class="text-on-surface-variant mb-stack-md">We understand international payment hurdles. Applicants from Ethiopia and Eritrea can pay tuition fees through Commercial Bank of Ethiopia (CBE) or local channels in Asmara.</p>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 font-tagline text-label-sm uppercase"><span class="material-symbols-outlined text-on-tertiary-container text-sm">check_circle</span> No USD required for local fees</li>
+<li class="flex items-center gap-2 font-tagline text-label-sm uppercase"><span class="material-symbols-outlined text-on-tertiary-container text-sm">check_circle</span> Installment plans available</li>
+</ul>
+</div>
+<div class="w-full md:w-1/2 bg-surface-variant h-48 flex items-center justify-center p-8">
+<!-- Low Bandwidth Placeholder for Image -->
+<div class="text-center opacity-50">
+<span class="material-symbols-outlined text-6xl">account_balance</span>
+<p class="text-xs mt-2 uppercase tracking-tighter">Simplified Local Banking</p>
+</div>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="md:col-span-4 bg-primary-container text-on-primary-container p-stack-lg border border-primary-container">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl mb-4">edgesensor_low</span>
+<h3 class="font-headline-md text-headline-md text-surface-container-lowest mb-stack-sm">Low-Data App</h3>
+<p class="text-on-primary-container mb-stack-md">Our Learning Management System is optimized for 2G/3G connections. Download lectures once, study offline anywhere.</p>
+<button class="text-tertiary-fixed-dim font-tagline text-label-sm border-b border-tertiary-fixed-dim uppercase py-1">Learn About Offline Mode</button>
+</div>
+<!-- Feature 3 -->
+<div class="md:col-span-4 bg-surface-container-lowest p-stack-lg border border-outline-variant/10 shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-4">schedule</span>
+<h3 class="font-headline-md text-headline-md text-primary-container mb-stack-sm">Work & Study</h3>
+<p class="text-on-surface-variant">Designed for professionals. 10 hours a week is all you need to maintain progress in our Diploma programs.</p>
+</div>
+<!-- Feature 4 -->
+<div class="md:col-span-8 bg-surface-container-lowest p-stack-lg border border-outline-variant/10 shadow-sm flex flex-col md:flex-row gap-stack-lg items-center">
+<div class="w-full md:w-1/2 bg-surface-variant h-48 flex items-center justify-center p-8 order-2 md:order-1">
+<div class="text-center opacity-50">
+<span class="material-symbols-outlined text-6xl">public</span>
+<p class="text-xs mt-2 uppercase tracking-tighter">UK-Diaspora Partnerships</p>
+</div>
+</div>
+<div class="w-full md:w-1/2 order-1 md:order-2">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-stack-sm">Global Prestige</h3>
+<p class="text-on-surface-variant mb-stack-md">Earn a certificate recognized internationally. Our curriculum is validated by UK-based academic boards but taught by Diaspora experts who understand the regional context.</p>
+<span class="bg-tertiary-fixed-dim text-on-tertiary-fixed font-tagline text-[10px] px-2 py-1 uppercase font-bold">Accredited by IAC</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Course Highlights: Focused List -->
+<section class="px-margin-mobile md:px-margin-desktop py-stack-lg" id="programs">
+<div class="max-w-6xl mx-auto">
+<div class="text-center mb-stack-lg">
+<h2 class="font-headline-md text-headline-md text-primary">Featured Diploma Programs</h2>
+<p class="text-on-surface-variant">12-Month Intensive Tracks for Local Leaders</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Diploma 1 -->
+<div class="bg-white border-t-4 border-primary-container p-stack-lg shadow-sm hover:shadow-md transition-shadow">
+<div class="font-tagline text-label-sm text-on-tertiary-container mb-2 uppercase">Diploma</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-sm">Business Leadership</h3>
+<p class="text-on-surface-variant mb-stack-lg font-body-md">Strategic management, ethical entrepreneurship, and financial planning tailored for developing markets.</p>
+<hr class="mb-stack-md border-outline-variant/20"/>
+<div class="flex justify-between items-center">
+<span class="font-tagline text-label-sm font-bold">Next Intake: Oct 2024</span>
+<span class="material-symbols-outlined text-primary-container">arrow_forward</span>
+</div>
+</div>
+<!-- Diploma 2 -->
+<div class="bg-white border-t-4 border-primary-container p-stack-lg shadow-sm hover:shadow-md transition-shadow">
+<div class="font-tagline text-label-sm text-on-tertiary-container mb-2 uppercase">Diploma</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-sm">Community Development</h3>
+<p class="text-on-surface-variant mb-stack-lg font-body-md">Project coordination, NGO management, and sustainable development goals in the Horn of Africa context.</p>
+<hr class="mb-stack-md border-outline-variant/20"/>
+<div class="flex justify-between items-center">
+<span class="font-tagline text-label-sm font-bold">Next Intake: Oct 2024</span>
+<span class="material-symbols-outlined text-primary-container">arrow_forward</span>
+</div>
+</div>
+<!-- Diploma 3 -->
+<div class="bg-white border-t-4 border-primary-container p-stack-lg shadow-sm hover:shadow-md transition-shadow">
+<div class="font-tagline text-label-sm text-on-tertiary-container mb-2 uppercase">Diploma</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-sm">Church Administration</h3>
+<p class="text-on-surface-variant mb-stack-lg font-body-md">Theological foundations and practical administrative skills for modern congregational leadership.</p>
+<hr class="mb-stack-md border-outline-variant/20"/>
+<div class="flex justify-between items-center">
+<span class="font-tagline text-label-sm font-bold">Next Intake: Nov 2024</span>
+<span class="material-symbols-outlined text-primary-container">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Optimized Application Form / CTA -->
+<section class="bg-primary-container text-on-primary-container px-margin-mobile md:px-margin-desktop py-stack-lg" id="apply">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-gutter items-center">
+<div class="w-full md:w-1/2">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest mb-stack-sm">Apply in Minutes</h2>
+<p class="text-surface-variant font-body-lg mb-stack-md">Don't let distance or technology be a barrier. Our simplified local application process is designed for speed.</p>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<div class="bg-tertiary-fixed-dim text-primary-container rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">1</div>
+<p class="text-label-sm uppercase tracking-wider font-tagline mt-1">Submit basic info online or via WhatsApp</p>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-tertiary-fixed-dim text-primary-container rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">2</div>
+<p class="text-label-sm uppercase tracking-wider font-tagline mt-1">Receive a callback from our local regional office</p>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-tertiary-fixed-dim text-primary-container rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">3</div>
+<p class="text-label-sm uppercase tracking-wider font-tagline mt-1">Verify documents & pay locally</p>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 bg-surface-container-lowest p-stack-lg shadow-2xl">
+<form class="space-y-4">
+<div>
+<label class="block text-primary text-label-sm font-bold uppercase mb-1">Full Name</label>
+<input class="w-full border-outline-variant bg-surface p-3 text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" type="text"/>
+</div>
+<div>
+<label class="block text-primary text-label-sm font-bold uppercase mb-1">Phone Number</label>
+<input class="w-full border-outline-variant bg-surface p-3 text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="+251 ..." type="tel"/>
+</div>
+<div>
+<label class="block text-primary text-label-sm font-bold uppercase mb-1">Program of Interest</label>
+<select class="w-full border-outline-variant bg-surface p-3 text-on-surface focus:border-primary-container outline-none transition-all">
+<option>Select a Program...</option>
+<option>Business Leadership</option>
+<option>Community Development</option>
+<option>Church Administration</option>
+</select>
+</div>
+<button class="w-full bg-primary-container text-surface-container-lowest font-tagline font-bold uppercase py-4 shadow-lg hover:bg-on-primary-fixed-variant transition-colors" type="submit">Submit Inquiry</button>
+<p class="text-[10px] text-center text-outline uppercase tracking-widest mt-2">Data-Efficient Submission</p>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container dark:bg-primary-container text-surface-container-lowest w-full py-stack-lg px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter border-t-4 border-tertiary-fixed-dim">
+<div>
+<div class="font-display-lg text-headline-md text-surface-container-lowest mb-4">GDU</div>
+<p class="font-body-md text-surface-variant text-sm mb-4">Providing academic excellence through the global diaspora for the prosperity of the local community.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-tagline font-bold uppercase text-tertiary-fixed-dim text-sm mb-2">Regional Support</h4>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Addis Ababa Office</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Asmara Contact Point</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">UK Main Campus</a>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-tagline font-bold uppercase text-tertiary-fixed-dim text-sm mb-2">Legal</h4>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a>
+<p class="text-[10px] text-surface-variant mt-4 opacity-70">© 2024 Global Diaspora University. Accredited by International Academic Council.</p>
+</div>
+</footer>
+<!-- Sticky WhatsApp Button: High visibility for mobile users -->
+<a class="fixed bottom-6 right-6 z-[100] flex items-center gap-2 bg-[#25D366] text-white px-4 py-3 shadow-2xl hover:scale-105 transition-transform" href="https://wa.me/yournumber">
+<span class="material-symbols-outlined">chat</span>
+<span class="font-tagline text-label-sm font-bold uppercase hidden md:inline">WhatsApp Inquiries</span>
+<span class="font-tagline text-label-sm font-bold uppercase md:hidden">Chat</span>
+</a>
+<!-- Simple interaction script for form and scroll -->
+<script>
+        // Smooth scroll for anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Form submission micro-interaction
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = 'SENDING...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
+            
+            setTimeout(() => {
+                btn.innerText = 'SENT SUCCESSFULLY';
+                btn.classList.remove('bg-primary-container');
+                btn.classList.add('bg-tertiary-fixed-dim', 'text-primary-container');
+                form.reset();
+            }, 1200);
+        });
+    </script>
+</body></html>

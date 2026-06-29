@@ -1,0 +1,59 @@
+<% const isPast = new Date(webinar.starts_at) < new Date(); %>
+<a href="/portal/webinars" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All webinars</a>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Stage -->
+    <div class="bg-primary rounded-lg aspect-video flex flex-col items-center justify-center text-on-primary">
+      <span class="material-symbols-outlined text-secondary-fixed-dim" style="font-size:64px;"><%= isPast ? 'smart_display' : 'sensors' %></span>
+      <% if (!isPast && webinar.join_url) { %>
+        <a href="<%= webinar.join_url %>" target="_blank" rel="noopener" class="mt-3 bg-secondary text-on-secondary px-6 py-2 rounded font-bold">Join live session</a>
+        <p class="text-on-primary-container text-sm mt-2"><%= formatDateTime(webinar.starts_at) %></p>
+      <% } else if (webinar.recording_url) { %>
+        <a href="<%= webinar.recording_url %>" target="_blank" rel="noopener" class="mt-3 bg-secondary text-on-secondary px-6 py-2 rounded font-bold">Watch recording</a>
+      <% } else { %>
+        <p class="text-on-primary-container text-sm mt-2"><%= isPast ? 'Recording coming soon' : formatDateTime(webinar.starts_at) %></p>
+      <% } %>
+    </div>
+    <div>
+      <span class="font-tagline text-label-sm text-secondary uppercase">Presented by <%= webinar.presenter %></span>
+      <h1 class="font-headline text-headline-md text-primary"><%= webinar.title %></h1>
+      <p class="text-on-surface-variant mt-2"><%= webinar.description %></p>
+    </div>
+
+    <!-- Questions queue -->
+    <div id="questions" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">live_help</span> Questions Queue</h2>
+      <form action="/portal/webinars/<%= webinar.id %>/questions" method="post" class="mb-5">
+        <textarea name="body" rows="2" required placeholder="Ask a question…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea>
+        <div class="flex justify-end mt-2"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Ask a question</button></div>
+      </form>
+      <div class="space-y-2">
+        <% if (!questions.length) { %><p class="text-on-surface-variant text-sm">No questions yet — be the first to ask.</p><% } %>
+        <% questions.forEach(function(q){ %>
+        <div class="flex items-start gap-3 border-b border-outline-variant/30 pb-2 last:border-0">
+          <form action="/portal/webinars/<%= webinar.id %>/questions/<%= q.id %>/upvote" method="post" class="text-center shrink-0">
+            <button class="material-symbols-outlined text-secondary">expand_less</button>
+            <p class="text-xs font-bold text-on-surface-variant -mt-2"><%= q.upvotes %></p>
+          </form>
+          <div class="flex-1">
+            <p class="text-sm text-on-surface <%= q.answered ? 'opacity-60' : '' %>"><%= q.body %></p>
+            <p class="text-[11px] text-on-surface-variant"><%= q.author_name || 'Student' %><%= q.answered ? ' · answered' : '' %></p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resource pack -->
+  <aside>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 sticky top-24">
+      <h2 class="font-headline text-headline-sm text-primary mb-3">Session Resource Pack</h2>
+      <% if (!resources.length) { %><p class="text-on-surface-variant text-sm">No resources shared.</p><% } %>
+      <ul class="space-y-2">
+        <% resources.forEach(function(r){ %><li><a href="<%= r.url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-secondary font-bold hover:underline text-sm"><span class="material-symbols-outlined text-base">attachment</span> <%= r.label %></a></li><% }) %>
+      </ul>
+    </div>
+  </aside>
+</div>

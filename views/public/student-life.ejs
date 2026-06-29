@@ -1,0 +1,39 @@
+<%- include('../partials/page-hero', { heroTitle: 'Student Life & Spiritual Community', heroTagline: 'More Than A Degree', heroText: 'A global family of believers learning, praying and serving together.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Spiritual Life</p>
+      <h2 class="font-headline text-headline-md text-primary mb-6">Grow in faith as you grow in knowledge</h2>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-4">At GDCU, your spiritual formation matters as much as your academic achievement. Through online chapel services, prayer groups and devotionals, students are encouraged and discipled throughout their studies.</p>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed">Wherever you are in the world, you belong to a praying community that walks with you.</p>
+    </div>
+    <div class="bg-primary text-on-primary rounded-lg p-8">
+      <span class="material-symbols-outlined text-secondary-fixed-dim text-5xl mb-3">church</span>
+      <blockquote class="font-headline text-headline-sm italic mb-3">"And let us consider how we may spur one another on toward love and good deeds."</blockquote>
+      <p class="font-tagline text-tagline text-secondary-fixed">— Hebrews 10:24</p>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-12 text-center">Ways to connect</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% [
+        ['groups','Online chapel & prayer','Weekly gatherings to worship and pray as a global community.'],
+        ['event','Events & webinars','Guest speakers, conferences and community celebrations.'],
+        ['handshake','Alumni & mentorship','Connect with graduates and mentors across the diaspora.'],
+        ['volunteer_activism','Mission & service','Opportunities to serve your local community and beyond.'],
+        ['diversity_3','Student groups','Interest groups by region, ministry and academic field.'],
+        ['support_agent','Pastoral care','Confidential support from our chaplaincy and wellbeing team.']
+      ].forEach(function(c){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+        <div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-4 rounded"><span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= c[0] %></span></div>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= c[1] %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= c[2] %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

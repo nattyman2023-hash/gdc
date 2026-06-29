@@ -1,0 +1,29 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Campus Hub</p><h1 class="font-headline text-headline-md text-primary">Upcoming Events</h1></div>
+
+<% if (!events.length) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">No upcoming events right now. Check back soon.</div>
+<% } %>
+<div class="space-y-4">
+  <% events.forEach(function(e){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex flex-col sm:flex-row gap-5 items-start">
+    <div class="bg-primary text-on-primary rounded-lg p-3 text-center w-20 shrink-0">
+      <p class="font-display text-headline-md leading-none"><%= new Date(e.starts_at).getDate() %></p>
+      <p class="font-tagline text-label-sm uppercase text-secondary-fixed"><%= new Date(e.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></p>
+    </div>
+    <div class="flex-1">
+      <span class="font-tagline text-label-sm text-secondary uppercase"><%= e.category || 'Event' %></span>
+      <h3 class="font-headline text-headline-sm text-primary"><%= e.title %></h3>
+      <p class="text-on-surface-variant text-sm my-1"><%= e.description %></p>
+      <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><span class="material-symbols-outlined text-sm align-middle">schedule</span> <%= formatDateTime(e.starts_at) %> · <%= e.is_online ? 'Online' : (e.location||'In person') %></p>
+    </div>
+    <div class="flex flex-col gap-2 shrink-0 w-full sm:w-auto">
+      <form action="/portal/events/<%= e.id %>/rsvp" method="post">
+        <button class="w-full <%= e.going ? 'bg-secondary text-on-secondary' : 'border border-outline text-primary' %> px-5 py-2 rounded font-bold text-sm inline-flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-base"><%= e.going ? 'check' : 'add' %></span><%= e.going ? "You're going" : 'RSVP' %>
+        </button>
+      </form>
+      <% if (e.is_online && e.join_url && e.going) { %><a href="<%= e.join_url %>" target="_blank" rel="noopener" class="text-center bg-primary text-on-primary px-5 py-2 rounded font-bold text-sm">Join</a><% } %>
+    </div>
+  </div>
+  <% }) %>
+</div>

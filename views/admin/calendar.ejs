@@ -1,0 +1,37 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Settings</p><h1 class="font-headline text-headline-md text-primary">Calendar Sync</h1><p class="text-on-surface-variant mt-1">Connect your calendar so interviews you host appear there automatically.</p></div>
+
+<div class="max-w-2xl space-y-5">
+  <% if (!configured) { %>
+    <div class="bg-tertiary-container border border-tertiary rounded-lg p-5">
+      <p class="font-bold text-on-tertiary-container flex items-center gap-2 mb-1"><span class="material-symbols-outlined">info</span> Google Calendar isn't switched on yet</p>
+      <p class="text-on-tertiary-container text-sm">The integration is built and ready. To activate it, an administrator needs to create a Google OAuth client and set these environment variables on the server:</p>
+      <ul class="text-on-tertiary-container text-sm mt-2 font-mono list-disc list-inside">
+        <li>GOOGLE_CLIENT_ID</li>
+        <li>GOOGLE_CLIENT_SECRET</li>
+        <li>GOOGLE_REDIRECT_URI</li>
+      </ul>
+      <p class="text-on-tertiary-container text-sm mt-2">Once those are set and the server is restarted, the <strong>Connect</strong> button below goes live and hosted interviews will sync to your Google Calendar.</p>
+    </div>
+  <% } %>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-3xl text-secondary">calendar_month</span>
+      <div>
+        <p class="font-bold text-primary">Google Calendar</p>
+        <% if (connection) { %>
+          <p class="text-sm text-secondary">Connected<%= connection.google_email ? (' — ' + connection.google_email) : '' %></p>
+        <% } else { %>
+          <p class="text-sm text-on-surface-variant">Not connected</p>
+        <% } %>
+      </div>
+    </div>
+    <% if (connection) { %>
+      <form action="/admin/calendar/disconnect" method="post"><button class="border border-outline text-on-surface-variant px-4 py-2 rounded font-bold text-sm">Disconnect</button></form>
+    <% } else { %>
+      <a href="/admin/calendar/connect" class="bg-primary text-on-primary px-5 py-2 rounded font-bold text-sm <%= configured ? '' : 'opacity-50 pointer-events-none' %>">Connect</a>
+    <% } %>
+  </div>
+
+  <p class="text-on-surface-variant text-sm">Tip: interviews can already be offered as a shared pool ("any available host") on the <a href="/admin/interview-slots" class="text-secondary font-bold">Interview Slots</a> page — a host claims each booking from the <a href="/admin/interviews" class="text-secondary font-bold">Interviews</a> list.</p>
+</div>

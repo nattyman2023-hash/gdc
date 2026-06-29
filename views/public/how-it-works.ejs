@@ -1,0 +1,42 @@
+<%- include('../partials/page-hero', { heroTitle: 'How Online Learning Works', heroTagline: 'Learn From Anywhere', heroText: 'A flexible, supportive online experience designed for the global diaspora.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    <% [
+      ['live_tv','Live & recorded lectures','Join live webinars with faculty or watch recordings on your own schedule.'],
+      ['forum','Discussion & community','Engage classmates worldwide in moderated forums and study groups.'],
+      ['assignment','Assessments & feedback','Submit assignments online and receive personalised tutor feedback.'],
+      ['support_agent','Dedicated support','Academic advisors and a student helpdesk support you at every step.'],
+      ['devices','Study on any device','Access the virtual learning environment from your laptop, tablet or phone.'],
+      ['workspace_premium','Earn your credential','Complete your programme and receive a verifiable digital certificate.']
+    ].forEach(function(f){ %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8">
+      <div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-4 rounded"><span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= f[0] %></span></div>
+      <h3 class="font-headline text-headline-sm text-primary mb-2"><%= f[1] %></h3>
+      <p class="text-on-surface-variant text-body-md"><%= f[2] %></p>
+    </div>
+    <% }) %>
+  </div>
+</section>
+
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-12 text-center">A typical learning journey</h2>
+    <ol class="relative border-l-2 border-secondary/40 max-w-2xl mx-auto space-y-10 pl-8">
+      <% [
+        ['Enrol & onboard','Activate your student account and complete a short orientation.'],
+        ['Access your modules','Your courses, schedule and resources appear in your student dashboard.'],
+        ['Learn & engage','Work through weekly content, join live sessions and collaborate with peers.'],
+        ['Be assessed','Complete quizzes, assignments and projects with tutor support.'],
+        ['Graduate','Meet the requirements and claim your Christ-centred qualification.']
+      ].forEach(function(step, i){ %>
+      <li class="relative">
+        <span class="absolute -left-[42px] w-6 h-6 bg-secondary text-on-secondary rounded-full flex items-center justify-center text-xs font-bold"><%= i+1 %></span>
+        <h3 class="font-headline text-headline-sm text-primary mb-1"><%= step[0] %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= step[1] %></p>
+      </li>
+      <% }) %>
+    </ol>
+    <div class="text-center mt-12"><a href="/admissions/apply" class="inline-block bg-primary text-on-primary px-10 py-4 rounded font-bold hover:opacity-90">Apply Now</a></div>
+  </div>
+</section>

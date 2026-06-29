@@ -1,0 +1,61 @@
+<div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+  <a href="/admin/open-days" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> All open days</a>
+  <div class="flex items-center gap-2">
+    <a href="/open-days/<%= openDay.slug %>" target="_blank" rel="noopener" class="inline-flex items-center gap-1 border border-outline text-primary px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">open_in_new</span> View public page</a>
+    <a href="/admin/open-days/<%= openDay.id %>/edit" class="inline-flex items-center gap-1 border border-outline text-primary px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+    <form action="/admin/open-days/<%= openDay.id %>/delete" method="post" onsubmit="return confirm('Delete this open day and its registrations?');"><button class="inline-flex items-center gap-1 text-error border border-error/40 px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">delete</span> Delete</button></form>
+  </div>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1 space-y-5">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <div class="flex items-center gap-2 mb-3"><h1 class="font-headline text-headline-sm text-primary"><%= openDay.title %></h1><%- include('_badge', { status: openDay.published ? 'active' : 'draft' }) %></div>
+      <dl class="divide-y divide-outline-variant/40 text-sm">
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">When</dt><dd class="font-bold text-primary text-right"><%= formatDateTime(openDay.starts_at) %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Format</dt><dd class="font-bold text-primary"><%= openDay.is_online ? 'Online' : 'In person' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant"><%= openDay.is_online ? 'Join link' : 'Location' %></dt><dd class="font-bold text-primary text-right truncate max-w-[60%]"><%= openDay.is_online ? (openDay.join_url || '—') : (openDay.location || '—') %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Registrations</dt><dd class="font-bold text-primary"><%= registrations.length %><% if (openDay.capacity) { %> / <%= openDay.capacity %><% } %></dd></div>
+      </dl>
+    </div>
+
+    <!-- Email registrants -->
+    <form action="/admin/open-days/<%= openDay.id %>/email" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 space-y-2">
+      <h2 class="font-headline text-headline-sm text-primary mb-1">Email registrants</h2>
+      <p class="text-on-surface-variant text-xs mb-2">Send a reminder or update to all <%= registrations.length %> registrant(s).</p>
+      <input name="subject" required placeholder="Subject" class="field" />
+      <textarea name="body" required rows="4" placeholder="Your message…" class="field"></textarea>
+      <button class="bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm">Send to all</button>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Registrations <span class="text-on-surface-variant font-normal">(<%= registrations.length %>)</span></h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+          <tr><th class="px-4 py-3">Name</th><th class="px-4 py-3 hidden sm:table-cell">Email</th><th class="px-4 py-3">Lead</th><th class="px-4 py-3">Attended</th></tr>
+        </thead>
+        <tbody>
+          <% if (!registrations.length) { %><tr><td colspan="4" class="px-4 py-6 text-center text-on-surface-variant">No registrations yet.</td></tr><% } %>
+          <% registrations.forEach(function(r){ %>
+          <tr class="border-t border-outline-variant/30">
+            <td class="px-4 py-3 font-bold text-primary"><%= r.first_name %> <%= r.last_name || '' %><% if (r.country) { %> <span class="text-[11px] text-on-surface-variant font-normal">· <%= r.country %></span><% } %></td>
+            <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= r.email %></td>
+            <td class="px-4 py-3">
+              <% if (r.lead_id) { %>
+                <a href="/admin/leads/<%= r.lead_id %>" class="text-secondary font-bold inline-flex items-center gap-1"><% if (r.converted_application_id) { %>Converted<% } else { %><%= r.lead_status || 'lead' %><% } %> <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+              <% } else { %><span class="text-on-surface-variant">—</span><% } %>
+            </td>
+            <td class="px-4 py-3">
+              <form action="/admin/open-days/<%= openDay.id %>/registrations/<%= r.id %>/attended" method="post">
+                <button class="material-symbols-outlined text-xl <%= r.attended ? 'text-secondary' : 'text-outline' %>" title="Toggle attended"><%= r.attended ? 'check_circle' : 'radio_button_unchecked' %></button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

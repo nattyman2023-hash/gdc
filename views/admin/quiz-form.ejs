@@ -1,0 +1,253 @@
+<%
+  var locked = (typeof lockedCourseId !== 'undefined' && lockedCourseId) ? lockedCourseId : null;
+  var modId = (typeof moduleId !== 'undefined' && moduleId) ? moduleId : (quiz.module_id || '');
+  var backTo = (typeof returnTo !== 'undefined' && returnTo) ? returnTo : '/admin/quizzes';
+  var formAction = isNew ? '/admin/quizzes' : ('/admin/quizzes/' + quiz.id);
+  var lockedCourse = locked ? courses.find(function(c){ return c.id === locked; }) : null;
+  var isFin = (typeof isFinal !== 'undefined' && isFinal) || (quiz.is_final_exam ? true : false);
+  var scope = (typeof examScope !== 'undefined' && examScope) ? examScope : (quiz.exam_scope || 'course');
+  var progs = (typeof programs !== 'undefined' && programs) ? programs : [];
+  var scopeLocked = isFin && locked; // launched from the course builder → course scope is fixed
+%>
+<a href="<%= backTo %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= backTo === '/admin/quizzes' ? 'Back to Quizzes' : 'Back to course builder' %></a>
+
+<div class="max-w-4xl mx-auto">
+  <h1 class="font-headline text-headline-lg text-primary mb-2"><% if (isNew) { %>Create New Quiz<% } else { %>Edit Quiz<% } %></h1>
+  <p class="text-on-surface-variant mb-6"><% if (isNew) { %>Build an assessment<%= lockedCourse ? ' for ' + lockedCourse.title : '' %>.<% } else { %>Update quiz details and questions.<% } %></p>
+
+  <% if (flash.success && flash.success.length) { %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div>
+  <% } %>
+
+  <form id="quizForm" method="POST" action="<%= formAction %>" class="space-y-6">
+    <input type="hidden" name="module_id" value="<%= modId %>">
+    <input type="hidden" name="return_to" value="<%= backTo !== '/admin/quizzes' ? backTo : '' %>">
+    <input type="hidden" name="is_final_exam" value="<%= isFin ? '1' : '0' %>">
+    <input type="hidden" name="after_block" value="<%= quiz.after_block || '' %>">
+    <input type="hidden" name="covers_blocks" value="<%= quiz.covers_blocks || '' %>">
+
+    <% if (quiz.after_block) { %>
+    <div class="bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-start gap-3">
+      <span class="material-symbols-outlined text-primary">quiz</span>
+      <div>
+        <p class="font-semibold text-primary">This quiz belongs to Lesson <%= quiz.after_block %><%= blockTitle ? ' — “' + blockTitle + '”' : '' %></p>
+        <p class="text-sm text-on-surface-variant">Students take it after completing this lesson, and must pass it (repeatable) before moving on. Write questions that cover this lesson’s readings and video.</p>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Basic Quiz Information -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="font-semibold text-lg mb-4"><%= isFin ? 'Final Exam' : 'Quiz' %> Information</h2>
+
+      <% if (isFin) { %>
+      <!-- Final exam scope -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">This final exam covers *</label>
+        <select name="exam_scope" id="examScope" class="w-full px-3 py-2 border rounded" <%= scopeLocked ? 'disabled' : '' %> onchange="toggleExamScope(this.value)">
+          <option value="course" <%= scope==='course'?'selected':'' %>>A single course</option>
+          <option value="year" <%= scope==='year'?'selected':'' %>>A programme year</option>
+          <option value="programme" <%= scope==='programme'?'selected':'' %>>An entire programme</option>
+        </select>
+        <% if (scopeLocked) { %><input type="hidden" name="exam_scope" value="<%= scope %>"><p class="text-xs text-on-surface-variant mt-1">Launched from the course builder — scoped to this course.</p><% } %>
+      </div>
+
+      <!-- Course scope -->
+      <div data-scope="course" class="mb-4 <%= scope==='course'?'':'hidden' %>">
+        <label class="block text-sm font-medium mb-2">Course</label>
+        <% if (lockedCourse) { %>
+          <input type="hidden" name="course_id" value="<%= lockedCourse.id %>">
+          <div class="w-full px-3 py-2 border rounded bg-surface-container-low text-on-surface-variant"><%= lockedCourse.title %></div>
+        <% } else { %>
+          <select name="course_id" class="w-full px-3 py-2 border rounded">
+            <option value="">Select course</option>
+            <% courses.forEach(function(course){ %><option value="<%= course.id %>" <%= (quiz.course_id === course.id) ? 'selected' : '' %>><%= course.title %></option><% }) %>
+          </select>
+        <% } %>
+      </div>
+
+      <!-- Programme + year scope -->
+      <div data-scope="year" class="mb-4 grid grid-cols-2 gap-4 <%= scope==='year'?'':'hidden' %>">
+        <div>
+          <label class="block text-sm font-medium mb-2">Programme</label>
+          <select name="program_id" class="w-full px-3 py-2 border rounded">
+            <option value="">Select programme</option>
+            <% progs.forEach(function(p){ %><option value="<%= p.id %>" <%= (quiz.program_id === p.id) ? 'selected' : '' %>><%= p.title %></option><% }) %>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Year of study</label>
+          <input type="number" name="exam_year" min="1" max="7" value="<%= quiz.exam_year || 1 %>" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+
+      <!-- Programme scope -->
+      <div data-scope="programme" class="mb-4 <%= scope==='programme'?'':'hidden' %>">
+        <label class="block text-sm font-medium mb-2">Programme</label>
+        <select name="program_id" class="w-full px-3 py-2 border rounded">
+          <option value="">Select programme</option>
+          <% progs.forEach(function(p){ %><option value="<%= p.id %>" <%= (quiz.program_id === p.id) ? 'selected' : '' %>><%= p.title %></option><% }) %>
+        </select>
+        <p class="text-xs text-on-surface-variant mt-1">A comprehensive exam across the whole programme.</p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Sort Order</label>
+        <input type="number" name="sort_order" value="<%= quiz.sort_order || 0 %>" class="w-32 px-3 py-2 border rounded">
+      </div>
+      <% } else { %>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Course *</label>
+          <% if (lockedCourse) { %>
+            <input type="hidden" name="course_id" value="<%= lockedCourse.id %>">
+            <div class="w-full px-3 py-2 border rounded bg-surface-container-low text-on-surface-variant"><%= lockedCourse.title %><%= modId ? ' · attached to module' : '' %></div>
+          <% } else { %>
+            <select name="course_id" required class="w-full px-3 py-2 border rounded">
+              <option value="">Select Course</option>
+              <% courses.forEach(function(course){ %>
+                <option value="<%= course.id %>" <%= (quiz.course_id === course.id) ? 'selected' : '' %>><%= course.title %> (<%= course.code || 'No code' %>)</option>
+              <% }) %>
+            </select>
+          <% } %>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Sort Order</label>
+          <input type="number" name="sort_order" value="<%= quiz.sort_order || 0 %>" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+      <% } %>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Quiz Title *</label>
+        <input type="text" name="title" value="<%= quiz.title || '' %>" required class="w-full px-3 py-2 border rounded">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-2">Description</label>
+        <textarea name="description" rows="3" class="w-full px-3 py-2 border rounded"><%= quiz.description || '' %></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Pass Mark (%) *</label>
+          <input type="number" name="pass_mark" value="<%= quiz.pass_mark || 60 %>" min="0" max="100" required class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Time Limit (minutes)</label>
+          <input type="number" name="time_limit_min" value="<%= quiz.time_limit_min || '' %>" min="1" class="w-full px-3 py-2 border rounded">
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions -->
+    <div class="bg-white rounded-lg p-6 shadow">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="font-semibold text-lg">Questions</h2>
+        <button type="button" id="addQuestionBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"><span class="material-symbols-outlined align-middle mr-1">add</span> Add Question</button>
+      </div>
+      <div id="questions-container"></div>
+      <div id="no-questions" class="text-center py-8 text-on-surface-variant hidden">
+        <span class="material-symbols-outlined text-4xl mb-2">quiz</span>
+        <p>No questions yet. Click "Add Question" to get started.</p>
+      </div>
+    </div>
+
+    <input type="hidden" name="questions" id="questionsJson" value="">
+    <div class="flex justify-end gap-4">
+      <a href="<%= backTo %>" class="px-6 py-3 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest">Cancel</a>
+      <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded font-bold hover:opacity-90"><% if (isNew) { %>Create Quiz<% } else { %>Save Changes<% } %></button>
+    </div>
+  </form>
+</div>
+
+<!-- Existing questions as data for hydration -->
+<script type="application/json" id="seedQuestions"><%- JSON.stringify((questions||[]).map(function(q){ return { prompt:q.prompt, type:q.type, explanation:q.explanation, options:(q.options||[]).map(function(o){ return { text:o.text, is_correct:!!o.is_correct }; }) }; })) %></script>
+
+<script>
+// Show only the active scope's fields and disable the others so they don't submit.
+function toggleExamScope(v){
+  document.querySelectorAll('[data-scope]').forEach(function(el){
+    var active = el.getAttribute('data-scope') === v;
+    el.classList.toggle('hidden', !active);
+    el.querySelectorAll('input, select, textarea').forEach(function(f){ f.disabled = !active; });
+  });
+}
+(function(){
+  var scopeSel = document.getElementById('examScope');
+  if (scopeSel) { toggleExamScope(scopeSel.value); }
+})();
+(function(){
+  var container = document.getElementById('questions-container');
+  var noQ = document.getElementById('no-questions');
+  var form = document.getElementById('quizForm');
+
+  function refreshEmptyState(){ noQ.classList.toggle('hidden', container.children.length > 0); renumber(); }
+  function renumber(){ container.querySelectorAll('.question-card').forEach(function(card,i){ var h=card.querySelector('.q-num'); if(h) h.textContent='Question '+(i+1); }); }
+
+  function optionRow(text, isCorrect){
+    var row = document.createElement('div');
+    row.className = 'option-row flex items-center gap-3';
+    row.innerHTML = '<input type="checkbox" class="opt-correct w-4 h-4" '+(isCorrect?'checked':'')+'>'
+      + '<input type="text" class="opt-text flex-1 px-3 py-2 border rounded" placeholder="Option text" value="'+(text?String(text).replace(/"/g,'&quot;'):'')+'">'
+      + '<button type="button" class="opt-remove text-red-600 hover:text-red-800"><span class="material-symbols-outlined">remove</span></button>';
+    row.querySelector('.opt-remove').addEventListener('click', function(){ var c=row.parentElement; if(c.querySelectorAll('.option-row').length>1) row.remove(); });
+    return row;
+  }
+
+  function questionCard(data){
+    data = data || { prompt:'', type:'single', explanation:'', options:[{text:'',is_correct:false}] };
+    var card = document.createElement('div');
+    card.className = 'question-card border rounded-lg p-4 mb-4 bg-gray-50';
+    card.innerHTML =
+      '<div class="flex justify-between items-center mb-3"><h3 class="font-medium q-num">Question</h3>'
+      + '<button type="button" class="q-remove text-red-600 hover:text-red-800"><span class="material-symbols-outlined">delete</span></button></div>'
+      + '<div class="space-y-3">'
+      + '<div><label class="block text-sm font-medium mb-1">Question Prompt *</label><textarea class="q-prompt w-full px-3 py-2 border rounded" rows="2"></textarea></div>'
+      + '<div class="grid grid-cols-2 gap-3"><div><label class="block text-sm font-medium mb-1">Type</label>'
+      + '<select class="q-type w-full px-3 py-2 border rounded"><option value="single">Single Choice</option><option value="multiple">Multiple Choice</option><option value="truefalse">True/False</option></select></div>'
+      + '<div><label class="block text-sm font-medium mb-1">Explanation (optional)</label><input type="text" class="q-explanation w-full px-3 py-2 border rounded"></div></div>'
+      + '<div class="options-section"><div class="flex justify-between items-center mb-2"><label class="block text-sm font-medium">Answer Options</label>'
+      + '<button type="button" class="opt-add text-blue-600 hover:text-blue-800 text-sm"><span class="material-symbols-outlined align-middle mr-1">add</span>Add Option</button></div>'
+      + '<div class="options-container space-y-2"></div></div></div>';
+
+    card.querySelector('.q-prompt').value = data.prompt || '';
+    card.querySelector('.q-type').value = data.type || 'single';
+    card.querySelector('.q-explanation').value = data.explanation || '';
+    var optsC = card.querySelector('.options-container');
+    (data.options && data.options.length ? data.options : [{text:'',is_correct:false}]).forEach(function(o){ optsC.appendChild(optionRow(o.text, o.is_correct)); });
+    card.querySelector('.q-remove').addEventListener('click', function(){ card.remove(); refreshEmptyState(); });
+    card.querySelector('.opt-add').addEventListener('click', function(){ optsC.appendChild(optionRow('', false)); });
+    return card;
+  }
+
+  document.getElementById('addQuestionBtn').addEventListener('click', function(){ container.appendChild(questionCard()); refreshEmptyState(); });
+
+  // Hydrate existing questions (edit mode)
+  try {
+    var seed = JSON.parse(document.getElementById('seedQuestions').textContent || '[]');
+    seed.forEach(function(q){ container.appendChild(questionCard(q)); });
+  } catch(e){}
+  refreshEmptyState();
+
+  // Serialize to JSON on submit
+  form.addEventListener('submit', function(e){
+    var out = [];
+    var bad = false;
+    container.querySelectorAll('.question-card').forEach(function(card){
+      var prompt = card.querySelector('.q-prompt').value.trim();
+      if(!prompt) return;
+      var opts = [];
+      var hasCorrect = false;
+      card.querySelectorAll('.option-row').forEach(function(row){
+        var text = row.querySelector('.opt-text').value.trim();
+        if(!text) return;
+        var correct = row.querySelector('.opt-correct').checked;
+        if(correct) hasCorrect = true;
+        opts.push({ text: text, is_correct: correct });
+      });
+      if(opts.length && !hasCorrect) bad = true;
+      out.push({ prompt: prompt, type: card.querySelector('.q-type').value, explanation: card.querySelector('.q-explanation').value.trim() || null, options: opts });
+    });
+    if(bad){ e.preventDefault(); alert('Each question needs at least one option marked correct.'); return; }
+    document.getElementById('questionsJson').value = JSON.stringify(out);
+  });
+})();
+</script>

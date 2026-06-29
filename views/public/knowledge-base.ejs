@@ -1,0 +1,28 @@
+<%- include('../partials/page-hero', { heroTitle: 'Knowledge Base', heroTagline: 'Help Hub', heroText: 'Guides and answers to help you get the most from GDCU.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <% const cats = Object.keys(grouped); %>
+    <% if (!cats.length) { %><p class="text-on-surface-variant">No articles yet.</p><% } %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% cats.forEach(function(cat){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+        <h2 class="font-headline text-headline-sm text-primary mb-3"><%= cat %></h2>
+        <ul class="space-y-2">
+          <% grouped[cat].forEach(function(a){ %>
+          <li><a href="/knowledge-base/<%= a.slug %>" class="text-on-surface-variant hover:text-secondary text-sm inline-flex items-start gap-2"><span class="material-symbols-outlined text-base text-secondary">article</span> <%= a.title %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% }) %>
+    </div>
+    <div class="bg-primary text-on-primary rounded-lg p-8 text-center mt-10">
+      <h3 class="font-headline text-headline-sm mb-2">Can't find what you need?</h3>
+      <p class="text-on-primary-container mb-6">Check our FAQs or contact the team.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/faq" class="bg-secondary text-on-secondary px-6 py-3 rounded font-bold">View FAQs</a>
+        <a href="/contact" class="border-2 border-secondary-fixed text-secondary-fixed px-6 py-3 rounded font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>

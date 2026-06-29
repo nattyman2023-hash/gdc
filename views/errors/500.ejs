@@ -1,0 +1,11 @@
+<section class="min-h-[70vh] flex items-center justify-center bg-surface-bright px-margin-mobile">
+  <div class="text-center max-w-lg">
+    <span class="material-symbols-outlined text-secondary-fixed-dim" style="font-size:96px;">error</span>
+    <h1 class="font-headline text-headline-md text-primary mb-4 mt-4">Something went wrong</h1>
+    <p class="font-body text-body-md text-on-surface-variant mb-8">We're sorry — an unexpected error occurred. Please try again shortly.</p>
+    <% if (typeof showDetail !== 'undefined' && showDetail && detail) { %>
+      <pre class="text-left bg-surface-container-high text-on-surface text-sm p-4 rounded mb-8 overflow-auto"><%= detail %></pre>
+    <% } %>
+    <a href="/" class="bg-primary text-on-primary px-8 py-3 rounded font-bold">Return Home</a>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Admissions</p><h1 class="font-headline text-headline-md text-primary">Open Days</h1></div>
+  <a href="/admin/open-days/new" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">add</span> Schedule open day</a>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">When</th><th class="px-4 py-3">Title</th><th class="px-4 py-3 hidden md:table-cell">Format</th><th class="px-4 py-3">Registrations</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Manage</th></tr>
+    </thead>
+    <tbody>
+      <% if (!openDays.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">No open days yet. <a href="/admin/open-days/new" class="text-secondary font-bold">Schedule one →</a></td></tr><% } %>
+      <% openDays.forEach(function(o){ %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low">
+        <td class="px-4 py-3 whitespace-nowrap"><a href="/admin/open-days/<%= o.id %>" class="font-bold text-primary hover:text-secondary"><%= formatDate(o.starts_at) %></a><br/><span class="text-[11px] text-on-surface-variant"><%= new Date(o.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) %></span></td>
+        <td class="px-4 py-3 text-primary"><%= o.title %></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= o.is_online ? 'Online' : (o.location || 'In person') %></td>
+        <td class="px-4 py-3 font-bold text-primary"><%= o.registrations %><% if (o.capacity) { %> <span class="text-on-surface-variant font-normal">/ <%= o.capacity %></span><% } %></td>
+        <td class="px-4 py-3"><%- include('_badge', { status: o.published ? 'active' : 'draft' }) %></td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/admin/open-days/<%= o.id %>" class="text-secondary font-bold">View</a>
+          <a href="/admin/open-days/<%= o.id %>/edit" class="text-secondary font-bold ml-3">Edit</a>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

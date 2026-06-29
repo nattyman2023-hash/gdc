@@ -1,0 +1,39 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Help & Support</p><h1 class="font-headline text-headline-md text-primary">Support</h1></div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1">
+    <form action="/portal/support" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 space-y-3 sticky top-24">
+      <h2 class="font-headline text-headline-sm text-primary">New ticket</h2>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Subject *</label><input name="subject" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Category</label>
+          <select name="category" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm">
+            <% ['General','Technical','Academic','Finance','Admissions'].forEach(function(c){ %><option><%= c %></option><% }) %>
+          </select>
+        </div>
+        <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Priority</label>
+          <select name="priority" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm">
+            <option value="normal">Normal</option><option value="low">Low</option><option value="high">High</option>
+          </select>
+        </div>
+      </div>
+      <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Message *</label><textarea name="body" required rows="4" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea></div>
+      <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold w-full">Submit ticket</button>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">My tickets</h2>
+    <% if (!tickets.length) { %><div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 text-center text-on-surface-variant">No tickets yet.</div><% } %>
+    <div class="space-y-3">
+      <% tickets.forEach(function(t){ %>
+      <a href="/portal/support/<%= t.id %>" class="block bg-surface-container-lowest border border-outline-variant rounded-lg p-4 hover:border-secondary transition-colors">
+        <div class="flex justify-between items-center">
+          <div><p class="font-bold text-primary"><%= t.subject %></p><p class="text-xs text-on-surface-variant"><%= t.reference %> · <%= t.category %></p></div>
+          <%- include('../admin/_badge', { status: t.status==='resolved'||t.status==='closed' ? 'paid' : (t.status==='pending'?'sent':'new') }) %>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</div>

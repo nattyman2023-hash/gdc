@@ -1,0 +1,28 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Operations</p><h1 class="font-headline text-headline-md text-primary">Email Outbox</h1></div>
+
+<div class="bg-<%= smtpConfigured ? 'secondary-fixed' : 'surface-container-high' %> rounded-lg p-4 mb-6 text-sm flex items-start gap-2">
+  <span class="material-symbols-outlined text-secondary"><%= smtpConfigured ? 'mark_email_read' : 'info' %></span>
+  <p class="text-on-surface">
+    <% if (smtpConfigured) { %>SMTP is configured — transactional emails are being sent and logged here.
+    <% } else { %>SMTP is not configured, so emails are <strong>logged here only</strong> (not delivered). Set <code>SMTP_HOST</code> in <code>.env</code> to enable sending.<% } %>
+  </p>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">To</th><th class="px-4 py-3">Subject</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 hidden sm:table-cell">When</th></tr>
+    </thead>
+    <tbody>
+      <% if (!emails.length) { %><tr><td colspan="4" class="px-4 py-6 text-center text-on-surface-variant">No emails yet.</td></tr><% } %>
+      <% emails.forEach(function(e){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 text-on-surface-variant"><%= e.to_name ? (e.to_name+' ') : '' %>&lt;<%= e.to_email %>&gt;</td>
+        <td class="px-4 py-3 font-bold text-primary"><%= e.subject %></td>
+        <td class="px-4 py-3"><%- include('_badge', { status: e.status === 'sent' ? 'paid' : (e.status === 'failed' ? 'declined' : 'sent') }) %></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= formatDate(e.created_at) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

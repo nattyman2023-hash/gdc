@@ -1,0 +1,25 @@
+<%- include('../partials/page-hero', { heroTitle: 'Join GDCU', heroTagline: 'Careers & Calling', heroText: 'Serve a global mission. Explore faculty, staff and volunteer opportunities.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <% if (!jobs.length) { %><p class="text-on-surface-variant">There are no open positions right now. Please check back soon.</p><% } %>
+    <div class="space-y-4">
+      <% jobs.forEach(function(j){ %>
+      <a href="/careers/<%= j.slug %>" class="block bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:border-secondary hover:shadow-md transition-all">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="font-tagline text-label-sm text-secondary uppercase"><%= j.type %><% if (j.department) { %> · <%= j.department %><% } %></span>
+            <h3 class="font-headline text-headline-sm text-primary"><%= j.title %></h3>
+            <p class="text-on-surface-variant text-body-md mt-1"><%= truncate(j.summary, 120) %></p>
+          </div>
+          <div class="text-right shrink-0">
+            <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><span class="material-symbols-outlined text-sm align-middle">location_on</span> <%= j.location || 'Remote' %></p>
+            <% if (j.closes_on) { %><p class="font-tagline text-[11px] text-on-surface-variant uppercase mt-1">Closes <%= formatDate(j.closes_on) %></p><% } %>
+            <span class="inline-block mt-2 text-secondary font-bold text-sm">View &amp; apply →</span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>

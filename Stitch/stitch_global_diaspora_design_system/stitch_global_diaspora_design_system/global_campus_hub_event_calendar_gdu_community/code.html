@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Campus Hub &amp; Event Calendar | GDU</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary-container": "#fdc355",
+                        "primary": "#00030c",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "surface-dim": "#dcdad4",
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-container": "#7386a8",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-tint": "#4c5f7f",
+                        "surface-variant": "#e5e2dc",
+                        "on-surface-variant": "#44474d",
+                        "outline": "#74777e",
+                        "surface-container-high": "#ebe8e2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fcf9f3",
+                        "on-tertiary-fixed": "#001a40",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-container": "#f0eee8",
+                        "on-primary-fixed": "#051b38",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-secondary-container": "#725000",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#31312d",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "primary-container": "#071d3a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-background": "#1c1c18",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "secondary": "#7d5800",
+                        "background": "#fcf9f3",
+                        "tertiary-container": "#001c43",
+                        "tertiary": "#00030d",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-primary-fixed-variant": "#354766",
+                        "outline-variant": "#c4c6ce",
+                        "surface": "#fcf9f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .text-balance { text-wrap: balance; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Global Diaspora University</span>
+</div>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Admissions</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Academics</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Research</a>
+<a class="text-on-surface-variant font-medium hover:text-secondary transition-colors duration-300" href="#">Faith</a>
+<a class="text-primary border-b-2 border-secondary-container font-bold pb-1" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-48" placeholder="Search events..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-variant rounded-full" data-icon="language">language</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:opacity-90 transition-opacity">Apply Now</button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative py-20 px-margin-mobile md:px-margin-desktop bg-surface overflow-hidden">
+<div class="max-w-container-max mx-auto relative z-10">
+<div class="flex flex-col md:flex-row items-center gap-12">
+<div class="md:w-1/2 space-y-6">
+<span class="font-tagline text-tagline text-secondary uppercase tracking-widest block">Connecting the Diaspora</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">Global Campus Hub &amp; Event Calendar</h1>
+<p class="font-body-lg text-on-surface-variant max-w-xl">Join a worldwide community of believers and scholars. Whether virtual or at one of our physical hubs, discover where faith and academia meet.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded font-bold flex items-center gap-2 hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+                                View All Events
+                            </button>
+<button class="border border-secondary text-primary px-8 py-4 rounded font-bold hover:bg-secondary-fixed transition-all">Find a Local Hub</button>
+</div>
+</div>
+<div class="md:w-1/2 relative h-[400px] w-full bg-surface-container-high rounded-xl border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A sophisticated black and white architectural photograph of a modern university campus courtyard. The image features clean lines, high-contrast lighting from a bright afternoon sun, and a sense of academic prestige. A subtle gold tint reflects the Global Diaspora University brand colors, creating an atmosphere of tradition and forward-thinking scholarship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT6-VsAcaB7qQELMX636SK77uY_zxG9o3nlAd045K7_rAhnCqlb3tY9Q6Ls0_FCJ2enxKeTVtq1JjhETrjZ1B-8qHMfPmFhUWbhJVTmGPnPvO2BQ5Jhh6bz20x5scvssCHqAfxjB8iPsIoPvZZWRP7JuYG3y4jgs2gcm43yLCRYUCrBmAPjefJtjMsHf0wajtxP_IZid-wOpH46f9l33GlEZeHqcH2Jf-jZ0heiwBOIBcJOGfVwhAQrI5-B70gnyEu_bCdReF-Wgc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 p-6 bg-white/90 backdrop-blur-md border border-outline-variant rounded shadow-lg">
+<p class="font-headline-sm text-primary">Next Highlighted Event</p>
+<p class="font-body-md text-on-surface-variant">Annual Diaspora Theological Symposium • Virtual &amp; London Hub</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Scriptural Anchor -->
+<div class="py-12 bg-surface-container-lowest border-y border-outline-variant">
+<div class="max-w-3xl mx-auto text-center px-margin-mobile">
+<div class="h-px bg-secondary-container w-24 mx-auto mb-6"></div>
+<blockquote class="font-headline-sm italic text-primary">
+                    "For where two or three are gathered in my name, there am I among them."
+                </blockquote>
+<p class="font-tagline text-tagline text-secondary mt-2">— Matthew 18:20</p>
+<div class="h-px bg-secondary-container w-24 mx-auto mt-6"></div>
+</div>
+</div>
+<!-- Main Content Area: Calendar & Upcoming -->
+<section class="py-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- Left: Calendar Sidebar Filters -->
+<aside class="lg:w-1/4 space-y-8">
+<div class="bg-surface-container-low p-6 border border-outline-variant rounded">
+<h3 class="font-headline-sm text-primary mb-6">Filter Events</h3>
+<div class="space-y-4">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-checkbox text-primary rounded-sm focus:ring-secondary border-outline" type="checkbox"/>
+<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Academic</span>
+<span class="text-body-md group-hover:text-primary">Lectures &amp; Seminars</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-checkbox text-primary rounded-sm focus:ring-secondary border-outline" type="checkbox"/>
+<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Spiritual</span>
+<span class="text-body-md group-hover:text-primary">Chapel &amp; Retreats</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-checkbox text-primary rounded-sm focus:ring-secondary border-outline" type="checkbox"/>
+<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Social</span>
+<span class="text-body-md group-hover:text-primary">Networking &amp; Mixers</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-checkbox text-primary rounded-sm focus:ring-secondary border-outline" type="checkbox"/>
+<span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Professional</span>
+<span class="text-body-md group-hover:text-primary">Career Workshops</span>
+</label>
+</div>
+</div>
+<div class="bg-primary text-on-primary p-6 rounded relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-sm mb-2">Time Zone Tool</h4>
+<p class="font-body-md opacity-80 mb-4">View global schedules in your local time.</p>
+<select class="w-full bg-white/10 border border-white/20 text-white rounded p-2 text-body-md focus:ring-secondary-container">
+<option>Eastern Standard Time (EST)</option>
+<option>East African Time (EAT)</option>
+<option>Greenwich Mean Time (GMT)</option>
+<option>Central Standard Time (CST)</option>
+</select>
+</div>
+</div>
+</aside>
+<!-- Center: Interactive Calendar -->
+<div class="lg:w-3/4 space-y-8">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-primary">November 2024</h2>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant hover:bg-surface-variant rounded">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-4 py-2 border border-outline-variant font-bold hover:bg-surface-variant rounded">Today</button>
+<button class="p-2 border border-outline-variant hover:bg-surface-variant rounded">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded overflow-hidden shadow-sm">
+<div class="calendar-grid bg-surface-container-low border-b border-outline-variant text-center font-tagline text-label-sm py-3 text-on-surface-variant">
+<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+</div>
+<div class="calendar-grid min-h-[600px]">
+<!-- Empty cells for start of month -->
+<div class="border-r border-b border-outline-variant p-2 bg-surface-container-lowest opacity-40"></div>
+<div class="border-r border-b border-outline-variant p-2 bg-surface-container-lowest opacity-40"></div>
+<div class="border-r border-b border-outline-variant p-2 bg-surface-container-lowest opacity-40"></div>
+<div class="border-r border-b border-outline-variant p-2 bg-surface-container-lowest opacity-40"></div>
+<!-- Real cells -->
+<div class="border-r border-b border-outline-variant p-2 group hover:bg-surface-bright transition-colors relative">
+<span class="font-tagline text-label-sm text-on-surface-variant">01</span>
+</div>
+<div class="border-r border-b border-outline-variant p-2 group hover:bg-surface-bright transition-colors relative">
+<span class="font-tagline text-label-sm text-on-surface-variant">02</span>
+</div>
+<div class="border-b border-outline-variant p-2 group hover:bg-surface-bright transition-colors relative">
+<span class="font-tagline text-label-sm text-on-surface-variant">03</span>
+</div>
+<!-- Day with event -->
+<div class="border-r border-b border-outline-variant p-2 bg-secondary-container/5">
+<span class="font-tagline text-label-sm text-on-surface-variant">04</span>
+<div class="mt-2 p-1 bg-amber-100 text-amber-900 text-[10px] font-bold rounded truncate">Prayer Breakfast</div>
+<div class="mt-1 p-1 bg-blue-100 text-blue-900 text-[10px] font-bold rounded truncate">Admin Webinar</div>
+</div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">05</span></div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">06</span></div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">07</span></div>
+<div class="border-r border-b border-outline-variant p-2 bg-surface-container">
+<span class="font-tagline text-label-sm text-on-surface-variant">08</span>
+<div class="mt-2 p-1 bg-purple-100 text-purple-900 text-[10px] font-bold rounded truncate">Career Fair Hub</div>
+</div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">09</span></div>
+<div class="border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">10</span></div>
+<!-- More rows placeholder... -->
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">11</span></div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">12</span></div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">13</span></div>
+<div class="border-r border-b border-outline-variant p-2 bg-emerald-100/30">
+<span class="font-tagline text-label-sm text-on-surface-variant">14</span>
+<div class="mt-2 p-1 bg-emerald-100 text-emerald-900 text-[10px] font-bold rounded truncate">Global Mixer</div>
+</div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">15</span></div>
+<div class="border-r border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">16</span></div>
+<div class="border-b border-outline-variant p-2"><span class="font-tagline text-label-sm text-on-surface-variant">17</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Global Events List -->
+<section class="py-20 bg-surface-container-low border-y border-outline-variant px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<span class="font-tagline text-tagline text-secondary uppercase block mb-2">Don't Miss Out</span>
+<h2 class="font-display-lg text-primary">Upcoming Global Events</h2>
+</div>
+<a class="text-primary font-bold border-b border-primary hover:text-secondary hover:border-secondary transition-all" href="#">Export to Calendar</a>
+</div>
+<div class="space-y-4">
+<!-- Event Row 1 -->
+<div class="bg-white p-6 border border-outline-variant rounded flex flex-col md:flex-row items-center gap-8 group hover:border-secondary transition-all shadow-sm">
+<div class="text-center md:w-24">
+<span class="block font-tagline text-secondary uppercase text-label-sm">Nov</span>
+<span class="block font-display-lg text-primary leading-none">18</span>
+</div>
+<div class="flex-grow space-y-1">
+<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Academic</span>
+<h4 class="font-headline-sm text-primary group-hover:text-secondary transition-colors">Economic Justice in the Diaspora Webinar</h4>
+<p class="text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span> 14:00 GMT • Online Classroom
+                            </p>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-surface-container-high text-primary px-6 py-2 rounded font-bold hover:bg-secondary-container transition-all">Register</button>
+<span class="material-symbols-outlined text-outline cursor-help" data-icon="more_vert" title="Add to Calendar">more_vert</span>
+</div>
+</div>
+<!-- Event Row 2 -->
+<div class="bg-white p-6 border border-outline-variant rounded flex flex-col md:flex-row items-center gap-8 group hover:border-secondary transition-all shadow-sm">
+<div class="text-center md:w-24">
+<span class="block font-tagline text-secondary uppercase text-label-sm">Nov</span>
+<span class="block font-display-lg text-primary leading-none">22</span>
+</div>
+<div class="flex-grow space-y-1">
+<span class="bg-amber-100 text-amber-800 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Spiritual</span>
+<h4 class="font-headline-sm text-primary group-hover:text-secondary transition-colors">Harvest Thanksgiving Chapel Service</h4>
+<p class="text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span> Nairobi Hub &amp; Livestream
+                            </p>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-surface-container-high text-primary px-6 py-2 rounded font-bold hover:bg-secondary-container transition-all">Details</button>
+<span class="material-symbols-outlined text-outline cursor-help" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<!-- Event Row 3 -->
+<div class="bg-white p-6 border border-outline-variant rounded flex flex-col md:flex-row items-center gap-8 group hover:border-secondary transition-all shadow-sm">
+<div class="text-center md:w-24">
+<span class="block font-tagline text-secondary uppercase text-label-sm">Dec</span>
+<span class="block font-display-lg text-primary leading-none">05</span>
+</div>
+<div class="flex-grow space-y-1">
+<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Professional</span>
+<h4 class="font-headline-sm text-primary group-hover:text-secondary transition-colors">Leadership Circle: Dallas Networking Night</h4>
+<p class="text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span> Dallas Global Hub
+                            </p>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-surface-container-high text-primary px-6 py-2 rounded font-bold hover:bg-secondary-container transition-all">RSVP</button>
+<span class="material-symbols-outlined text-outline cursor-help" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Regional Hub Spotlights -->
+<section class="py-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<span class="font-tagline text-tagline text-secondary uppercase tracking-widest block mb-2">Our Physical Presence</span>
+<h2 class="font-display-lg text-primary">Regional Hub Spotlights</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto mt-4">Connect with fellow students and faculty at our regional centers designed for co-working, worship, and physical interaction.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Hub 1 -->
+<div class="bg-white border border-outline-variant rounded overflow-hidden group">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A bright and airy co-working space in Nairobi, Kenya, featuring modern African aesthetic elements, large glass windows with a view of greenery, and students engaged in collaborative study. The lighting is natural and vibrant, emphasizing a clean and professional academic atmosphere within a global hub." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6yxhKQdF9NFsbNkNxRATcPbEs46icAtMUKfa2GhwyRL2SIhWyj-Uz6UqnQ4tU112m1qw37diMW6Jb-DEbHIO3bYMcTZ6-APNoaRBVJOAuTuMHm1fj7KWXJF0zZZYdT3mhwnSEE9o_TzJSllXQm_MnWhBXmgzbMGHL72O1FqnWJI9UOZ2TXHF5tdJUoyQnW0wW-_ipbx-ikm0p6vyiET6xl8_gLvvc2q7S6L_7546Vi-u0f4TpayRJ5wH-WGp4rabuJlDcCNbmSP0"/>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-primary">Nairobi Hub</h3>
+<span class="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
+</div>
+<p class="font-body-md text-on-surface-variant">The gateway to our African diaspora community, located in the heart of Westlands.</p>
+<div class="pt-4 border-t border-outline-variant">
+<p class="text-label-sm font-tagline text-secondary uppercase">Local Coordinator</p>
+<p class="font-body-md font-bold text-primary">Dr. Samuel Mwangi</p>
+<a class="text-body-md text-on-primary-container hover:underline" href="mailto:nairobi.hub@gdu.edu">nairobi.hub@gdu.edu</a>
+</div>
+<button class="w-full border border-primary text-primary py-3 rounded font-bold hover:bg-primary hover:text-on-primary transition-all">Visit Hub Page</button>
+</div>
+</div>
+<!-- Hub 2 -->
+<div class="bg-white border border-outline-variant rounded overflow-hidden group">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A historic brick building exterior in London, redesigned with a sleek, minimalist glass entrance. The interior shows a traditional university library setting with modern ergonomic furniture, where students and faculty are networking. The mood is sophisticated, merging Old World European academic charm with modern global connectivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKwp00oXcVIPI9sbJv9mQwACrmxy2QMson2FWb7sQ2vdxLeBG2YiCswMWM9dRilh62EKZO0eeVz_-7YB_sFnN-SbSAYz9k8ndfwpEJ_pUNhB1eM-lhfdnvq0sIDszrek73i13lX0WeZNM-PgCoNH5uv5sN2MUUazP9axV-hegfVomNN5s8Svu_8dFbc_lnnXzSyE1KyejX1iYX2QKvcvsdxcswEjF9xzW3xjhPAyluJM6ObQZe0FCM8y5J-wsJd6T46odp41RP4iw"/>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-primary">London Hub</h3>
+<span class="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
+</div>
+<p class="font-body-md text-on-surface-variant">Our European anchor situated in Bloomsbury, fostering cross-continental research.</p>
+<div class="pt-4 border-t border-outline-variant">
+<p class="text-label-sm font-tagline text-secondary uppercase">Local Coordinator</p>
+<p class="font-body-md font-bold text-primary">Prof. Elizabeth Thorne</p>
+<a class="text-body-md text-on-primary-container hover:underline" href="mailto:london.hub@gdu.edu">london.hub@gdu.edu</a>
+</div>
+<button class="w-full border border-primary text-primary py-3 rounded font-bold hover:bg-primary hover:text-on-primary transition-all">Visit Hub Page</button>
+</div>
+</div>
+<!-- Hub 3 -->
+<div class="bg-white border border-outline-variant rounded overflow-hidden group">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-tech, sleek university center in Dallas, Texas, with clean white surfaces, expansive digital screens displaying global maps, and a dedicated prayer chapel. The architectural style is bold and authoritative, using high-key lighting to project a forward-looking, corporate academic image." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAnnXISRpC8EtOGX2YUz7mNSUg7HH45kn8aQc6fefgxBQzJiu6cdtuEByg6eE23fcBCd6iuGftfhpPbmNvCjSmKIK0iPa3RedwVATZs_Lar6XcbMKjFl3VEhStgpXrYh9ds_3nS7GQMTumNOwaiMc5iEJvYnaAWDpgbTVTZwVfll43BU27JVP78b5XlyMY4JhlGniNURV0oqVAKhLWUgTySqY4UhysPdwIRY1KoMcjzwiIt4RuU_E4pLG_v5V1DADOHqiHJ29A2gU"/>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-sm text-primary">Dallas Hub</h3>
+<span class="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
+</div>
+<p class="font-body-md text-on-surface-variant">Serving our North American students with state-of-the-art virtual studio facilities.</p>
+<div class="pt-4 border-t border-outline-variant">
+<p class="text-label-sm font-tagline text-secondary uppercase">Local Coordinator</p>
+<p class="font-body-md font-bold text-primary">Rev. Marcus Johnson</p>
+<a class="text-body-md text-on-primary-container hover:underline" href="mailto:dallas.hub@gdu.edu">dallas.hub@gdu.edu</a>
+</div>
+<button class="w-full border border-primary text-primary py-3 rounded font-bold hover:bg-primary hover:text-on-primary transition-all">Visit Hub Page</button>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Newsletter -->
+<section class="py-20 px-margin-mobile md:px-margin-desktop bg-primary text-on-primary text-center">
+<div class="max-w-2xl mx-auto space-y-8">
+<h2 class="font-headline-md">Stay Informed of the Spirit's Movement</h2>
+<p class="font-body-lg opacity-80">Subscribe to our monthly newsletter to receive personalized event updates from your chosen hubs and academic departments.</p>
+<form class="flex flex-col sm:flex-row gap-4">
+<input class="flex-grow rounded px-6 py-4 bg-white/10 border border-white/20 focus:ring-secondary-container text-white placeholder:text-white/50" placeholder="Enter your email address" type="email"/>
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded font-bold hover:scale-[1.02] transition-transform" type="submit">Join Community</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-mobile md:px-margin-desktop bg-primary border-t border-on-primary-fixed-variant/20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
+<div class="space-y-4">
+<span class="font-display-lg text-on-primary block">GDU</span>
+<p class="font-tagline text-tagline text-secondary-fixed max-w-xs italic uppercase">Commissioned for a Higher Purpose.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+<div class="space-y-4">
+<p class="font-bold text-on-primary">Quick Links</p>
+<nav class="flex flex-col gap-2">
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+</nav>
+</div>
+<div class="space-y-4">
+<p class="font-bold text-on-primary">Institution</p>
+<nav class="flex flex-col gap-2">
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Accessibility</a>
+<a class="text-on-primary-fixed-variant opacity-80 hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</nav>
+</div>
+<div class="space-y-4">
+<p class="font-bold text-on-primary">Connect</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:text-secondary-fixed" data-icon="public">public</span>
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:text-secondary-fixed" data-icon="forum">forum</span>
+<span class="material-symbols-outlined text-on-primary cursor-pointer hover:text-secondary-fixed" data-icon="share">share</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-on-primary-fixed-variant/20 text-center">
+<p class="font-body-md text-on-primary-fixed-variant opacity-80">© 2024 Global Diaspora University. All Rights Reserved. Commissioned for a Higher Purpose.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Simple interactivity for demonstration
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                console.log('Filtering calendar by:', e.target.parentElement.textContent.trim());
+                // In a real app, this would trigger a re-render of the calendar events
+            });
+        });
+    </script>
+</body></html>

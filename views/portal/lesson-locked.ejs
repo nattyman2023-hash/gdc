@@ -1,0 +1,77 @@
+<a href="/portal/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
+
+<div class="max-w-2xl mx-auto text-center">
+  <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-8">
+    <span class="material-symbols-outlined text-6xl text-amber-500 mb-4">lock_clock</span>
+    <h1 class="text-2xl font-bold text-amber-900 mb-2">Lesson Not Available Yet</h1>
+    <p class="text-amber-700 mb-6"><%= lesson.title %></p>
+
+    <% if (availability.reason === 'drip_feed_cooldown' && availability.next_available) { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <h3 class="font-semibold text-gray-800 mb-2">Next Available In:</h3>
+        <div class="text-3xl font-bold text-amber-600 mb-2" id="countdown">
+          <span id="countdown-h">--</span>h <span id="countdown-m">--</span>m <span id="countdown-s">--</span>s
+        </div>
+        <p class="text-sm text-gray-500">
+          Unlocks at <span id="unlock-time"><%= availability.next_available.toISOString() %></span>
+        </p>
+      </div>
+    <% } else if (availability.reason === 'scheduled_release' && availability.next_available) { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <h3 class="font-semibold text-gray-800 mb-2">Scheduled Release:</h3>
+        <div class="text-xl font-bold text-blue-600 mb-2">
+          <%= availability.next_available.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+        </div>
+      </div>
+    <% } else if (availability.reason === 'essay_required') { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <span class="material-symbols-outlined text-4xl text-blue-500 mb-2">edit_note</span>
+        <h3 class="font-semibold text-gray-800 mb-2">Essay Submission Required</h3>
+        <p class="text-gray-600">You must submit the essay for the previous module before this content unlocks.</p>
+      </div>
+    <% } else if (availability.reason === 'prerequisite_not_met') { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <span class="material-symbols-outlined text-4xl text-purple-500 mb-2">checklist</span>
+        <h3 class="font-semibold text-gray-800 mb-2">Prerequisites Not Met</h3>
+        <p class="text-gray-600">Complete all lessons in the prerequisite module first.</p>
+      </div>
+    <% } else { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">hourglass_top</span>
+        <h3 class="font-semibold text-gray-800 mb-2">Complete Previous Lesson First</h3>
+        <p class="text-gray-600">Finish the previous lesson to unlock this one.</p>
+      </div>
+    <% } %>
+
+    <a href="/portal/courses/<%= course.slug %>" class="inline-block bg-primary text-on-primary px-6 py-3 rounded font-bold hover:opacity-90">
+      Back to Course
+    </a>
+  </div>
+</div>
+
+<% if (availability.next_available) { %>
+<script>
+(function(){
+  var target = new Date('<%= availability.next_available.toISOString() %>').getTime();
+  var hEl = document.getElementById('countdown-h');
+  var mEl = document.getElementById('countdown-m');
+  var sEl = document.getElementById('countdown-s');
+  var unlockEl = document.getElementById('unlock-time');
+  if (unlockEl) unlockEl.textContent = new Date(target).toLocaleString();
+
+  function tick(){
+    var now = Date.now();
+    var diff = target - now;
+    if (diff <= 0){ if(hEl)hEl.textContent='0'; if(mEl)mEl.textContent='00'; if(sEl)sEl.textContent='00'; location.reload(); return; }
+    var h = Math.floor(diff/3600000);
+    var m = Math.floor((diff%3600000)/60000);
+    var s = Math.floor((diff%60000)/1000);
+    if(hEl)hEl.textContent=h;
+    if(mEl)mEl.textContent=String(m).padStart(2,'0');
+    if(sEl)sEl.textContent=String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+<% } %>

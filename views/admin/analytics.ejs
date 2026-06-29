@@ -1,0 +1,80 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Executive</p><h1 class="font-headline text-headline-md text-primary">Executive Analytics</h1></div>
+
+<!-- Headline KPIs -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <% const k = [['Students', totals.students, 'groups'],['Applications', totals.applications, 'description'],['Acceptance rate', totals.acceptanceRate+'%', 'verified'],['Revenue', formatMoney(totals.revenue,'GBP'), 'payments']]; %>
+  <% k.forEach(function(c){ %>
+  <div class="bg-primary text-on-primary rounded-lg p-5">
+    <span class="material-symbols-outlined text-secondary-fixed-dim"><%= c[2] %></span>
+    <p class="font-display text-headline-md leading-none mt-2"><%= c[1] %></p>
+    <p class="font-tagline text-label-sm uppercase mt-1 text-secondary-fixed"><%= c[0] %></p>
+  </div>
+  <% }) %>
+</div>
+
+<%
+  function barList(rows, labelKey, max) {
+    return rows;
+  }
+  function maxOf(rows){ return Math.max.apply(null, rows.map(function(r){return Number(r.c);}).concat([1])); }
+%>
+
+<div class="grid lg:grid-cols-2 gap-6 mb-6">
+  <!-- Applications by country -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Applications by country</h2>
+    <% var mc = maxOf(byCountry); %>
+    <% if (!byCountry.length) { %><p class="text-on-surface-variant text-sm">No data.</p><% } %>
+    <div class="space-y-2">
+      <% byCountry.forEach(function(r){ %>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span class="text-on-surface-variant"><%= r.country %></span><span class="font-bold text-primary"><%= r.c %></span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= Math.round((r.c/mc)*100) %>%"></div></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Applications by program -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Applications by programme</h2>
+    <% var mp = maxOf(byProgram); %>
+    <% if (!byProgram.length) { %><p class="text-on-surface-variant text-sm">No data.</p><% } %>
+    <div class="space-y-2">
+      <% byProgram.forEach(function(r){ %>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span class="text-on-surface-variant"><%= r.title || 'Unspecified' %></span><span class="font-bold text-primary"><%= r.c %></span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-primary-container rounded-full" style="width: <%= Math.round((r.c/mp)*100) %>%"></div></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6">
+  <!-- Enrolments by course -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Enrolments by course</h2>
+    <% var me = maxOf(enrolmentsByCourse); %>
+    <% if (!enrolmentsByCourse.length) { %><p class="text-on-surface-variant text-sm">No data.</p><% } %>
+    <div class="space-y-2">
+      <% enrolmentsByCourse.forEach(function(r){ %>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span class="text-on-surface-variant"><%= r.title %></span><span class="font-bold text-primary"><%= r.c %></span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= Math.round((r.c/me)*100) %>%"></div></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Finance snapshot -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Finance snapshot</h2>
+    <div class="space-y-3">
+      <div class="flex justify-between border-b border-outline-variant/30 pb-2"><span class="text-on-surface-variant">Revenue collected</span><span class="font-bold text-secondary"><%= formatMoney(totals.revenue,'GBP') %></span></div>
+      <div class="flex justify-between border-b border-outline-variant/30 pb-2"><span class="text-on-surface-variant">Outstanding</span><span class="font-bold text-primary"><%= formatMoney(totals.outstanding,'GBP') %></span></div>
+      <div class="flex justify-between border-b border-outline-variant/30 pb-2"><span class="text-on-surface-variant">Total leads</span><span class="font-bold text-primary"><%= totals.leads %></span></div>
+      <div class="flex justify-between"><span class="text-on-surface-variant">Accepted applications</span><span class="font-bold text-primary"><%= totals.accepted %></span></div>
+    </div>
+  </div>
+</div>

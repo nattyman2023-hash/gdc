@@ -1,0 +1,66 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Governance</p><h1 class="font-headline text-headline-md text-primary">Compliance & Board</h1></div>
+
+<div class="grid lg:grid-cols-2 gap-8">
+  <!-- Documents -->
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Policy, Legal & Compliance Repository</h2>
+    <% const ed = editDoc || {}; %>
+    <form action="<%= editDoc ? '/admin/governance/documents/'+editDoc.id : '/admin/governance/documents' %>" method="post" class="bg-surface-container-lowest border <%= editDoc ? 'border-secondary' : 'border-outline-variant' %> rounded-lg p-4 mb-4 grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+      <% if (editDoc) { %><p class="sm:col-span-12 font-tagline text-label-sm text-secondary uppercase">Editing document</p><% } %>
+      <div class="sm:col-span-5"><input name="title" required value="<%= ed.title || '' %>" placeholder="Document title" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="sm:col-span-3">
+        <select name="category" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm">
+          <% ['Policy','Legal','Compliance','Minutes','Report'].forEach(function(c){ %><option <%= ed.category===c?'selected':'' %>><%= c %></option><% }) %>
+        </select>
+      </div>
+      <div class="sm:col-span-3"><input name="url" required value="<%= ed.url || '' %>" placeholder="Link (https://…)" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" /></div>
+      <div class="sm:col-span-1"><button class="w-full bg-secondary text-on-secondary px-3 py-2 rounded font-bold text-sm"><%= editDoc ? 'Save' : 'Add' %></button></div>
+      <% if (editDoc) { %><div class="sm:col-span-12"><a href="/admin/governance" class="text-on-surface-variant text-sm">Cancel edit</a></div><% } %>
+    </form>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!documents.length) { %><p class="p-4 text-on-surface-variant text-sm">No documents.</p><% } %>
+      <% documents.forEach(function(d){ %>
+      <div class="flex items-center justify-between p-4">
+        <div>
+          <a href="<%= d.url %>" target="_blank" rel="noopener" class="font-bold text-primary hover:text-secondary inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">description</span> <%= d.title %></a>
+          <p class="text-xs text-on-surface-variant ml-6"><%= d.category %><% if (d.review_date) { %> · review by <%= formatDate(d.review_date) %><% } %></p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="/admin/governance?editDoc=<%= d.id %>" class="material-symbols-outlined text-base text-on-surface-variant hover:text-secondary" title="Edit">edit</a>
+          <form action="/admin/governance/documents/<%= d.id %>/delete" method="post" onsubmit="return confirm('Remove document?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error">delete</button></form>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Board -->
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Governance Board</h2>
+    <% const em = editMember || {}; %>
+    <form action="<%= editMember ? '/admin/governance/board/'+editMember.id : '/admin/governance/board' %>" method="post" class="bg-surface-container-lowest border <%= editMember ? 'border-secondary' : 'border-outline-variant' %> rounded-lg p-4 mb-4 space-y-2">
+      <% if (editMember) { %><p class="font-tagline text-label-sm text-secondary uppercase">Editing member</p><% } %>
+      <div class="grid grid-cols-2 gap-2">
+        <input name="name" required value="<%= em.name || '' %>" placeholder="Name" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+        <input name="role" value="<%= em.role || '' %>" placeholder="Role" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+      </div>
+      <input name="bio" value="<%= em.bio || '' %>" placeholder="Short bio" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+      <div class="flex gap-3"><button class="bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm"><%= editMember ? 'Save' : 'Add board member' %></button><% if (editMember) { %><a href="/admin/governance" class="text-on-surface-variant text-sm self-center">Cancel</a><% } %></div>
+    </form>
+    <div class="space-y-2">
+      <% if (!board.length) { %><p class="text-on-surface-variant text-sm">No board members.</p><% } %>
+      <% board.forEach(function(b){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex justify-between items-start gap-3">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-center font-bold"><%= b.name.charAt(0) %></div>
+          <div><p class="font-bold text-primary"><%= b.name %></p><p class="text-xs text-secondary"><%= b.role || '' %></p><% if (b.bio) { %><p class="text-xs text-on-surface-variant mt-1"><%= b.bio %></p><% } %></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="/admin/governance?editMember=<%= b.id %>" class="material-symbols-outlined text-base text-on-surface-variant hover:text-secondary" title="Edit">edit</a>
+          <form action="/admin/governance/board/<%= b.id %>/delete" method="post" onsubmit="return confirm('Remove?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error">delete</button></form>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

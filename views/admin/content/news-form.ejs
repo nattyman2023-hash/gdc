@@ -1,0 +1,37 @@
+<a href="/admin/content/news" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All articles</a>
+<h1 class="font-headline text-headline-md text-primary mb-6"><%= isNew ? 'New Article' : 'Edit Article' %></h1>
+
+<form action="<%= isNew ? '/admin/content/news' : '/admin/content/news/'+post.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 max-w-3xl space-y-5">
+  <% const f = (k)=> (post && post[k]!=null) ? post[k] : ''; %>
+  <div>
+    <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Title *</label>
+    <input name="title" required value="<%= f('title') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+  </div>
+  <div class="grid sm:grid-cols-3 gap-5">
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Category</label>
+      <input name="category" value="<%= f('category') %>" placeholder="University News" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+    </div>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Author</label>
+      <input name="author" value="<%= f('author') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+    </div>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Slug (blank=auto)</label>
+      <input name="slug" value="<%= f('slug') %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+    </div>
+  </div>
+  <div>
+    <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Excerpt</label>
+    <textarea name="excerpt" rows="2" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= f('excerpt') %></textarea>
+  </div>
+  <div>
+    <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Body</label>
+    <textarea name="body" rows="12" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= f('body') %></textarea>
+  </div>
+  <label class="flex items-center gap-2"><input type="checkbox" name="published" <%= (isNew || post.published) ? 'checked' : '' %> class="rounded text-secondary" /> <span class="text-sm">Published</span></label>
+  <div class="flex gap-3 pt-2 border-t border-outline-variant/40">
+    <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold"><%= isNew ? 'Publish article' : 'Save changes' %></button>
+    <a href="/admin/content/news" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,267 @@
+<div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+  <a href="/admin/applications" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> All applications</a>
+  <div class="flex items-center gap-2">
+    <a href="/admin/applications/<%= application.id %>/edit" class="inline-flex items-center gap-1 border border-outline text-primary px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+    <form action="/admin/applications/<%= application.id %>/archive" method="post"><button class="inline-flex items-center gap-1 border border-outline text-on-surface-variant px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base"><%= application.archived ? 'unarchive' : 'archive' %></span> <%= application.archived ? 'Restore' : 'Archive' %></button></form>
+    <form action="/admin/applications/<%= application.id %>/delete" method="post" onsubmit="return confirm('Permanently delete this application?');"><button class="inline-flex items-center gap-1 text-error border border-error/40 px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">delete</span> Delete</button></form>
+  </div>
+</div>
+
+<% if (dupApps && dupApps.length) { %>
+<div class="mb-4 bg-tertiary-container border border-tertiary rounded-lg p-4 text-sm">
+  <p class="font-bold text-on-tertiary-container flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-base">content_copy</span> Possible duplicate — same email address</p>
+  <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-tertiary-container">
+    <% dupApps.forEach(function(d){ %><a href="/admin/applications/<%= d.id %>" class="underline hover:text-secondary"><%= d.reference %> (<%= d.status %>)</a><% }) %>
+  </div>
+</div>
+<% } %>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-1 space-y-5">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <p class="font-mono text-xs text-on-surface-variant mb-1"><%= application.reference %></p>
+      <h1 class="font-headline text-headline-sm text-primary mb-2"><%= application.first_name %> <%= application.last_name %></h1>
+      <div class="flex gap-2 mb-4"><%- include('_badge', { status: application.status }) %><%- include('_badge', { status: application.payment_status }) %></div>
+      <dl class="divide-y divide-outline-variant/40 text-sm">
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Email</dt><dd class="font-bold text-primary"><%= application.email %></dd></div>
+        <div class="flex justify-between py-2 items-center"><dt class="text-on-surface-variant">Phone</dt><dd class="font-bold text-primary text-right"><% if (application.phone) { %><%= application.phone %><span class="inline-flex gap-1 ml-2 align-middle"><a href="tel:<%= application.phone.replace(/[^+0-9]/g,'') %>" title="Call" class="material-symbols-outlined text-base text-secondary hover:text-primary">call</a><a href="https://wa.me/<%= application.phone.replace(/[^0-9]/g,'') %>" target="_blank" rel="noopener" title="WhatsApp" class="material-symbols-outlined text-base text-secondary hover:text-primary">chat</a></span><% } else { %>—<% } %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Country</dt><dd class="font-bold text-primary"><%= application.country || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Program</dt><dd class="font-bold text-primary text-right"><%= application.program_title || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Intake</dt><dd class="font-bold text-primary"><%= application.intake || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Prior education</dt><dd class="font-bold text-primary text-right"><%= application.prior_education || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Applied</dt><dd class="font-bold text-primary"><%= formatDate(application.created_at) %></dd></div>
+      </dl>
+    </div>
+
+    <% if (studentUser) { %>
+    <div class="bg-secondary-fixed border border-secondary rounded-lg p-4 text-sm">
+      <p class="font-bold text-on-secondary-fixed flex items-center gap-1"><span class="material-symbols-outlined text-base">how_to_reg</span> Student account active</p>
+      <a href="/admin/students/<%= studentUser.id %>" class="text-on-secondary-fixed underline">View student record →</a>
+    </div>
+    <% } %>
+
+    <!-- Pipeline -->
+    <form action="/admin/applications/<%= application.id %>/status" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Move through pipeline</label>
+      <select name="status" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary mb-3">
+        <% statuses.forEach(function(s){ %><option value="<%= s %>" <%= application.status===s?'selected':'' %>><%= s.replace('_',' ') %></option><% }) %>
+      </select>
+      <button class="w-full bg-primary text-on-primary px-4 py-2 rounded font-bold">Update status</button>
+      <p class="text-xs text-on-surface-variant mt-2">Setting status to <strong>accepted</strong> creates a student account automatically.</p>
+    </form>
+
+    <!-- Assignment -->
+    <form action="/admin/applications/<%= application.id %>/assign" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Assigned to</label>
+      <div class="flex gap-2">
+        <select name="assigned_to" class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">Unassigned</option>
+          <% assignees.forEach(function(u){ %><option value="<%= u.id %>" <%= application.assigned_to===u.id?'selected':'' %>><%= u.first_name %> <%= u.last_name %></option><% }) %>
+        </select>
+        <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Full application details -->
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-4">Application details</h2>
+      <%
+        var a = application;
+        var full = [a.title, a.first_name, a.middle_name, a.last_name].filter(Boolean).join(' ');
+        var addr = [a.address_line1, a.address_line2, a.city, a.region, a.postal_code, a.country].filter(Boolean).join(', ');
+        var sections = [
+          ['Personal', [
+            ['Full name', full],
+            ['Preferred name', a.preferred_name],
+            ['Date of birth', a.date_of_birth ? formatDate(a.date_of_birth) : ''],
+            ['Gender', a.gender],
+            ['Nationality', a.nationality],
+          ]],
+          ['Contact', [
+            ['Email', a.email], ['Phone', a.phone], ['Address', addr],
+          ]],
+          ['Education', [
+            ['Highest qualification', a.prev_qualification || a.prior_education],
+            ['Institution', a.prev_institution],
+            ['Grade', a.prev_grade], ['Year', a.prev_year],
+            ['English', a.english_proficiency],
+          ]],
+          ['Experience', [
+            ['Employment', a.employment_status],
+            ['Occupation', a.occupation], ['Employer', a.employer],
+            ['Church / ministry', a.church_involvement],
+          ]],
+          ['References', [
+            ['Referee 1', [a.ref1_name, a.ref1_relationship && '('+a.ref1_relationship+')', a.ref1_email].filter(Boolean).join(' ')],
+            ['Referee 2', [a.ref2_name, a.ref2_relationship && '('+a.ref2_relationship+')', a.ref2_email].filter(Boolean).join(' ')],
+          ]],
+          ['Other', [
+            ['How they heard', a.how_heard],
+            ['Interested in funding', a.sponsorship_interest ? 'Yes' : 'No'],
+          ]],
+        ];
+      %>
+      <div class="grid sm:grid-cols-2 gap-x-8 gap-y-5">
+        <% sections.forEach(function(sec){ var rows = sec[1].filter(function(r){ return r[1]; }); if (!rows.length) return; %>
+        <div>
+          <p class="font-tagline text-label-sm text-secondary uppercase mb-2"><%= sec[0] %></p>
+          <dl class="space-y-1.5 text-sm">
+            <% rows.forEach(function(r){ %>
+            <div class="flex justify-between gap-3"><dt class="text-on-surface-variant shrink-0"><%= r[0] %></dt><dd class="font-medium text-primary text-right break-words"><%= r[1] %></dd></div>
+            <% }) %>
+          </dl>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <% if (application.statement) { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-2">Personal statement</h2>
+      <p class="text-on-surface-variant text-sm whitespace-pre-line leading-relaxed"><%= application.statement %></p>
+    </div>
+    <% } %>
+
+    <% if (fees && fees.length) { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <h2 class="font-headline text-headline-sm text-primary mb-3">Application fee</h2>
+      <% fees.forEach(function(f){ %>
+      <div class="flex justify-between items-center text-sm py-1"><span class="text-on-surface-variant"><%= formatMinor(f.amount, (f.currency||'gbp').toUpperCase()) %> · <%= f.provider %></span><%- include('_badge', { status: f.status }) %></div>
+      <% }) %>
+    </div>
+    <% } %>
+
+    <!-- Interviews -->
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+      <h2 class="font-headline text-headline-sm text-primary mb-3">Interviews</h2>
+      <div class="space-y-2 mb-4">
+        <% if (!interviews.length) { %><p class="text-on-surface-variant text-sm">No interviews scheduled.</p><% } %>
+        <% const outcomeBadge = { recommend:'paid', hold:'sent', decline:'declined', pending:'new' }; %>
+        <% interviews.forEach(function(iv){ %>
+        <div class="border-b border-outline-variant/30 pb-3 mb-3 last:border-0 last:mb-0">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-bold text-primary text-sm"><%= formatDateTime(iv.scheduled_at) %> · <%= iv.mode === 'online' ? 'Online' : 'In person' %></p>
+              <% if (iv.location) { %><p class="text-xs text-on-surface-variant break-all"><%= iv.location %></p><% } %>
+              <div class="flex items-center gap-2 mt-1">
+                <%- include('_badge', { status: iv.status==='completed'?'paid':(iv.status==='scheduled'?'sent':'declined') }) %>
+                <% if (iv.outcome && iv.outcome !== 'pending') { %><%- include('_badge', { status: outcomeBadge[iv.outcome] }) %><span class="text-xs text-on-surface-variant"><%= iv.outcome %><% if (iv.rating) { %> · <%= iv.rating %>/5<% } %></span><% } %>
+              </div>
+              <% if (iv.outcome_notes) { %><p class="text-xs text-on-surface-variant mt-1 italic">"<%= iv.outcome_notes %>"</p><% } %>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <form action="/admin/interviews/<%= iv.id %>/status" method="post">
+                <select name="status" onchange="this.form.submit()" class="text-xs px-2 py-1 rounded border border-outline">
+                  <% ['scheduled','completed','cancelled','no_show'].forEach(function(s){ %><option value="<%= s %>" <%= iv.status===s?'selected':'' %>><%= s.replace('_',' ') %></option><% }) %>
+                </select>
+              </form>
+              <form action="/admin/interviews/<%= iv.id %>/delete" method="post" onsubmit="return confirm('Remove this interview?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error" title="Delete">delete</button></form>
+            </div>
+          </div>
+          <div class="flex gap-3 mt-2 text-xs">
+            <button type="button" class="text-secondary font-bold" onclick="document.getElementById('outcome-<%= iv.id %>').classList.toggle('hidden')">Record outcome</button>
+            <button type="button" class="text-secondary font-bold" onclick="document.getElementById('resched-<%= iv.id %>').classList.toggle('hidden')">Reschedule</button>
+          </div>
+          <form id="outcome-<%= iv.id %>" action="/admin/interviews/<%= iv.id %>/outcome" method="post" class="hidden mt-2 bg-surface-container-low rounded p-3 space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <select name="outcome" class="text-sm px-2 py-1.5 rounded border border-outline"><% ['pending','recommend','hold','decline'].forEach(function(o){ %><option value="<%= o %>" <%= iv.outcome===o?'selected':'' %>><%= o %></option><% }) %></select>
+              <select name="rating" class="text-sm px-2 py-1.5 rounded border border-outline"><option value="">Rating…</option><% [1,2,3,4,5].forEach(function(n){ %><option value="<%= n %>" <%= iv.rating===n?'selected':'' %>><%= n %>/5</option><% }) %></select>
+            </div>
+            <textarea name="outcome_notes" rows="2" placeholder="Interview notes / recommendation" class="w-full text-sm px-2 py-1.5 rounded border border-outline"><%= iv.outcome_notes || '' %></textarea>
+            <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Save outcome</button>
+          </form>
+          <form id="resched-<%= iv.id %>" action="/admin/interviews/<%= iv.id %>/reschedule" method="post" class="hidden mt-2 bg-surface-container-low rounded p-3 space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <input name="scheduled_at" type="datetime-local" class="text-sm px-2 py-1.5 rounded border border-outline" />
+              <select name="mode" class="text-sm px-2 py-1.5 rounded border border-outline"><option value="online">Online</option><option value="in_person">In person</option></select>
+            </div>
+            <input name="location" placeholder="Link or location" class="w-full text-sm px-2 py-1.5 rounded border border-outline" />
+            <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Save new time</button>
+          </form>
+        </div>
+        <% }) %>
+      </div>
+      <!-- Self-scheduling link -->
+      <div class="border-t border-outline-variant/40 pt-3 mb-3">
+        <% if (application.interview_token) { %>
+          <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Applicant self-scheduling link</p>
+          <input readonly value="<%= appUrl %>/interview/<%= application.interview_token %>" onclick="this.select()" class="w-full px-3 py-2 rounded border border-outline bg-surface-container-high text-xs mb-2" />
+        <% } %>
+        <div class="flex flex-wrap gap-3 mb-2">
+          <form action="/admin/applications/<%= application.id %>/send-interview-invite" method="post"><button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">mail</span> Email interview invite</button></form>
+          <% if (!application.interview_token) { %><form action="/admin/applications/<%= application.id %>/interview-link" method="post"><button class="text-secondary font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">link</span> Generate link</button></form><% } %>
+        </div>
+        <a href="/admin/interview-slots" class="text-on-surface-variant text-xs hover:text-secondary">Manage interview availability →</a>
+      </div>
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Or schedule directly</p>
+      <form action="/admin/applications/<%= application.id %>/interview" method="post" class="grid grid-cols-1 gap-2">
+        <div class="grid grid-cols-2 gap-2">
+          <input name="scheduled_at" type="datetime-local" required class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+          <select name="mode" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"><option value="online">Online</option><option value="in_person">In person</option></select>
+        </div>
+        <input name="location" placeholder="Meeting link or location" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+        <select name="interviewer_id" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm">
+          <option value="">Interviewer: me</option>
+          <% interviewers.forEach(function(u){ %><option value="<%= u.id %>"><%= u.first_name %> <%= u.last_name %></option><% }) %>
+        </select>
+        <button class="bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm">Schedule interview</button>
+      </form>
+    </div>
+
+    <!-- Documents -->
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+      <h2 class="font-headline text-headline-sm text-primary mb-3">Documents</h2>
+      <div class="space-y-2 mb-4">
+        <% if (!documents.length) { %><p class="text-on-surface-variant text-sm">No documents attached.</p><% } %>
+        <% documents.forEach(function(d){ %>
+        <div class="flex items-center justify-between border-b border-outline-variant/30 pb-2 last:border-0">
+          <a href="<%= d.url %>" target="_blank" rel="noopener" class="text-secondary font-bold text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">description</span> <%= d.label %></a>
+          <form action="/admin/documents/<%= d.id %>/delete" method="post" onsubmit="return confirm('Remove this document?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error" title="Remove">delete</button></form>
+        </div>
+        <% }) %>
+      </div>
+      <form action="/admin/applications/<%= application.id %>/documents" method="post" class="grid grid-cols-1 sm:grid-cols-12 gap-2 border-t border-outline-variant/40 pt-3">
+        <input name="label" required placeholder="Label (e.g. Transcript)" class="sm:col-span-4 px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+        <input name="url" required placeholder="Link (https://…)" class="sm:col-span-6 px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm" />
+        <button class="sm:col-span-2 bg-secondary text-on-secondary px-3 py-2 rounded font-bold text-sm">Add</button>
+      </form>
+    </div>
+
+    <%- include('_activity', { activity: activity, entity: 'application', entityId: application.id, email: application.email }) %>
+
+    <%- include('_tasks', { tasks: tasks, taskEntity: 'application', taskEntityId: application.id, staff: [] }) %>
+
+    <div>
+      <h2 class="font-headline text-headline-sm text-primary mb-3">Notes</h2>
+      <form action="/admin/applications/<%= application.id %>/notes" method="post" data-async-refresh="#notes-list" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-4">
+        <textarea name="body" rows="3" required placeholder="Add an admissions note…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea>
+        <div class="flex justify-end mt-2"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Add note</button></div>
+      </form>
+      <div id="notes-list" class="space-y-3 rounded-lg transition-shadow">
+        <% if (!notes.length) { %><p class="text-on-surface-variant text-sm">No notes yet.</p><% } %>
+        <% notes.forEach(function(n){ %>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+          <div class="flex justify-between items-center mb-1">
+            <p class="font-bold text-primary text-sm"><%= n.author_name || 'Staff' %></p>
+            <div class="flex items-center gap-2">
+              <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= formatDate(n.created_at) %></p>
+              <button type="button" class="material-symbols-outlined text-base text-on-surface-variant hover:text-secondary" title="Edit note" onclick="document.getElementById('note-<%= n.id %>').classList.toggle('hidden')">edit</button>
+              <form action="/admin/notes/<%= n.id %>/delete" method="post" onsubmit="return confirm('Delete this note?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error" title="Delete note">delete</button></form>
+            </div>
+          </div>
+          <p class="text-on-surface-variant text-sm whitespace-pre-line"><%= n.body %></p>
+          <form id="note-<%= n.id %>" action="/admin/notes/<%= n.id %>/edit" method="post" class="hidden mt-2">
+            <textarea name="body" rows="3" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"><%= n.body %></textarea>
+            <div class="flex justify-end gap-2 mt-2">
+              <button type="button" class="text-on-surface-variant text-sm" onclick="document.getElementById('note-<%= n.id %>').classList.add('hidden')">Cancel</button>
+              <button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-sm">Save</button>
+            </div>
+          </form>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>

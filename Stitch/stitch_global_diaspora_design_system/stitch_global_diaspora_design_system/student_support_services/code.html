@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Support Services | Global Diaspora University</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;600&amp;family=Montserrat:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#071d3a",
+                        "outline": "#74777e",
+                        "on-primary-fixed-variant": "#354766",
+                        "tertiary-fixed": "#ffdea9",
+                        "surface": "#fcf9f3",
+                        "surface-tint": "#4c5f7f",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fcf9f3",
+                        "on-tertiary-fixed": "#271900",
+                        "on-primary-container": "#7386a8",
+                        "secondary-fixed": "#d7e2ff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#ebe8e2",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary-fixed": "#051b38",
+                        "tertiary-container": "#291a00",
+                        "on-surface-variant": "#44474d",
+                        "on-surface": "#1c1c18",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary-container": "#345083",
+                        "secondary-fixed-dim": "#acc7ff",
+                        "on-tertiary-fixed-variant": "#5e4100",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "surface-variant": "#e5e2dc",
+                        "secondary": "#425e92",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "background": "#fcf9f3",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#040200",
+                        "on-secondary-fixed": "#001a40",
+                        "surface-container-low": "#f6f3ed",
+                        "on-tertiary-container": "#ad7c0e",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#f6bd50",
+                        "on-secondary-fixed-variant": "#294678",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "surface-container": "#f0eee8",
+                        "inverse-primary": "#b4c7ec",
+                        "secondary-container": "#a8c4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "margin-desktop": "48px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "tagline": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "tagline": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.15em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(7, 29, 58, 0.85), rgba(7, 29, 58, 0.95));
+        }
+        .bento-border {
+            border-top: 2px solid #f6bd50;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(7, 29, 58, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<header class="bg-primary-container dark:bg-primary-container text-on-primary font-tagline text-tagline uppercase tracking-widest docked full-width top-0 sticky z-50 border-b border-outline-variant/15 shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
+<div class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest dark:text-surface-bright">GDU</div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Research</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Faculty</a>
+<a class="text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">About</a>
+<a class="text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Student Life</a>
+</div>
+<button class="bg-primary-container border-2 border-tertiary-fixed-dim text-tertiary-fixed-dim px-6 py-2 font-tagline hover:bg-tertiary-fixed-dim hover:text-primary-container transition-all active:scale-95">
+                Apply Now
+            </button>
+</nav>
+</header>
+<!-- SideNavBar (Student Portal Context) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface-container-low border-r border-outline-variant/10 w-64 pt-24">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Student Portal</h2>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">Global Diaspora University</p>
+</div>
+<nav class="flex-grow">
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+                Academic Record
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+                Financials
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant hover:bg-surface-container-high px-6 py-4 transition-all" href="#">
+<span class="material-symbols-outlined">book</span>
+                Library
+            </a>
+<a class="flex items-center gap-stack-md bg-secondary-container text-on-secondary-container font-bold px-6 py-4 rounded-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">contact_support</span>
+                Support
+            </a>
+</nav>
+<div class="p-6">
+<button class="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 font-tagline text-xs uppercase tracking-widest rounded-none">
+<span class="material-symbols-outlined text-sm">chat</span>
+                WhatsApp Support
+            </button>
+</div>
+</aside>
+<main class="lg:ml-64 min-h-screen">
+<!-- Hero Section -->
+<section class="relative h-[614px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Students working together" class="w-full h-full object-cover" data-alt="A group of diverse university students working collaboratively on laptops in a bright, modern library environment with large windows. The scene is captured in high-key, sophisticated lighting with a warm ivory glow. The depth of field is shallow, focusing on a student's determined but peaceful expression, embodying the theme of mission-driven academic success. Deep navy and gold accents are present in their attire and environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcZA5WVKql43KBQxV8ggW9SPBHGQ8lRgwhB5tVpD405Mt_X1ut3zI9QPOVHNyGBcRohXupcC6Y2qp3-LvwOF96XywpqPkwk5J1wGgoMfKKrdiw3ePrSan-j6j3gaZnNkrlHbw_EhQHKchEyLkThUjeTntOhUd1zg8tZFBGdatfJvOMlgyWcaM5uDRC97yEHZACPNCfRw9ZJQ6rceEBNVd2ixL7oQIThtO2fz6sWo9eNpeI3jkMH9rQx-5LQQ7bsBacaueZCSlh-rU"/>
+<div class="hero-gradient absolute inset-0"></div>
+</div>
+<div class="relative z-10 px-margin-mobile md:px-margin-desktop w-full max-w-4xl">
+<span class="font-tagline text-tagline text-tertiary-fixed-dim uppercase tracking-[0.3em] mb-4 block">Student Support Services</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest mb-6">
+                    Your Success is Our Mission
+                </h1>
+<p class="font-body-lg text-body-lg text-surface-variant max-w-2xl mb-8">
+                    GDU provides a comprehensive ecosystem of care, ensuring that every member of our global diaspora has the resources to thrive academically, technically, and spiritually.
+                </p>
+</div>
+</section>
+<!-- Ask GDU Search -->
+<section class="relative -mt-12 z-20 px-margin-mobile md:px-margin-desktop">
+<div class="bg-surface-container-lowest custom-shadow p-6 md:p-10 max-w-5xl mx-auto flex flex-col md:flex-row gap-gutter items-center border border-outline-variant/10">
+<div class="w-full relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface border border-outline-variant rounded-none focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none font-body-md" placeholder="Ask GDU: Search for help articles, FAQs, or contact info..." type="text"/>
+</div>
+<button class="whitespace-nowrap bg-primary-container text-surface-container-lowest px-8 py-4 font-tagline uppercase tracking-widest hover:bg-on-primary-fixed-variant transition-all active:scale-95">
+                    Find Help
+                </button>
+</div>
+</section>
+<!-- Support Categories Grid -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto mt-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Academic Support -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/10 bento-border custom-shadow flex flex-col">
+<div class="w-12 h-12 bg-primary-container/5 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary-container text-3xl">edit_note</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Academic Support</h3>
+<p class="text-on-surface-variant mb-6 flex-grow">Refine your intellectual craft through writing workshops, one-on-one tutoring, and essential study skill resources tailored for a global curriculum.</p>
+<ul class="space-y-3 mb-8">
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Writing Workshops</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Peer Tutoring</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Research Mentorship</li>
+</ul>
+<a class="text-primary-container font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:translate-x-1 transition-transform" href="#">
+                        Explore Resources <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<!-- Technical Assistance -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/10 bento-border custom-shadow flex flex-col">
+<div class="w-12 h-12 bg-primary-container/5 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary-container text-3xl">terminal</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Technical Help</h3>
+<p class="text-on-surface-variant mb-6 flex-grow">Our help desk is dedicated to ensuring seamless access to the LMS, mobile application, and providing troubleshooting for connectivity issues globally.</p>
+<ul class="space-y-3 mb-8">
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> LMS Access Issues</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Mobile App Support</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Global Connectivity</li>
+</ul>
+<a class="text-primary-container font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:translate-x-1 transition-transform" href="#">
+                        Submit a Ticket <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<!-- Pastoral Care -->
+<div class="bg-surface-container-lowest p-8 border border-outline-variant/10 bento-border custom-shadow flex flex-col">
+<div class="w-12 h-12 bg-primary-container/5 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary-container text-3xl">volunteer_activism</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Pastoral Care</h3>
+<p class="text-on-surface-variant mb-6 flex-grow">Spiritual guidance and counseling for the diaspora. Connect with advisors for prayer requests, mentorship, and faith-based student support.</p>
+<ul class="space-y-3 mb-8">
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Prayer Requests</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Spiritual Counseling</li>
+<li class="flex items-center gap-2 text-sm font-semibold text-primary"><span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">check_circle</span> Community Gatherings</li>
+</ul>
+<a class="text-primary-container font-bold text-sm uppercase tracking-widest flex items-center gap-2 hover:translate-x-1 transition-transform" href="#">
+                        Book a Session <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Quick Links -->
+<section class="bg-surface-dim py-stack-lg px-margin-mobile md:px-margin-desktop">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-stack-lg">
+<h4 class="font-tagline text-tagline text-primary uppercase tracking-widest">Essential Access:</h4>
+<div class="flex flex-wrap justify-center gap-gutter">
+<a class="flex items-center gap-2 bg-surface-container-lowest px-6 py-3 border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">calendar_today</span>
+<span class="font-bold text-sm">Academic Calendar</span>
+</a>
+<a class="flex items-center gap-2 bg-surface-container-lowest px-6 py-3 border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">local_library</span>
+<span class="font-bold text-sm">Digital Library Access</span>
+</a>
+<a class="flex items-center gap-2 bg-surface-container-lowest px-6 py-3 border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-colors" href="#">
+<span class="material-symbols-outlined text-tertiary-fixed-dim">chat_bubble</span>
+<span class="font-bold text-sm">WhatsApp Support</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Testimony -->
+<section class="py-24 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-4xl mx-auto text-center">
+<span class="material-symbols-outlined text-5xl text-tertiary-fixed-dim mb-6" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<blockquote class="font-headline-md text-headline-md text-primary mb-8 leading-relaxed italic">
+                    "When I struggled to balance my clinical rotations with academic writing, the GDU Writing Lab didn't just correct my grammar—they helped me find my voice as a scholar. The pastoral team’s prayers were my anchor during challenging seasons."
+                </blockquote>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-tertiary-fixed-dim">
+<img alt="Student Portrait" data-alt="A professional and warm portrait of a female graduate student of the African diaspora. She is smiling confidently, wearing a graduation gown with gold accents, set against a blurred background of a prestigious academic library. The lighting is soft and golden, highlighting a sense of achievement and institutional pride." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByUx32oDT5ZACsNKiZIH0EN6Lig2WQhgUX-Q2Qzeb3owjH2nCIx9fzGmUkAX3vzl2ThtXO1AqbIxFT1cfga_CyttLEF6lrFiJyaw-F4gpA4hqYH3F6VpPz-ryp2XE70CYhJTWlKMJirZN9zxaaMBVrjsV5PBn0uipEFFBps5OeG6yeo2tJh_sxxFQ_7p1Lo683JOFKoVtwYQilaxmqU_4rxL7VmCmGCGIahfJT4INLecZQeidqUqX-7fRIJK_0_hItRjthxu2J7wY"/>
+</div>
+<cite class="not-italic">
+<span class="block font-tagline text-tagline text-primary uppercase tracking-widest font-bold">Amara Okafor</span>
+<span class="text-sm text-on-surface-variant">Master of Global Health, Class of 2024</span>
+</cite>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-mobile md:px-margin-desktop bg-primary-container text-surface-container-lowest border-t-4 border-tertiary-fixed-dim">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="space-y-4">
+<div class="font-display-lg text-headline-md text-surface-container-lowest">GDU</div>
+<p class="font-body-md text-body-md opacity-80 max-w-xs">
+                        Empowering the global diaspora through accessible, prestigious, and spirit-led higher education.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<ul class="space-y-2">
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Accreditation</a></li>
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a></li>
+</ul>
+<ul class="space-y-2">
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a></li>
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Careers</a></li>
+<li><a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Alumni</a></li>
+</ul>
+</div>
+<div class="flex flex-col md:items-end justify-center">
+<p class="font-body-md text-body-md text-right md:text-right opacity-60">
+                        © 2024 Global Diaspora University.<br/>
+                        Accredited by International Academic Council.
+                    </p>
+</div>
+</div>
+</footer>
+</main>
+<!-- Mobile Bottom Nav -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant/15 flex justify-around py-3 z-50">
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase">Home</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">school</span>
+<span class="text-[10px] font-bold uppercase">Academics</span>
+</button>
+<button class="flex flex-col items-center text-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<span class="text-[10px] font-bold uppercase">Support</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase">Portal</span>
+</button>
+</div>
+<script>
+        // Micro-interaction for the search bar
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.parentElement.classList.add('ring-2', 'ring-tertiary-fixed-dim');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.parentElement.classList.remove('ring-2', 'ring-tertiary-fixed-dim');
+        });
+    </script>
+</body></html>

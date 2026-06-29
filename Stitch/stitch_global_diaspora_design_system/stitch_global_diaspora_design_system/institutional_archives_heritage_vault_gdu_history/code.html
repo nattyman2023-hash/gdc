@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Heritage Vault | Global Diaspora University</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Montserrat:wght@600&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#294678",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4c5f7f",
+                    "on-primary-fixed": "#051b38",
+                    "surface-variant": "#e5e2dc",
+                    "surface-container-high": "#ebe8e2",
+                    "surface-container": "#f0eee8",
+                    "secondary-fixed": "#ffdea9",
+                    "on-secondary-container": "#725000",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#5e4100",
+                    "on-secondary-fixed": "#271900",
+                    "error-container": "#ffdad6",
+                    "on-background": "#1c1c18",
+                    "inverse-surface": "#31312d",
+                    "surface": "#fcf9f3",
+                    "outline": "#74777e",
+                    "primary-fixed": "#d6e3ff",
+                    "on-surface": "#1c1c18",
+                    "inverse-primary": "#b4c7ec",
+                    "secondary": "#7d5800",
+                    "on-surface-variant": "#44474d",
+                    "on-primary-fixed-variant": "#354766",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f6f3ed",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#f6bd50",
+                    "primary": "#00030c",
+                    "on-tertiary-fixed": "#001a40",
+                    "tertiary": "#00030d",
+                    "on-primary-container": "#7386a8",
+                    "secondary-container": "#fdc355",
+                    "surface-dim": "#dcdad4",
+                    "primary-container": "#071d3a",
+                    "outline-variant": "#c4c6ce",
+                    "tertiary-fixed": "#d7e2ff",
+                    "tertiary-container": "#001c43",
+                    "tertiary-fixed-dim": "#acc7ff",
+                    "surface-container-highest": "#e5e2dc",
+                    "primary-fixed-dim": "#b4c7ec",
+                    "on-tertiary-container": "#6a85bb",
+                    "surface-bright": "#fcf9f3",
+                    "background": "#fcf9f3",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0ea"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-mobile": "20px",
+                    "container-max": "1280px",
+                    "margin-desktop": "64px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "tagline": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "display-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Playfair Display"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .parchment-texture {
+            background-color: #fcf9f3;
+            background-image: url("https://www.transparenttextures.com/patterns/cardboard-flat.png");
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-shadow-sm {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .border-gold {
+            border-color: #7d5800;
+        }
+        .sepia-effect {
+            filter: sepia(0.3) contrast(1.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f0eee8;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #7d5800;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md parchment-texture min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50 h-20">
+<div class="flex justify-between items-center px-gutter w-full max-w-container-max mx-auto h-full">
+<div class="font-headline-sm text-headline-sm text-primary uppercase tracking-wider">
+                Global Diaspora University
+            </div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Admissions</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Programs</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Research</a>
+<a class="text-primary font-bold border-b-2 border-secondary font-body-md" href="#">About</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:scale-95 duration-150">
+                Apply Now
+            </button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[716px] flex items-center justify-center overflow-hidden border-b border-gold">
+<div class="absolute inset-0 z-0">
+<img alt="Grand Library" class="w-full h-full object-cover sepia-effect opacity-40" data-alt="A grand, historical academic library with floor-to-ceiling wooden bookshelves, rolling ladders, and large arched windows letting in soft, golden morning light. The atmosphere is quiet and scholarly, with a color palette dominated by rich mahogany woods, ivory parchment paper, and deep navy blue carpets. The scene is shot with high detail, emphasizing the texture of leather-bound books and dust motes dancing in the sunlight, reflecting a prestigious and traditional university heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi0IrOHORxfDlOLtMuVrN6OHp_cT0fOoxolF5UlNnuIBIBsBsPuGXfv7erZ_eD1xYU4Nkz7AgkqFCgpoVqq_ilN3KB3RFc-9kDbsJ4pvszKmf4XMTDcxgXu6De1QYPC4r-1H0Xy3JaML1hjapw0SHuBGP3_XI7ahN1RBuA5yZRlQd4xxOg3c2lplYoSu-ioFJuGo_vUn_Bu7Yvgae0YqpOpKGe_Og06WgaoV4PibUAJBnzPg8QJGzci9TPlbhPUW39c14qoaiGKMA"/>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-background/90"></div>
+</div>
+<div class="relative z-10 text-center px-gutter max-w-3xl">
+<div class="flex justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-5xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary mb-4">The Heritage Vault</h1>
+<p class="font-headline-sm text-headline-sm italic text-secondary mb-8">"Preserving the Sacred Legacy of the Global Diaspora"</p>
+<div class="w-24 h-px bg-secondary mx-auto mb-8"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    A digital sanctum dedicated to the stories, artifacts, and wisdom of those who built the bridge between ancestral lands and global horizons.
+                </p>
+</div>
+</section>
+<!-- Bento Grid: Main Collections -->
+<section class="py-24 px-gutter max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 h-auto md:h-[900px]">
+<!-- The Founder's Collection (Large Hero Card) -->
+<div class="md:col-span-8 md:row-span-2 group relative overflow-hidden bg-surface-container-lowest border border-outline-variant rounded-lg p-1">
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+<img alt="Founder's Desk" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An atmospheric, close-up photograph of an antique mahogany desk belonging to a university founder. On the desk lies an inkwell, a fountain pen, and a stack of yellowed, handwritten letters in elegant cursive script. The scene is lit by a warm, localized lamp light, creating deep shadows and highlighting the texture of the old paper and polished wood. The overall aesthetic is one of scholarly tradition and intellectual history, with a color palette of gold, deep brown, and cream." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxbne3SGUayPxPnT2YwK1jh4cqWc-5kHkuKUnnagt5p6ItGlVk6ggG51e438pe3id_OgKWxfNDRCRK_h9NUfCJ0Y6HUvpSA16IkJUPbsEN_kpsUy0FuFCfLbL6EnMpcQFWa08SUb_lDG0utayxpMA9sLIPHiDZM6r6WE-0WFsEkHXLbYS4UxaugnUulAICEBscvAutWXjmN-HldRhdZZk3IngYqRiROEKnE1KbhcT11IymZfptbXEMPNSm5Q81FLy1JlaZMwKhhjk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-10 z-20">
+<span class="font-tagline text-tagline text-secondary-fixed bg-primary-container px-3 py-1 mb-4 inline-block uppercase">Interactive Artifacts</span>
+<h2 class="font-display-lg text-display-lg text-white mb-4">The Founder's Collection</h2>
+<p class="font-body-lg text-body-lg text-outline-variant max-w-lg mb-6">Explore the personal effects, journals, and original blueprints of Global Diaspora University's inception.</p>
+<button class="flex items-center text-secondary-fixed font-bold hover:gap-4 transition-all duration-300">
+                            ENTER THE GALLERY <span class="material-symbols-outlined ml-2">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Digitized Rare Manuscripts -->
+<div class="md:col-span-4 md:row-span-1 group relative bg-surface-container border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-8 h-full flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">auto_stories</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Rare Manuscripts</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Access digital high-resolution scans of ancient theological texts and diaspora treaties.</p>
+</div>
+<div class="mt-6 border-t border-outline-variant pt-4 flex justify-between items-center">
+<span class="font-tagline text-tagline text-secondary">422 VOLUMES</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-2 transition-transform">menu_book</span>
+</div>
+</div>
+<div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">script</span>
+</div>
+</div>
+<!-- Oral History Gallery -->
+<div class="md:col-span-4 md:row-span-1 group relative bg-primary-container border border-primary text-on-primary rounded-lg overflow-hidden">
+<img alt="Elder Speaking" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-500" data-alt="A portrait of a dignified elder with graying hair, speaking passionately into a vintage-style microphone. The lighting is soft and cinematic, focusing on the person's expressive face against a blurred background of a cozy room filled with books. The image has a warm, sepia-toned quality that evokes memories and heritage, with high contrast and a sense of profound wisdom and history." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAczpXQPLI5N-674xI8KqSoH-OgM92XaRVwxCBtKdY93x3JBzJ35EwjrKGMOxlkGofKp039wx8z3y5tiZcNvKHKhPTggexulzmjr5LuItMnOr0he8_JW2fg3GwUbJHFQU7wp5lIkuIEcKJ2H9IXcFTDXpBMJqGeaNp_Xebp3pp8SPxSNyeB1cj-kXFMz0nntgXZ61TdV-e_dvsnVIGAAvRn7qv9lwYGT9xRgLZnVTm-ZLKBodvwpD6MOH_xw0-e442W5DfE6R-3cwg"/>
+<div class="relative p-8 h-full flex flex-col justify-end bg-gradient-to-t from-primary to-transparent">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-4xl mb-2">graphic_eq</span>
+<h3 class="font-headline-md text-headline-md mb-2">Oral Histories</h3>
+<p class="font-body-md text-body-md text-on-primary-container mb-4">Testimonials from the elders of the diaspora community.</p>
+<a class="inline-flex items-center text-secondary-fixed font-tagline text-tagline hover:underline" href="#">
+                            LISTEN TO STORIES
+                        </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Manuscript Viewer Section -->
+<section class="py-24 bg-surface-container-low border-y border-outline-variant overflow-hidden">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="relative aspect-[3/4] bg-surface border-gold border shadow-xl p-8 transform -rotate-2 hover:rotate-0 transition-transform duration-700">
+<img alt="Manuscript Detail" class="w-full h-full object-cover sepia-effect" data-alt="A macro photograph of an ancient parchment manuscript page. The parchment is cracked and yellowed with age, showing intricate hand-drawn calligraphy in deep black ink and vibrant gold-leaf illuminations. The light grazing across the surface reveals the tactile texture of the vellum. The shot is highly detailed and scholarly, emphasizing the precious and delicate nature of this historical theological document." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkNzwrvr3817D4CM8rXxv9ZWU6GdGwyRkkOZ6F-UZngbHTCi3X24S3cVIBXqqzMmQb_Cz3tqC_CWDprZ5UBTQTJQztCsfavh2pYaiIZdPFt7q8eHW5tcpreqjMQjG6Tv1XQMncZM6aROoj91gyPEG8ls5jk-VCggz07IqvD3h4cGVcUk_bacFM8kjbnl6vEONMIb_Ijkjh0tm7riYRMj-Y5S9rcSvcDAnWvarUo-7qExYWYLymQsTlys_VtkBcH5VH51kWGZJzDYw"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-primary/20">
+<button class="bg-secondary text-white px-8 py-4 font-tagline text-tagline shadow-lg">EXPLORE SCAN (4K)</button>
+</div>
+</div>
+<div>
+<span class="font-tagline text-tagline text-secondary border-b border-secondary pb-1 mb-8 inline-block">THEOLOGICAL TREASURE</span>
+<h2 class="font-display-lg text-display-lg text-primary mb-6">The Diaspora Psalter, 1782</h2>
+<div class="italic font-headline-sm text-headline-sm text-on-surface-variant mb-8 border-l-4 border-gold pl-6">
+                        "For the memory of our fathers is the light for our children."
+                    </div>
+<div class="space-y-6 text-on-surface-variant font-body-lg leading-relaxed">
+<p>This digitized volume represents the only surviving copy of the Diaspora Psalter, smuggled across borders during the great migration. Each page has been scanned at 1200 DPI to preserve the intricate gold-leaf work and the personal notes scribbled in the margins by its various keepers.</p>
+<p>University scholars are currently annotating the text for contemporary research into early diaspora liturgical practices.</p>
+</div>
+<div class="mt-12 grid grid-cols-2 gap-8 border-t border-outline-variant pt-8">
+<div>
+<p class="text-secondary font-tagline text-tagline">ORIGIN</p>
+<p class="font-headline-sm text-headline-sm">Ethiopian Highlands</p>
+</div>
+<div>
+<p class="text-secondary font-tagline text-tagline">ACQUISITION</p>
+<p class="font-headline-sm text-headline-sm">The Heritage Bequest</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Oral History Mini-Gallery -->
+<section class="py-24 px-gutter max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div class="max-w-2xl">
+<h2 class="font-display-lg text-display-lg text-primary mb-4">Voice of the Elders</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Listen to the unedited accounts of our founders, alumni, and global partners who paved the way for GDU’s mission.</p>
+</div>
+<button class="border border-secondary text-secondary hover:bg-secondary hover:text-white px-8 py-3 transition-colors font-tagline text-tagline">VIEW ALL TESTIMONIALS</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Audio Card 1 -->
+<div class="bg-surface p-8 border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-2">DR. ELARA VANCE, '68</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-4">The First Convocation</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">"I remember the rain that day, and how the Chancellor's voice seemed to carry across the entire valley without a microphone..."</p>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-1/3"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>1:45</span>
+<span>08:12</span>
+</div>
+</div>
+<!-- Audio Card 2 -->
+<div class="bg-surface p-8 border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-2">BISHOP SAMUEL AKIN</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-4">Spiritual Foundations</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">"The university was built not on bricks, but on the prayers of mothers who sent their children across oceans to seek light."</p>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-0"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>0:00</span>
+<span>12:30</span>
+</div>
+</div>
+<!-- Audio Card 3 -->
+<div class="bg-surface p-8 border border-outline-variant shadow-sm hover:shadow-md transition-shadow group">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<p class="font-tagline text-tagline text-on-surface-variant mb-2">MARCUS CHEN, ARCHITECT</p>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-4">Designing the Great Hall</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">"We wanted a structure that felt like it had always been there, a permanent home for a people who had been wanderers."</p>
+<div class="w-full bg-outline-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-0"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>0:00</span>
+<span>05:54</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Heritage Submission Form -->
+<section class="py-24 bg-primary-container text-on-primary">
+<div class="max-w-4xl mx-auto px-gutter text-center">
+<span class="material-symbols-outlined text-secondary-fixed text-6xl mb-6">workspace_premium</span>
+<h2 class="font-display-lg text-display-lg mb-4">Contribute to the Heritage</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-12">Are you an alum or a friend of the university? Your story is a vital thread in the GDU tapestry. Share your photos, letters, or audio stories for inclusion in the permanent vault.</p>
+<form class="text-left bg-surface-container-low p-10 rounded-lg border border-primary shadow-2xl space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<label class="block font-tagline text-tagline text-secondary mb-2 uppercase">Full Name</label>
+<input class="w-full bg-white border-0 border-b border-primary p-3 focus:ring-0 focus:border-secondary text-primary font-body-md" placeholder="Dr. Jane Doe" type="text"/>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-secondary mb-2 uppercase">GDU Class Year / Affiliation</label>
+<input class="w-full bg-white border-0 border-b border-primary p-3 focus:ring-0 focus:border-secondary text-primary font-body-md" placeholder="Class of '92" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-secondary mb-2 uppercase">The Heritage Type</label>
+<select class="w-full bg-white border-0 border-b border-primary p-3 focus:ring-0 focus:border-secondary text-primary font-body-md">
+<option>Written Memoir</option>
+<option>Historical Photograph</option>
+<option>Audio Recording</option>
+<option>Digital Document</option>
+</select>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-secondary mb-2 uppercase">The Narrative</label>
+<textarea class="w-full bg-white border-0 border-b border-primary p-3 focus:ring-0 focus:border-secondary text-primary font-body-md" placeholder="Tell us the story behind your contribution..." rows="4"></textarea>
+</div>
+<div class="flex flex-col items-center justify-center border-2 border-dashed border-outline rounded-lg p-12 text-on-surface-variant hover:border-secondary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-5xl mb-4">upload_file</span>
+<p class="font-body-md">Drag and drop artifacts here, or click to browse files</p>
+<p class="text-label-sm mt-2">PDF, JPG, MP3 (Max 50MB)</p>
+</div>
+<div class="text-center">
+<button class="bg-primary text-white px-12 py-4 font-bold text-headline-sm uppercase tracking-widest hover:bg-secondary transition-colors shadow-lg" type="submit">
+                            Submit to the Archives
+                        </button>
+<p class="text-label-sm text-on-surface-variant mt-4 italic">Submissions are reviewed by the Curatorial Committee before being added to the public vault.</p>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary py-16 px-gutter border-t border-outline-variant">
+<div class="max-w-container-max mx-auto flex flex-col items-center space-y-8">
+<div class="font-headline-md text-headline-md text-secondary-fixed">
+                Global Diaspora University
+            </div>
+<div class="flex flex-wrap justify-center gap-8 text-on-primary-fixed-variant">
+<a class="font-tagline text-tagline hover:text-secondary-fixed transition-colors" href="#">Accreditation</a>
+<a class="font-tagline text-tagline hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-tagline text-tagline hover:text-secondary-fixed transition-colors" href="#">Giving</a>
+<a class="font-tagline text-tagline hover:text-secondary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+<div class="w-full h-px bg-on-primary-fixed-variant/20 max-w-sm"></div>
+<div class="text-center">
+<p class="font-tagline text-tagline text-on-primary-fixed-variant/60">
+                    © 2024 Global Diaspora University. Commissioned for a Higher Purpose.
+                </p>
+<p class="mt-2 font-body-md italic text-on-primary-fixed-variant/40">
+                    "Veritas et Hereditas"
+                </p>
+</div>
+</div>
+</footer>
+<!-- Side Navigation Bar (Hidden on Mobile, context-aware) -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center pt-24 pb-8 bg-surface-container-low border-r border-outline-variant z-40 transition-all hover:w-64 group">
+<div class="flex flex-col space-y-8 w-full px-4">
+<a class="flex items-center space-x-4 text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container rounded-lg p-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="hidden group-hover:block font-label-sm whitespace-nowrap">Dashboard</span>
+</a>
+<a class="flex items-center space-x-4 bg-secondary-container text-on-secondary-container rounded-lg p-3 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+<span class="hidden group-hover:block font-label-sm whitespace-nowrap font-bold">Archives</span>
+</a>
+<a class="flex items-center space-x-4 text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container rounded-lg p-3 transition-all" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="hidden group-hover:block font-label-sm whitespace-nowrap">Directory</span>
+</a>
+<a class="flex items-center space-x-4 text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container rounded-lg p-3 transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="hidden group-hover:block font-label-sm whitespace-nowrap">Giving</span>
+</a>
+<div class="flex-grow"></div>
+<a class="flex items-center space-x-4 text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container rounded-lg p-3 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="hidden group-hover:block font-label-sm whitespace-nowrap">Settings</span>
+</a>
+</div>
+</aside>
+<script>
+        // Micro-interactions for scrolling effects
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-md');
+                nav.classList.add('h-16');
+                nav.classList.remove('h-20');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.add('h-20');
+                nav.classList.remove('h-16');
+            }
+        });
+
+        // Simple Fade-in Observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-8');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

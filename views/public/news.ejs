@@ -1,0 +1,28 @@
+<%- include('../partials/page-hero', { heroTitle: 'News & Insights', heroTagline: 'Media Center', heroText: 'Stories, announcements and insights from across our global community.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <% if (!posts.length) { %>
+      <p class="text-on-surface-variant text-center">No articles yet. Please check back soon.</p>
+    <% } else { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% posts.forEach(function(n){ %>
+      <%
+        const newsImage = imageFor('news', n);
+      %>
+      <a href="/news/<%= n.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden group hover:border-secondary hover:shadow-md transition-all flex flex-col">
+        <div class="h-44 bg-primary-container overflow-hidden">
+          <img src="<%= newsImage %>" alt="" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <span class="font-tagline text-label-sm text-secondary uppercase mb-2"><%= n.category %></span>
+          <h2 class="font-headline text-headline-sm text-primary mb-3 group-hover:text-secondary transition-colors"><%= n.title %></h2>
+          <p class="text-on-surface-variant text-body-md mb-4 flex-1"><%= truncate(n.excerpt, 130) %></p>
+          <p class="font-tagline text-label-sm text-on-surface-variant"><%= formatDate(n.published_at) %></p>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>

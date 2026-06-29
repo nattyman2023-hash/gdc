@@ -1,0 +1,51 @@
+<%- include('../partials/page-hero', { heroTitle: 'About Our University', heroTagline: 'Heritage & Mission', heroText: 'Educating, equipping and empowering the global diaspora for divine purpose.' }) %>
+
+<section class="py-20 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-2 gap-12 items-start">
+    <div>
+      <p class="font-tagline text-tagline text-secondary mb-2 uppercase">Our Mission</p>
+      <h2 class="font-headline text-headline-md text-primary mb-6">Faith and excellence, without borders</h2>
+      <p class="font-body text-body-md text-on-surface-variant mb-4 leading-relaxed">Global Diaspora Christian University exists to provide accessible, affordable, Christ-centred higher education to the global diaspora. We believe that every person carries a calling, and our mission is to equip students academically and spiritually so they can serve their communities and impact the world.</p>
+      <p class="font-body text-body-md text-on-surface-variant mb-4 leading-relaxed">We have been serving learners since <strong>2019</strong>. In that time we recognised a simple truth: quality Christ-centred education should not be limited by geography or cost. So we built a university that teaches across borders and keeps tuition affordable, opening the door to learners who would otherwise be left out.</p>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed">Delivered entirely online, our programmes remove the barriers of distance and relocation, uniting learners from many nations in one global classroom. We are currently pursuing formal accreditation, building on rigorous internal academic standards as we progress through the process.</p>
+    </div>
+    <div class="bg-surface-container-low border-l-4 border-secondary p-8 rounded">
+      <span class="material-symbols-outlined text-secondary text-4xl">format_quote</span>
+      <blockquote class="font-headline text-headline-sm italic text-primary my-4">"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."</blockquote>
+      <p class="font-tagline text-tagline text-on-surface-variant">— Jeremiah 29:11</p>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-12 text-center">Our Core Values</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% [
+        ['menu_book','Biblical Foundation','Every programme is rooted in Scripture and a Christ-centred worldview.'],
+        ['public','Global Perspective','We celebrate the diaspora and prepare students for cross-cultural impact.'],
+        ['workspace_premium','Academic Excellence','Rigorous, quality-assured learning delivered by experienced faculty.'],
+        ['diversity_3','Servant Leadership','We form leaders who serve with humility, integrity and vision.'],
+        ['volunteer_activism','Compassionate Mission','We equip students to care for migrant and underserved communities.'],
+        ['hub','Accessible Learning','Flexible online study that fits around work, family and ministry.']
+      ].forEach(function(v){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant p-8 rounded-lg">
+        <div class="w-12 h-12 bg-secondary-container flex items-center justify-center mb-4 rounded"><span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings:'FILL' 1;"><%= v[0] %></span></div>
+        <h3 class="font-headline text-headline-sm text-primary mb-2"><%= v[1] %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= v[2] %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-primary text-on-primary text-center px-margin-mobile lg:px-margin-desktop">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="font-headline text-headline-md mb-6">Ready to take the next step?</h2>
+    <p class="text-on-primary-container mb-8">Explore our programmes or speak to our admissions team today.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/programs" class="bg-secondary text-on-secondary px-8 py-3 rounded font-bold">Explore Programs</a>
+      <a href="/contact" class="border-2 border-secondary-fixed text-secondary-fixed px-8 py-3 rounded font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Contact Us</a>
+    </div>
+  </div>
+</section>

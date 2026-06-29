@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GDU Student Application Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#354766",
+            "on-primary-container": "#7386a8",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#6a85bb",
+            "surface-bright": "#fcf9f3",
+            "on-primary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "background": "#fcf9f3",
+            "surface-container-high": "#ebe8e2",
+            "on-tertiary-fixed": "#001a40",
+            "tertiary-container": "#001c43",
+            "on-error": "#ffffff",
+            "surface-variant": "#e5e2dc",
+            "inverse-on-surface": "#f3f0ea",
+            "secondary": "#7d5800",
+            "inverse-primary": "#b4c7ec",
+            "outline-variant": "#c4c6ce",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#00030d",
+            "surface-container": "#f0eee8",
+            "secondary-fixed-dim": "#f6bd50",
+            "error": "#ba1a1a",
+            "inverse-surface": "#31312d",
+            "surface-tint": "#4c5f7f",
+            "surface": "#fcf9f3",
+            "tertiary-fixed-dim": "#acc7ff",
+            "surface-container-low": "#f6f3ed",
+            "primary-fixed-dim": "#b4c7ec",
+            "primary": "#00030c",
+            "outline": "#74777e",
+            "on-surface-variant": "#44474d",
+            "tertiary-fixed": "#d7e2ff",
+            "on-tertiary-fixed-variant": "#294678",
+            "on-secondary-container": "#725000",
+            "secondary-fixed": "#ffdea9",
+            "on-secondary-fixed-variant": "#5e4100",
+            "on-background": "#1c1c18",
+            "on-primary-fixed": "#051b38",
+            "on-secondary-fixed": "#271900",
+            "surface-dim": "#dcdad4",
+            "primary-container": "#071d3a",
+            "surface-container-highest": "#e5e2dc",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#d6e3ff",
+            "secondary-container": "#fdc355",
+            "on-surface": "#1c1c18"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "container-max": "1280px",
+            "gutter": "24px",
+            "margin-desktop": "64px",
+            "unit": "8px",
+            "margin-mobile": "20px"
+          },
+          "fontFamily": {
+            "headline-md": ["Playfair Display"],
+            "label-sm": ["Inter"],
+            "display-lg-mobile": ["Playfair Display"],
+            "display-lg": ["Playfair Display"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Playfair Display"],
+            "body-lg": ["Inter"],
+            "tagline": ["Montserrat"]
+          },
+          "fontSize": {
+            "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .step-active { color: #00030c; font-weight: 700; border-bottom: 2px solid #7d5800; }
+    .step-inactive { color: #44474d; }
+    .btn-shadow { box-shadow: 0 4px 12px rgba(7, 29, 58, 0.08); }
+    input:focus { border-color: #00030c !important; ring: none !important; }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation (Shell suppressed for Transactional Flow, but Header branding remains) -->
+<header class="bg-surface-container-lowest border-b border-outline-variant w-full sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container flex items-center justify-center rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-surface-bright" data-icon="school">school</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface">Global Diaspora University</h1>
+<p class="font-tagline text-tagline text-secondary uppercase text-[10px] tracking-[0.2em]">Application Portal</p>
+</div>
+</div>
+<div class="hidden md:flex gap-4">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Save & Exit</a>
+</div>
+</div>
+</header>
+<!-- Application Canvas -->
+<main class="flex-grow max-w-container-max mx-auto w-full px-margin-desktop py-12 flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar: Support & Progress Navigation -->
+<aside class="w-full md:w-1/4 space-y-8 order-2 md:order-1">
+<!-- Progress Indicator -->
+<nav class="bg-surface-container-low p-6 border border-outline-variant rounded-lg">
+<h3 class="font-tagline text-tagline text-on-surface-variant mb-6 border-b border-outline-variant pb-2">ENROLLMENT STEPS</h3>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 step-active pb-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="person_edit">person_edit</span>
+<span class="text-label-sm font-label-sm">Personal Info</span>
+</li>
+<li class="flex items-center gap-3 step-inactive">
+<span class="material-symbols-outlined text-[20px]" data-icon="history_edu">history_edu</span>
+<span class="text-label-sm font-label-sm">Academic Background</span>
+</li>
+<li class="flex items-center gap-3 step-inactive">
+<span class="material-symbols-outlined text-[20px]" data-icon="church">church</span>
+<span class="text-label-sm font-label-sm">Statement of Faith</span>
+</li>
+<li class="flex items-center gap-3 step-inactive">
+<span class="material-symbols-outlined text-[20px]" data-icon="school">school</span>
+<span class="text-label-sm font-label-sm">Program Selection</span>
+</li>
+</ul>
+</nav>
+<!-- Support Card -->
+<div class="bg-primary-container text-surface-bright p-6 rounded-lg space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<h4 class="font-headline-sm text-[18px]">Need Assistance?</h4>
+</div>
+<p class="text-body-md text-on-primary-container text-sm leading-relaxed">
+          Our admissions officers are available to help you complete your journey to GDU.
+        </p>
+<a class="flex items-center justify-center gap-2 bg-secondary text-on-primary w-full py-3 rounded-sm font-label-sm text-label-sm transition-all hover:opacity-90 active:scale-[0.98]" href="https://wa.me/university">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat">chat</span>
+          CHAT ON WHATSAPP
+        </a>
+</div>
+<!-- Trust Indicator -->
+<div class="border border-outline-variant p-4 rounded-lg flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary" data-icon="verified_user">verified_user</span>
+<div>
+<p class="text-[12px] font-bold text-on-surface">Secure Application</p>
+<p class="text-[10px] text-on-surface-variant">Your data is encrypted and protected.</p>
+</div>
+</div>
+</aside>
+<!-- Main Wizard Form Area -->
+<section class="w-full md:w-3/4 order-1 md:order-2">
+<div class="bg-surface-container-lowest p-8 md:p-12 border border-outline-variant rounded-lg shadow-sm">
+<!-- Section Header -->
+<div class="mb-10 text-center md:text-left">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Personal Information</h2>
+<p class="text-body-lg text-on-surface-variant">Please provide your legal identity as it appears on your passport or official documents.</p>
+<div class="h-[1px] w-24 bg-secondary mt-6 mx-auto md:mx-0"></div>
+</div>
+<!-- Form Steps Content (JavaScript handles visibility) -->
+<form class="space-y-8" id="applicationForm">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">First Name</label>
+<input class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all" placeholder="e.g. John" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Last Name</label>
+<input class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all" placeholder="e.g. Doe" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Email Address</label>
+<input class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all" placeholder="john.doe@example.com" type="email"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Phone Number</label>
+<input class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Date of Birth</label>
+<input class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all" type="date"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Nationality</label>
+<select class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all">
+<option>Select Country</option>
+<option>United States</option>
+<option>Kenya</option>
+<option>Nigeria</option>
+<option>United Kingdom</option>
+<option>Canada</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-tagline text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Permanent Address</label>
+<textarea class="bg-surface-container-low border-0 border-b border-primary py-3 px-4 text-on-surface placeholder-outline-variant focus:ring-0 transition-all resize-none" placeholder="Enter your full residential address" rows="3"></textarea>
+</div>
+<!-- Scripture Callout (Thematic Element) -->
+<div class="py-12 border-t border-b border-outline-variant my-12 text-center">
+<div class="w-12 h-[1px] bg-secondary mx-auto mb-4"></div>
+<p class="font-headline-sm italic text-primary leading-relaxed">
+              "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."
+            </p>
+<p class="font-tagline text-tagline text-secondary mt-4 text-[12px]">JEREMIAH 29:11</p>
+<div class="w-12 h-[1px] bg-secondary mx-auto mt-4"></div>
+</div>
+<!-- Actions -->
+<div class="flex justify-between items-center pt-8">
+<button class="px-8 py-3 border border-secondary text-primary font-label-sm text-label-sm rounded-sm hover:bg-surface-container transition-colors disabled:opacity-30" disabled="" type="button">
+              Back
+            </button>
+<div class="flex gap-4">
+<button class="px-8 py-3 border border-outline text-on-surface-variant font-label-sm text-label-sm rounded-sm hover:bg-surface-container-low transition-colors hidden md:block" type="button">
+                Save Draft
+              </button>
+<button class="px-10 py-3 bg-primary text-on-primary font-label-sm text-label-sm rounded-sm btn-shadow hover:opacity-90 active:scale-[0.98] transition-all flex items-center gap-2" type="button">
+                Continue to Academic Background
+                <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</form>
+</div>
+<!-- Identity Image Integration -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="relative h-64 bg-primary-container rounded-lg overflow-hidden group">
+<img class="w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A dignified university campus scene showing classical brick architecture under a bright clear sky. The lighting is crisp and academic, representing a prestigious and historical institution. The image reflects global diaspora values with a sense of growth and intellectual heritage. Deep navy and ivory tones dominate the aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG1Fjwh3w-sweeZxGYbisx3UEVEjpepifVokpDpLHZZhGQzHzSoqvMq8MIgfLzlgC-5Iks0ZA5VsxBO87w9bNJkRx2AOOCPpnGdm4Yo1sSaYTYH5O9b80IVT4X9e-5Wd5Wk8WK3gzEFgYrz2I_1Og0uEXoxXTGmqk2l1bGq47q_Vqn_vNyqDuxl3k95zOZCzyRFkCpIALWtPsVfKCInhN3Uxaj94IyUqQgYE_-GGeoZ70Mxed3orYnEmzPZ_Z5CFkUznSicKqBlhA"/>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<h5 class="text-surface-bright font-headline-sm text-[20px]">Impact the World</h5>
+<p class="text-on-primary-container text-xs">Join our global network of leaders.</p>
+</div>
+</div>
+<div class="relative h-64 bg-secondary rounded-lg overflow-hidden group">
+<img class="w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="Close up of a graduation cap resting on an open vintage Bible. The lighting is warm and golden, symbolizing divine purpose and academic excellence. The setting is a quiet, scholarly study room with polished wooden furniture. The atmosphere is serene and focused, reflecting Global Diaspora University's mission of faith-based education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0_toHhMpFZFP7NWeNQ6pUQ63iIhm5hBKwc5c3-dGIxI-VZ0hwm-F_TsUNiXAOfQxoWcHZ-VggeyIIAotPmFnKrCI-CGzDQ0kHLy2LT529hfgOs1HojsHf80U9yCXiEn1PMS3gZcJFcAUFwfe8FcaG2A60CGThyfSWos6fQ-HXuuH99c5rdN7XoKjzEfH9XzEj6Wm1lKE5KljgQpyhzjGrx8kUBDNQIitctGIYzBtGqI4GcEK-X4Tg-kRWyxPQaB8OtvRpC9k4Hlw"/>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<h5 class="text-on-secondary font-headline-sm text-[20px]">Faith & Knowledge</h5>
+<p class="text-on-secondary-fixed-variant text-xs">A curriculum centered on truth.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary-container text-on-primary-container mt-12">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto border-b border-on-primary-fixed-variant">
+<div class="space-y-4">
+<h3 class="font-headline-sm text-primary-fixed">Global Diaspora University</h3>
+<p class="font-tagline text-tagline text-[12px] text-surface-variant italic">Educate. Equip. Empower. Impact the World.</p>
+</div>
+<div class="flex flex-wrap gap-x-8 gap-y-4 md:justify-end items-center">
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed transition-colors" href="#">Terms & Conditions</a>
+<a class="font-body-md text-body-md text-surface-variant hover:text-secondary-fixed transition-colors" href="#">FAQs</a>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-desktop py-6 flex flex-col md:flex-row justify-between items-center text-[12px]">
+<p>© 2024 Global Diaspora University. All Rights Reserved.</p>
+<div class="flex gap-4 mt-4 md:mt-0">
+<span class="material-symbols-outlined text-[16px]" data-icon="facebook">face_nod</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="linkedin">dine_in</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="mail">mail</span>
+</div>
+</div>
+</footer>
+<script>
+    // Micro-interactions for form focus
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.querySelector('label').style.color = '#7d5800';
+      });
+      input.addEventListener('blur', () => {
+        input.parentElement.querySelector('label').style.color = '#44474d';
+      });
+    });
+
+    // Form Navigation Placeholder (Visual Only)
+    const continueBtn = document.querySelector('button:last-of-type');
+    continueBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Logic for multi-step would go here
+      alert("Application data saved. Transitioning to Academic Background step...");
+    });
+  </script>
+</body></html>

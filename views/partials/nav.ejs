@@ -1,0 +1,87 @@
+<%
+  // Grouped navigation. Each group: { label, href (optional direct link), items: [[label, href]] }
+  const groups = [
+    { label: 'Home', href: '/' },
+    { label: 'About', match: ['/about','/accreditation','/student-life','/news','/events','/alumni','/academic-calendar'], items: [
+      ['About GDCU', '/about'], ['Accreditation', '/accreditation'], ['Student Life', '/student-life'],
+      ['News & Insights', '/news'], ['Events', '/events'], ['Academic Calendar', '/academic-calendar'], ['Alumni Network', '/alumni'],
+    ]},
+    { label: 'Study', match: ['/programs','/how-it-works','/scholarships','/research-grants'], items: [
+      ['All Programmes', '/programs'],
+      ['Certificates', '/programs?level=Certificate'],
+      ['Diplomas', '/programs?level=Diploma'],
+      ['Degrees', '/programs?level=Undergraduate'],
+      ['Masters', '/programs?level=Masters'],
+      ['PhD / Doctorate', '/programs?level=Doctorate'],
+      ['How Online Learning Works', '/how-it-works'],
+      ['Scholarships & Funding', '/scholarships'], ['Research Grants', '/research-grants'],
+    ]},
+    { label: 'Admissions', match: ['/admissions','/faq','/open-days'], items: [
+      ['Admissions & Tuition', '/admissions'], ['Apply Now', '/admissions/apply'], ['Open Days', '/open-days'], ['FAQs', '/faq'],
+    ]},
+    { label: 'Careers', href: '/careers' },
+    { label: 'Contact', href: '/contact' },
+  ];
+  function isActive(g) {
+    if (g.href) return g.href === '/' ? currentPath === '/' : currentPath.startsWith(g.href);
+    return (g.match || []).some((p) => currentPath.startsWith(p));
+  }
+  const topLink = 'font-tagline text-label-sm font-medium transition-colors';
+%>
+<header id="site-header" class="bg-surface-container-lowest border-b border-outline-variant fixed top-0 w-full z-50 transition-shadow">
+  <nav class="flex justify-between items-center w-full px-margin-mobile lg:px-margin-desktop py-4 max-w-container-max mx-auto">
+    <a href="/" class="flex items-center gap-3 shrink-0">
+      <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1;">school</span>
+      <span class="font-headline text-headline-sm font-bold text-on-surface leading-tight hidden sm:block">Global Diaspora<br/><span class="text-secondary">Christian University</span></span>
+    </a>
+
+    <div class="hidden lg:flex items-center gap-7">
+      <% groups.forEach(function(g){ %>
+        <% if (g.href) { %>
+          <a href="<%= g.href %>" class="<%= topLink %> <%= isActive(g) ? 'text-primary border-b-2 border-secondary pb-1 font-bold' : 'text-on-surface-variant hover:text-secondary' %>"><%= g.label %></a>
+        <% } else { %>
+          <div class="relative group">
+            <button class="<%= topLink %> inline-flex items-center gap-1 <%= isActive(g) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-secondary' %>">
+              <%= g.label %> <span class="material-symbols-outlined text-base transition-transform group-hover:rotate-180">expand_more</span>
+            </button>
+            <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
+              <div class="bg-surface-container-lowest border border-outline-variant rounded-lg shadow-lg py-2 w-60">
+                <% g.items.forEach(function(it){ %>
+                  <a href="<%= it[1] %>" class="block px-4 py-2 text-sm <%= currentPath===it[1] ? 'text-secondary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' %>"><%= it[0] %></a>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      <% }) %>
+    </div>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors" title="Toggle dark mode">
+        <span class="material-symbols-outlined text-lg">dark_mode</span>
+      </button>
+      <% if (currentUser) { %>
+        <a href="<%= currentUser.role==='student' ? '/portal' : (currentUser.role==='faculty' ? '/faculty' : '/admin') %>" class="hidden sm:inline font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary">My Portal</a>
+        <form action="/logout" method="post"><button class="font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary">Sign out</button></form>
+      <% } else { %>
+        <a href="/login" class="hidden sm:inline font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary transition-all">Student Login</a>
+      <% } %>
+      <a href="/admissions/apply" class="bg-primary text-on-primary px-5 py-2 rounded font-tagline text-label-sm font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">Apply Now</a>
+      <button id="mobile-menu-btn" class="lg:hidden text-primary" aria-label="Open menu"><span class="material-symbols-outlined text-3xl">menu</span></button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-outline-variant bg-surface-container-lowest px-margin-mobile py-4 space-y-4 max-h-[80vh] overflow-y-auto">
+    <a class="block font-bold text-primary" href="/">Home</a>
+    <% groups.filter(function(g){return g.items;}).forEach(function(g){ %>
+      <div>
+        <p class="font-tagline text-label-sm text-secondary uppercase tracking-wider mb-1"><%= g.label %></p>
+        <% g.items.forEach(function(it){ %><a class="block py-1 pl-3 text-sm text-on-surface-variant" href="<%= it[1] %>"><%= it[0] %></a><% }) %>
+      </div>
+    <% }) %>
+    <a class="block font-bold text-primary" href="/careers">Careers</a>
+    <a class="block font-bold text-primary" href="/contact">Contact</a>
+    <% if (!currentUser) { %><a class="block font-bold text-secondary border-t border-outline-variant pt-3" href="/login">Student Login</a><% } %>
+  </div>
+</header>

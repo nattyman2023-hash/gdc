@@ -1,0 +1,45 @@
+<%- include('../partials/page-hero', { heroTitle: 'Events & Campus Hub', heroTagline: 'Connect & Grow', heroText: 'Webinars, worship, orientations and conferences for our global community.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-8">Upcoming events</h2>
+    <% if (!upcoming.length) { %><p class="text-on-surface-variant mb-8">No upcoming events scheduled. Please check back soon.</p><% } %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% upcoming.forEach(function(e){ %>
+      <a href="/events/<%= e.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden group hover:border-secondary hover:shadow-md transition-all flex flex-col">
+        <div class="relative h-36 bg-primary text-on-primary overflow-hidden">
+          <img src="<%= imageFor('event', e) %>" alt="" class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+          <div class="absolute inset-0 bg-primary/60"></div>
+          <div class="relative h-full p-5 flex items-center justify-between">
+            <div>
+              <p class="font-display text-display-lg-mobile leading-none"><%= new Date(e.starts_at).getDate() %></p>
+              <p class="font-tagline text-label-sm uppercase text-secondary-fixed"><%= new Date(e.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></p>
+            </div>
+            <span class="material-symbols-outlined text-secondary-fixed-dim text-3xl"><%= e.is_online ? 'videocam' : 'location_on' %></span>
+          </div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <span class="font-tagline text-label-sm text-secondary uppercase mb-1"><%= e.category || 'Event' %></span>
+          <h3 class="font-headline text-headline-sm text-primary mb-2 group-hover:text-secondary transition-colors"><%= e.title %></h3>
+          <p class="text-on-surface-variant text-sm mb-3 flex-1"><%= truncate(e.description, 90) %></p>
+          <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><span class="material-symbols-outlined text-sm align-middle">schedule</span> <%= formatDateTime(e.starts_at) %></p>
+          <p class="font-tagline text-[11px] text-on-surface-variant uppercase mt-1"><%= e.is_online ? 'Online' : (e.location || 'In person') %></p>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <% if (past.length) { %>
+    <h2 class="font-headline text-headline-md text-primary mt-16 mb-8">Past events</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% past.forEach(function(e){ %>
+      <div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 opacity-80">
+        <span class="font-tagline text-label-sm text-on-surface-variant uppercase"><%= e.category || 'Event' %></span>
+        <h3 class="font-headline text-headline-sm text-primary my-1"><%= e.title %></h3>
+        <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= formatDate(e.starts_at) %></p>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>

@@ -1,0 +1,142 @@
+<div class="mb-6">
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Staff CRM</p>
+  <h1 class="font-headline text-headline-md text-primary">Dashboard</h1>
+</div>
+
+<!-- KPI cards -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <%
+    const cards = [
+      ['New leads', stats.leadsNew, 'contact_phone', '/admin/leads?status=new'],
+      ['Open applications', stats.appsOpen, 'description', '/admin/applications'],
+      ['Students', stats.students, 'groups', '/admin/students'],
+      ['Unread messages', stats.messages, 'inbox', '/admin/messages']
+    ];
+  %>
+  <% cards.forEach(function(c){ %>
+  <a href="<%= c[3] %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 hover:border-secondary transition-colors">
+    <div class="flex items-center justify-between mb-2"><span class="material-symbols-outlined text-secondary"><%= c[2] %></span></div>
+    <p class="font-headline text-headline-md text-primary leading-none"><%= c[1] %></p>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1"><%= c[0] %></p>
+  </a>
+  <% }) %>
+</div>
+
+<!-- Today's interviews + overdue tasks -->
+<div class="grid lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <div class="flex items-center justify-between mb-3"><h2 class="font-headline text-headline-sm text-primary">Today's interviews</h2><a href="/admin/interviews" class="text-secondary font-bold text-sm">All →</a></div>
+    <% if (!todaysInterviews.length) { %><p class="text-on-surface-variant text-sm">No interviews scheduled for today.</p><% } %>
+    <div class="space-y-2">
+      <% todaysInterviews.forEach(function(iv){ %>
+      <a href="/admin/applications/<%= iv.application_id %>" class="flex items-center gap-3 text-sm p-2 -mx-2 rounded hover:bg-surface-container-low">
+        <span class="font-headline text-primary tabular-nums"><%= new Date(iv.scheduled_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) %></span>
+        <div class="flex-1 min-w-0"><p class="font-bold text-primary truncate"><%= iv.first_name %> <%= iv.last_name %></p><p class="text-on-surface-variant text-xs"><%= iv.reference %> · <%= iv.mode || 'interview' %><%= iv.interviewer_first ? (' · ' + iv.interviewer_first + ' ' + iv.interviewer_last) : '' %></p></div>
+        <span class="material-symbols-outlined text-base text-secondary"><%= iv.mode === 'video' ? 'videocam' : (iv.mode === 'phone' ? 'call' : 'event') %></span>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <div class="flex items-center justify-between mb-3"><h2 class="font-headline text-headline-sm text-primary">Overdue follow-ups</h2><span class="material-symbols-outlined text-error">warning</span></div>
+    <% if (!overdueTasks.length) { %><p class="text-on-surface-variant text-sm">Nothing overdue. 👍</p><% } %>
+    <div class="space-y-2">
+      <% overdueTasks.forEach(function(t){ %>
+      <div class="flex items-center gap-2 text-sm">
+        <form action="/admin/tasks/<%= t.id %>/toggle" method="post"><button class="material-symbols-outlined text-outline text-base">radio_button_unchecked</button></form>
+        <a href="/admin/<%= t.entity_type %>s/<%= t.entity_id %>" class="flex-1 min-w-0 text-primary hover:text-secondary truncate"><%= t.title %></a>
+        <span class="font-tagline text-[11px] uppercase text-error font-bold"><%= formatDate(t.due_date) %></span>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- Tasks due + analytics -->
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <div class="flex items-center justify-between mb-3"><h2 class="font-headline text-headline-sm text-primary">My follow-ups</h2><span class="material-symbols-outlined text-secondary">task</span></div>
+    <% if (!myTasks.length) { %><p class="text-on-surface-variant text-sm">No open tasks. 🎉</p><% } %>
+    <div class="space-y-2">
+      <% myTasks.forEach(function(t){ %>
+      <div class="flex items-center gap-2 text-sm">
+        <form action="/admin/tasks/<%= t.id %>/toggle" method="post"><button class="material-symbols-outlined text-outline text-base">radio_button_unchecked</button></form>
+        <a href="/admin/<%= t.entity_type %>s/<%= t.entity_id %>" class="flex-1 min-w-0 text-primary hover:text-secondary truncate"><%= t.title %></a>
+        <% if (t.due_date) { %><span class="font-tagline text-[11px] uppercase <%= t.overdue ? 'text-error font-bold' : 'text-on-surface-variant' %>"><%= formatDate(t.due_date) %></span><% } %>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Conversion funnel</h2>
+    <% const fmax = Math.max(funnel.leads, 1); const steps = [['Leads',funnel.leads],['Qualified',funnel.qualified],['Applications',funnel.applications],['Accepted',funnel.accepted]]; %>
+    <div class="space-y-2">
+      <% steps.forEach(function(s){ %>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span class="text-on-surface-variant"><%= s[0] %></span><span class="font-bold text-primary"><%= s[1] %></span></div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= Math.round((s[1]/fmax)*100) %>%"></div></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Leads by source</h2>
+    <% if (!leadsBySource.length) { %><p class="text-on-surface-variant text-sm">No leads yet.</p><% } %>
+    <div class="space-y-2">
+      <% leadsBySource.forEach(function(s){ %>
+      <div class="flex justify-between text-sm"><span class="text-on-surface-variant capitalize"><%= String(s.source).replace('_',' ') %></span><span class="font-bold text-primary"><%= s.c %></span></div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- Revenue + pipeline -->
+<div class="grid lg:grid-cols-3 gap-6 mb-8">
+  <div class="bg-primary text-on-primary rounded-lg p-6">
+    <p class="font-tagline text-label-sm text-secondary-fixed uppercase">Revenue collected</p>
+    <p class="font-display text-display-lg-mobile mt-1"><%= formatMoney(stats.revenue, 'GBP') %></p>
+    <p class="text-on-primary-container text-sm mt-2">Outstanding: <%= formatMoney(stats.outstanding, 'GBP') %></p>
+  </div>
+  <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Admissions pipeline</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <% Object.keys(pipeline).filter(function(k){return ['new','in_review','interview','offer','accepted'].includes(k);}).forEach(function(k){ %>
+      <div class="text-center bg-surface-container-low rounded p-3">
+        <p class="font-headline text-headline-sm text-primary"><%= pipeline[k] %></p>
+        <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= k.replace('_',' ') %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- Recent activity -->
+<div class="grid lg:grid-cols-2 gap-6">
+  <div>
+    <div class="flex justify-between items-center mb-3"><h2 class="font-headline text-headline-sm text-primary">Recent leads</h2><a href="/admin/leads" class="text-secondary font-bold text-sm">All →</a></div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!recentLeads.length) { %><p class="p-4 text-on-surface-variant text-sm">No leads yet.</p><% } %>
+      <% recentLeads.forEach(function(l){ %>
+      <a href="/admin/leads/<%= l.id %>" class="flex items-center justify-between p-4 hover:bg-surface-container-low">
+        <div><p class="font-bold text-primary"><%= l.first_name %> <%= l.last_name || '' %></p><p class="text-sm text-on-surface-variant"><%= l.email %></p></div>
+        <span class="font-tagline text-[11px] uppercase px-2 py-1 rounded bg-surface-container-high text-on-surface-variant"><%= l.status %></span>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+  <div>
+    <div class="flex justify-between items-center mb-3"><h2 class="font-headline text-headline-sm text-primary">Recent applications</h2><a href="/admin/applications" class="text-secondary font-bold text-sm">All →</a></div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!recentApps.length) { %><p class="p-4 text-on-surface-variant text-sm">No applications yet.</p><% } %>
+      <% recentApps.forEach(function(a){ %>
+      <a href="/admin/applications/<%= a.id %>" class="flex items-center justify-between p-4 hover:bg-surface-container-low">
+        <div><p class="font-bold text-primary"><%= a.first_name %> <%= a.last_name %></p><p class="text-sm text-on-surface-variant"><%= a.program_title || 'Program TBC' %></p></div>
+        <span class="font-tagline text-[11px] uppercase px-2 py-1 rounded bg-surface-container-high text-on-surface-variant"><%= a.status.replace('_',' ') %></span>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+  <a href="/admin/leads" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> All leads</a>
+  <div class="flex items-center gap-2">
+    <a href="/admin/leads/<%= lead.id %>/edit" class="inline-flex items-center gap-1 border border-outline text-primary px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">edit</span> Edit</a>
+    <form action="/admin/leads/<%= lead.id %>/archive" method="post"><button class="inline-flex items-center gap-1 border border-outline text-on-surface-variant px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base"><%= lead.archived ? 'unarchive' : 'archive' %></span> <%= lead.archived ? 'Restore' : 'Archive' %></button></form>
+    <form action="/admin/leads/<%= lead.id %>/delete" method="post" onsubmit="return confirm('Permanently delete this lead?');"><button class="inline-flex items-center gap-1 text-error border border-error/40 px-4 py-1.5 rounded font-bold text-sm"><span class="material-symbols-outlined text-base">delete</span> Delete</button></form>
+  </div>
+</div>
+
+<% if ((dupLeads && dupLeads.length) || (dupApps && dupApps.length)) { %>
+<div class="mb-4 bg-tertiary-container border border-tertiary rounded-lg p-4 text-sm">
+  <p class="font-bold text-on-tertiary-container flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-base">content_copy</span> Possible duplicate — same email address</p>
+  <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-tertiary-container">
+    <% dupLeads.forEach(function(d){ %><a href="/admin/leads/<%= d.id %>" class="underline hover:text-secondary">Lead: <%= d.first_name %> <%= d.last_name || '' %> (<%= d.status %>)</a><% }) %>
+    <% dupApps.forEach(function(d){ %><a href="/admin/applications/<%= d.id %>" class="underline hover:text-secondary">Application: <%= d.reference %> (<%= d.status %>)</a><% }) %>
+  </div>
+</div>
+<% } %>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <!-- Details -->
+  <div class="lg:col-span-1 space-y-5">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-lg"><%= lead.first_name.charAt(0) %></div>
+        <div><h1 class="font-headline text-headline-sm text-primary leading-tight"><%= lead.first_name %> <%= lead.last_name || '' %></h1><%- include('_badge', { status: lead.status }) %></div>
+      </div>
+      <dl class="divide-y divide-outline-variant/40 text-sm">
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Email</dt><dd class="font-bold text-primary"><%= lead.email %></dd></div>
+        <div class="flex justify-between py-2 items-center"><dt class="text-on-surface-variant">Phone</dt><dd class="font-bold text-primary text-right"><% if (lead.phone) { %><%= lead.phone %><span class="inline-flex gap-1 ml-2 align-middle"><a href="tel:<%= lead.phone.replace(/[^+0-9]/g,'') %>" title="Call" class="material-symbols-outlined text-base text-secondary hover:text-primary">call</a><a href="https://wa.me/<%= lead.phone.replace(/[^0-9]/g,'') %>" target="_blank" rel="noopener" title="WhatsApp" class="material-symbols-outlined text-base text-secondary hover:text-primary">chat</a></span><% } else { %>—<% } %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Country</dt><dd class="font-bold text-primary"><%= lead.country || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Interest</dt><dd class="font-bold text-primary text-right"><%= lead.program_title || lead.interest || '—' %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Source</dt><dd class="font-bold text-primary"><%= lead.source %></dd></div>
+        <div class="flex justify-between py-2"><dt class="text-on-surface-variant">Added</dt><dd class="font-bold text-primary"><%= formatDate(lead.created_at) %></dd></div>
+      </dl>
+      <% if (lead.message) { %><div class="mt-4 bg-surface-container-low rounded p-3 text-sm text-on-surface-variant"><%= lead.message %></div><% } %>
+    </div>
+
+    <!-- Status update -->
+    <form action="/admin/leads/<%= lead.id %>/status" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Update status</label>
+      <div class="flex gap-2">
+        <select name="status" class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <% statuses.forEach(function(s){ %><option value="<%= s %>" <%= lead.status===s?'selected':'' %>><%= s %></option><% }) %>
+        </select>
+        <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold">Save</button>
+      </div>
+      <a href="mailto:<%= lead.email %>" class="inline-flex items-center gap-1 text-secondary font-bold text-sm mt-4"><span class="material-symbols-outlined text-base">mail</span> Email this lead</a>
+    </form>
+
+    <!-- Assignment -->
+    <form action="/admin/leads/<%= lead.id %>/assign" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-2">Assigned to</label>
+      <div class="flex gap-2">
+        <select name="assigned_to" class="flex-1 px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+          <option value="">Unassigned</option>
+          <% staff.forEach(function(u){ %><option value="<%= u.id %>" <%= lead.assigned_to===u.id?'selected':'' %>><%= u.first_name %> <%= u.last_name %></option><% }) %>
+        </select>
+        <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold">Save</button>
+      </div>
+    </form>
+
+    <!-- Convert -->
+    <div class="bg-secondary-fixed border border-secondary rounded-lg p-5">
+      <% if (lead.converted_application_id) { %>
+        <p class="font-bold text-on-secondary-fixed text-sm mb-2"><span class="material-symbols-outlined text-base align-middle">check_circle</span> Converted to an application</p>
+        <a href="/admin/applications/<%= lead.converted_application_id %>" class="text-on-secondary-fixed underline text-sm">View application →</a>
+      <% } else { %>
+        <p class="font-bold text-on-secondary-fixed text-sm mb-1">Ready to apply?</p>
+        <p class="text-on-secondary-fixed/80 text-sm mb-3">Convert this lead into an application, carrying over their details.</p>
+        <form action="/admin/leads/<%= lead.id %>/convert" method="post" onsubmit="return confirm('Convert this lead into an application?');">
+          <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold text-sm w-full">Convert to application</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Notes timeline + tasks -->
+  <div class="lg:col-span-2 space-y-6">
+    <%- include('_activity', { activity: activity, entity: 'lead', entityId: lead.id, email: lead.email }) %>
+    <%- include('_tasks', { tasks: tasks, taskEntity: 'lead', taskEntityId: lead.id, staff: staff }) %>
+    <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Activity &amp; Notes</h2>
+    <form action="/admin/leads/<%= lead.id %>/notes" method="post" data-async-refresh="#notes-list" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-4">
+      <textarea name="body" rows="3" required placeholder="Log a call, email or note…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"></textarea>
+      <div class="flex justify-end mt-2"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Add note</button></div>
+    </form>
+    <div id="notes-list" class="space-y-3 rounded-lg transition-shadow">
+      <% if (!notes.length) { %><p class="text-on-surface-variant text-sm">No notes yet.</p><% } %>
+      <% notes.forEach(function(n){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+        <div class="flex justify-between items-center mb-1">
+          <p class="font-bold text-primary text-sm"><%= n.author_name || 'Staff' %></p>
+          <div class="flex items-center gap-2">
+            <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= formatDate(n.created_at) %></p>
+            <button type="button" class="material-symbols-outlined text-base text-on-surface-variant hover:text-secondary" title="Edit note" onclick="document.getElementById('note-<%= n.id %>').classList.toggle('hidden')">edit</button>
+            <form action="/admin/notes/<%= n.id %>/delete" method="post" onsubmit="return confirm('Delete this note?');"><button class="material-symbols-outlined text-base text-on-surface-variant hover:text-error" title="Delete note">delete</button></form>
+          </div>
+        </div>
+        <p class="text-on-surface-variant text-sm whitespace-pre-line"><%= n.body %></p>
+        <form id="note-<%= n.id %>" action="/admin/notes/<%= n.id %>/edit" method="post" class="hidden mt-2">
+          <textarea name="body" rows="3" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary text-sm"><%= n.body %></textarea>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" class="text-on-surface-variant text-sm" onclick="document.getElementById('note-<%= n.id %>').classList.add('hidden')">Cancel</button>
+            <button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-sm">Save</button>
+          </div>
+        </form>
+      </div>
+      <% }) %>
+    </div>
+    </div>
+  </div>
+</div>

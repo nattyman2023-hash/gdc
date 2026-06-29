@@ -1,0 +1,29 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Content</p><h1 class="font-headline text-headline-md text-primary">Careers</h1></div>
+  <a href="/admin/content/careers/new" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">add</span> New position</a>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">Title</th><th class="px-4 py-3 hidden md:table-cell">Type</th><th class="px-4 py-3 hidden lg:table-cell">Closes</th><th class="px-4 py-3">Applicants</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+    </thead>
+    <tbody>
+      <% if (!jobs.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">No positions yet.</td></tr><% } %>
+      <% jobs.forEach(function(j){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 font-bold text-primary"><%= j.title %></td>
+        <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= j.type %></td>
+        <td class="px-4 py-3 hidden lg:table-cell text-on-surface-variant"><%= j.closes_on ? formatDate(j.closes_on) : '—' %></td>
+        <td class="px-4 py-3 text-on-surface-variant"><%= j.applicants %></td>
+        <td class="px-4 py-3"><%- include('../_badge', { status: j.published ? 'published' : 'draft' }) %></td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/careers/<%= j.slug %>" target="_blank" class="text-on-surface-variant hover:text-primary inline-flex"><span class="material-symbols-outlined text-lg">open_in_new</span></a>
+          <a href="/admin/content/careers/<%= j.id %>/edit" class="text-secondary font-bold ml-3">Edit / applicants</a>
+          <form action="/admin/content/careers/<%= j.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this position?');"><button class="text-error font-bold ml-3">Delete</button></form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

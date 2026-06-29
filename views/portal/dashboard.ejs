@@ -1,0 +1,99 @@
+<div class="mb-8">
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Student Workspace</p>
+  <h1 class="font-headline text-headline-md text-primary">Welcome back, <%= currentUser.name.split(' ')[0] %></h1>
+</div>
+
+<% if (typeof outstanding !== 'undefined' && outstanding > 0) { %>
+<a href="/portal/billing" class="flex items-center justify-between gap-3 bg-secondary-fixed border border-secondary rounded-lg p-4 mb-6 hover:opacity-95">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-secondary">payments</span>
+    <p class="text-on-secondary-fixed text-sm"><span class="font-bold"><%= formatMoney(outstanding, 'GBP') %></span> outstanding on your account.</p>
+  </div>
+  <span class="font-bold text-on-secondary-fixed text-sm inline-flex items-center gap-1">Pay now <span class="material-symbols-outlined text-base">chevron_right</span></span>
+</a>
+<% } %>
+
+<!-- Stats -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <%
+    const active = enrollments.filter(e=>e.status==='active').length;
+    const done = enrollments.filter(e=>e.status==='completed').length;
+    const avg = enrollments.length ? Math.round(enrollments.reduce((a,e)=>a+e.progress_pct,0)/enrollments.length) : 0;
+    const stats = [
+      ['Active courses', active, 'menu_book'],
+      ['Completed', done, 'task_alt'],
+      ['Avg. progress', avg+'%', 'trending_up'],
+      ['Certificates', certificates.length, 'workspace_premium']
+    ];
+  %>
+  <% stats.forEach(function(s){ %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <div class="flex items-center justify-between mb-2"><span class="material-symbols-outlined text-secondary"><%= s[2] %></span></div>
+    <p class="font-headline text-headline-md text-primary leading-none"><%= s[1] %></p>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1"><%= s[0] %></p>
+  </div>
+  <% }) %>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <!-- Courses -->
+  <div class="lg:col-span-2">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-headline text-headline-sm text-primary">My Courses</h2>
+      <a href="/portal/catalog" class="text-secondary font-bold text-sm">Browse catalogue →</a>
+    </div>
+    <% if (!enrollments.length) { %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">
+        You are not enrolled in any courses yet. <a href="/portal/catalog" class="text-secondary font-bold">Browse the catalogue</a>.
+      </div>
+    <% } else { %>
+      <!-- Enrolled courses as beautiful card grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <% enrollments.forEach(function(e){ %>
+        <a href="/portal/courses/<%= e.course_slug %>" class="group block bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:border-secondary hover:shadow-md transition-all">
+          <!-- Card image header -->
+          <div class="relative h-28 bg-primary-container overflow-hidden">
+            <img src="<%= e.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='/img/generated/gdcu-online-learning.png'" loading="lazy" decoding="async" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+            <span class="absolute bottom-3 left-3 bg-primary text-on-primary text-xs font-bold px-2.5 py-1 rounded inline-flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm"><%= e.course_icon || 'menu_book' %></span>
+              <%= e.course_code || 'Course' %>
+            </span>
+            <% if (e.status==='completed') { %>
+            <span class="absolute top-3 right-3 font-tagline text-[10px] bg-secondary text-on-secondary px-2 py-1 uppercase rounded">✓ Done</span>
+            <% } %>
+          </div>
+          <!-- Card body -->
+          <div class="p-4">
+            <h3 class="font-headline text-headline-sm text-primary group-hover:text-secondary transition-colors"><%= e.course_title %></h3>
+            <div class="mt-3">
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-on-surface-variant">Progress</span>
+                <span class="font-bold text-primary"><%= e.progress_pct %>%</span>
+              </div>
+              <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                <div class="h-full bg-secondary rounded-full transition-all" style="width: <%= e.progress_pct %>%"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Announcements -->
+  <div>
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Announcements</h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg divide-y divide-outline-variant/40">
+      <% if (!announcements.length) { %><p class="p-5 text-on-surface-variant text-sm">No announcements.</p><% } %>
+      <% announcements.forEach(function(a){ %>
+      <div class="p-5">
+        <p class="font-bold text-primary text-sm mb-1"><%= a.title %></p>
+        <p class="text-on-surface-variant text-sm mb-2"><%= truncate(a.body, 120) %></p>
+        <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= a.author || 'GDCU' %> · <%= formatDate(a.published_at) %></p>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

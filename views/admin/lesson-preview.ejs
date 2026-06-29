@@ -1,0 +1,44 @@
+<div class="flex items-center justify-between mb-4">
+  <a href="<%= course ? '/admin/courses/'+course.id+'/modules' : '/admin/courses' %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> Back to builder</a>
+  <span class="inline-flex items-center gap-1 font-tagline text-label-sm uppercase text-secondary"><span class="material-symbols-outlined text-base">visibility</span> Lesson preview (student view)</span>
+</div>
+
+<div class="max-w-3xl mx-auto bg-surface-container-lowest border border-outline-variant rounded-lg p-6 lg:p-10">
+  <p class="font-tagline text-label-sm text-secondary uppercase"><%= mod ? mod.title : '' %><% if (lesson.block_no) { %> · Lesson <%= lesson.block_no %><% } %></p>
+  <h1 class="font-headline text-headline-md text-primary mb-2"><%= lesson.title %></h1>
+  <p class="text-sm text-on-surface-variant mb-6">
+    <span class="material-symbols-outlined text-base align-middle"><%= lesson.type==='video' ? 'play_circle' : (lesson.type==='live' ? 'live_tv' : 'article') %></span>
+    <%= lesson.type %> · <%= lesson.duration_min %> min
+  </p>
+
+  <% if (lesson.image_url) { %>
+    <img src="<%= lesson.image_url %>" alt="" class="w-full max-h-72 object-cover rounded-lg mb-6" onerror="this.style.display='none'" />
+  <% } %>
+
+  <% if (lesson.video_url) { var embed = videoEmbed(lesson.video_url); %>
+    <% if (embed) { %>
+      <div class="mb-6"><%- embed %></div>
+    <% } else { %>
+      <div class="mb-6 p-4 bg-tertiary-container text-on-tertiary-container rounded text-sm">⚠ Video URL not recognised as YouTube/Vimeo/MP4: <code><%= lesson.video_url %></code></div>
+    <% } %>
+  <% } %>
+
+  <% if (lesson.content) { %>
+    <div class="prose-gdcu font-body text-body-lg text-on-surface leading-relaxed space-y-4"><%- lesson.content %></div>
+  <% } else { %>
+    <p class="text-on-surface-variant italic">This lesson has no written content yet.</p>
+  <% } %>
+
+  <% if (materials && materials.length) { %>
+  <div class="mt-8 bg-surface-container-low border border-outline-variant rounded-lg p-5">
+    <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">folder_open</span> Materials &amp; readings</h2>
+    <ul class="space-y-2">
+      <% materials.forEach(function(mat){ %>
+      <li><a href="<%= mat.url %>" target="_blank" rel="noopener" class="text-secondary font-medium inline-flex items-center gap-1 hover:underline"><span class="material-symbols-outlined text-base">link</span> <%= mat.label %></a></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% } %>
+
+  <div class="mt-8 pt-4 border-t border-outline-variant/40 text-xs text-on-surface-variant">This is a staff preview. Students see this within their course with progress tracking and the “mark complete” button.</div>
+</div>

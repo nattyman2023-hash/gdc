@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quiz Builder | Global Diaspora University</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .seal-watermark {
+            opacity: 0.03;
+            pointer-events: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            z-index: 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f6f3ed;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dcdad4;
+            border-radius: 10px;
+        }
+        /* Custom UI transitions */
+        .modal-enter {
+            animation: modalFadeIn 0.3s ease-out forwards;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f6f3ed",
+                        "on-primary-fixed-variant": "#354766",
+                        "tertiary": "#00030d",
+                        "on-tertiary-container": "#6a85bb",
+                        "secondary-fixed": "#ffdea9",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "surface-tint": "#4c5f7f",
+                        "secondary": "#7d5800",
+                        "surface-dim": "#dcdad4",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "surface-container-high": "#ebe8e2",
+                        "secondary-container": "#fdc355",
+                        "on-primary-fixed": "#051b38",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "on-surface": "#1c1c18",
+                        "on-secondary-fixed": "#271900",
+                        "background": "#fcf9f3",
+                        "surface-variant": "#e5e2dc",
+                        "primary-container": "#071d3a",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "primary-fixed": "#d6e3ff",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "surface-container": "#f0eee8",
+                        "primary": "#00030c",
+                        "inverse-surface": "#31312d",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "on-background": "#1c1c18",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "tertiary-container": "#001c43",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fcf9f3",
+                        "outline-variant": "#c4c6ce",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e5e2dc",
+                        "inverse-primary": "#b4c7ec",
+                        "tertiary-fixed": "#d7e2ff",
+                        "outline": "#74777e",
+                        "on-surface-variant": "#44474d",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf9f3",
+                        "on-secondary-container": "#725000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "tagline": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed custom-scrollbar">
+<!-- University Seal Watermark -->
+<img alt="University Seal" class="seal-watermark grayscale" data-alt="A highly detailed, elegant architectural sketch of a university crest or seal, featuring traditional motifs like an open book, a cross, and a laurel wreath. The style is classic editorial, rendered in thin navy ink lines on a textured ivory paper background, evoking a sense of centuries-old academic heritage and divine purpose." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx3ky7tsSwXFPT7Vpumc-gt7a81NXloCqgqQyNiJPSqg1YUBXG_0Tj1nLptbtU1-IdOm3nXlnfPW04oqueBMwDd2KZWx-SgtgMB116elLrdymoPk6nwa6ZMgpYmQ5_L5NfCQJdkR8RYojqjVNqK2cE5u_4U2L-3mfOaFtrAfCWboLR59ZQRNZzIJrbsk5VD1oNHN02LdBCX8V0kCPW21LryVMYaHv9U0QUR8nIo33FM5FEGz3ZUjg8Qosr--rXsZYGJWEJuCO9CIE"/>
+<div class="flex min-h-screen relative z-10">
+<!-- Side Navigation (Authority Source: SideNavBar JSON) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 z-40 bg-surface-container-low border-r border-outline-variant w-64 shadow-sm">
+<div class="mb-10 px-4">
+<h1 class="font-headline-sm text-headline-sm text-primary mb-1">LMS Workspace</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Academic Session 2024</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-semibold transition-transform active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm">My Courses</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">local_library</span>
+<span class="font-label-sm">Library</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">grade</span>
+<span class="font-label-sm">Grades</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-sm">Schedule</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-4 space-y-1">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-sm hover:opacity-90 transition-opacity mb-4">
+                    Contact Registrar
+                </button>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 p-margin-desktop bg-transparent relative">
+<!-- Page Header -->
+<header class="mb-12 flex justify-between items-end border-b border-outline-variant pb-6">
+<div>
+<span class="font-tagline text-tagline text-secondary uppercase tracking-widest mb-2 block">Faculty Assessment Portal</span>
+<h2 class="font-display-lg text-display-lg text-primary">Quiz & Examination Builder</h2>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 bg-surface-container-high border border-outline px-6 py-3 text-primary font-label-sm rounded hover:bg-surface-variant transition-colors" onclick="toggleModal('ai-modal')">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                        AI Generator
+                    </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-8 py-3 text-on-primary font-label-sm rounded shadow-sm hover:opacity-90 transition-opacity" onclick="toggleModal('question-modal')">
+<span class="material-symbols-outlined">add_circle</span>
+                        Create New Question
+                    </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Filter Sidebar / Stats (Left Column) -->
+<section class="col-span-3 space-y-gutter">
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6 border-b border-secondary-fixed pb-2">Repository Stats</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-on-surface-variant">Total Questions</span>
+<span class="font-bold text-primary">1,420</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-on-surface-variant">Used in Quizzes</span>
+<span class="font-bold text-primary">856</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-on-surface-variant">Avg. Difficulty</span>
+<span class="font-bold text-secondary">Moderate</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded">
+<h3 class="font-label-sm text-tagline text-primary mb-4 uppercase">Filter by Topic</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-label-sm rounded font-medium cursor-pointer">Theology</span>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant text-label-sm rounded font-medium cursor-pointer">Ethics</span>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant text-label-sm rounded font-medium cursor-pointer">History</span>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant text-label-sm rounded font-medium cursor-pointer">Leadership</span>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant text-label-sm rounded font-medium cursor-pointer">Social Justice</span>
+</div>
+</div>
+</section>
+<!-- Question Bank Table (Main Area) -->
+<section class="col-span-9 bg-surface-container-lowest border border-outline-variant rounded shadow-sm overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-white border-outline-variant pl-10 py-2 rounded font-body-md focus:ring-1 focus:ring-secondary focus:border-secondary transition-all" placeholder="Search questions, tags, or IDs..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm text-on-surface-variant">Show:</span>
+<select class="bg-white border-outline-variant py-1 rounded text-label-sm focus:ring-0">
+<option>Recent First</option>
+<option>Hardest First</option>
+<option>Theology Only</option>
+</select>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/30">
+<th class="px-6 py-4 font-tagline text-tagline text-primary border-b border-outline-variant w-16">ID</th>
+<th class="px-6 py-4 font-tagline text-tagline text-primary border-b border-outline-variant">Question Prompt</th>
+<th class="px-6 py-4 font-tagline text-tagline text-primary border-b border-outline-variant">Topic</th>
+<th class="px-6 py-4 font-tagline text-tagline text-primary border-b border-outline-variant">Difficulty</th>
+<th class="px-6 py-4 font-tagline text-tagline text-primary border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Question Row -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-label-sm text-on-surface-variant">#942</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-primary font-medium line-clamp-1">Examine the role of service in contemporary leadership...</p>
+<p class="text-label-sm text-on-surface-variant mt-1 italic">Last modified 2 days ago</p>
+</td>
+<td class="px-6 py-5">
+<span class="font-tagline text-[10px] bg-primary-container text-on-primary-fixed-variant px-2 py-0.5 rounded">LEADERSHIP</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-0.5">
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-outline-variant rounded-full"></span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">edit</span></button>
+<button class="text-on-surface-variant hover:text-error transition-colors ml-2 opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">delete</span></button>
+</td>
+</tr>
+<!-- Question Row -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-label-sm text-on-surface-variant">#881</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-primary font-medium line-clamp-1">Define the 'Great Commission' in the context of global education.</p>
+<p class="text-label-sm text-on-surface-variant mt-1 italic">High performance rating</p>
+</td>
+<td class="px-6 py-5">
+<span class="font-tagline text-[10px] bg-primary-container text-on-primary-fixed-variant px-2 py-0.5 rounded">THEOLOGY</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-0.5">
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-outline-variant rounded-full"></span>
+<span class="w-3 h-1 bg-outline-variant rounded-full"></span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">edit</span></button>
+<button class="text-on-surface-variant hover:text-error transition-colors ml-2 opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">delete</span></button>
+</td>
+</tr>
+<!-- Question Row -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-label-sm text-on-surface-variant">#734</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-primary font-medium line-clamp-1">Analyze the ethical implications of AI in modern ministry...</p>
+<p class="text-label-sm text-on-surface-variant mt-1 italic">New addition</p>
+</td>
+<td class="px-6 py-5">
+<span class="font-tagline text-[10px] bg-primary-container text-on-primary-fixed-variant px-2 py-0.5 rounded">ETHICS</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-0.5">
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">edit</span></button>
+<button class="text-on-surface-variant hover:text-error transition-colors ml-2 opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">delete</span></button>
+</td>
+</tr>
+<!-- Question Row -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5 text-label-sm text-on-surface-variant">#412</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-primary font-medium line-clamp-1">Historical overview of the Diaspora Mission Movement.</p>
+<p class="text-label-sm text-on-surface-variant mt-1 italic">Used in 12 quizzes</p>
+</td>
+<td class="px-6 py-5">
+<span class="font-tagline text-[10px] bg-primary-container text-on-primary-fixed-variant px-2 py-0.5 rounded">HISTORY</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex gap-0.5">
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-secondary rounded-full"></span>
+<span class="w-3 h-1 bg-outline-variant rounded-full"></span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">edit</span></button>
+<button class="text-on-surface-variant hover:text-error transition-colors ml-2 opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="p-4 border-t border-outline-variant flex justify-center">
+<nav class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-primary hover:bg-surface-variant"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-label-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-primary hover:bg-surface-variant font-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-primary hover:bg-surface-variant font-label-sm">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-primary hover:bg-surface-variant"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</nav>
+</div>
+</section>
+</div>
+<!-- Footer (Authority Source: Footer JSON) -->
+<footer class="mt-24 pt-12 pb-8 border-t border-outline-variant flex flex-col items-center">
+<div class="font-display-lg text-primary mb-6 opacity-30">Global Diaspora University</div>
+<div class="flex gap-8 mb-8">
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Accreditation</a>
+<a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Contact Us</a>
+</div>
+<p class="font-tagline text-tagline text-on-surface-variant text-center opacity-60">
+                    © 2024 Global Diaspora University. All Rights Reserved. Commissioned for a Higher Purpose.
+                </p>
+</footer>
+</main>
+</div>
+<!-- MODAL: Create New Question -->
+<div class="fixed inset-0 z-[100] hidden" id="question-modal">
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-sm" onclick="toggleModal('question-modal')"></div>
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-white p-10 rounded shadow-2xl modal-enter">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-md text-headline-md text-primary">New Assessment Question</h3>
+<button class="text-on-surface-variant hover:text-primary" onclick="toggleModal('question-modal')"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-6">
+<div>
+<label class="block font-tagline text-tagline text-primary mb-2">Question Type</label>
+<select class="w-full border-outline-variant rounded p-3 bg-surface-container-low font-body-md">
+<option>Multiple Choice</option>
+<option>Short Answer</option>
+<option>Essay / Long Form</option>
+<option>True/False</option>
+</select>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-primary mb-2">Theological or Academic Prompt</label>
+<textarea class="w-full border-b-2 border-primary bg-surface-container-low p-4 rounded font-body-md h-32 focus:ring-0 resize-none" placeholder="Enter the inquiry details here..."></textarea>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-tagline text-tagline text-primary mb-2">Subject Category</label>
+<select class="w-full border-outline-variant rounded p-3 bg-surface-container-low font-body-md">
+<option>Mission Studies</option>
+<option>Systematic Theology</option>
+<option>Ethical Leadership</option>
+<option>Ecclesiology</option>
+</select>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-primary mb-2">Difficulty Level</label>
+<select class="w-full border-outline-variant rounded p-3 bg-surface-container-low font-body-md">
+<option>Level 1 - Foundational</option>
+<option>Level 2 - Intermediate</option>
+<option>Level 3 - Advanced</option>
+<option>Level 4 - Scholar</option>
+</select>
+</div>
+</div>
+<div class="pt-6 flex justify-end gap-4">
+<button class="px-6 py-2 font-label-sm text-on-surface-variant hover:underline" onclick="toggleModal('question-modal')" type="button">Discard Draft</button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded font-label-sm shadow-md hover:bg-opacity-90" type="submit">Commit to Repository</button>
+</div>
+</form>
+</div>
+</div>
+<!-- MODAL: AI Generator Panel -->
+<div class="fixed inset-0 z-[100] hidden" id="ai-modal">
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-sm" onclick="toggleModal('ai-modal')"></div>
+<div class="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-2xl p-8 border-l border-outline-variant">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    Curate with AI
+                </h3>
+<button class="text-on-surface-variant hover:text-primary" onclick="toggleModal('ai-modal')"><span class="material-symbols-outlined">close</span></button>
+</div>
+<p class="font-body-md text-on-surface-variant mb-10 leading-relaxed italic">
+                Our academic intelligence engine can automatically curate a balanced assessment based on your syllabus parameters and learning outcomes.
+            </p>
+<div class="space-y-8">
+<div class="p-6 bg-surface-container-high rounded border border-outline-variant">
+<label class="block font-tagline text-tagline text-primary mb-4">Quiz Complexity Profile</label>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="text-secondary focus:ring-secondary" name="difficulty" type="radio"/>
+<span class="font-body-md group-hover:text-secondary">Comprehensive Mastery (Advanced)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="text-secondary focus:ring-secondary" name="difficulty" type="radio"/>
+<span class="font-body-md group-hover:text-secondary">Balanced Review (Intermediate)</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="text-secondary focus:ring-secondary" name="difficulty" type="radio"/>
+<span class="font-body-md group-hover:text-secondary">Introductory Check (Beginner)</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block font-tagline text-tagline text-primary mb-2">Question Count</label>
+<input class="w-full accent-secondary" max="50" min="5" step="5" type="range"/>
+<div class="flex justify-between text-label-sm text-on-surface-variant mt-1">
+<span>5 Questions</span>
+<span>50 Questions</span>
+</div>
+</div>
+<div class="space-y-4">
+<label class="block font-tagline text-tagline text-primary">Topic Distribution</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="border border-outline-variant p-2 rounded text-label-sm text-on-surface-variant hover:border-secondary transition-colors">Historical Context</button>
+<button class="border border-secondary p-2 rounded text-label-sm text-secondary bg-secondary-fixed">Theological Core</button>
+<button class="border border-outline-variant p-2 rounded text-label-sm text-on-surface-variant hover:border-secondary transition-colors">Missionary Ethics</button>
+<button class="border border-outline-variant p-2 rounded text-label-sm text-on-surface-variant hover:border-secondary transition-colors">Scriptural Roots</button>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded font-label-sm shadow-sm hover:opacity-90 flex items-center justify-center gap-3 mt-8">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">magic_button</span>
+                    Generate Assessment Draft
+                </button>
+</div>
+</div>
+</div>
+<script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Table row hover interactions
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.querySelector('td:nth-child(2) p').classList.add('text-secondary');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.querySelector('td:nth-child(2) p').classList.remove('text-secondary');
+            });
+        });
+    </script>
+</body></html>

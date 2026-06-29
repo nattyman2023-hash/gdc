@@ -1,0 +1,42 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Spiritual Life</p><h1 class="font-headline text-headline-md text-primary">Chapel</h1></div>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <!-- Schedule a session -->
+  <form action="/admin/chapel" method="post" class="lg:col-span-1 space-y-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-6 h-fit">
+    <h2 class="font-headline text-headline-sm text-primary">Schedule a chapel</h2>
+    <p class="text-on-surface-variant text-xs">Chapel is held on Tuesdays — the next one is pre-filled for you.</p>
+    <div><label class="field-label">Title *</label><input name="title" required value="Tuesday Chapel" class="field" /></div>
+    <div><label class="field-label">Date & time *</label><input type="datetime-local" name="starts_at" required value="<%= nextTuesday %>T13:00" class="field" /></div>
+    <div><label class="field-label">Theme</label><input name="theme" class="field" placeholder="e.g. Walking in faith" /></div>
+    <div><label class="field-label">Speaker</label><input name="speaker" class="field" /></div>
+    <div><label class="field-label">Scripture</label><input name="scripture" class="field" placeholder="e.g. Psalm 23" /></div>
+    <div><label class="field-label">Join link</label><input name="join_url" class="field" placeholder="https://…" /></div>
+    <button class="w-full bg-primary text-on-primary px-5 py-2 rounded font-bold">Schedule chapel</button>
+  </form>
+
+  <!-- Sessions list -->
+  <div class="lg:col-span-2">
+    <h2 class="font-headline text-headline-sm text-primary mb-3">Sessions</h2>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+          <tr><th class="px-4 py-3">When</th><th class="px-4 py-3">Title</th><th class="px-4 py-3 hidden md:table-cell">Speaker</th><th class="px-4 py-3">Present</th><th class="px-4 py-3">Status</th></tr>
+        </thead>
+        <tbody>
+          <% if (!sessions.length) { %><tr><td colspan="5" class="px-4 py-6 text-center text-on-surface-variant">No chapel sessions yet.</td></tr><% } %>
+          <% sessions.forEach(function(s){ %>
+          <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low">
+            <td class="px-4 py-3 whitespace-nowrap"><a href="/admin/chapel/<%= s.id %>" class="font-bold text-primary hover:text-secondary"><%= formatDate(s.starts_at) %></a><br/><span class="text-[11px] text-on-surface-variant"><%= new Date(s.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) %></span></td>
+            <td class="px-4 py-3 text-primary"><%= s.title %><% if (s.theme) { %><br/><span class="text-[11px] text-on-surface-variant"><%= s.theme %></span><% } %></td>
+            <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= s.speaker || '—' %></td>
+            <td class="px-4 py-3 font-bold text-primary"><%= s.present %></td>
+            <td class="px-4 py-3"><%- include('_badge', { status: s.status==='completed'?'accepted':(s.status==='cancelled'?'lost':'sent') }) %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

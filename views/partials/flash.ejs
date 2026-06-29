@@ -1,0 +1,18 @@
+<% if (flash.success && flash.success.length) { %>
+  <div class="flash-msg bg-secondary-fixed border-l-4 border-secondary text-on-secondary-fixed px-4 py-3 mb-4 rounded flex items-start gap-2">
+    <span class="material-symbols-outlined text-secondary">check_circle</span>
+    <div><% flash.success.forEach(function(m){ %><p><%= m %></p><% }) %></div>
+  </div>
+<% } %>
+<% if (flash.error && flash.error.length) { %>
+  <div class="flash-msg bg-error-container border-l-4 border-error text-on-error-container px-4 py-3 mb-4 rounded flex items-start gap-2">
+    <span class="material-symbols-outlined text-error">error</span>
+    <div><% flash.error.forEach(function(m){ %><p><%= m %></p><% }) %></div>
+  </div>
+<% } %>
+<% if (flash.info && flash.info.length) { %>
+  <div class="flash-msg bg-surface-container-high border-l-4 border-primary text-on-surface px-4 py-3 mb-4 rounded flex items-start gap-2">
+    <span class="material-symbols-outlined text-primary">info</span>
+    <div><% flash.info.forEach(function(m){ %><p><%= m %></p><% }) %></div>
+  </div>
+<% } %>

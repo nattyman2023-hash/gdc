@@ -1,0 +1,34 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Content</p><h1 class="font-headline text-headline-md text-primary">Academic Calendar</h1><p class="text-on-surface-variant mt-1 text-sm">Closures, opening dates, term dates and deadlines — shown to the right audience across the site and portals.</p></div>
+  <a href="/admin/schedule/new" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">add</span> New entry</a>
+</div>
+
+<% function tbl(rows, title, muted) { %>
+<h2 class="font-headline text-headline-sm text-primary mb-3 <%= muted?'opacity-70':'' %>"><%= title %></h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto mb-8 <%= muted?'opacity-70':'' %>">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">When</th><th class="px-4 py-3">Title</th><th class="px-4 py-3">Type</th><th class="px-4 py-3 hidden sm:table-cell">Audience</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+    </thead>
+    <tbody>
+      <% if (!rows.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">None.</td></tr><% } %>
+      <% rows.forEach(function(e){ var c = cats[e.category] || cats.event; %>
+      <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low">
+        <td class="px-4 py-3 whitespace-nowrap font-bold text-primary"><%= formatDate(e.starts_at) %><% if (e.ends_at) { %><br/><span class="text-[11px] text-on-surface-variant font-normal">→ <%= formatDate(e.ends_at) %></span><% } %></td>
+        <td class="px-4 py-3 text-primary"><%= e.title %></td>
+        <td class="px-4 py-3"><span class="inline-flex items-center gap-1 font-tagline text-[11px] uppercase px-2 py-0.5 rounded <%= c.tone %>"><span class="material-symbols-outlined text-sm"><%= c.icon %></span> <%= c.label %></span></td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant capitalize"><%= e.audience %></td>
+        <td class="px-4 py-3"><%- include('_badge', { status: e.published ? 'active' : 'draft' }) %></td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/admin/schedule/<%= e.id %>/edit" class="text-secondary font-bold text-xs">Edit</a>
+          <form action="/admin/schedule/<%= e.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this entry?');"><button class="text-error font-bold text-xs ml-2">Delete</button></form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<% tbl(upcoming, 'Upcoming', false) %>
+<% if (past.length) { tbl(past, 'Past', true) } %>

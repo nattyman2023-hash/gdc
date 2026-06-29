@@ -1,0 +1,63 @@
+<section class="relative bg-primary text-on-primary py-16 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="<%= imageFor('program', program) %>" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/78"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/50"></div>
+  <div class="relative max-w-container-max mx-auto">
+    <a href="/programs" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All programs</a>
+    <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest"><%= program.level %> · <%= program.school %></p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-4 max-w-3xl"><%= program.title %></h1>
+    <p class="font-body text-body-lg text-on-primary-container max-w-2xl"><%= program.summary %></p>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-12 gap-12">
+    <div class="md:col-span-8">
+      <h2 class="font-headline text-headline-md text-primary mb-4">Program Overview</h2>
+      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-8 whitespace-pre-line"><%= program.description || program.summary %></p>
+
+      <h3 class="font-headline text-headline-sm text-primary mb-4">What you'll gain</h3>
+      <ul class="space-y-3 mb-8">
+        <% ['A Christ-centred academic foundation in your field','Practical skills you can apply immediately in ministry or work','Mentorship from experienced, global faculty','A Christ-centred qualification, designed to recognised academic standards'].forEach(function(item){ %>
+        <li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span><span class="font-body text-body-md text-on-surface-variant"><%= item %></span></li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <aside class="md:col-span-4">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 sticky top-28">
+        <div class="space-y-4 mb-6">
+          <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Credential</span><span class="font-bold text-primary text-right"><%= program.credential || program.level %></span></div>
+          <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Duration</span><span class="font-bold text-primary text-right"><%= program.duration %></span></div>
+          <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Study mode</span><span class="font-bold text-primary text-right"><%= program.study_mode || 'Online' %></span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Tuition</span><span class="font-bold text-primary text-right"><%= formatMoney(program.tuition, program.tuition_currency) %></span></div>
+        </div>
+        <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded font-bold mb-3 hover:opacity-90">Apply for this program</a>
+        <a href="#enquire" class="block text-center border-2 border-secondary text-primary px-6 py-3 rounded font-bold hover:bg-secondary-fixed transition-colors">Request information</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<% if (related && related.length) { %>
+<section class="py-16 bg-surface">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-8">Related programs</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% related.forEach(function(p){ %>
+      <a href="/programs/<%= p.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:border-secondary transition-colors">
+        <span class="font-tagline text-label-sm text-secondary uppercase"><%= p.level %></span>
+        <h3 class="font-headline text-headline-sm text-primary mt-2 mb-2"><%= p.title %></h3>
+        <p class="text-on-surface-variant text-body-md"><%= truncate(p.summary, 90) %></p>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section id="enquire" class="py-16 bg-surface-container-low">
+  <div class="max-w-2xl mx-auto px-margin-mobile lg:px-margin-desktop">
+    <%- include('../partials/request-info', { programs: [program].concat(related || []) }) %>
+  </div>
+</section>

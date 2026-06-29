@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Montserrat:wght@600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e5e2dc;
+            border-radius: 2px;
+        }
+        .ticket-row:hover {
+            background-color: rgba(253, 195, 85, 0.05);
+        }
+        .ticket-active {
+            border-left: 4px solid #7d5800;
+            background-color: #f0eee8;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#f6bd50",
+                        "on-secondary-container": "#725000",
+                        "on-tertiary-fixed-variant": "#294678",
+                        "surface-dim": "#dcdad4",
+                        "primary": "#00030c",
+                        "surface-variant": "#e5e2dc",
+                        "secondary": "#7d5800",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ea",
+                        "on-secondary-fixed": "#271900",
+                        "surface-container-low": "#f6f3ed",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf9f3",
+                        "tertiary": "#00030d",
+                        "surface-container": "#f0eee8",
+                        "secondary-container": "#fdc355",
+                        "inverse-primary": "#b4c7ec",
+                        "surface-container-highest": "#e5e2dc",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#6a85bb",
+                        "on-background": "#1c1c18",
+                        "inverse-surface": "#31312d",
+                        "primary-fixed-dim": "#b4c7ec",
+                        "tertiary-fixed-dim": "#acc7ff",
+                        "on-secondary-fixed-variant": "#5e4100",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4c5f7f",
+                        "tertiary-fixed": "#d7e2ff",
+                        "surface": "#fcf9f3",
+                        "error": "#ba1a1a",
+                        "primary-container": "#071d3a",
+                        "outline": "#74777e",
+                        "on-primary-fixed-variant": "#354766",
+                        "on-tertiary-fixed": "#001a40",
+                        "on-primary-container": "#7386a8",
+                        "secondary-fixed": "#ffdea9",
+                        "surface-bright": "#fcf9f3",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#001c43",
+                        "on-surface-variant": "#44474d",
+                        "on-surface": "#1c1c18",
+                        "on-primary-fixed": "#051b38",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6ce",
+                        "surface-container-high": "#ebe8e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "tagline": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "tagline": ["14px", {"lineHeight": "20px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-primary-container sticky top-0 z-50 shadow-sm border-b border-outline-variant/15 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg text-surface-container-lowest">GDU</span>
+<div class="hidden md:flex items-center gap-6 ml-8">
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Admissions</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Programs</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Research</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-surface-container-lowest hover:text-tertiary-fixed transition-colors" href="#">Faculty</a>
+<a class="font-tagline text-tagline uppercase tracking-widest text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim pb-1" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="bg-primary/20 border-none text-surface-container-lowest placeholder:text-on-primary-container text-body-md rounded-none px-4 py-2 w-64 focus:ring-1 focus:ring-tertiary-fixed" placeholder="Search tickets..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-primary-container">search</span>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2 rounded-none font-tagline text-tagline uppercase tracking-widest hover:opacity-80 transition-opacity">Apply Now</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col w-64 bg-surface-container-low border-r border-outline-variant/10 z-40">
+<div class="p-6 border-b border-outline-variant/10">
+<h2 class="font-headline-md text-headline-md text-primary">Student Portal</h2>
+<p class="font-body-md text-on-surface-variant text-sm">Global Diaspora University</p>
+</div>
+<nav class="flex-1 py-4">
+<div class="space-y-1">
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-body-md">Academic Record</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-body-md">Financials</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high px-6 py-3 transition-all" href="#">
+<span class="material-symbols-outlined">book</span>
+<span class="font-body-md">Library</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container font-bold px-6 py-3 border-l-4 border-secondary transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-body-md">Support</span>
+</a>
+</div>
+</nav>
+<div class="p-6 border-t border-outline-variant/10">
+<button class="w-full flex items-center justify-center gap-2 border border-secondary text-secondary py-3 px-4 font-tagline text-tagline uppercase tracking-wider hover:bg-secondary/5 transition-colors">
+<span class="material-symbols-outlined">chat</span>
+                    WhatsApp Support
+                </button>
+</div>
+</aside>
+<!-- Main Content Area: Helpdesk Layout -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Ticket List Sidebar (High Density) -->
+<section class="w-full md:w-96 flex flex-col border-r border-outline-variant/20 bg-surface">
+<div class="p-4 border-b border-outline-variant/20 flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Tickets</h3>
+<span class="bg-surface-container-high px-2 py-1 text-[10px] font-bold rounded-none border border-outline-variant uppercase">34 Total</span>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary text-on-primary px-3 py-1 text-xs rounded-none font-medium">All</button>
+<button class="text-on-surface-variant hover:bg-surface-container px-3 py-1 text-xs rounded-none transition-colors">Open</button>
+<button class="text-on-surface-variant hover:bg-surface-container px-3 py-1 text-xs rounded-none transition-colors">Academic</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Ticket Items -->
+<div class="ticket-row ticket-active p-4 border-b border-outline-variant/10 cursor-pointer">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-tagline font-bold text-secondary uppercase tracking-widest">#8421 • Financial</span>
+<span class="text-[10px] text-on-surface-variant">2h ago</span>
+</div>
+<h4 class="font-semibold text-sm mb-1 line-clamp-1">Tuition Payment Verification Issue</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-3">Student reporting that payment for Semester 2 hasn't reflected in the portal despite bank receipt...</p>
+<div class="flex items-center gap-2">
+<span class="bg-error-container text-on-error-container text-[10px] px-2 py-0.5 font-bold uppercase">High Priority</span>
+<span class="bg-secondary-container/50 text-on-secondary-container text-[10px] px-2 py-0.5 font-bold uppercase">In Progress</span>
+</div>
+</div>
+<div class="ticket-row p-4 border-b border-outline-variant/10 cursor-pointer">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-tagline font-bold text-secondary uppercase tracking-widest">#8419 • Technical</span>
+<span class="text-[10px] text-on-surface-variant">4h ago</span>
+</div>
+<h4 class="font-semibold text-sm mb-1 line-clamp-1">Portal Login - Two-Factor Authentication</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-3">Locked out of account after multiple failed SMS codes. Needs manual verification...</p>
+<div class="flex items-center gap-2">
+<span class="bg-surface-container-highest text-on-surface-variant text-[10px] px-2 py-0.5 font-bold uppercase">Medium</span>
+<span class="bg-primary-container text-on-primary-container text-[10px] px-2 py-0.5 font-bold uppercase">Open</span>
+</div>
+</div>
+<div class="ticket-row p-4 border-b border-outline-variant/10 cursor-pointer">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-tagline font-bold text-secondary uppercase tracking-widest">#8415 • Academic</span>
+<span class="text-[10px] text-on-surface-variant">Yesterday</span>
+</div>
+<h4 class="font-semibold text-sm mb-1 line-clamp-1">Change of Major Application</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-3">Requesting transfer from BSc Computer Science to BA Philosophy for next term...</p>
+<div class="flex items-center gap-2">
+<span class="bg-surface-container-highest text-on-surface-variant text-[10px] px-2 py-0.5 font-bold uppercase">Low</span>
+<span class="bg-surface-variant text-on-surface-variant text-[10px] px-2 py-0.5 font-bold uppercase">Resolved</span>
+</div>
+</div>
+<!-- More generic tickets for fill -->
+<div class="ticket-row p-4 border-b border-outline-variant/10 cursor-pointer opacity-80">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-tagline font-bold text-secondary uppercase tracking-widest">#8410 • Financial</span>
+<span class="text-[10px] text-on-surface-variant">Yesterday</span>
+</div>
+<h4 class="font-semibold text-sm mb-1 line-clamp-1">Scholarship Disbursement Inquiry</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2 mb-3">Check on the status of the Merit Scholarship for international students...</p>
+<div class="flex items-center gap-2">
+<span class="bg-surface-container-highest text-on-surface-variant text-[10px] px-2 py-0.5 font-bold uppercase">Medium</span>
+<span class="bg-surface-variant text-on-surface-variant text-[10px] px-2 py-0.5 font-bold uppercase">Resolved</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Ticket Detail View -->
+<section class="hidden md:flex flex-1 flex-col bg-background relative">
+<!-- Detail Header -->
+<div class="p-6 bg-surface-container-low border-b border-outline-variant/20">
+<div class="flex justify-between items-start mb-4">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="font-headline-md text-headline-md text-primary">#8421: Tuition Payment Verification Issue</h1>
+<span class="bg-error-container text-on-error-container text-[10px] px-2 py-1 font-bold uppercase rounded-none">High Priority</span>
+</div>
+<p class="text-sm text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+                                Student: Elias Thorne (ID: 99420) • Submitted Oct 12, 2024, 09:14 AM
+                            </p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-highest border border-outline-variant/30 text-primary p-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">print</span>
+</button>
+<button class="bg-surface-container-highest border border-outline-variant/30 text-primary p-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">archive</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-2 font-tagline text-[12px] uppercase tracking-widest">Mark Resolved</button>
+</div>
+</div>
+<div class="flex gap-6 border-t border-outline-variant/10 pt-4">
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-1">Assigned To</p>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-[10px] font-bold">JD</div>
+<span class="text-xs font-semibold">Julianna Davis</span>
+</div>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-1">Category</p>
+<span class="text-xs font-semibold">Financial Services</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-1">SLA Deadline</p>
+<span class="text-xs font-semibold text-error">4 Hours Remaining</span>
+</div>
+</div>
+</div>
+<!-- Conversation & Notes Thread -->
+<div class="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-6">
+<!-- Date Separator -->
+<div class="flex items-center gap-4">
+<div class="h-[1px] flex-1 bg-outline-variant/30"></div>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant tracking-widest">October 12, 2024</span>
+<div class="h-[1px] flex-1 bg-outline-variant/30"></div>
+</div>
+<!-- Student Message -->
+<div class="flex gap-4 max-w-3xl">
+<img alt="Elias Thorne" class="w-10 h-10 rounded-none border border-outline-variant" data-alt="A portrait of a young college student with a focused expression, wearing a navy blue collegiate sweater. The lighting is soft and natural, suggesting an indoor academic setting. The style is professional and elegant, matching a high-end university brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGRQM1fJCN475Ai4S-iWa4yRieYhpTnpHrvRAlL1quC-AriT0dgWj3tpHEqyZqXp-Fv4eUVQPZnNawoF9tJQ2xU3STlZ57br-2BnDbUNb_SJVnDOIb_XQYqfHV6BE4wc0fjOpxJIdxPcBAYjAFpZB-uvf5DVhfAOGw88QMlgps0bRqgSb69_xbZG8nTHNPkFNhpmi4yUFnuECQmn_Dcy6IiRRFAk08YL_8pNAXk-q6We6QJz7sJt0z2pJHjXv87oMu1ofZJikEHSI"/>
+<div class="bg-white p-4 border border-outline-variant/20 shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-sm">Elias Thorne (Student)</span>
+<span class="text-[10px] text-on-surface-variant">09:14 AM</span>
+</div>
+<p class="text-sm leading-relaxed text-on-surface">
+                                Hello, I am writing because my portal still shows an outstanding balance of $3,200 for the Fall term. I made the wire transfer 4 days ago and received a confirmation from my bank. I have attached the receipt below for your reference. My registration is currently blocked and I need to enroll in my final seminar course by tomorrow.
+                            </p>
+<div class="mt-4 p-2 bg-surface flex items-center gap-3 border border-dashed border-outline hover:border-secondary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-secondary">attachment</span>
+<span class="text-xs font-medium">Bank_Receipt_Thorne_Oct2024.pdf (245 KB)</span>
+</div>
+</div>
+</div>
+<!-- Internal Note -->
+<div class="flex gap-4 max-w-3xl ml-auto justify-end">
+<div class="bg-secondary-container/10 p-4 border border-secondary/20 shadow-sm border-l-4 border-l-secondary w-full">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary">lock</span>
+<span class="font-bold text-sm text-on-secondary-container">Internal Staff Note</span>
+</div>
+<span class="text-[10px] text-on-secondary-container/70">10:45 AM</span>
+</div>
+<p class="text-sm italic text-on-surface-variant">
+                                Checked the treasury logs. It seems the wire came through but the reference number was mistyped by the student's bank. I've sent a manual reconciliation request to the Finance office. Awaiting their confirmation before clearing the block.
+                            </p>
+<p class="text-[10px] font-bold mt-2 uppercase">— Julianna Davis</p>
+</div>
+</div>
+<!-- Faculty Reply -->
+<div class="flex gap-4 max-w-3xl ml-auto justify-end">
+<div class="bg-primary-container text-surface-container-lowest p-4 shadow-md w-full">
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-sm">Julianna Davis (Finance Support)</span>
+<span class="text-[10px] opacity-70">11:02 AM</span>
+</div>
+<p class="text-sm leading-relaxed">
+                                Dear Elias, thank you for providing the receipt. We have located your transfer in our pending logs. There was a minor discrepancy in the reference number which caused a delay in the automated processing. I have initiated a manual reconciliation. Your registration block should be removed within the next 2-4 hours. We appreciate your patience.
+                            </p>
+</div>
+<div class="w-10 h-10 bg-secondary flex items-center justify-center text-on-secondary font-bold">JD</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="p-6 bg-white border-t border-outline-variant/30">
+<div class="flex gap-4 mb-4">
+<button class="text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary pb-1">Public Reply</button>
+<button class="text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors pb-1">Internal Note</button>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-low border border-outline-variant/30 p-4 text-sm focus:ring-0 focus:border-secondary h-32 resize-none rounded-none" placeholder="Type your response here..."></textarea>
+<div class="absolute bottom-4 right-4 flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-tagline text-[12px] uppercase tracking-widest hover:opacity-90">Send Message</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full py-6 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-gutter bg-primary-container border-t-4 border-tertiary-fixed-dim text-surface-container-lowest font-body-md text-body-md">
+<div class="space-y-4">
+<span class="font-display-lg text-headline-md text-surface-container-lowest">GDU</span>
+<p class="text-sm text-surface-variant leading-relaxed">Global Diaspora University is committed to providing academic excellence through a Christian worldview, fostering leaders for a global society.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-tagline text-tagline uppercase tracking-widest mb-2">Administration</h4>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Institutional Equity</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors text-tertiary-fixed underline" href="#">Accreditation</a>
+<a class="text-surface-variant hover:text-tertiary-fixed transition-colors" href="#">Global Contacts</a>
+</div>
+<div class="flex flex-col justify-between items-start md:items-end">
+<div class="flex gap-4 mb-4">
+<span class="material-symbols-outlined text-surface-container-lowest cursor-pointer hover:text-tertiary-fixed">public</span>
+<span class="material-symbols-outlined text-surface-container-lowest cursor-pointer hover:text-tertiary-fixed">mail</span>
+<span class="material-symbols-outlined text-surface-container-lowest cursor-pointer hover:text-tertiary-fixed">help</span>
+</div>
+<p class="text-[10px] text-surface-variant opacity-70 text-right">
+                © 2024 Global Diaspora University.<br/>Accredited by International Academic Council.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple Micro-interaction for Ticket Selection
+        document.querySelectorAll('.ticket-row').forEach(row => {
+            row.addEventListener('click', function() {
+                document.querySelectorAll('.ticket-row').forEach(r => r.classList.remove('ticket-active'));
+                this.classList.add('ticket-active');
+            });
+        });
+    </script>
+</body></html>

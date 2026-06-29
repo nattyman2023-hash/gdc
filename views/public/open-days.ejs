@@ -1,0 +1,49 @@
+<%- include('../partials/page-hero', { heroTitle: 'Open Days', heroTagline: 'Meet GDCU', heroText: 'Join us online to meet our team, explore our programmes and ask anything about studying with us.' }) %>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+    <h2 class="font-headline text-headline-md text-primary mb-8">Upcoming open days</h2>
+    <% if (!upcoming.length) { %>
+      <div class="bg-surface-container-low border border-outline-variant rounded-lg p-8 text-center">
+        <span class="material-symbols-outlined text-secondary text-4xl">event_upcoming</span>
+        <p class="text-on-surface-variant mt-2">No open days are scheduled right now. Please check back soon, or <a href="/contact" class="text-secondary font-bold underline">contact our team</a> to arrange a chat.</p>
+      </div>
+    <% } %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <% upcoming.forEach(function(o){ %>
+      <a href="/open-days/<%= o.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden group hover:border-secondary hover:shadow-md transition-all flex flex-col">
+        <div class="relative h-36 bg-primary text-on-primary">
+          <div class="relative h-full p-5 flex items-center justify-between">
+            <div>
+              <p class="font-display text-display-lg-mobile leading-none"><%= new Date(o.starts_at).getDate() %></p>
+              <p class="font-tagline text-label-sm uppercase text-secondary-fixed"><%= new Date(o.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></p>
+            </div>
+            <span class="material-symbols-outlined text-secondary-fixed-dim text-3xl"><%= o.is_online ? 'videocam' : 'location_on' %></span>
+          </div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <span class="font-tagline text-label-sm text-secondary uppercase mb-1">Open Day</span>
+          <h3 class="font-headline text-headline-sm text-primary mb-2 group-hover:text-secondary transition-colors"><%= o.title %></h3>
+          <p class="text-on-surface-variant text-sm mb-3 flex-1"><%= truncate(o.description, 90) %></p>
+          <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><span class="material-symbols-outlined text-sm align-middle">schedule</span> <%= formatDateTime(o.starts_at) %></p>
+          <p class="font-tagline text-[11px] text-on-surface-variant uppercase mt-1"><%= o.is_online ? 'Online' : (o.location || 'In person') %></p>
+          <span class="inline-flex items-center gap-1 text-secondary font-bold text-sm mt-3">Register <span class="material-symbols-outlined text-base">arrow_forward</span></span>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <% if (past.length) { %>
+    <h2 class="font-headline text-headline-md text-primary mt-16 mb-8">Past open days</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      <% past.forEach(function(o){ %>
+      <div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 opacity-80">
+        <span class="font-tagline text-label-sm text-on-surface-variant uppercase">Open Day</span>
+        <h3 class="font-headline text-headline-sm text-primary my-1"><%= o.title %></h3>
+        <p class="font-tagline text-[11px] text-on-surface-variant uppercase"><%= formatDate(o.starts_at) %></p>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>

@@ -1,0 +1,70 @@
+<div class="mb-6"><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Admissions</p><h1 class="font-headline text-headline-md text-primary">Interview Availability</h1><p class="text-on-surface-variant mt-1">Publish slots that applicants can book via their interview link.</p></div>
+
+<!-- Stats -->
+<div class="grid grid-cols-3 gap-4 mb-6 max-w-xl">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4"><p class="font-headline text-headline-md text-primary leading-none"><%= stats.open %></p><p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1">Open slots</p></div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4"><p class="font-headline text-headline-md text-primary leading-none"><%= stats.booked %></p><p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1">Booked</p></div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4"><p class="font-headline text-headline-md text-primary leading-none"><%= stats.total %></p><p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-1">Total</p></div>
+</div>
+
+<!-- Add / edit slot -->
+<%
+  function dtLocal(v){ if(!v) return ''; var d=new Date(v); if(isNaN(d.getTime())) return ''; var p=function(n){return String(n).padStart(2,'0');}; return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes()); }
+  var e = editing || {};
+%>
+<form action="<%= editing ? '/admin/interview-slots/'+editing.id : '/admin/interview-slots' %>" method="post" class="bg-surface-container-lowest border <%= editing ? 'border-secondary' : 'border-outline-variant' %> rounded-lg p-5 mb-6 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+  <% if (editing) { %><p class="sm:col-span-12 font-tagline text-label-sm text-secondary uppercase">Editing slot</p><% } %>
+  <div class="sm:col-span-3"><label class="field-label">Host</label>
+    <select name="interviewer_id" class="field">
+      <option value="pool" <%= (editing && !e.interviewer_id)?'selected':'' %>>Any available host (pool)</option>
+      <% interviewers.forEach(function(u){ %><option value="<%= u.id %>" <%= String(e.interviewer_id)===String(u.id)?'selected':'' %>><%= u.first_name %> <%= u.last_name %></option><% }) %>
+    </select>
+  </div>
+  <div class="sm:col-span-3"><label class="field-label">Pool name <span class="text-on-surface-variant font-normal normal-case">(if no host)</span></label><input name="host_label" value="<%= e.host_label || '' %>" placeholder="Academic Office" class="field" /></div>
+  <div class="sm:col-span-3"><label class="field-label">Date &amp; time *</label><input name="starts_at" type="datetime-local" required value="<%= dtLocal(e.starts_at) %>" class="field" /></div>
+  <div class="sm:col-span-2"><label class="field-label">Mode</label><select name="mode" class="field"><option value="online" <%= e.mode==='online'?'selected':'' %>>Online</option><option value="in_person" <%= e.mode==='in_person'?'selected':'' %>>In person</option></select></div>
+  <div class="sm:col-span-2"><label class="field-label">Capacity</label><input name="capacity" type="number" min="1" value="<%= e.capacity || 1 %>" class="field" /></div>
+  <div class="sm:col-span-2"><label class="field-label">Location / link</label><input name="location" value="<%= e.location || '' %>" class="field" /></div>
+  <div class="sm:col-span-12 flex gap-3"><button class="bg-primary text-on-primary px-6 py-2.5 rounded font-bold"><%= editing ? 'Save changes' : 'Add slot' %></button><% if (editing) { %><a href="/admin/interview-slots" class="px-6 py-2.5 rounded font-bold border border-outline text-on-surface-variant">Cancel</a><% } %></div>
+</form>
+
+<% function slotTable(rows, title, muted) { %>
+<h2 class="font-headline text-headline-sm text-primary mb-3 <%= muted ? 'opacity-70' : '' %>"><%= title %></h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto mb-8 <%= muted ? 'opacity-70' : '' %>">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+      <tr><th class="px-4 py-3">When</th><th class="px-4 py-3">Interviewer</th><th class="px-4 py-3 hidden sm:table-cell">Mode</th><th class="px-4 py-3">Booked</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">Actions</th></tr>
+    </thead>
+    <tbody>
+      <% if (!rows.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">None.</td></tr><% } %>
+      <% rows.forEach(function(s){ %>
+      <tr class="border-t border-outline-variant/30">
+        <td class="px-4 py-3 font-bold text-primary"><%= formatDateTime(s.starts_at) %></td>
+        <td class="px-4 py-3 text-on-surface-variant">
+          <%= s.host %><% if (s.is_pool) { %> <span class="font-tagline text-[10px] uppercase bg-tertiary-container text-on-tertiary-container px-1.5 py-0.5 rounded align-middle">Pool</span><% } %>
+          <% if (s.bookings.length) { %>
+            <div class="text-xs text-secondary mt-0.5">
+              <% s.bookings.forEach(function(b){ %><a href="/admin/applications/<%= b.application_id %>" class="hover:underline"><%= b.first_name %> <%= b.last_name %></a><% }) %>
+            </div>
+          <% } %>
+        </td>
+        <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant"><%= s.mode==='online'?'Online':'In person' %><% if (s.location) { %> · <span class="text-xs"><%= truncate(s.location, 24) %></span><% } %></td>
+        <td class="px-4 py-3 text-on-surface-variant"><%= s.booked %>/<%= s.capacity %></td>
+        <td class="px-4 py-3">
+          <% var st = s.is_past ? 'void' : (s.is_full ? 'sent' : 'paid'); var lbl = s.is_past ? 'Past' : (s.is_full ? 'Full' : 'Open'); %>
+          <span class="inline-block font-tagline text-[11px] uppercase px-2 py-1 rounded <%= st==='paid'?'bg-secondary text-on-secondary':(st==='sent'?'bg-secondary-fixed text-on-secondary-fixed':'bg-surface-container-high text-on-surface-variant') %>"><%= lbl %></span>
+        </td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/admin/interview-slots?edit=<%= s.id %>" class="text-primary font-bold text-xs">Edit</a>
+          <form action="/admin/interview-slots/<%= s.id %>/duplicate" method="post" class="inline"><button class="text-secondary font-bold text-xs ml-2">Duplicate</button></form>
+          <form action="/admin/interview-slots/<%= s.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this slot?');"><button class="text-error font-bold text-xs ml-2">Delete</button></form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<% slotTable(upcoming, 'Upcoming slots', false) %>
+<% if (past.length) { slotTable(past, 'Past slots', true) } %>

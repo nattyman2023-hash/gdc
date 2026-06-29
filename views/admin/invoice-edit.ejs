@@ -1,0 +1,22 @@
+<a href="/admin/finance" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Back to finance</a>
+<h1 class="font-headline text-headline-md text-primary mb-6">Edit Invoice <span class="font-mono text-base text-on-surface-variant"><%= invoice.reference %></span></h1>
+
+<form action="/admin/invoices/<%= invoice.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 max-w-2xl space-y-5">
+  <p class="text-sm text-on-surface-variant">Student: <strong class="text-primary"><%= student ? (student.first_name+' '+student.last_name) : 'Unknown' %></strong></p>
+  <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Description *</label><input name="description" required value="<%= invoice.description %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+  <div class="grid sm:grid-cols-3 gap-5">
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Amount (£) *</label><input name="amount" type="number" step="0.01" min="0" required value="<%= invoice.amount %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Due date</label><input name="due_date" type="date" value="<%= invoice.due_date ? String(invoice.due_date).slice(0,10) : '' %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Status</label>
+      <select name="status" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+        <% ['draft','sent','paid','overdue','void'].forEach(function(s){ %><option value="<%= s %>" <%= invoice.status===s?'selected':'' %>><%= s %></option><% }) %>
+      </select>
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-3 pt-2 border-t border-outline-variant/40">
+    <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold">Save changes</button>
+    <a href="/admin/finance" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+    <form action="/admin/invoices/<%= invoice.id %>/void" method="post" class="inline" onsubmit="return confirm('Void this invoice?');"><button class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Void</button></form>
+    <form action="/admin/invoices/<%= invoice.id %>/delete" method="post" class="inline ml-auto" onsubmit="return confirm('Permanently delete this invoice?');"><button class="px-6 py-2 rounded font-bold text-error border border-error/40">Delete</button></form>
+  </div>
+</form>

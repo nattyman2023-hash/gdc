@@ -1,0 +1,82 @@
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+  <div><p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Admissions</p><h1 class="font-headline text-headline-md text-primary">Applications</h1></div>
+  <div class="flex items-center gap-2">
+    <a href="/admin/applications/new" class="bg-primary text-on-primary px-5 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">add</span> Add application</a>
+    <a href="/admin/applications<%= filters.archived ? '' : '?archived=1' %>" class="border border-outline text-on-surface-variant px-4 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base"><%= filters.archived ? 'inbox' : 'archive' %></span> <%= filters.archived ? 'Active' : 'Archived' %></a>
+    <a href="/admin/applications/export.csv?status=<%= encodeURIComponent(filters.status) %>&program=<%= encodeURIComponent(filters.program) %>&owner=<%= encodeURIComponent(filters.owner) %>&q=<%= encodeURIComponent(filters.q) %><%= filters.archived ? '&archived=1' : '' %>" class="border border-outline text-primary px-4 py-2 rounded font-bold inline-flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-base">download</span> Export CSV</a>
+  </div>
+</div>
+<% if (filters.archived) { %><p class="text-on-surface-variant text-sm mb-3"><span class="material-symbols-outlined text-base align-middle">archive</span> Showing archived applications.</p><% } %>
+
+<form method="get" class="flex flex-wrap gap-3 mb-5">
+  <input name="q" value="<%= filters.q %>" placeholder="Search name, email, ref…" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary min-w-[200px]" />
+  <select name="status" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All statuses</option>
+    <% statuses.forEach(function(s){ %><option value="<%= s %>" <%= filters.status===s?'selected':'' %>><%= s.replace('_',' ') %></option><% }) %>
+  </select>
+  <select name="program" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All programmes</option>
+    <% programs.forEach(function(p){ %><option value="<%= p.id %>" <%= String(filters.program)===String(p.id)?'selected':'' %>><%= p.title %></option><% }) %>
+  </select>
+  <select name="owner" class="px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+    <option value="">All owners</option>
+    <option value="me" <%= filters.owner==='me'?'selected':'' %>>My applications</option>
+    <option value="unassigned" <%= filters.owner==='unassigned'?'selected':'' %>>Unassigned</option>
+  </select>
+  <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold">Filter</button>
+  <a href="/admin/applications" class="px-5 py-2 rounded font-bold border border-outline text-on-surface-variant">Reset</a>
+</form>
+
+<%
+  var chipBase = '/admin/applications?q=' + encodeURIComponent(filters.q) + '&program=' + encodeURIComponent(filters.program) + '&owner=' + encodeURIComponent(filters.owner) + (filters.archived ? '&archived=1' : '');
+  var totalCount = statuses.reduce(function(n,s){ return n + (statusCounts[s] || 0); }, 0);
+%>
+<div class="flex flex-wrap gap-2 mb-5">
+  <a href="<%= chipBase %>" class="px-3 py-1 rounded-full text-xs font-bold border <%= !filters.status ? 'bg-primary text-on-primary border-primary' : 'border-outline text-on-surface-variant hover:border-secondary' %>">All <span class="opacity-70"><%= totalCount %></span></a>
+  <% statuses.forEach(function(s){ %>
+  <a href="<%= chipBase %>&status=<%= s %>" class="px-3 py-1 rounded-full text-xs font-bold border capitalize <%= filters.status===s ? 'bg-primary text-on-primary border-primary' : 'border-outline text-on-surface-variant hover:border-secondary' %>"><%= s.replace('_',' ') %> <span class="opacity-70"><%= statusCounts[s] || 0 %></span></a>
+  <% }) %>
+</div>
+
+<form method="post" action="/admin/applications/bulk" data-bulk>
+  <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 mb-3 bg-secondary-fixed border border-secondary rounded-lg p-3">
+    <span class="text-sm text-on-secondary-fixed font-bold"><strong data-bulk-count>0</strong> selected</span>
+    <select name="action" data-bulk-action class="px-3 py-1.5 rounded border border-outline text-sm">
+      <option value="">Choose action…</option>
+      <option value="assign">Assign to…</option>
+      <option value="status">Set status…</option>
+      <% if (filters.archived) { %><option value="unarchive">Restore from archive</option><% } else { %><option value="archive">Archive</option><% } %>
+    </select>
+    <select name="assigned_to" data-bulk-for="assign" class="hidden px-3 py-1.5 rounded border border-outline text-sm">
+      <option value="">Unassigned</option>
+      <% staff.forEach(function(u){ %><option value="<%= u.id %>"><%= u.first_name %> <%= u.last_name %></option><% }) %>
+    </select>
+    <select name="status" data-bulk-for="status" class="hidden px-3 py-1.5 rounded border border-outline text-sm">
+      <% statuses.forEach(function(s){ %><option value="<%= s %>"><%= s.replace('_',' ') %></option><% }) %>
+    </select>
+    <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Apply</button>
+  </div>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-surface-container-high font-tagline text-label-sm uppercase text-on-surface-variant">
+        <tr><th class="px-4 py-3 w-8"><input type="checkbox" data-bulk-all title="Select all" /></th><th class="px-4 py-3">Ref</th><th class="px-4 py-3">Applicant</th><th class="px-4 py-3 hidden md:table-cell">Program</th><th class="px-4 py-3 hidden lg:table-cell">Owner</th><th class="px-4 py-3">Fee</th><th class="px-4 py-3">Status</th><th class="px-4 py-3 text-right">View</th></tr>
+      </thead>
+      <tbody>
+        <% if (!applications.length) { %><tr><td colspan="8" class="px-4 py-6 text-center text-on-surface-variant">No applications found.</td></tr><% } %>
+        <% applications.forEach(function(a){ %>
+        <tr class="border-t border-outline-variant/30 hover:bg-surface-container-low cursor-pointer" data-drawer="/admin/applications/<%= a.id %>/drawer">
+          <td class="px-4 py-3"><input type="checkbox" name="ids" value="<%= a.id %>" /></td>
+          <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><a href="/admin/applications/<%= a.id %>" class="hover:text-secondary"><%= a.reference %></a></td>
+          <td class="px-4 py-3 font-bold text-primary"><a href="/admin/applications/<%= a.id %>" class="hover:text-secondary"><%= a.first_name %> <%= a.last_name %></a></td>
+          <td class="px-4 py-3 hidden md:table-cell text-on-surface-variant"><%= a.program_title || '—' %></td>
+          <td class="px-4 py-3 hidden lg:table-cell text-on-surface-variant"><%= a.owner_first ? (a.owner_first+' '+a.owner_last) : '—' %></td>
+          <td class="px-4 py-3"><%- include('_badge', { status: a.payment_status }) %></td>
+          <td class="px-4 py-3"><%- include('_badge', { status: a.status }) %></td>
+          <td class="px-4 py-3 text-right"><a href="/admin/applications/<%= a.id %>" data-drawer="/admin/applications/<%= a.id %>/drawer" class="inline-flex items-center gap-1 text-secondary font-bold text-sm">Open <span class="material-symbols-outlined text-base">chevron_right</span></a></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</form>
+<%- include('_pagination', { pg: pg, baseUrl: '/admin/applications?status=' + encodeURIComponent(filters.status) + '&program=' + encodeURIComponent(filters.program) + '&owner=' + encodeURIComponent(filters.owner) + '&q=' + encodeURIComponent(filters.q) + (filters.archived ? '&archived=1' : '') }) %>

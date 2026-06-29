@@ -1,0 +1,82 @@
+<section class="relative bg-primary text-on-primary py-16 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+  <img src="<%= imageFor('event', event) %>" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+  <div class="absolute inset-0 bg-primary/78"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/50"></div>
+  <div class="relative max-w-3xl mx-auto">
+    <a href="/events" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All events</a>
+    <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest"><%= event.category || 'Event' %></p>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-4"><%= event.title %></h1>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-12 gap-10 lg:gap-16 items-start">
+    <!-- Main -->
+    <div class="md:col-span-7 lg:col-span-8">
+      <h2 class="font-headline text-headline-md text-primary mb-4">About this event</h2>
+      <div class="font-body text-body-lg text-on-surface-variant leading-relaxed whitespace-pre-line"><%= event.description || 'Join the Global Diaspora Christian University community for this event.' %></div>
+
+      <h3 class="font-headline text-headline-sm text-primary mt-10 mb-4">What to expect</h3>
+      <ul class="space-y-3">
+        <% [
+          ['groups','A welcoming, global community from across the diaspora'],
+          ['record_voice_over','Encouraging teaching and worship'],
+          ['forum','Time for questions, prayer and connection'],
+          [event.is_online ? 'videocam' : 'location_on', event.is_online ? 'Joining is simple — connect online from anywhere' : 'Meet in person at the venue']
+        ].forEach(function(it){ %>
+        <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;"><%= it[0] %></span>
+          <span class="font-body text-body-md text-on-surface"><%= it[1] %></span>
+        </li>
+        <% }) %>
+      </ul>
+
+      <div class="mt-10 border-l-4 border-secondary bg-surface-container-low rounded-r-lg p-6">
+        <p class="font-headline text-headline-sm italic text-primary">"For where two or three gather in my name, there am I with them."</p>
+        <p class="font-tagline text-tagline text-on-surface-variant mt-2">— Matthew 18:20</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="md:col-span-5 lg:col-span-4">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 space-y-5 sticky top-28 shadow-sm">
+        <div class="flex items-center gap-4 pb-4 border-b border-outline-variant/50">
+          <div class="bg-primary text-on-primary rounded-lg w-16 h-16 flex flex-col items-center justify-center shrink-0">
+            <span class="font-display text-headline-md leading-none"><%= new Date(event.starts_at).getDate() %></span>
+            <span class="font-tagline text-[11px] uppercase text-secondary-fixed"><%= new Date(event.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></span>
+          </div>
+          <div>
+            <p class="font-tagline text-label-sm text-secondary uppercase"><%= event.category || 'Event' %></p>
+            <p class="font-bold text-primary leading-tight"><%= event.title %></p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3"><span class="material-symbols-outlined text-on-surface-variant">schedule</span><div><p class="font-tagline text-label-sm text-on-surface-variant uppercase">When</p><p class="font-bold text-primary"><%= formatDateTime(event.starts_at) %><% if (event.ends_at) { %><span class="block text-sm font-normal text-on-surface-variant">until <%= formatDateTime(event.ends_at) %></span><% } %></p></div></div>
+          <div class="flex items-start gap-3"><span class="material-symbols-outlined text-on-surface-variant"><%= event.is_online ? 'videocam' : 'location_on' %></span><div><p class="font-tagline text-label-sm text-on-surface-variant uppercase">Where</p><p class="font-bold text-primary"><%= event.is_online ? 'Online' : (event.location || 'In person') %></p></div></div>
+        </div>
+        <div class="space-y-2 pt-2">
+          <% if (event.is_online && event.join_url) { %>
+            <% if (currentUser) { %>
+              <a href="<%= event.join_url %>" target="_blank" rel="noopener" class="block text-center bg-secondary text-on-secondary px-5 py-3 rounded-lg font-bold hover:opacity-90">Join online</a>
+            <% } else { %>
+              <a href="/login" class="block text-center bg-primary text-on-primary px-5 py-3 rounded-lg font-bold hover:opacity-90">Sign in to join</a>
+            <% } %>
+          <% } %>
+          <a href="/contact" class="block text-center border border-outline text-primary px-5 py-3 rounded-lg font-bold hover:bg-surface-container-low">Ask a question</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- Closing CTA -->
+<section class="py-16 bg-primary text-on-primary text-center px-margin-mobile">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="font-headline text-headline-md mb-4">Be part of our global community</h2>
+    <p class="text-on-primary-container mb-8">Explore more events, or take the next step in your journey with GDCU.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/events" class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-bold">More events</a>
+      <a href="/admissions/apply" class="border-2 border-secondary-fixed text-secondary-fixed px-8 py-3 rounded-lg font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors">Apply to study</a>
+    </div>
+  </div>
+</section>
