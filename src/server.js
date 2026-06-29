@@ -8,6 +8,26 @@ const knex = require('./config/db');
 
 const PORT = process.env.PORT || 3000;
 
+// TEMPORARY DIAGNOSTIC: when startup fails (e.g. the database can't be reached
+// or a migration errors), Hostinger only shows a blank 503 because the process
+// exits. Instead, start a tiny server that prints the real error so we can see
+// it in the browser. REMOVE this block once the deploy is healthy.
+function startDiagnosticServer(err) {
+  const http = require('http');
+  const message = err && err.stack ? err.stack : String(err);
+  // eslint-disable-next-line no-console
+  console.error('Failed to start server:', err);
+  http
+    .createServer((req, res) => {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(`GDCU failed to start.\n\n${message}\n`);
+    })
+    .listen(PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`⚠ Diagnostic server running on ${PORT} — startup failed`);
+    });
+}
+
 async function start() {
   try {
     // Run any pending migrations on boot so a fresh deploy is ready to serve.
@@ -32,9 +52,7 @@ async function start() {
       setInterval(sweep, 24 * 60 * 60 * 1000); // then daily
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('Failed to start server:', err);
-    process.exit(1);
+    startDiagnosticServer(err);
   }
 }
 
