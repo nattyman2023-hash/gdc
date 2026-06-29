@@ -28,6 +28,9 @@ const sqlite = {
     // Enable foreign keys on every SQLite connection
     afterCreate: (conn, done) => {
       conn.pragma('foreign_keys = ON');
+      conn.pragma('journal_mode = WAL');
+      conn.pragma('synchronous = NORMAL');
+      conn.pragma('cache_size = -64000'); // 64MB cache
       done(null, conn);
     },
   },
@@ -43,8 +46,17 @@ const mysql = {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
     charset: 'utf8mb4',
+    connectTimeout: 10000,
+    acquireTimeout: 10000,
   },
-  pool: { min: 2, max: 10 },
+  pool: { 
+    min: 1, 
+    max: 5, 
+    acquireTimeoutMillis: 10000,
+    createTimeoutMillis: 15000,
+    idleTimeoutMillis: 30000,
+    reapIntervalMillis: 1000,
+  },
 };
 
 const active = process.env.DB_CLIENT === 'mysql' ? mysql : sqlite;

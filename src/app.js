@@ -19,6 +19,7 @@ const locals = require('./middleware/locals');
 const { formatMoney, formatMinor, formatDate, formatDateTime, truncate, imageFor, videoEmbed } = require('./lib/helpers');
 
 const maintenance = require('./middleware/maintenance');
+const cache = require('./middleware/cache');
 
 const app = express();
 
@@ -61,6 +62,9 @@ app.use(
 app.use(compression());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
+// ─── Response cache (production only) ────────────────────────
+app.use(cache(60 * 1000)); // Cache public pages for 60 seconds
+
 // ─── Rate limiting (auth only - global limiter used in production) ──
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -98,7 +102,7 @@ app.use(express.static(path.join(__dirname, '..', 'public'), {
 // ─── Sessions & flash ────────────────────────────────────────
 app.use(
   session({
-    store: new ConnectSessionKnexStore({ knex, tablename: 'sessions', createtable: false }),
+    store: new ConnectSessionKnexStore({ knex, tablename: 'sessions', createtable: false, cleanupInterval: 900000 }),
     secret: process.env.SESSION_SECRET || 'insecure-dev-secret',
     resave: false,
     saveUninitialized: false,
