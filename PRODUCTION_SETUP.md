@@ -38,7 +38,7 @@ APP_URL=https://yourdomain.com
 SESSION_SECRET=<generate a random 64-char string>
 
 # Database - USE MYSQL FOR PRODUCTION
-DB_CLIENT=mysql2
+DB_CLIENT=mysql
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
 MYSQL_USER=gdcu_user
