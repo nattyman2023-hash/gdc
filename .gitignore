@@ -2,6 +2,8 @@ node_modules/
 .env
 data/*.sqlite
 data/*.sqlite-journal
+data/*.sqlite-shm
+data/*.sqlite-wal
 *.log
 npm-debug.log*
 .DS_Store
