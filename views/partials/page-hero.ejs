@@ -18,14 +18,14 @@
   <img src="<%= resolvedHeroImage %>" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
   <div class="absolute inset-0 bg-primary/40"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/45 to-primary/75"></div>
-  <div class="relative max-w-container-max mx-auto text-center">
+  <div class="relative max-w-container-max mx-auto text-center hero-shadow">
     <% if (typeof heroTagline !== 'undefined' && heroTagline) { %>
       <p class="font-tagline text-tagline text-secondary-fixed mb-4 uppercase tracking-[0.25em]"><%= heroTagline %></p>
     <% } %>
     <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-5 leading-tight"><%= heroTitle %></h1>
     <div class="w-20 h-px bg-secondary mx-auto<%= (typeof heroText !== 'undefined' && heroText) ? ' mb-6' : '' %>"></div>
     <% if (typeof heroText !== 'undefined' && heroText) { %>
-      <p class="font-body text-body-lg text-on-primary-container max-w-2xl mx-auto leading-relaxed"><%= heroText %></p>
+      <p class="font-body text-body-lg text-on-primary max-w-2xl mx-auto leading-relaxed"><%= heroText %></p>
     <% } %>
   </div>
 </section>
