@@ -60,10 +60,17 @@ async function runStartupTasks() {
     await knex.migrate.latest();
     // eslint-disable-next-line no-console
     console.log('✓ Database migrations are up to date');
-    await ensureAdminUser();
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Migration error (continuing to serve):', err);
+  }
+
+  // Independent of migrations: ensure an admin exists so the panel is reachable.
+  try {
+    await ensureAdminUser();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('ensureAdminUser failed:', err);
   }
 
   // Daily attendance sweep: escalating warning emails to inactive students.
