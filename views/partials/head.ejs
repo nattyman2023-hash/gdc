@@ -2,124 +2,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : '' %>" />
 <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Global Diaspora Christian University' %></title>
+<meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Global Diaspora Christian University' %>" />
+<meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Global Diaspora Christian University — an online, faith-based university.' %>" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="<%= typeof appUrl !== 'undefined' ? appUrl : '' %>" />
+<meta property="og:image" content="<%= appUrl || '' %>/img/generated/gdcu-online-learning.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="<%= (appUrl || '') + (currentPath || '/') %>" />
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
 <script src="/js/theme.js"></script>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Compiled Tailwind CSS, built ahead of time from tailwind.config.js via
+     `npm run build:css`. Replaces the Tailwind Play CDN (cdn.tailwindcss.com),
+     which compiled all CSS in the browser on every page load and made the
+     site slow. Rebuild this file whenever templates/classes change. -->
+<link rel="stylesheet" href="/css/app.css?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>" />
 <link
   href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
   rel="stylesheet"
 />
-<script>
-  // Suppress Tailwind CDN warning in development
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
-    document.documentElement.classList.add('js');
-  }
-  // Suppress Tailwind console warning
-  if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-    const originalWarn = console.warn;
-    console.warn = function(...args) {
-      if (args && args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
-        return; // Suppress Tailwind CDN warning
-      }
-      return originalWarn.apply(console, args);
-    };
-  }
-</script>
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        colors: {
-          "background": "#fcf9f3",
-          "surface": "#fcf9f3",
-          "surface-bright": "#fcf9f3",
-          "surface-dim": "#dcdad4",
-          "surface-variant": "#e5e2dc",
-          "surface-container-lowest": "#ffffff",
-          "surface-container-low": "#f6f3ed",
-          "surface-container": "#f0eee8",
-          "surface-container-high": "#ebe8e2",
-          "surface-container-highest": "#e5e2dc",
-          "on-surface": "#1c1c18",
-          "on-surface-variant": "#44474d",
-          "on-background": "#1c1c18",
-          "inverse-surface": "#31312d",
-          "inverse-on-surface": "#f3f0ea",
-          "outline": "#74777e",
-          "outline-variant": "#c4c6ce",
-          "primary": "#071d3a",
-          "on-primary": "#ffffff",
-          "primary-container": "#071d3a",
-          "on-primary-container": "#7386a8",
-          "on-primary-fixed": "#051b38",
-          "on-primary-fixed-variant": "#354766",
-          "inverse-primary": "#b4c7ec",
-          "secondary": "#b8861b",
-          "on-secondary": "#ffffff",
-          "secondary-container": "#fdc355",
-          "on-secondary-container": "#725000",
-          "secondary-fixed": "#ffdea9",
-          "secondary-fixed-dim": "#f6bd50",
-          "on-secondary-fixed": "#271900",
-          "on-secondary-fixed-variant": "#5e4100",
-          "tertiary": "#00030d",
-          "on-tertiary": "#ffffff",
-          "tertiary-container": "#001c43",
-          "on-tertiary-container": "#6a85bb",
-          "error": "#ba1a1a",
-          "on-error": "#ffffff",
-          "error-container": "#ffdad6",
-          "on-error-container": "#93000a",
-          /* Dark mode */
-          "dark-background": "#111318",
-          "dark-surface": "#1a1c21",
-          "dark-surface-dim": "#111318",
-          "dark-surface-bright": "#3f4046",
-          "dark-surface-container-lowest": "#0c0e13",
-          "dark-surface-container-low": "#1a1c21",
-          "dark-surface-container": "#1e2025",
-          "dark-surface-container-high": "#282a30",
-          "dark-surface-container-highest": "#33353b",
-          "dark-on-surface": "#e2e2e6",
-          "dark-on-surface-variant": "#c2c2c8",
-          "dark-outline": "#8c8e94",
-          "dark-outline-variant": "#424449",
-          "dark-primary": "#aec3e8",
-          "dark-on-primary": "#1a2f4e",
-          "dark-primary-container": "#2f4567",
-          "dark-on-primary-container": "#d2e1ff",
-          "dark-secondary": "#f0c04a",
-          "dark-on-secondary": "#3d2b00",
-          "dark-secondary-container": "#5e4100",
-          "dark-on-secondary-container": "#ffdea9",
-          "dark-error": "#ffb4ab",
-          "dark-on-error": "#690005",
-          "dark-error-container": "#93000a",
-          "dark-on-error-container": "#ffdad6"
-        },
-        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px" },
-        spacing: { "container-max": "1280px", "gutter": "24px", "margin-desktop": "64px", "unit": "8px", "margin-mobile": "20px" },
-        fontFamily: {
-          "display": ["Playfair Display", "serif"],
-          "headline": ["Playfair Display", "serif"],
-          "body": ["Inter", "sans-serif"],
-          "tagline": ["Montserrat", "sans-serif"]
-        },
-        fontSize: {
-          "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
-          "display-lg-mobile": ["32px", { lineHeight: "40px", fontWeight: "700" }],
-          "headline-md": ["32px", { lineHeight: "40px", fontWeight: "600" }],
-          "headline-sm": ["24px", { lineHeight: "32px", fontWeight: "600" }],
-          "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
-          "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-          "tagline": ["14px", { lineHeight: "20px", letterSpacing: "0.15em", fontWeight: "600" }],
-          "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }]
-        }
-      }
-    }
-  };
-</script>
 <style>
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
   .ivory-gradient { background: linear-gradient(180deg, #ffffff 0%, #fcf9f3 100%); }
@@ -152,26 +52,6 @@
   .prose-gdcu h3 { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; color:#071d3a; margin:1.25rem 0 .5rem; }
   .prose-gdcu ul { list-style:disc; padding-left:1.25rem; }
   .prose-gdcu blockquote { border-left:3px solid #b8861b; padding-left:1rem; font-style:italic; color:#44474d; }
-
-  /* ── Dark mode (via .dark class) ── */
-  .dark body, body.dark-mode { background-color: #111318; color: #e2e2e6; }
-  .dark .bg-background { background-color: #111318 !important; }
-  .dark .bg-surface { background-color: #1a1c21 !important; }
-  .dark .bg-surface-container-lowest { background-color: #0c0e13 !important; }
-  .dark .bg-surface-container-low { background-color: #1a1c21 !important; }
-  .dark .bg-surface-container { background-color: #1e2025 !important; }
-  .dark .bg-surface-container-high { background-color: #282a30 !important; }
-  .dark .bg-surface-container-highest { background-color: #33353b !important; }
-  .dark .text-on-surface { color: #e2e2e6 !important; }
-  .dark .text-on-surface-variant { color: #c2c2c8 !important; }
-  .dark .text-primary { color: #aec3e8 !important; }
-  .dark .text-secondary { color: #f0c04a !important; }
-  .dark .border-outline-variant { border-color: #424449 !important; }
-  .dark .field { background-color: #1e2025; color: #e2e2e6; border-color: #424449; }
-  .dark .field:focus { border-color: #aec3e8; box-shadow: 0 0 0 3px rgba(174,195,232,.15); }
-  .dark .bg-white { background-color: #1e2025 !important; }
-  .dark .text-white { color: #e2e2e6 !important; }
-  .dark .shadow-sm, .dark .shadow { box-shadow: 0 1px 3px 0 rgba(0,0,0,.4); }
   .animate-spin { animation: gdcu-spin 1s linear infinite; }
   @keyframes gdcu-spin { to { transform: rotate(360deg); } }
 </style>
