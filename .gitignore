@@ -4,6 +4,13 @@ data/*.sqlite
 data/*.sqlite-journal
 data/*.sqlite-shm
 data/*.sqlite-wal
+
+# Temp / generated
+.claude/
+fix-schema.sql
+restore-courses.sql
+scripts/export-lms.js
+scripts/fix-schema.js
 *.log
 npm-debug.log*
 .DS_Store
