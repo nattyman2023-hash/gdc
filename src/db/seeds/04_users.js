@@ -15,7 +15,7 @@ exports.seed = async function (knex) {
     {
       first_name: 'GDCU',
       last_name: 'Administrator',
-      email: process.env.SEED_ADMIN_EMAIL || 'admin@gdcu.edu',
+      email: process.env.SEED_ADMIN_EMAIL || 'admin@gdc.university',
       password_hash: hash,
       role: 'admin',
       status: 'active',
@@ -32,7 +32,7 @@ exports.seed = async function (knex) {
 
   // eslint-disable-next-line no-console
   console.log(
-    `\n  Seeded admin: ${process.env.SEED_ADMIN_EMAIL || 'admin@gdcu.edu'} / ${password}` +
+    `\n  Seeded admin: ${process.env.SEED_ADMIN_EMAIL || 'admin@gdc.university'} / ${password}` +
     `\n  Seeded staff: staff@gdcu.edu / Staff!2026\n`
   );
 };

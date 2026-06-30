@@ -21,6 +21,32 @@ const server = app.listen(PORT, () => {
   runStartupTasks();
 });
 
+/**
+ * Create a first admin account if none exists yet. Safe to run on every boot:
+ * it only inserts when there is no admin, so it never clobbers a later password
+ * or email change made from the admin panel. Email/password come from the
+ * SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD env vars (recommended), with sensible
+ * defaults so the site is reachable out of the box.
+ */
+async function ensureAdminUser() {
+  const existing = await knex('users').where({ role: 'admin' }).first();
+  if (existing) return;
+  const bcrypt = require('bcryptjs');
+  const email = process.env.SEED_ADMIN_EMAIL || 'admin@gdc.university';
+  const password = process.env.SEED_ADMIN_PASSWORD || 'ChangeMe!2026';
+  const hash = await bcrypt.hash(password, 12);
+  await knex('users').insert({
+    first_name: 'GDCU',
+    last_name: 'Administrator',
+    email,
+    password_hash: hash,
+    role: 'admin',
+    status: 'active',
+  });
+  // eslint-disable-next-line no-console
+  console.log(`✓ Created initial admin user: ${email}`);
+}
+
 async function runStartupTasks() {
   try {
     // Clear any stale migration lock left by a previously interrupted boot,
@@ -34,6 +60,7 @@ async function runStartupTasks() {
     await knex.migrate.latest();
     // eslint-disable-next-line no-console
     console.log('✓ Database migrations are up to date');
+    await ensureAdminUser();
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Migration error (continuing to serve):', err);
