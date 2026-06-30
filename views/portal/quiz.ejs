@@ -5,25 +5,184 @@
     <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Assessment</p>
     <h1 class="font-headline text-headline-md text-primary"><%= quiz.title %></h1>
     <p class="text-on-surface-variant mt-1"><%= quiz.description %></p>
-    <p class="text-sm text-on-surface-variant mt-2"><%= questions.length %> questions · Pass mark <%= quiz.pass_mark %>%<% if (quiz.time_limit_min) { %> · <%= quiz.time_limit_min %> min<% } %></p>
   </div>
 
-  <form action="/portal/quizzes/<%= quiz.id %>/submit" method="post" class="space-y-6">
+  <!-- Timer + Progress Bar - sticky top -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-6 sticky top-20 z-20 shadow-sm">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex-1">
+        <div class="flex justify-between text-sm mb-1">
+          <span class="text-on-surface-variant">Progress</span>
+          <span id="progress-text" class="font-bold text-primary">0/<%= questions.length %></span>
+        </div>
+        <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-secondary rounded-full transition-all duration-300" style="width:0%"></div>
+        </div>
+      </div>
+      <% if (quiz.time_limit_min) { %>
+      <div class="shrink-0 text-center">
+        <div id="timer" class="text-2xl font-bold font-mono text-primary" data-minutes="<%= quiz.time_limit_min %>" data-seconds="0"><%= String(quiz.time_limit_min).padStart(2,'0') %>:00</div>
+        <p class="text-[10px] text-on-surface-variant uppercase">Time left</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <form id="quiz-form" action="/portal/quizzes/<%= quiz.id %>/submit" method="post">
+    <input type="hidden" name="timed_out" id="timed-out-field" value="0" />
+
     <% questions.forEach(function(q, qi){ %>
-    <fieldset class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
-      <legend class="font-bold text-primary mb-4"><span class="text-secondary"><%= qi+1 %>.</span> <%= q.prompt %></legend>
-      <div class="space-y-2">
+    <div id="q-<%= q.id %>" class="question-card bg-surface-container-lowest border border-outline-variant rounded-lg p-6 mb-4 transition-all border-l-4 <%= qi===0 ? 'border-secondary' : 'border-outline-variant' %>">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <legend class="font-bold text-primary flex items-start gap-2 text-lg">
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-secondary-container text-on-secondary-container text-sm font-bold shrink-0"><%= qi+1 %></span>
+          <%= q.prompt %>
+        </legend>
+        <button type="button" onclick="toggleFlag(<%= q.id %>)" class="flag-btn shrink-0 text-outline hover:text-amber-500 transition-colors" title="Flag for review">
+          <span class="material-symbols-outlined text-base">flag</span>
+        </button>
+      </div>
+      <div class="space-y-2 ml-9">
         <% q.options.forEach(function(o){ %>
-        <label class="flex items-center gap-3 px-4 py-3 rounded border border-outline-variant hover:border-secondary cursor-pointer has-[:checked]:border-secondary has-[:checked]:bg-secondary-fixed/40">
-          <input type="radio" name="q_<%= q.id %>" value="<%= o.id %>" class="text-secondary focus:ring-secondary" required />
+        <label class="flex items-center gap-3 px-4 py-3 rounded-lg border border-outline-variant hover:border-secondary cursor-pointer has-[:checked]:border-secondary has-[:checked]:bg-secondary-fixed/20 transition-all">
+          <input type="radio" name="q_<%= q.id %>" value="<%= o.id %>" class="text-secondary focus:ring-secondary" data-qid="<%= q.id %>" />
           <span class="text-on-surface"><%= o.text %></span>
         </label>
         <% }) %>
       </div>
-    </fieldset>
+    </div>
     <% }) %>
-    <div class="flex justify-end">
-      <button class="bg-primary text-on-primary px-8 py-3 rounded font-bold hover:opacity-90">Submit Answers</button>
+
+    <!-- Question navigator -->
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-6">
+      <p class="text-sm font-bold text-primary mb-2">Question navigator</p>
+      <div class="flex flex-wrap gap-1.5" id="q-navigator">
+        <% questions.forEach(function(q, qi){ %>
+        <button type="button" onclick="scrollToQ(<%= q.id %>)" class="q-nav-dot w-8 h-8 rounded-lg text-xs font-bold border border-outline-variant bg-surface-container-low text-on-surface-variant hover:border-secondary transition-all" data-qid="<%= q.id %>"><%= qi+1 %></button>
+        <% }) %>
+      </div>
+      <div class="flex items-center gap-3 mt-2 text-xs text-on-surface-variant">
+        <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-secondary"></span> Answered</span>
+        <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-amber-200 border border-amber-300"></span> Flagged</span>
+        <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded bg-surface-container-low border border-outline-variant"></span> Unanswered</span>
+      </div>
+    </div>
+
+    <!-- Sticky submit bar -->
+    <div class="flex items-center justify-between gap-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-5 sticky bottom-4 z-20 shadow-lg">
+      <p id="answered-info" class="text-sm text-on-surface-variant hidden">
+        <span class="material-symbols-outlined text-base align-middle text-secondary">checklist</span>
+        <span id="answered-count">0</span> of <%= questions.length %> answered
+      </p>
+      <div></div>
+      <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-all text-lg">Submit Answers</button>
     </div>
   </form>
 </div>
+
+<script>
+(function() {
+  const questions = document.querySelectorAll('.question-card');
+  const radioMap = {};
+  const flags = {};
+  let answeredSet = {};
+  const STORAGE_KEY = 'quiz_answers_<%= quiz.id %>';
+  const TIMER_KEY = 'quiz_timer_<%= quiz.id %>';
+
+  // Timer
+  const timerEl = document.getElementById('timer');
+  let totalSeconds = 0;
+  let timerInterval = null;
+
+  if (timerEl) {
+    const mins = parseInt(timerEl.dataset.minutes) || 0;
+    totalSeconds = mins * 60;
+    const saved = localStorage.getItem(TIMER_KEY);
+    if (saved) {
+      const elapsed = Math.floor((Date.now() - parseInt(saved)) / 1000);
+      totalSeconds = Math.max(0, totalSeconds - elapsed);
+    } else {
+      localStorage.setItem(TIMER_KEY, String(Date.now()));
+    }
+    function updateTimer() {
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      timerEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      timerEl.className = 'text-2xl font-bold font-mono ' + (totalSeconds > 120 ? 'text-primary' : (totalSeconds > 60 ? 'text-amber-500 animate-pulse' : 'text-error animate-pulse'));
+      if (totalSeconds <= 0) { clearInterval(timerInterval); document.getElementById('timed-out-field').value = '1'; document.getElementById('quiz-form').submit(); }
+    }
+    timerInterval = setInterval(() => { totalSeconds--; updateTimer(); if (totalSeconds % 5 === 0) localStorage.setItem('quiz_remaining_<%= quiz.id %>', String(totalSeconds)); }, 1000);
+    updateTimer();
+  }
+
+  function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: radioMap, flags, updatedAt: Date.now() })); updateProgress(); }
+
+  function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      if (data.answers) Object.assign(radioMap, data.answers);
+      if (data.flags) Object.assign(flags, data.flags);
+      Object.entries(radioMap).forEach(([qId, val]) => { const r = document.querySelector(`input[name="q_${qId}"][value="${val}"]`); if (r) r.checked = true; });
+      Object.entries(flags).forEach(([qId, f]) => { if (f) applyFlag(parseInt(qId)); });
+    } catch(e) {}
+    updateProgress();
+  }
+
+  window.scrollToQ = function(qId) { const el = document.getElementById('q-' + qId); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  window.toggleFlag = function(qId) { flags[qId] = !flags[qId]; applyFlag(qId); saveState(); };
+
+  function applyFlag(qId) {
+    const btn = document.querySelector(`.flag-btn[onlick*="toggleFlag(${qId})"]`);
+    const dot = document.querySelector(`.q-nav-dot[data-qid="${qId}"]`);
+    if (flags[qId]) {
+      if (btn) btn.classList.add('text-amber-500'), btn.classList.remove('text-outline');
+      if (dot) dot.classList.add('bg-amber-200', 'border-amber-300');
+    } else {
+      if (btn) btn.classList.remove('text-amber-500'), btn.classList.add('text-outline');
+      if (dot) dot.classList.remove('bg-amber-200', 'border-amber-300');
+    }
+  }
+
+  function updateProgress() {
+    const allRadios = document.querySelectorAll('input[type="radio"][name^="q_"]');
+    const answered = new Set();
+    allRadios.forEach(r => { if (r.checked) answered.add(r.name); });
+    answeredSet = answered;
+    const total = <%= questions.length %>;
+    const count = answered.size;
+    document.getElementById('progress-text').textContent = count + '/' + total;
+    document.getElementById('progress-bar').style.width = ((count / total) * 100) + '%';
+    document.getElementById('answered-count').textContent = count;
+    document.getElementById('answered-info').classList.remove('hidden');
+    document.querySelectorAll('.q-nav-dot').forEach(dot => {
+      const qId = parseInt(dot.dataset.qid);
+      if (radioMap[qId]) { dot.classList.add('bg-secondary', 'text-on-secondary', 'border-secondary'); dot.classList.remove('bg-surface-container-low', 'text-on-surface-variant', 'border-outline-variant'); }
+      else { dot.classList.remove('bg-secondary', 'text-on-secondary', 'border-secondary'); dot.classList.add('bg-surface-container-low', 'text-on-surface-variant', 'border-outline-variant'); }
+      if (flags[qId]) applyFlag(qId);
+    });
+  }
+
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() { if (this.checked) { radioMap[this.dataset.qid] = this.value; saveState(); } });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=dots.length-1;i>=0;i--) { const qid = parseInt(dots[i].dataset.qid); if (!radioMap[qid]) { scrollToQ(qid); break; } } }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=0;i<dots.length;i++) { const qid = parseInt(dots[i].dataset.qid); if (!radioMap[qid]) { scrollToQ(qid); break; } } }
+  });
+
+  window.addEventListener('beforeunload', function(e) { const u = <%= questions.length %> - Object.keys(radioMap).length; if (u > 0) { e.preventDefault(); e.returnValue = 'You have unanswered questions.'; } });
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    const u = <%= questions.length %> - Object.keys(radioMap).length;
+    if (u > 0 && !document.getElementById('timed-out-field').value && !confirm('You have ' + u + ' unanswered question(s). Submit anyway?')) { e.preventDefault(); return; }
+    localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(TIMER_KEY); localStorage.removeItem('quiz_remaining_<%= quiz.id %>');
+  });
+
+  loadState();
+  updateProgress();
+  window.addEventListener('scroll', updateProgress);
+})();
+</script>

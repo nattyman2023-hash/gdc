@@ -473,6 +473,7 @@ router.post('/quizzes/:id/submit', async (req, res, next) => {
     for (const q of questions) {
       // Form fields named q_<questionId> (radio = single value)
       const submitted = req.body[`q_${q.id}`];
+      const timedOut = req.body.timed_out === '1';
       const correctOptions = await knex('quiz_options').where({ question_id: q.id, is_correct: true }).pluck('id');
 
       let isCorrect = false;
@@ -1194,6 +1195,42 @@ router.post('/profile/change-password', [
 });
 
 // ─── Essay submission ────────────────────────────────────────
+
+
+// ─── Get next lesson availability (AJAX) ──────────────────
+router.get('/courses/:slug/next-available', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.json({ available: false });
+
+    const structure = await getCourseStructure(course.id, enrollment.id);
+    const flat = [];
+    structure.forEach(m => m.lessons.forEach(l => flat.push(l)));
+
+    // Find current lesson (passed as query param)
+    const currentId = parseInt(req.query.current_lesson_id);
+    if (!currentId) return res.json({ available: false });
+
+    const idx = flat.findIndex(l => l.id === currentId);
+    if (idx < 0 || idx >= flat.length - 1) return res.json({ available: false, done: true });
+
+    const nextLesson = flat[idx + 1];
+    const availability = await isLessonAvailable(enrollment.id, nextLesson.id, structure);
+    
+    res.json({
+      lesson_id: nextLesson.id,
+      title: nextLesson.title,
+      available: availability.available,
+      next_available: availability.next_available ? availability.next_available.toISOString() : null,
+      reason: availability.reason || null,
+    });
+  } catch (err) {
+    console.error('Next available error:', err);
+    res.status(500).json({ error: 'Failed to check availability' });
+  }
+});
+
 router.post('/courses/:slug/modules/:moduleId/essay', async (req, res, next) => {
   try {
     const userId = req.session.user.id;

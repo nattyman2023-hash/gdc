@@ -4,45 +4,138 @@
   <div class="mb-6">
     <p class="font-tagline text-label-sm text-secondary uppercase">Assignment</p>
     <h1 class="font-headline text-headline-md text-primary"><%= assignment.title %></h1>
-    <p class="text-on-surface-variant text-sm"><% if (assignment.due_date) { %>Due <%= formatDate(assignment.due_date) %> · <% } %>Out of <%= assignment.max_points %> points</p>
+    <p class="text-on-surface-variant text-sm"><% if (assignment.due_date) { %><span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Due <%= formatDate(assignment.due_date) %></span> · <% } %>Out of <strong><%= assignment.max_points %></strong> points</p>
   </div>
 
   <% if (assignment.instructions) { %>
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 mb-6">
-    <h2 class="font-headline text-headline-sm text-primary mb-2">Instructions</h2>
-    <p class="text-on-surface-variant whitespace-pre-line"><%= assignment.instructions %></p>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 mb-6">
+    <h2 class="font-headline text-headline-sm text-primary mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-secondary">description</span> Instructions</h2>
+    <div class="text-on-surface-variant whitespace-pre-line"><%= assignment.instructions %></div>
   </div>
   <% } %>
 
+  <!-- Grading result -->
   <% if (submission && submission.status === 'graded') { %>
-  <div class="bg-secondary-fixed border border-secondary rounded-lg p-5 mb-6">
-    <p class="font-tagline text-label-sm text-on-secondary-fixed uppercase">Graded</p>
-    <p class="font-display text-headline-md text-secondary"><%= submission.grade %>/<%= assignment.max_points %></p>
-    <% if (submission.feedback) { %><p class="text-on-secondary-fixed text-sm mt-2"><span class="font-bold">Feedback:</span> <%= submission.feedback %></p><% } %>
+  <div class="bg-secondary-fixed/20 border border-secondary rounded-lg p-6 mb-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="font-tagline text-label-sm text-on-secondary-fixed uppercase">Grade</p>
+        <p class="font-display text-headline-lg text-secondary"><%= submission.grade %>/<%= assignment.max_points %></p>
+      </div>
+      <span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold uppercase">Graded</span>
+    </div>
+    <% if (submission.feedback) { %>
+    <div class="mt-4 pt-4 border-t border-secondary/30">
+      <p class="font-bold text-sm text-primary mb-1">Faculty feedback</p>
+      <p class="text-on-surface-variant text-sm whitespace-pre-line"><%= submission.feedback %></p>
+    </div>
+    <% } %>
   </div>
   <% } %>
 
+  <!-- Submission form -->
   <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
-    <h2 class="font-headline text-headline-sm text-primary mb-3"><%= submission ? 'Your submission' : 'Submit your work' %></h2>
+    <h2 class="font-headline text-headline-sm text-primary mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-secondary">edit_note</span>
+      <%= submission ? (submission.status === 'graded' ? 'Your submission' : 'Update submission') : 'Submit your work' %>
+    </h2>
+
     <% if (submission && submission.status === 'graded') { %>
-      <% if (submission.body) { %><p class="text-on-surface-variant text-sm whitespace-pre-line bg-surface-container-low rounded p-3 mb-2"><%= submission.body %></p><% } %>
-      <% if (submission.url) { %><a href="<%= submission.url %>" target="_blank" class="text-secondary font-bold text-sm">View your attachment</a><% } %>
-      <p class="text-on-surface-variant text-sm mt-3">This assignment has been graded and is locked.</p>
+      <div class="bg-surface-container-low rounded-lg p-4 mb-3">
+        <% if (submission.body) { %><div class="text-on-surface-variant text-sm whitespace-pre-line"><%= submission.body %></div><% } %>
+        <% if (submission.url) { %><a href="<%= submission.url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-secondary font-bold text-sm mt-2"><span class="material-symbols-outlined">open_in_new</span> View attachment</a><% } %>
+      </div>
+      <p class="text-on-surface-variant text-sm mt-3">This assignment has been graded and cannot be edited.</p>
     <% } else { %>
-    <form action="/portal/assignments/<%= assignment.id %>/submit" method="post" class="space-y-4">
+    <form action="/portal/assignments/<%= assignment.id %>/submit" method="post" id="assignment-form" class="space-y-4">
       <div>
-        <label class="field-label">Your answer</label>
-        <textarea name="body" rows="6" class="field" placeholder="Type your response here…"><%= submission ? submission.body : '' %></textarea>
+        <label class="field-label">Your answer <span class="text-on-surface-variant">(Markdown or plain text supported)</span></label>
+        <textarea name="body" id="assign-body" rows="8" class="field font-mono text-sm" placeholder="Write your response here. You can use markdown for formatting:
+**bold** *italic* [links](url) and bullet lists
+
+Or just plain text."><%= submission ? submission.body : '' %></textarea>
+        <div class="flex items-center justify-between mt-1">
+          <p class="text-xs text-on-surface-variant" id="word-count">0 words</p>
+          <p class="text-xs text-on-surface-variant" id="auto-save-status"></p>
+        </div>
       </div>
       <div>
         <label class="field-label">Or attach a link (Google Doc, PDF, etc.)</label>
-        <input name="url" value="<%= submission ? submission.url : '' %>" placeholder="https://…" class="field" />
+        <input name="url" value="<%= submission ? submission.url : '' %>" placeholder="https://docs.google.com/document/d/..." class="field" />
       </div>
-      <div class="flex items-center gap-3">
-        <button class="bg-primary text-on-primary px-6 py-2.5 rounded font-bold"><%= submission ? 'Update submission' : 'Submit' %></button>
-        <% if (submission) { %><span class="text-secondary text-sm font-bold"><span class="material-symbols-outlined text-base align-middle">check_circle</span> Submitted <%= formatDate(submission.submitted_at) %></span><% } %>
+      <div class="flex items-center gap-3 pt-4 border-t border-outline-variant/50">
+        <button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all"><%= submission ? 'Update submission' : 'Submit' %></button>
+        <% if (submission) { %>
+        <span class="text-secondary text-sm font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">check_circle</span> Already submitted <%= formatDate(submission.submitted_at) %></span>
+        <% } %>
+        <button type="button" onclick="previewAssignment()" class="border border-outline-variant text-primary px-4 py-2.5 rounded-lg font-bold hover:bg-surface-container transition">Preview</button>
       </div>
     </form>
+    <div id="preview-panel" class="hidden mt-4 bg-surface-container-low border border-outline-variant rounded-lg p-5">
+      <p class="font-bold text-primary mb-2">Preview</p>
+      <div id="preview-content" class="text-on-surface-variant whitespace-pre-line"></div>
+    </div>
     <% } %>
   </div>
 </div>
+
+<script>
+(function() {
+  const bodyField = document.getElementById('assign-body');
+  const wordCount = document.getElementById('word-count');
+  const autoSaveStatus = document.getElementById('auto-save-status');
+  const DRAFT_KEY = 'assign_draft_<%= assignment.id %>';
+  var saveTimeout = null;
+
+  function updateWords() {
+    if (!bodyField) return;
+    const text = bodyField.value.trim();
+    const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+    if (wordCount) wordCount.textContent = words + ' words' + (words > 500 ? ' (consider keeping under 500 words)' : '');
+  }
+
+  function autoSave() {
+    if (!bodyField) return;
+    const data = { body: bodyField.value, url: document.querySelector('input[name="url"]') ? document.querySelector('input[name="url"]').value : '', updatedAt: Date.now() };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    if (autoSaveStatus) autoSaveStatus.textContent = 'Draft saved ' + new Date().toLocaleTimeString();
+  }
+
+  function loadDraft() {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (!saved || !bodyField) return;
+    try {
+      const data = JSON.parse(saved);
+      const formSubmitted = '<%= submission ? 1 : 0 %>';
+      if (formSubmitted === '1') return;
+      if (data.body && !bodyField.value) bodyField.value = data.body;
+      if (data.url && document.querySelector('input[name="url"]') && !document.querySelector('input[name="url"]').value) document.querySelector('input[name="url"]').value = data.url;
+      if (autoSaveStatus) autoSaveStatus.textContent = 'Draft restored from ' + new Date(data.updatedAt).toLocaleTimeString();
+    } catch(e) {}
+  }
+
+  if (bodyField) {
+    bodyField.addEventListener('input', function() {
+      updateWords();
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(autoSave, 1000);
+    });
+    loadDraft();
+    updateWords();
+  }
+
+  document.getElementById('assignment-form').addEventListener('submit', function() {
+    localStorage.removeItem(DRAFT_KEY);
+  });
+
+  window.previewAssignment = function() {
+    const panel = document.getElementById('preview-panel');
+    const content = document.getElementById('preview-content');
+    if (!panel || !content) return;
+    panel.classList.toggle('hidden');
+    if (!panel.classList.contains('hidden')) {
+      content.textContent = bodyField ? bodyField.value : '';
+    }
+  };
+})();
+</script>
