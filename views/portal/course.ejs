@@ -50,7 +50,7 @@
         <% if (y) { %>
         <details class="group/yr rounded-xl overflow-hidden border border-outline-variant shadow-sm" <%= yearCurrent ? 'open' : '' %>>
           <summary class="list-none select-none cursor-pointer relative h-32 flex items-end text-on-primary">
-            <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+            <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
             <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
             <div class="relative w-full px-5 py-4 flex items-center justify-between">
               <div>
@@ -67,7 +67,7 @@
         <details class="group/mod bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" <%= modCurrent ? 'open' : '' %>>
           <summary class="list-none select-none cursor-pointer overflow-hidden">
             <div class="relative h-24 bg-primary-container">
-              <img src="<%= m.featured_image || yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+              <img src="<%= m.featured_image || yImg || course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
               <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
               <% if (modComplete) { %>
               <span class="absolute top-3 right-3 font-tagline text-[10px] bg-secondary text-on-secondary px-2 py-1 uppercase rounded">✓ Complete</span>

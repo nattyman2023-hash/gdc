@@ -148,7 +148,7 @@
     <% if (y) { %>
     <details class="group/yr mb-4 rounded-lg overflow-hidden border border-outline-variant shadow-sm" <%= yi===0 ? 'open' : '' %>>
       <summary class="list-none select-none cursor-pointer relative h-28 flex items-end text-on-primary">
-        <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+        <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
         <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
         <div class="relative w-full px-5 py-3 flex items-center justify-between">
           <div><p class="font-tagline text-[11px] uppercase tracking-wider text-secondary-fixed">Academic Year</p><h2 class="font-headline text-headline-sm">Year <%= y %> <span class="text-sm font-normal opacity-80">· <%= yMods.length %> modules</span></h2></div>
@@ -162,7 +162,7 @@
     <!-- Card summary (the box) -->
     <summary class="list-none select-none cursor-pointer flex items-stretch hover:bg-surface-container-lowest">
       <div class="w-32 sm:w-44 shrink-0 bg-primary-container relative">
-        <img src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+        <img src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
       </div>
       <div class="flex-1 flex items-center justify-between gap-3 px-5 py-4 min-w-0">
         <div class="flex items-center gap-3 min-w-0">
@@ -219,7 +219,7 @@
               <input type="url" name="featured_image" id="mod-img-<%= mod.id %>" value="<%= mod.featured_image || '' %>" placeholder="https://… or upload →" class="w-full px-2 py-1.5 border rounded text-sm">
               <button type="button" data-upload-target="#mod-img-<%= mod.id %>" data-upload-preview="#mod-img-prev-<%= mod.id %>" class="mt-1 inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1 hover:bg-white"><span class="material-symbols-outlined text-sm">upload</span> Upload</button>
             </div>
-            <img id="mod-img-prev-<%= mod.id %>" src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-28 h-16 object-cover rounded border border-outline-variant" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+            <img id="mod-img-prev-<%= mod.id %>" src="<%= mod.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-28 h-16 object-cover rounded border border-outline-variant" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">

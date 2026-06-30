@@ -45,10 +45,10 @@
         <label class="block text-sm font-medium mb-2">Featured image URL</label>
         <div class="flex gap-4 items-start">
           <div class="flex-1">
-            <input type="url" name="featured_image" id="featured_image" value="<%= course.featured_image || '' %>" placeholder="https://… or upload →" class="w-full px-3 py-2 border rounded" oninput="document.getElementById('fi-preview').src=this.value||'/img/generated/gdcu-online-learning.png'">
+            <input type="url" name="featured_image" id="featured_image" value="<%= course.featured_image || '' %>" placeholder="https://… or upload →" class="w-full px-3 py-2 border rounded" oninput="document.getElementById('fi-preview').src=this.value||'/img/generated/gdcu-online-learning.webp'">
             <button type="button" data-upload-target="#featured_image" data-upload-preview="#fi-preview" class="mt-2 inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm">upload</span> Upload image</button>
           </div>
-          <img id="fi-preview" src="<%= course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-40 h-24 object-cover rounded-lg border border-outline-variant bg-surface-container-low" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+          <img id="fi-preview" src="<%= course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-40 h-24 object-cover rounded-lg border border-outline-variant bg-surface-container-low" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
         </div>
         <p class="text-xs text-on-surface-variant mt-1">Shown on the course card, hero and student page. Paste a URL or upload (max 6&nbsp;MB).</p>
       </div>

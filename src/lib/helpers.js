@@ -55,16 +55,16 @@ function truncate(text, len = 160) {
 }
 
 const siteImages = {
-  hero: '/img/generated/gdcu-student-courtyard-learning.png',
-  onlineLesson: '/img/generated/gdcu-student-video-lesson-home.png',
-  teacher: '/img/generated/gdcu-teacher-living-room-v2.png',
-  admissions: '/img/generated/gdcu-student-admissions-video.png',
-  newsIntake: '/img/generated/gdcu-news-intake-male-home-v2.png',
-  newsProgram: '/img/generated/gdcu-news-program-female-home-v2.png',
-  newsAccreditation: '/img/generated/gdcu-news-accreditation-park-v2.png',
-  programLeadership: '/img/generated/gdcu-program-leadership-park-v2.png',
-  programTheology: '/img/generated/gdcu-program-theology-living-room-v2.png',
-  programBusiness: '/img/generated/gdcu-program-mba-home-v2.png',
+  hero: '/img/generated/gdcu-student-courtyard-learning.webp',
+  onlineLesson: '/img/generated/gdcu-student-video-lesson-home.webp',
+  teacher: '/img/generated/gdcu-teacher-living-room-v2.webp',
+  admissions: '/img/generated/gdcu-student-admissions-video.webp',
+  newsIntake: '/img/generated/gdcu-news-intake-male-home-v2.webp',
+  newsProgram: '/img/generated/gdcu-news-program-female-home-v2.webp',
+  newsAccreditation: '/img/generated/gdcu-news-accreditation-park-v2.webp',
+  programLeadership: '/img/generated/gdcu-program-leadership-park-v2.webp',
+  programTheology: '/img/generated/gdcu-program-theology-living-room-v2.webp',
+  programBusiness: '/img/generated/gdcu-program-mba-home-v2.webp',
 };
 
 const programImagesBySlug = {

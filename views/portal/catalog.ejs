@@ -18,7 +18,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% courses.forEach(function(c){ var enrolled = enrolledIds.includes(c.id); %>
     <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col">
-      <div class="h-28 bg-primary-container overflow-hidden"><img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'"></div>
+      <div class="h-28 bg-primary-container overflow-hidden"><img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'"></div>
       <div class="p-5 flex flex-col flex-1">
         <p class="font-tagline text-label-sm text-secondary uppercase"><%= c.code || 'Course' %> · <%= c.credits %> credits</p>
         <h3 class="font-headline text-headline-sm text-primary mb-2"><%= c.title %></h3>
@@ -37,11 +37,11 @@
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <% courses.forEach(function(c){
          var enrolled = enrolledIds.includes(c.id);
-         var img = c.featured_image || '/img/generated/gdcu-online-learning.png';
+         var img = c.featured_image || '/img/generated/gdcu-online-learning.webp';
          var cta = enrolled ? 'To the course' : 'Enrol now';
          var inner = `
            <div class="relative h-44 rounded-lg overflow-hidden border border-outline-variant shadow-sm group-hover:shadow-lg transition-shadow">
-             <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+             <img src="${img}" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/25"></div>
              <span class="absolute top-3 left-0 bg-primary text-on-primary text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug">${c.title}</span>
              <span class="absolute bottom-3 right-3 bg-white/95 text-primary text-xs font-bold px-3 py-1.5 rounded-full inline-flex items-center gap-1">${cta} <span class="material-symbols-outlined text-sm">arrow_forward</span></span>

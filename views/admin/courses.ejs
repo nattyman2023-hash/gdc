@@ -31,7 +31,7 @@
     <div class="group relative h-44 rounded-lg overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-shadow">
       <!-- Whole card opens the builder (the main place to manage a course) -->
       <a href="/admin/courses/<%= c.id %>/modules" class="absolute inset-0 z-0" title="Open course builder"></a>
-      <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+      <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
       <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-black/30 pointer-events-none"></div>
       <span class="absolute top-3 left-0 bg-primary text-on-primary text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug pointer-events-none"><%= c.title %></span>
       <% if (!c.published) { %><span class="absolute top-3 right-3 bg-gray-200 text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded-full pointer-events-none">Draft</span><% } %>
@@ -51,7 +51,7 @@
       <div class="p-6 hover:bg-surface-container-lowest transition-colors">
         <div class="flex items-center justify-between gap-4">
           <div class="w-24 h-16 shrink-0 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant">
-            <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.png'">
+            <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
           </div>
           <div class="flex-1">
             <div class="flex items-center gap-3 mb-1">

@@ -5,7 +5,7 @@
 
 <!-- Hero with featured image -->
 <div class="relative rounded-xl overflow-hidden mb-8 bg-primary text-on-primary">
-  <img src="<%= course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="absolute inset-0 h-full w-full object-cover" onerror="this.style.display='none'">
+  <img src="<%= course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 h-full w-full object-cover" onerror="this.style.display='none'">
   <div class="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-primary/40"></div>
   <div class="relative p-8 md:p-12 max-w-2xl">
     <% if (course.code) { %><p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider mb-2"><%= course.code %></p><% } %>
@@ -94,7 +94,7 @@
 
   <aside class="lg:col-span-1">
     <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 sticky top-24">
-      <img src="<%= course.featured_image || '/img/generated/gdcu-online-learning.png' %>" alt="" class="w-full h-40 object-cover rounded-lg mb-4" onerror="this.style.display='none'">
+      <img src="<%= course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-full h-40 object-cover rounded-lg mb-4" onerror="this.style.display='none'">
       <p class="font-headline text-headline-sm text-primary mb-1"><%= course.title %></p>
       <p class="text-on-surface-variant text-sm mb-4"><%= modules.length %> modules · <%= lessonCount %> lessons</p>
       <div class="bg-secondary-container text-on-secondary-container rounded p-3 text-sm">This is a staff preview. Students enrol and study this course from their portal.</div>
