@@ -1,0 +1,365 @@
+<a href="/portal" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Dashboard</a>
+
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Messaging</p>
+    <h1 class="font-headline text-headline-md text-primary">Chat</h1>
+  </div>
+  <button onclick="openNewChat()" class="bg-primary text-on-primary px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center gap-1.5">
+    <span class="material-symbols-outlined text-base">add_comment</span> New chat
+  </button>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6" style="height: calc(100vh - 250px); min-height: 500px;">
+  <!-- Conversation list -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+    <div class="p-3 border-b border-outline-variant/40">
+      <input id="chat-search" oninput="filterConversations()" placeholder="Search conversations…" class="field text-sm w-full" />
+    </div>
+    <div id="conv-list" class="flex-1 overflow-y-auto divide-y divide-outline-variant/30">
+      <div class="p-8 text-center text-on-surface-variant text-sm">Loading conversations…</div>
+    </div>
+  </div>
+
+  <!-- Chat area -->
+  <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+    <div id="chat-header" class="p-4 border-b border-outline-variant/40 bg-surface-container-high flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-sm" id="chat-avatar">?</div>
+      <div>
+        <p class="font-bold text-primary" id="chat-title">Select a conversation</p>
+        <p class="text-xs text-on-surface-variant" id="chat-subtitle">or start a new one</p>
+      </div>
+    </div>
+
+    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-surface-container-low/30">
+      <div class="h-full flex items-center justify-center text-on-surface-variant">
+        <div class="text-center">
+          <span class="material-symbols-outlined text-4xl text-outline">chat</span>
+          <p class="mt-2">Select a conversation to start chatting</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-input-area" class="p-3 border-t border-outline-variant/40 hidden">
+      <form id="msg-form" onsubmit="sendMessage(event)" class="flex items-center gap-2">
+        <input id="msg-input" type="text" placeholder="Type a message…" class="field flex-1" autocomplete="off" />
+        <button type="submit" class="bg-primary text-on-primary p-2.5 rounded-full hover:opacity-90">
+          <span class="material-symbols-outlined text-lg">send</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- New Chat Modal -->
+<div id="new-chat-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden" onclick="if(event.target===this)closeNewChat()">
+  <div class="bg-surface-container-lowest rounded-xl w-full max-w-lg mx-4 max-h-[80vh] overflow-hidden" onclick="event.stopPropagation()">
+    <div class="p-5 border-b border-outline-variant/40 flex items-center justify-between">
+      <h2 class="font-headline text-headline-sm text-primary">New conversation</h2>
+      <button onclick="closeNewChat()" class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="p-5 overflow-y-auto max-h-[50vh]">
+      <div class="mb-4">
+        <label class="field-label">Type</label>
+        <select id="new-chat-type" onchange="toggleNewChatType()" class="field">
+          <option value="direct">Direct message</option>
+          <option value="group">Group chat</option>
+        </select>
+      </div>
+
+      <div id="new-chat-cohort-area" class="mb-4 hidden">
+        <label class="field-label">Cohort (optional)</label>
+        <select id="new-chat-cohort" class="field">
+          <option value="">— None —</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="field-label">Search people</label>
+        <input id="new-chat-search" oninput="searchUsers()" placeholder="Type a name…" class="field" />
+      </div>
+
+      <div id="search-results" class="space-y-2 max-h-48 overflow-y-auto mb-4"></div>
+
+      <div>
+        <label class="field-label">Selected participants</label>
+        <div id="selected-participants" class="flex flex-wrap gap-2 min-h-[40px] p-2 bg-surface-container-low rounded">
+          <span class="text-on-surface-variant text-sm">Search and click to add people</span>
+        </div>
+      </div>
+    </div>
+    <div class="p-5 border-t border-outline-variant/40 flex justify-end">
+      <button onclick="createConversation()" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold">Create</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentConvId = null;
+let selectedUsers = [];
+let pollInterval = null;
+
+// Load conversation list
+async function loadConversations() {
+  try {
+    const res = await fetch('/chat');
+    const data = await res.json();
+    const list = document.getElementById('conv-list');
+
+    if (!data.conversations?.length) {
+      list.innerHTML = '<div class="p-8 text-center text-on-surface-variant text-sm">No conversations yet. Start a new one!</div>';
+      return;
+    }
+
+    list.innerHTML = data.conversations.map(c => {
+      const names = c.participants.map(p => `${p.first_name} ${p.last_name}`).join(', ');
+      const title = c.title || names;
+      const preview = c.last_message || '';
+      const time = c.last_message_at ? new Date(c.last_message_at).toLocaleDateString() : '';
+      const unread = c.unread_count > 0 ? `<span class="bg-secondary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${c.unread_count > 99 ? '99+' : c.unread_count}</span>` : '';
+
+      return `<div onclick="openConversation(${c.id})" class="cursor-pointer px-4 py-3 hover:bg-surface-container-low transition-colors ${currentConvId === c.id ? 'bg-secondary-fixed/20' : ''}">
+        <div class="flex items-center justify-between">
+          <p class="font-bold text-sm text-primary truncate">${title}</p>
+          ${unread}
+        </div>
+        <p class="text-xs text-on-surface-variant truncate mt-0.5">${preview || 'No messages yet'}</p>
+        <p class="text-[10px] text-on-surface-variant/60 mt-0.5">${time}</p>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.error('Load conversations error:', e);
+  }
+}
+
+// Open a conversation
+async function openConversation(convId) {
+  currentConvId = convId;
+  document.getElementById('chat-input-area').classList.remove('hidden');
+  document.getElementById('chat-messages').innerHTML = '<div class="text-center text-on-surface-variant py-8">Loading messages…</div>';
+
+  try {
+    const res = await fetch(`/chat/${convId}`);
+    const data = await res.json();
+
+    if (!data.conversation) return;
+
+    // Update header
+    const participants = data.conversation.participants || [];
+    const names = participants.map(p => `${p.first_name} ${p.last_name}`).join(', ');
+    document.getElementById('chat-title').textContent = data.conversation.title || names;
+    document.getElementById('chat-subtitle').textContent = `${participants.length} participants`;
+    document.getElementById('chat-avatar').textContent = (data.conversation.title || names).charAt(0);
+
+    // Render messages
+    const msgContainer = document.getElementById('chat-messages');
+    msgContainer.innerHTML = data.messages.map(m => {
+      const isMine = m.sender_id === <%= currentUser.id %>;
+      const time = new Date(m.created_at).toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      const reactions = (m.reactions || []).map(r => r.emoji);
+      const uniqueReactions = [...new Set(reactions)];
+
+      return `<div class="flex ${isMine ? 'justify-end' : 'justify-start'}">
+        <div class="${isMine ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface'} rounded-xl px-4 py-2.5 max-w-[75%] shadow-sm">
+          ${m.message_type === 'system' ? `<p class="text-xs italic opacity-70">${m.message}</p>` : `
+            <p class="text-sm">${m.message}</p>
+            ${m.attachment_url ? `<a href="${m.attachment_url}" target="_blank" class="text-xs underline inline-flex items-center gap-1 mt-1 ${isMine ? 'text-on-primary/80' : 'text-secondary'}">📎 ${m.attachment_name || 'Attachment'}</a>` : ''}
+            <div class="flex items-center justify-between gap-2 mt-1">
+              <span class="text-[10px] opacity-60">${time}</span>
+              <div class="flex gap-0.5">
+                ${uniqueReactions.map(e => `<span class="text-xs cursor-pointer" onclick="toggleReaction(${m.id}, '${e}')">${e}</span>`).join('')}
+                <button onclick="toggleReaction(${m.id}, '👍')" class="text-xs opacity-50 hover:opacity-100">+</button>
+              </div>
+            </div>
+          `}
+        </div>
+      </div>`;
+    }).join('');
+
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+
+    // Refresh conversation list to update unread counts
+    loadConversations();
+  } catch (e) {
+    console.error('Open conversation error:', e);
+  }
+}
+
+// Send a message
+async function sendMessage(event) {
+  event.preventDefault();
+  const input = document.getElementById('msg-input');
+  const msg = input.value.trim();
+  if (!msg || !currentConvId) return;
+
+  input.value = '';
+  try {
+    const res = await fetch(`/chat/${currentConvId}/message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg }),
+    });
+    if (res.ok) {
+      openConversation(currentConvId);
+    } else {
+      input.value = msg; // restore on failure
+    }
+  } catch (e) {
+    console.error('Send message error:', e);
+    input.value = msg;
+  }
+}
+
+// Toggle reaction
+async function toggleReaction(messageId, emoji) {
+  try {
+    await fetch(`/chat/${messageId}/react`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ emoji }),
+    });
+    openConversation(currentConvId);
+  } catch (e) {
+    console.error('React error:', e);
+  }
+}
+
+// New chat modal
+function openNewChat() {
+  document.getElementById('new-chat-modal').classList.remove('hidden');
+  document.getElementById('new-chat-search').value = '';
+  document.getElementById('search-results').innerHTML = '';
+  selectedUsers = [];
+  updateSelectedParticipants();
+}
+
+function closeNewChat() {
+  document.getElementById('new-chat-modal').classList.add('hidden');
+}
+
+function toggleNewChatType() {
+  const type = document.getElementById('new-chat-type').value;
+  document.getElementById('new-chat-cohort-area').classList.toggle('hidden', type !== 'cohort');
+}
+
+// Search users
+let searchTimeout;
+function searchUsers() {
+  clearTimeout(searchTimeout);
+  const q = document.getElementById('new-chat-search').value.trim();
+  if (q.length < 2) { document.getElementById('search-results').innerHTML = ''; return; }
+
+  searchTimeout = setTimeout(async () => {
+    try {
+      const res = await fetch(`/chat/search/users?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      const container = document.getElementById('search-results');
+      if (!data.users?.length) {
+        container.innerHTML = '<p class="text-on-surface-variant text-sm">No users found</p>';
+        return;
+      }
+      container.innerHTML = data.users.map(u => {
+        const alreadySelected = selectedUsers.some(s => s.id === u.id);
+        const flag = u.country ? getFlagEmoji(u.country) : '';
+        return `<div onclick="${alreadySelected ? '' : `addUser(${u.id},'${u.first_name}','${u.last_name}')`}" class="flex items-center gap-3 p-2 rounded hover:bg-surface-container-low cursor-pointer ${alreadySelected ? 'opacity-40' : ''}">
+          <div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">${u.first_name.charAt(0)}${u.last_name.charAt(0)}</div>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-primary">${flag} ${u.first_name} ${u.last_name}</p>
+            <p class="text-xs text-on-surface-variant">${u.role}</p>
+          </div>
+          ${alreadySelected ? '<span class="text-xs text-secondary">✓ Added</span>' : ''}
+        </div>`;
+      }).join('');
+    } catch (e) {
+      console.error('Search error:', e);
+    }
+  }, 300);
+}
+
+function addUser(id, firstName, lastName) {
+  if (selectedUsers.some(u => u.id === id)) return;
+  selectedUsers.push({ id, firstName, lastName });
+  updateSelectedParticipants();
+  searchUsers();
+}
+
+function removeUser(id) {
+  selectedUsers = selectedUsers.filter(u => u.id !== id);
+  updateSelectedParticipants();
+}
+
+function updateSelectedParticipants() {
+  const container = document.getElementById('selected-participants');
+  if (!selectedUsers.length) {
+    container.innerHTML = '<span class="text-on-surface-variant text-sm">Search and click to add people</span>';
+    return;
+  }
+  container.innerHTML = selectedUsers.map(u =>
+    `<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">
+      ${u.firstName} ${u.lastName}
+      <button onclick="removeUser(${u.id})" class="hover:text-error"><span class="material-symbols-outlined text-sm">close</span></button>
+    </span>`
+  ).join('');
+}
+
+async function createConversation() {
+  const type = document.getElementById('new-chat-type').value;
+  const cohortId = document.getElementById('new-chat-cohort').value;
+
+  if (!selectedUsers.length) {
+    alert('Please add at least one person');
+    return;
+  }
+
+  try {
+    const res = await fetch('/chat/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type,
+        participant_ids: selectedUsers.map(u => u.id),
+        cohort_id: cohortId || undefined,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      closeNewChat();
+      loadConversations();
+      openConversation(data.conversation.id);
+    } else {
+      const err = await res.json();
+      alert(err.error || 'Failed to create conversation');
+    }
+  } catch (e) {
+    console.error('Create error:', e);
+  }
+}
+
+// Simple country flag emoji helper
+function getFlagEmoji(country) {
+  const map = { 'Kenya': '🇰🇪', 'UK': '🇬🇧', 'USA': '🇺🇸', 'Nigeria': '🇳🇬', 'Ghana': '🇬🇭', 'South Africa': '🇿🇦', 'Rwanda': '🇷🇼', 'Uganda': '🇺🇬', 'Tanzania': '🇹🇿', 'Ethiopia': '🇪🇹', 'Zambia': '🇿🇲', 'Zimbabwe': '🇿🇼', 'Canada': '🇨🇦', 'Australia': '🇦🇺', 'Germany': '🇩🇪', 'France': '🇫🇷', 'India': '🇮🇳', 'Brazil': '🇧🇷', 'Jamaica': '🇯🇲', 'Trinidad': '🇹🇹', 'Barbados': '🇧🇧' };
+  return map[country] || '🌍';
+}
+
+function filterConversations() {
+  const q = document.getElementById('chat-search').value.toLowerCase();
+  document.querySelectorAll('#conv-list > div').forEach(el => {
+    el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Poll for new messages every 10 seconds
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = setInterval(() => {
+    loadConversations();
+    if (currentConvId) openConversation(currentConvId);
+  }, 10000);
+}
+
+// Load on page start
+document.addEventListener('DOMContentLoaded', () => {
+  loadConversations();
+  startPolling();
+});
+</script>

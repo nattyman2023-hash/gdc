@@ -1022,60 +1022,94 @@ router.post('/graduation/register', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// ─── Profile ─────────────────────────────────────────────────
-router.get('/profile', async (req, res, next) => {
+// ─── Chat page ──────────────────────────────────────────────
+router.get('/chat', async (req, res, next) => {
   try {
     const user = await knex('users').where({ id: req.session.user.id }).first();
-    const edit = req.query.edit === '1';
-    res.render('portal/profile', { pageTitle: 'My Profile | GDCU', portalActive: 'profile', user, edit });
+    res.render('portal/chat', {
+      pageTitle: 'Chat | GDCU',
+      portalActive: 'chat',
+      currentUser: user,
+    });
   } catch (err) {
     next(err);
   }
 });
 
-// Update profile information
-router.post('/profile', [
-  body('first_name').trim().notEmpty().withMessage('First name is required'),
-  body('last_name').trim().notEmpty().withMessage('Last name is required'),
-  body('email').trim().isEmail().normalizeEmail().withMessage('Valid email is required'),
-  body('phone')
-    .trim()
-    .custom(value => {
-      // Allow empty or null values
-      if (!value) return true;
-      // If provided, must be a valid phone number
-      // Accept international format starting with +, or UK format
-      if (/^(?:\+44|0)[0-9\s\-()]{9,}$/.test(value)) return true;
-      throw new Error('Valid phone number is required');
-    }),
-], async (req, res, next) => {
+// ─── Profile ─────────────────────────────────────────────────
+router.get('/profile', async (req, res, next) => {
+  try {
+    const user = await knex('users').where({ id: req.session.user.id }).first();
+    const edit = req.query.edit === '1';
+
+    // Get achievements
+    const achievements = await knex('achievements').where({ user_id: user.id }).orderBy('awarded_at', 'desc').limit(20);
+
+    // Get cohorts
+    const cohorts = await knex('cohorts')
+      .join('cohort_members', 'cohort_members.cohort_id', 'cohorts.id')
+      .where('cohort_members.user_id', user.id)
+      .select('cohorts.*')
+      .orderBy('cohorts.year', 'desc');
+
+    res.render('portal/profile', { pageTitle: 'My Profile | GDCU', portalActive: 'profile', user, edit, achievements, cohorts });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update profile information (enhanced with photo, country, DOB, bio)
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+const profileUploadDir = path.join(__dirname, '..', '..', 'public', 'uploads', 'profiles');
+fs.mkdirSync(profileUploadDir, { recursive: true });
+
+const profileUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, profileUploadDir),
+    filename: (req, file, cb) => {
+      const ext = (path.extname(file.originalname) || '.jpg').toLowerCase();
+      cb(null, `user-${req.session.user.id}-${Date.now()}${ext}`);
+    },
+  }),
+  limits: { fileSize: 6 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype)),
+});
+
+router.post('/profile', profileUpload.single('photo'), async (req, res, next) => {
   try {
     const userId = req.session.user.id;
-    const result = validationResult(req);
-    
-    if (!result.isEmpty()) {
-      req.flash('error', result.array()[0].msg);
-      return res.redirect('/portal/profile?edit=1');
+
+    const updateData = {
+      first_name: req.body.first_name?.trim(),
+      last_name: req.body.last_name?.trim(),
+      email: req.body.email?.trim(),
+      country: req.body.country || null,
+      date_of_birth: req.body.date_of_birth || null,
+      bio: req.body.bio?.trim() || null,
+      phone: req.body.phone || null,
+      updated_at: knex.fn.now(),
+    };
+
+    // Handle photo upload
+    if (req.file) {
+      updateData.photo_url = `/uploads/profiles/${req.file.filename}`;
     }
 
-    // Check if email is already in use by another user
-    const existing = await knex('users').where({ email: req.body.email }).whereNot({ id: userId }).first();
+    // Check email uniqueness
+    const existing = await knex('users').where({ email: updateData.email }).whereNot({ id: userId }).first();
     if (existing) {
       req.flash('error', 'That email is already in use.');
       return res.redirect('/portal/profile?edit=1');
     }
 
-    await knex('users').where({ id: userId }).update({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      phone: req.body.phone || null,
-      updated_at: knex.fn.now(),
-    });
+    await knex('users').where({ id: userId }).update(updateData);
 
-    // Update session user name if it changed
-    req.session.user.name = `${req.body.first_name} ${req.body.last_name}`;
-    req.session.user.email = req.body.email;
+    // Update session
+    req.session.user.name = `${updateData.first_name} ${updateData.last_name}`;
+    req.session.user.email = updateData.email;
 
     req.flash('success', 'Your profile has been updated.');
     res.redirect('/portal/profile');

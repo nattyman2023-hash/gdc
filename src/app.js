@@ -144,6 +144,8 @@ app.use('/admin/content', require('./routes/adminContent'));
 app.use('/admin/users', require('./routes/adminUsers'));
 app.use('/admin', require('./routes/admin'));
 app.use('/webhooks/stripe', require('./routes/stripeWebhook'));
+app.use('/chat', require('./routes/chat'));
+app.use('/cohorts', require('./routes/cohorts'));
 
 // ─── 404 ─────────────────────────────────────────────────────
 app.use((req, res) => {

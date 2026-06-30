@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:gdc.university)",
+      "Bash(git commit -q -m 'Remove temporary startup diagnostic; clean, stable production bootstrap *)",
+      "Bash(node -e \"console.log\\('Gdc' + require\\('crypto'\\).randomBytes\\(6\\).toString\\('hex'\\) + '!'\\)\")",
+      "Bash(git commit -q -m 'Create initial admin user on boot if none exists *)",
+      "Bash(git commit -q -m 'Add show/hide password toggle to login form *)",
+      "Bash(git commit -q -m 'Run ensureAdminUser independently of migration success *)",
+      "Bash(node -e ' *)",
+      "Bash(node scripts/export-lms.js)",
+      "Bash(grep -A2 \"INSERT INTO \\\\`courses\\\\`\" restore-courses.sql)",
+      "Bash(grep -rnA1 \"\\\\.text\\(\" .)",
+      "Bash(node \"C:/Users/Natty/Desktop/Anti Grav/GDCU/scripts/export-lms.js\")",
+      "Bash(grep -A1 \"INSERT INTO \\\\`knex_migrations\\\\`\" \"C:/Users/Natty/Desktop/Anti Grav/GDCU/restore-courses.sql\")",
+      "Bash(awk '{print $5}')",
+      "Bash(node -c src/app.js)",
+      "Bash(git commit -q -m 'Show full error detail to admins on the 500 page *)",
+      "Bash(node \"C:/Users/Natty/Desktop/Anti Grav/GDCU/scripts/fix-schema.js\")",
+      "Bash(grep -A12 \"CREATE TABLE \\\\`essay_submissions\\\\`\" \"C:/Users/Natty/Desktop/Anti Grav/GDCU/fix-schema.sql\")"
+    ]
+  }
+}
