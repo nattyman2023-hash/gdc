@@ -43,7 +43,15 @@
       <% groups.forEach(function(g){ %>
         <% if (g[0]) { %><p class="px-6 pt-3 pb-1 font-tagline text-[11px] text-secondary-fixed uppercase tracking-wider"><%= g[0] %></p><% } %>
         <% g[1].forEach(function(it){ %>
-        <a href="<%= it[1] %>" class="flex items-center gap-3 px-6 py-2.5 font-body text-body-md <%= portalActive===it[0] ? 'bg-on-primary-fixed-variant/30 border-l-4 border-secondary text-on-primary font-bold' : 'text-on-primary-container hover:bg-on-primary-fixed-variant/20' %>">
+        <%
+          // Highlight when the page sends a matching key OR (self-correcting) the
+          // current URL matches this item's path. Dashboard ('/portal') matches
+          // only its exact path so it doesn't light up on every sub-page.
+          var p = (typeof currentPath !== 'undefined' && currentPath) || '';
+          var isActive = (typeof portalActive !== 'undefined' && portalActive === it[0])
+            || (it[1] === '/portal' ? p === '/portal' : (p === it[1] || p.indexOf(it[1] + '/') === 0));
+        %>
+        <a href="<%= it[1] %>" class="flex items-center gap-3 px-6 py-2.5 font-body text-body-md <%= isActive ? 'bg-on-primary-fixed-variant/30 border-l-4 border-secondary text-on-primary font-bold' : 'text-on-primary-container hover:bg-on-primary-fixed-variant/20' %>">
           <span class="material-symbols-outlined text-xl"><%= it[3] %></span><%= it[2] %>
         </a>
         <% }) %>
