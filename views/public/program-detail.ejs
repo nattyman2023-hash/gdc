@@ -1,54 +1,137 @@
-<section class="relative bg-primary text-on-primary py-16 px-margin-mobile lg:px-margin-desktop overflow-hidden">
+<section class="relative bg-primary text-on-primary py-20 px-margin-mobile lg:px-margin-desktop overflow-hidden">
   <img src="<%= imageFor('program', program) %>" alt="" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
   <div class="absolute inset-0 bg-primary/35"></div>
   <div class="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/20"></div>
   <div class="relative max-w-container-max mx-auto hero-shadow">
-    <a href="/programs" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All programs</a>
+    <a href="/programs" class="inline-flex items-center gap-2 text-secondary-fixed mb-6 hover:gap-3 transition-all"><span class="material-symbols-outlined">arrow_back</span> All programmes</a>
     <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-widest"><%= program.level %> · <%= program.school %></p>
     <h1 class="font-display text-display-lg-mobile md:text-display-lg mb-4 max-w-3xl"><%= program.title %></h1>
     <p class="font-body text-body-lg text-on-primary max-w-2xl"><%= program.summary %></p>
+    <div class="flex flex-wrap gap-x-8 gap-y-2 mt-6 text-on-primary text-sm">
+      <% if (program.credential) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">workspace_premium</span><%= program.credential %></span><% } %>
+      <% if (program.duration) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">schedule</span><%= program.duration %></span><% } %>
+      <span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">language</span><%= program.study_mode || 'Online' %></span>
+    </div>
   </div>
 </section>
 
-<section class="py-16 bg-surface-bright">
+<section class="py-16 lg:py-20 bg-background">
   <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid md:grid-cols-12 gap-12">
-    <div class="md:col-span-8">
-      <h2 class="font-headline text-headline-md text-primary mb-4">Program Overview</h2>
-      <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-8 whitespace-pre-line"><%= program.description || program.summary %></p>
+    <div class="md:col-span-8 space-y-14">
 
-      <h3 class="font-headline text-headline-sm text-primary mb-4">What you'll gain</h3>
-      <ul class="space-y-3 mb-8">
-        <% ['A Christ-centred academic foundation in your field','Practical skills you can apply immediately in ministry or work','Mentorship from experienced, global faculty','A Christ-centred qualification, designed to recognised academic standards'].forEach(function(item){ %>
-        <li class="flex items-start gap-3"><span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span><span class="font-body text-body-md text-on-surface-variant"><%= item %></span></li>
-        <% }) %>
-      </ul>
+      <!-- Overview -->
+      <div>
+        <h2 class="font-headline text-headline-md text-primary mb-4">Programme overview</h2>
+        <p class="font-body text-body-md text-on-surface-variant leading-relaxed whitespace-pre-line"><%= program.description || program.summary %></p>
+      </div>
+
+      <!-- What you'll gain -->
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">What you'll gain</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <% ['A Christ-centred academic foundation in your field','Practical skills you can apply immediately in ministry or work','Mentorship from experienced, global faculty','A qualification designed to recognised academic standards'].forEach(function(item){ %>
+          <div class="flex items-start gap-3 bg-surface-container-lowest border border-outline-variant rounded-xl p-4">
+            <span class="material-symbols-outlined text-secondary mt-0.5" style="font-variation-settings:'FILL' 1;">check_circle</span>
+            <span class="font-body text-body-md text-on-surface"><%= item %></span>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Curriculum / Modules -->
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">Curriculum &amp; modules</h3>
+        <% if (curriculum && curriculum.length && curriculum.some(function(c){ return c.modules.length; })) { %>
+          <div class="space-y-4">
+            <% curriculum.forEach(function(course){ %>
+              <% if (course.modules.length) { %>
+              <details class="group bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden" open>
+                <summary class="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none">
+                  <span class="font-headline text-body-lg text-primary font-bold"><%= course.title %></span>
+                  <span class="flex items-center gap-3 text-on-surface-variant text-sm shrink-0">
+                    <span><%= course.modules.length %> module<%= course.modules.length===1?'':'s' %></span>
+                    <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                  </span>
+                </summary>
+                <ul class="px-5 pb-5 pt-1 divide-y divide-outline-variant/40">
+                  <% course.modules.forEach(function(m, i){ %>
+                  <li class="flex items-start gap-3 py-3">
+                    <span class="font-tagline text-label-sm text-secondary mt-0.5 w-6 shrink-0"><%= String(i+1).padStart(2,'0') %></span>
+                    <div>
+                      <p class="font-body text-body-md text-on-surface"><%= m.title %></p>
+                      <% if (m.summary) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= truncate(m.summary, 140) %></p><% } %>
+                    </div>
+                  </li>
+                  <% }) %>
+                </ul>
+              </details>
+              <% } %>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 text-on-surface-variant">
+            <p>The full module breakdown for this programme is being finalised. <a href="#enquire" class="text-secondary font-bold">Request the curriculum</a> and our team will send you the detailed module guide.</p>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Entry requirements -->
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">Entry requirements</h3>
+        <ul class="space-y-3">
+          <% entryRequirements.forEach(function(req){ %>
+          <li class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-secondary mt-0.5">task_alt</span>
+            <span class="font-body text-body-md text-on-surface-variant"><%= req %></span>
+          </li>
+          <% }) %>
+        </ul>
+        <p class="text-on-surface-variant text-sm mt-4 italic">Unsure if you qualify? <a href="#enquire" class="text-secondary font-bold not-italic">Talk to admissions</a> — we assess experience as well as qualifications.</p>
+      </div>
+
+      <!-- Career prospects -->
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">Where this can take you</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <% careers.forEach(function(c){ %>
+          <div class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3">
+            <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">trending_up</span>
+            <span class="font-body text-body-md text-on-surface"><%= c %></span>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
     </div>
 
+    <!-- Sidebar -->
     <aside class="md:col-span-4">
-      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 sticky top-28">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm sticky top-28">
+        <p class="font-tagline text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">At a glance</p>
         <div class="space-y-4 mb-6">
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Credential</span><span class="font-bold text-primary text-right"><%= program.credential || program.level %></span></div>
-          <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Duration</span><span class="font-bold text-primary text-right"><%= program.duration %></span></div>
+          <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Duration</span><span class="font-bold text-primary text-right"><%= program.duration || 'Flexible' %></span></div>
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Study mode</span><span class="font-bold text-primary text-right"><%= program.study_mode || 'Online' %></span></div>
           <div class="flex justify-between"><span class="text-on-surface-variant">Tuition</span><span class="font-bold text-primary text-right"><%= formatMoney(program.tuition, program.tuition_currency) %></span></div>
         </div>
-        <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded font-bold mb-3 hover:opacity-90">Apply for this program</a>
-        <a href="#enquire" class="block text-center border-2 border-secondary text-primary px-6 py-3 rounded font-bold hover:bg-secondary-fixed transition-colors">Request information</a>
+        <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded-lg font-bold mb-3 hover:opacity-90 active:scale-95 transition">Apply for this programme</a>
+        <a href="#enquire" class="block text-center border-2 border-secondary text-primary px-6 py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-colors">Request information</a>
       </div>
     </aside>
   </div>
 </section>
 
 <% if (related && related.length) { %>
-<section class="py-16 bg-surface">
+<section class="py-16 bg-surface-container-low">
   <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
-    <h2 class="font-headline text-headline-md text-primary mb-8">Related programs</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    <h2 class="font-headline text-headline-md text-primary mb-8">Related programmes</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <% related.forEach(function(p){ %>
-      <a href="/programs/<%= p.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:border-secondary transition-colors">
-        <span class="font-tagline text-label-sm text-secondary uppercase"><%= p.level %></span>
-        <h3 class="font-headline text-headline-sm text-primary mt-2 mb-2"><%= p.title %></h3>
+      <a href="/programs/<%= p.slug %>" class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <span class="font-tagline text-label-sm text-secondary uppercase tracking-wider"><%= p.level %></span>
+        <h3 class="font-headline text-headline-sm text-primary mt-2 mb-2 group-hover:text-secondary transition-colors"><%= p.title %></h3>
         <p class="text-on-surface-variant text-body-md"><%= truncate(p.summary, 90) %></p>
+        <span class="mt-4 inline-flex items-center gap-1.5 text-secondary font-bold text-sm group-hover:gap-3 transition-all">View programme <span class="material-symbols-outlined text-base">arrow_forward</span></span>
       </a>
       <% }) %>
     </div>
@@ -56,7 +139,7 @@
 </section>
 <% } %>
 
-<section id="enquire" class="py-16 bg-surface-container-low">
+<section id="enquire" class="py-16 bg-surface-container">
   <div class="max-w-2xl mx-auto px-margin-mobile lg:px-margin-desktop">
     <%- include('../partials/request-info', { programs: [program].concat(related || []) }) %>
   </div>

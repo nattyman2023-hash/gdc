@@ -3,6 +3,7 @@
  */
 const express = require('express');
 const knex = require('../config/db');
+const { programmeExtras } = require('../lib/programmeInfo');
 
 const router = express.Router();
 
@@ -46,11 +47,30 @@ router.get('/:slug', async (req, res, next) => {
       .where({ published: true, school: program.school })
       .whereNot('id', program.id)
       .limit(3);
+
+    // Curriculum: this programme's courses and the modules within them.
+    const courses = await knex('courses').where({ program_id: program.id }).orderBy('sort_order');
+    let modules = [];
+    if (courses.length) {
+      modules = await knex('modules')
+        .whereIn('course_id', courses.map((c) => c.id))
+        .orderBy(['course_id', 'sort_order']);
+    }
+    const curriculum = courses.map((c) => ({
+      ...c,
+      modules: modules.filter((m) => m.course_id === c.id),
+    }));
+
+    const { entryRequirements, careers } = programmeExtras(program);
+
     res.render('public/program-detail', {
       pageTitle: `${program.title} | GDCU`,
       metaDescription: program.summary,
       program,
       related,
+      curriculum,
+      entryRequirements,
+      careers,
     });
   } catch (err) {
     next(err);
