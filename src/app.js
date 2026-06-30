@@ -155,10 +155,14 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console
   console.error(err);
+  // Show the real error to admins (and in dev) so problems can be diagnosed;
+  // everyone else sees only the friendly message.
+  const isAdmin = req.session && req.session.user && req.session.user.role === 'admin';
+  const showDetail = process.env.NODE_ENV !== 'production' || isAdmin;
   res.status(err.status || 500).render('errors/500', {
     pageTitle: 'Something went wrong',
-    showDetail: process.env.NODE_ENV !== 'production',
-    detail: err.message,
+    showDetail,
+    detail: showDetail ? (err.stack || err.message) : null,
   });
 });
 
