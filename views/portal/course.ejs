@@ -14,87 +14,52 @@
 
 <div class="grid lg:grid-cols-3 gap-6">
   <div class="lg:col-span-2 space-y-5">
-        <!-- Continue / Next Lesson Banner -->
     <% if (typeof continueTo !== 'undefined' && continueTo) { %>
-      <div class="<%= continueTo.ready ? 'bg-primary text-on-primary' : 'bg-primary/90 text-on-primary' %> rounded-lg p-5 lg:p-6 mb-6 transition-all duration-300 hover:shadow-lg">
-        <div class="flex items-start justify-between gap-4 flex-wrap">
-          <div class="flex-1 min-w-0">
-            <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider flex items-center gap-1">
-              <% if (continueTo.ready) { %>
-              <span class="material-symbols-outlined text-sm">play_circle</span> Continue where you left off
-              <% } else { %>
-              <span class="material-symbols-outlined text-sm">schedule</span> Up next
-              <% } %>
-            </p>
-            <p class="font-headline text-headline-sm mt-1"><%= continueTo.blockTitle || 'Lesson ' + continueTo.blockNo %></p>
-            <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
-            
-            <% if (!continueTo.ready && continueTo.nextAvailable) { %>
-              <div class="mt-3 inline-flex items-center gap-2 bg-on-primary/15 text-on-primary px-4 py-2 rounded-lg font-bold text-sm">
-                <span class="material-symbols-outlined text-base">lock_clock</span>
-                <span>Next lesson unlocks <span class="underline decoration-dotted" title="Lessons release gradually">in <span id="drip-countdown" data-target="<%= new Date(continueTo.nextAvailable).getTime() %>">calculating&hellip;</span></span></span>
-              </div>
-              <p class="text-on-primary-container text-xs mt-2">Well done finishing the last lesson! Your next session unlocks automatically.</p>
-            <% } else if (!continueTo.ready && !continueTo.nextAvailable) { %>
-              <div class="mt-3 inline-flex items-center gap-2 bg-on-primary/15 text-on-primary px-4 py-2 rounded-lg font-bold text-sm">
-                <span class="material-symbols-outlined text-base">quiz</span> Pass the previous quiz to continue
-              </div>
-            <% } else if (continueTo.ready) { %>
-              <% if (enrollment.progress_pct > 0) { %>
-              <div class="flex items-center gap-2 mt-2">
-                <div class="w-32 h-1.5 bg-on-primary-fixed-variant/40 rounded-full overflow-hidden">
-                  <div class="h-full bg-secondary rounded-full" style="width: <%= enrollment.progress_pct %>%"></div>
-                </div>
-                <span class="text-xs text-on-primary-container"><%= enrollment.progress_pct %>% complete</span>
-              </div>
-              <% } %>
-            <% } %>
-          </div>
-          <div class="shrink-0">
-            <% if (continueTo.ready) { %>
-            <a href="/portal/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all shadow-md">
-              Resume <span class="material-symbols-outlined text-base">arrow_forward</span>
-            </a>
-            <% } %>
-          </div>
-        </div>
+      <% if (continueTo.ready) { %>
+      <a href="/portal/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="block bg-primary text-on-primary rounded-lg p-5 hover:shadow-lg transition-shadow">
+        <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider">Continue where you left off</p>
+        <p class="font-headline text-headline-sm mt-1">Lesson <%= continueTo.blockNo %> — <%= continueTo.blockTitle %></p>
+        <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
+        <span class="inline-flex items-center gap-1 mt-3 bg-secondary text-on-secondary px-4 py-2 rounded font-bold text-sm">Resume <span class="material-symbols-outlined text-base">arrow_forward</span></span>
+      </a>
+      <% } else { %>
+      <div class="block bg-primary/90 text-on-primary rounded-lg p-5">
+        <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider">Up next</p>
+        <p class="font-headline text-headline-sm mt-1">Lesson <%= continueTo.blockNo %> — <%= continueTo.blockTitle %></p>
+        <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
+        <% if (continueTo.nextAvailable) { %>
+          <span class="inline-flex items-center gap-2 mt-3 bg-on-primary/15 text-on-primary px-4 py-2 rounded-lg font-bold text-sm"><span class="material-symbols-outlined text-base">lock_clock</span> Unlocks in <span data-countdown data-target="<%= new Date(continueTo.nextAvailable).getTime() %>">calculating…</span></span>
+          <p class="text-on-primary-container text-xs mt-2">Lessons release gradually to keep your learning steady — well done on finishing the last one!</p>
+        <% } else if (continueTo.blockingQuiz) { %>
+          <a href="/portal/quizzes/<%= continueTo.blockingQuiz.id %>" class="inline-flex items-center gap-2 mt-3 bg-secondary text-on-secondary px-4 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition"><span class="material-symbols-outlined text-base">quiz</span> Take the quiz to unlock <span class="material-symbols-outlined text-base">arrow_forward</span></a>
+          <p class="text-on-primary-container text-xs mt-2">Pass “<%= continueTo.blockingQuiz.title %>” to continue to your next lesson.</p>
+        <% } else { %>
+          <span class="inline-flex items-center gap-2 mt-3 bg-on-primary/15 text-on-primary px-4 py-2 rounded-lg font-bold text-sm"><span class="material-symbols-outlined text-base">lock</span> Complete the current lesson to continue</span>
+        <% } %>
       </div>
-    <% } else if (enrollment.status === 'completed') { %>
-      <div class="bg-secondary-fixed/20 border border-secondary rounded-lg p-5 mb-6">
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-          <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
-            <div>
-              <p class="font-headline text-headline-sm text-primary">Course complete!</p>
-              <p class="text-sm text-on-surface-variant">You've completed all lessons in this course.</p>
-            </div>
-          </div>
-          <a href="/portal/certificates" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold">Claim certificate</a>
-        </div>
-      </div>
+      <% } %>
     <% } %>
-
     <script>
-    (function() {
-      var el = document.getElementById('drip-countdown');
-      if (!el) return;
-      var target = parseInt(el.dataset.target);
-      if (!target) return;
-      function update() {
-        var now = Date.now();
-        var diff = Math.max(0, target - now);
-        if (diff <= 0) { el.textContent = 'now!'; setTimeout(function() { window.location.reload(); }, 1000); return; }
-        var h = Math.floor(diff / 3600000);
-        var m = Math.floor((diff % 3600000) / 60000);
-        var s = Math.floor((diff % 60000) / 1000);
-        el.textContent = h + 'h ' + m + 'm ' + s + 's';
+    (function(){
+      function initCountdowns(){
+        document.querySelectorAll('[data-countdown]').forEach(function(el){
+          var target = parseInt(el.dataset.target, 10); if (!target) return;
+          function tick(){
+            var diff = Math.max(0, target - Date.now());
+            if (diff <= 0){ el.textContent = 'now — refreshing…'; setTimeout(function(){ location.reload(); }, 1200); return true; }
+            var d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+            el.textContent = (d>0 ? d+'d ' : '') + (d>0||h>0 ? h+'h ' : '') + m + 'm ' + s + 's';
+            return false;
+          }
+          if (tick()) return;
+          var iv = setInterval(function(){ if (tick()) clearInterval(iv); }, 1000);
+        });
       }
-      update();
-      setInterval(update, 1000);
+      if (document.readyState !== 'loading') initCountdowns();
+      else document.addEventListener('DOMContentLoaded', initCountdowns);
     })();
     </script>
-
-    <h2 class="font-headline text-headline-sm text-primary">Curriculum</h2><h2 class="font-headline text-headline-sm text-primary">Curriculum</h2>
+    <h2 class="font-headline text-headline-sm text-primary">Curriculum</h2>
     <% if (typeof curriculum !== 'undefined' && curriculum) { %>
       <%
         function unlockTime(d){ return new Date(d).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }
@@ -106,6 +71,7 @@
       %>
       <% yearOrder.forEach(function(y){ var yMods = byYear[y]; var yImg = (yMods.find(function(m){ return m.featured_image; }) || {}).featured_image; var yearCurrent = yMods.some(function(m){ return m.blocks.some(function(b){ return b.open && !b.complete; }); }); %>
         <% if (y) { %>
+        <!-- Year card --- hero image with summary, collapsible -->
         <details class="group/yr rounded-xl overflow-hidden border border-outline-variant shadow-sm" <%= yearCurrent ? 'open' : '' %>>
           <summary class="list-none select-none cursor-pointer relative h-32 flex items-end text-on-primary">
             <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
@@ -119,9 +85,11 @@
               <span class="material-symbols-outlined transition-transform group-open/yr:rotate-180">expand_more</span>
             </div>
           </summary>
+          <!-- Module cards grid inside the year -->
           <div class="p-4 bg-surface-container-low/40 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <% } %>
         <% yMods.forEach(function(m){ var mi = curriculum.indexOf(m); var modCurrent = m.blocks.some(function(b){ return b.open && !b.complete; }); var modComplete = m.blocks.length && m.blocks.every(function(b){ return b.complete; }); %>
+        <!-- Module card --- clickable, expands lesson blocks inline -->
         <details class="group/mod bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow" <%= modCurrent ? 'open' : '' %>>
           <summary class="list-none select-none cursor-pointer overflow-hidden">
             <div class="relative h-24 bg-primary-container">
@@ -139,6 +107,7 @@
               <p class="text-xs text-on-surface-variant mt-1"><%= m.blocks.length %> lesson blocks<% if (modComplete) { %> · <span class="text-secondary font-bold">✓ done</span><% } %></p>
             </div>
           </summary>
+        <!-- Lesson blocks inside the module card -->
         <div class="border-t border-outline-variant/40 divide-y divide-outline-variant/30">
           <% m.blocks.forEach(function(blk){ var current = blk.open && !blk.complete; %>
           <details class="group/blk px-4 py-3 transition-colors <%= blk.complete ? 'bg-surface-container-low/30' : (current ? 'bg-secondary-fixed/15' : '') %>" <%= current ? 'open' : '' %>>
@@ -149,7 +118,8 @@
               </p>
               <% if (blk.complete) { %><span class="text-xs text-secondary font-bold whitespace-nowrap">✓ Complete</span>
               <% } else if (current) { %><span class="text-xs text-secondary font-bold whitespace-nowrap">● Current</span>
-              <% } else if (blk.next_available) { %><span class="text-xs text-on-surface-variant inline-flex items-center gap-1 whitespace-nowrap"><span class="material-symbols-outlined text-sm">lock_clock</span> Unlocks <%= unlockTime(blk.next_available) %></span>
+              <% } else if (blk.next_available) { %><span class="text-xs text-on-surface-variant inline-flex items-center gap-1 whitespace-nowrap" title="Unlocks <%= unlockTime(blk.next_available) %>"><span class="material-symbols-outlined text-sm">lock_clock</span> Unlocks in <span data-countdown data-target="<%= new Date(blk.next_available).getTime() %>"><%= unlockTime(blk.next_available) %></span></span>
+              <% } else if (blk.blockedByQuiz) { %><a href="/portal/quizzes/<%= blk.blockedByQuiz.id %>" onclick="event.stopPropagation()" class="text-xs bg-secondary text-on-secondary px-2.5 py-1 rounded font-bold inline-flex items-center gap-1 whitespace-nowrap hover:opacity-90"><span class="material-symbols-outlined text-sm">quiz</span> Take quiz to unlock</a>
               <% } else { %><span class="text-xs text-on-surface-variant inline-flex items-center gap-1 whitespace-nowrap"><span class="material-symbols-outlined text-sm">lock</span> Locked</span><% } %>
             </summary>
             <ul class="mt-2 space-y-0.5 pl-6">
@@ -185,8 +155,9 @@
         <% }) %>
         <% if (y) { %></div></details><% } %>
       <% }) %>
-      <p class="text-xs text-on-surface-variant">Lessons unlock gradually (about every 4 hours after you finish one) to support steady, focused learning. A short quiz follows every 5 lessons — you can retake it until you pass.</p>
+      <p class="text-xs text-on-surface-variant">Lessons unlock gradually (about every <%= 4 %> hours after you finish one) to support steady, focused learning. A short quiz follows every 5 lessons — you can retake it until you pass.</p>
     <% } else { %>
+      <!-- Non-block (legacy/simple) curriculum as card grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <% structure.forEach(function(m, mi){ %>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -198,7 +169,7 @@
             <% m.lessons.forEach(function(l){ %>
             <li>
               <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low">
-                <span class="material-symbols-outlined <%= l.completed ? 'text-secondary' : 'text-outline' %>"><%= l.completed ? 'check_circle' : (l.type==='video'||l.type==='live' ? 'play_circle' : 'article') %></span>
+                <span class="material-symbols-outlined <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : (l.type==='video'||l.type==='live' ? 'play_circle' : 'article') %></span>
                 <span class="flex-1 <%= l.completed ? 'text-on-surface-variant line-through' : 'text-primary font-medium' %>"><%= l.title %></span>
                 <span class="text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
               </a>
@@ -223,7 +194,8 @@
       <% }) %>
       <% } %>
     <% } %>
-<!-- Final exam (course-level) -->
+
+    <!-- Final exam (course-level) -->
     <% if (typeof finalExam !== 'undefined' && finalExam) { %>
     <h2 class="font-headline text-headline-sm text-primary pt-4">Final Exam</h2>
     <div class="bg-surface-container-lowest border-l-4 border-secondary border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">

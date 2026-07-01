@@ -147,6 +147,7 @@ router.get('/courses/:slug', async (req, res, next) => {
               blockTitle: blk.title,
               ready: !!blk.open,
               nextAvailable: blk.next_available || null,
+              blockingQuiz: blk.blockedByQuiz || null,
             };
             break;
           }

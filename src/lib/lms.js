@@ -368,6 +368,7 @@ async function getBlockedCurriculum(enrollmentId, structure, course) {
   const allQuizzes = await knex('quizzes').whereIn('module_id', structure.map((m) => m.id)).whereNotNull('after_block');
 
   let gateOpen = true;
+  let gateQuiz = null; // the unpassed quiz currently holding the gate shut, if any
   let lastBlockCompletedAt = null;
   return structure.map((m) => {
     const blockNos = [...new Set(m.lessons.map((l) => l.block_no).filter(Boolean))].sort((a, b) => a - b);
@@ -382,15 +383,18 @@ async function getBlockedCurriculum(enrollmentId, structure, course) {
       }
       const quizRow = allQuizzes.find((q) => q.module_id === m.id && q.after_block === b);
       const quiz = quizRow ? { id: quizRow.id, title: quizRow.title, covers: quizRow.covers_blocks, passed: passed.has(quizRow.id), available: complete } : null;
+      // A block that's locked but not on the drip timer is waiting on the last
+      // unpassed gate quiz — expose it so the UI can link straight to that quiz.
+      const blockedByQuiz = (!open && !complete && !next_available) ? gateQuiz : null;
       // advance the gate
       if (complete) {
         const times = ls.map((l) => compAt[l.id]).filter(Boolean).map((t) => t.getTime());
         if (times.length) lastBlockCompletedAt = new Date(Math.max(...times));
-        if (quizRow && !passed.has(quizRow.id)) gateOpen = false;
+        if (quizRow && !passed.has(quizRow.id)) { gateOpen = false; gateQuiz = { id: quizRow.id, title: quizRow.title }; }
       } else {
         gateOpen = false;
       }
-      return { block_no: b, title: ls[0] ? (ls[0].block_title || `Lesson ${b}`) : `Lesson ${b}`, lessons: ls, complete, open, next_available, quiz };
+      return { block_no: b, title: ls[0] ? (ls[0].block_title || `Lesson ${b}`) : `Lesson ${b}`, lessons: ls, complete, open, next_available, quiz, blockedByQuiz };
     });
     return { ...m, blocks };
   });
