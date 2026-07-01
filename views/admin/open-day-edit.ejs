@@ -16,6 +16,17 @@
     <label class="field-label">Description</label>
     <textarea name="description" rows="4" class="field" placeholder="What attendees can expect…"><%= openDay.description || '' %></textarea>
   </div>
+  <div>
+    <label class="field-label">Featured image</label>
+    <div class="flex gap-4 items-start">
+      <div class="flex-1">
+        <input type="url" name="image_url" id="image_url" value="<%= openDay.image_url || '' %>" placeholder="https://… or upload →" class="field" oninput="document.getElementById('od-img-preview').src=this.value||'/img/generated/gdcu-student-admissions-video.webp'" />
+        <button type="button" data-upload-target="#image_url" data-upload-preview="#od-img-preview" class="mt-2 inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-surface-container-lowest"><span class="material-symbols-outlined text-sm">upload</span> Upload image</button>
+      </div>
+      <img id="od-img-preview" src="<%= openDay.image_url || '/img/generated/gdcu-student-admissions-video.webp' %>" alt="" class="w-40 h-24 object-cover rounded-lg border border-outline-variant bg-surface-container-low" onerror="this.src='/img/generated/gdcu-student-admissions-video.webp'" />
+    </div>
+    <p class="text-xs text-on-surface-variant mt-1">Shown on the homepage banner, open-days listing and the event page. Leave blank to use a default. Paste a URL or upload.</p>
+  </div>
   <div class="grid sm:grid-cols-2 gap-4">
     <div>
       <label class="field-label">Starts *</label>

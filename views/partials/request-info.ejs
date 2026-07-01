@@ -2,49 +2,83 @@
   // Reusable lead-capture / inquiry form. Expects optional `programs` and `compact` flag.
   var progs = (typeof programs !== 'undefined' && programs) ? programs : [];
   var isCompact = (typeof compact !== 'undefined') && compact;
-  var inputCls = 'w-full px-4 py-3 rounded-lg border border-outline bg-surface-container-lowest outline-none focus:border-primary focus:ring-2 focus:ring-secondary/40 transition-shadow placeholder:text-on-surface-variant/60';
+  // Base field styling. Icon-led fields add `pl-11`; the wrapping `.group` turns the icon gold on focus.
+  var inputCls = 'peer w-full px-4 py-3.5 rounded-xl border border-outline-variant/70 bg-surface-container-lowest text-on-surface outline-none focus:border-secondary focus:ring-4 focus:ring-secondary/15 transition-all placeholder:text-on-surface-variant/50 hover:border-outline';
+  var iconInputCls = inputCls.replace('px-4', 'pl-11 pr-4');
+  var iconCls = 'material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant/45 group-focus-within:text-secondary transition-colors pointer-events-none';
 %>
-<div data-inquiry class="relative overflow-hidden rounded-2xl border border-outline-variant/60 bg-surface shadow-sm">
-  <!-- warm accent header -->
-  <div class="bg-primary text-on-primary px-8 pt-7 pb-6">
-    <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest mb-1">Let’s talk</p>
-    <p class="font-headline text-headline-sm leading-tight">Take the first step — it’s free 🌍</p>
-    <p class="text-on-primary/85 text-sm mt-2 leading-relaxed">Tell us a little about you and a real person from our team will reach out. No pressure, no obligation.</p>
+<div data-inquiry class="relative overflow-hidden rounded-3xl border border-outline-variant/50 bg-surface-container-lowest shadow-xl shadow-primary/5 ring-1 ring-primary/5">
+  <!-- deep navy header with a warm gold glow -->
+  <div class="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-tertiary-container text-on-primary px-8 pt-8 pb-7">
+    <div class="pointer-events-none absolute -top-16 -right-10 h-48 w-48 rounded-full bg-secondary-fixed-dim/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-24 -left-8 h-40 w-40 rounded-full bg-inverse-primary/10 blur-3xl"></div>
+    <div class="relative">
+      <p class="inline-flex items-center gap-2 font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest mb-2">
+        <span class="h-px w-6 bg-secondary-fixed-dim/70"></span>Let’s talk
+      </p>
+      <p class="font-headline text-headline-sm leading-tight">Take the first step — it’s free 🌍</p>
+      <p class="text-on-primary/80 text-sm mt-2.5 leading-relaxed max-w-md">Tell us a little about you and a real person from our team will reach out. No pressure, no obligation.</p>
+    </div>
   </div>
 
   <!-- success state (revealed by JS after a seamless submit) -->
   <div data-inquiry-done class="hidden p-10 text-center">
-    <span class="material-symbols-outlined text-secondary text-5xl">mark_email_read</span>
+    <span class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-secondary/10 text-secondary mb-1">
+      <span class="material-symbols-outlined text-4xl">mark_email_read</span>
+    </span>
     <h3 class="font-headline text-headline-sm text-primary mt-3 mb-1">Thank you — we’ve got it!</h3>
-    <p class="text-on-surface-variant text-sm">Someone from our admissions team will be in touch within one working day. Check your inbox for a hello from us.</p>
-    <a href="/programs" class="inline-block mt-5 text-secondary font-bold">Explore programmes while you wait →</a>
+    <p class="text-on-surface-variant text-sm max-w-sm mx-auto">Someone from our admissions team will be in touch within one working day. Check your inbox for a hello from us.</p>
+    <a href="/programs" class="inline-flex items-center gap-1 mt-5 text-secondary font-bold hover:gap-2 transition-all">Explore programmes while you wait <span class="material-symbols-outlined text-base">arrow_forward</span></a>
   </div>
 
   <form data-inquiry-form action="/admissions/request-info" method="post" class="p-8 space-y-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input name="first_name" required placeholder="First name *" class="<%= inputCls %>" />
-      <input name="last_name" placeholder="Last name" class="<%= inputCls %>" />
+      <div class="group relative">
+        <span class="<%= iconCls %>">person</span>
+        <input name="first_name" required placeholder="First name *" class="<%= iconInputCls %>" />
+      </div>
+      <div class="group relative">
+        <span class="<%= iconCls %>">badge</span>
+        <input name="last_name" placeholder="Last name" class="<%= iconInputCls %>" />
+      </div>
     </div>
-    <input type="email" name="email" required placeholder="Email address *" class="<%= inputCls %>" />
+    <div class="group relative">
+      <span class="<%= iconCls %>">mail</span>
+      <input type="email" name="email" required placeholder="Email address *" class="<%= iconInputCls %>" />
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input name="phone" placeholder="Phone (optional)" class="<%= inputCls %>" />
-      <input name="country" placeholder="Your country" class="<%= inputCls %>" />
+      <div class="group relative">
+        <span class="<%= iconCls %>">call</span>
+        <input name="phone" placeholder="Phone (optional)" class="<%= iconInputCls %>" />
+      </div>
+      <div class="group relative">
+        <span class="<%= iconCls %>">public</span>
+        <input name="country" placeholder="Your country" class="<%= iconInputCls %>" />
+      </div>
     </div>
-    <select name="program_id" class="<%= inputCls %>">
-      <option value="">What would you like to study?</option>
-      <% progs.forEach(function(p){ %><option value="<%= p.id %>"><%= p.title %></option><% }) %>
-    </select>
+    <div class="group relative">
+      <span class="<%= iconCls %>">school</span>
+      <select name="program_id" class="<%= iconInputCls %> appearance-none cursor-pointer">
+        <option value="">What would you like to study?</option>
+        <% progs.forEach(function(p){ %><option value="<%= p.id %>"><%= p.title %></option><% }) %>
+      </select>
+      <span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant/45 pointer-events-none">expand_more</span>
+    </div>
     <% if (!isCompact) { %>
-    <textarea name="message" rows="3" placeholder="Anything you’d like to ask? (optional)" class="<%= inputCls %>"></textarea>
+    <div class="group relative">
+      <span class="<%= iconCls %> !top-4 !translate-y-0">chat_bubble</span>
+      <textarea name="message" rows="3" placeholder="Anything you’d like to ask? (optional)" class="<%= iconInputCls %>"></textarea>
+    </div>
     <% } %>
-    <button class="group w-full bg-secondary text-on-secondary px-6 py-3.5 rounded-lg font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all">
-      Send my enquiry
-      <span class="material-symbols-outlined text-base group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+    <button class="group relative w-full overflow-hidden bg-gradient-to-r from-secondary to-secondary-fixed-dim text-on-secondary px-6 py-4 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 shadow-lg shadow-secondary/25 hover:shadow-xl hover:shadow-secondary/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all">
+      <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:translate-x-full transition-transform duration-700 ease-out"></span>
+      <span class="relative">Send my enquiry</span>
+      <span class="material-symbols-outlined relative text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
     </button>
-    <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[11px] text-on-surface-variant pt-1">
-      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span> Free &amp; no obligation</span>
-      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">schedule</span> Reply within 1 working day</span>
-      <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm text-secondary">lock</span> Your details stay private</span>
+    <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] font-medium text-on-surface-variant pt-4 mt-2 border-t border-outline-variant/40">
+      <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-secondary">check_circle</span> Free &amp; no obligation</span>
+      <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-secondary">schedule</span> Reply within 1 working day</span>
+      <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-secondary">lock</span> Your details stay private</span>
     </div>
   </form>
 </div>

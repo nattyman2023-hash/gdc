@@ -85,22 +85,54 @@
 </section>
 
 <!-- Open days callout -->
-<section class="py-10 bg-surface-container-low">
+<section class="py-14 bg-surface-container-low">
   <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
-    <div class="bg-secondary-container text-on-secondary-container rounded-xl p-6 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-5">
-      <div class="flex items-center gap-4 text-center sm:text-left">
-        <span class="material-symbols-outlined text-4xl shrink-0" style="font-variation-settings:'FILL' 1;">co_present</span>
-        <div>
-          <% if (typeof openDaysCount !== 'undefined' && openDaysCount > 0) { %>
-            <p class="font-headline text-headline-sm"><%= openDaysCount %> upcoming open day<%= openDaysCount===1?'':'s' %> — meet us online, free</p>
-            <% if (nextOpenDay) { %><p class="text-sm opacity-80">Next: <%= nextOpenDay.title %> · <%= formatDate(nextOpenDay.starts_at) %></p><% } %>
+    <%
+      var hasOd = (typeof openDaysCount !== 'undefined' && openDaysCount > 0);
+      var odImg = (typeof nextOpenDay !== 'undefined' && nextOpenDay && nextOpenDay.image_url) ? nextOpenDay.image_url : '/img/generated/gdcu-student-admissions-video.webp';
+    %>
+    <div class="group relative overflow-hidden rounded-3xl bg-primary text-on-primary shadow-xl shadow-primary/15 ring-1 ring-primary/10">
+      <!-- feature image -->
+      <img src="<%= odImg %>" alt="" class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.src='/img/generated/gdcu-student-admissions-video.webp'" />
+      <!-- scrims: darken left for text on desktop, bottom on mobile -->
+      <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary/25"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent md:hidden"></div>
+      <!-- warm gold glow -->
+      <div class="pointer-events-none absolute -top-24 -left-16 h-64 w-64 rounded-full bg-secondary-fixed-dim/20 blur-3xl"></div>
+
+      <div class="relative p-8 md:p-12 min-h-[300px] flex items-center">
+        <div class="max-w-xl">
+          <p class="inline-flex items-center gap-2.5 font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest mb-4">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed-dim opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-fixed-dim"></span>
+            </span>
+            Open days
+          </p>
+          <% if (hasOd) { %>
+            <h2 class="font-headline text-headline-md leading-tight"><%= openDaysCount %> upcoming open day<%= openDaysCount===1?'':'s' %> — meet us live, online &amp; free</h2>
+            <p class="text-on-primary/80 mt-3 leading-relaxed">Spend an hour with our team, explore programmes and get every question answered. No pressure, no obligation.</p>
+            <% if (nextOpenDay) { %>
+            <div class="inline-flex items-center gap-2 mt-5 rounded-full bg-on-primary/10 backdrop-blur px-4 py-2 text-sm ring-1 ring-on-primary/20">
+              <span class="material-symbols-outlined text-secondary-fixed-dim text-base" style="font-variation-settings:'FILL' 1;">event</span>
+              <span class="font-medium">Next: <%= nextOpenDay.title %></span>
+              <span class="text-on-primary/60">·</span>
+              <span class="text-on-primary/80"><%= formatDate(nextOpenDay.starts_at) %></span>
+            </div>
+            <% } %>
           <% } else { %>
-            <p class="font-headline text-headline-sm">Open days are coming soon</p>
-            <p class="text-sm opacity-80">Register your interest and we’ll invite you to the next one.</p>
+            <h2 class="font-headline text-headline-md leading-tight">Open days are coming soon</h2>
+            <p class="text-on-primary/80 mt-3 leading-relaxed">Register your interest and we’ll personally invite you to the next one — meet our team, explore programmes and ask us anything.</p>
           <% } %>
+          <div class="mt-7">
+            <a href="/open-days" class="group/btn relative inline-flex items-center gap-2 overflow-hidden bg-gradient-to-r from-secondary to-secondary-fixed-dim text-on-secondary px-7 py-3.5 rounded-xl font-bold shadow-lg shadow-secondary/25 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all">
+              <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover/btn:translate-x-full transition-transform duration-700 ease-out"></span>
+              <span class="relative"><%= hasOd ? 'See open days' : 'Register your interest' %></span>
+              <span class="material-symbols-outlined relative text-base group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+          </div>
         </div>
       </div>
-      <a href="/open-days" class="bg-primary text-on-primary px-7 py-3 rounded font-bold shrink-0 hover:opacity-90 active:scale-95 transition-all">See open days</a>
     </div>
   </div>
 </section>

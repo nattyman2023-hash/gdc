@@ -1,8 +1,11 @@
-<section class="bg-primary text-on-primary py-16">
-  <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
+<section class="relative overflow-hidden bg-primary text-on-primary py-16 md:py-20">
+  <img src="<%= openDay.image_url || '/img/generated/gdcu-student-admissions-video.webp' %>" alt="" class="absolute inset-0 h-full w-full object-cover object-center" loading="eager" decoding="async" onerror="this.style.display='none'" />
+  <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary/40"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
+  <div class="relative max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
     <a href="/open-days" class="inline-flex items-center gap-1 text-secondary-fixed-dim hover:text-secondary-fixed text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All open days</a>
     <p class="font-tagline text-tagline text-secondary-fixed uppercase mb-2">Open Day</p>
-    <h1 class="font-display text-display-lg-mobile md:text-display-lg leading-tight mb-4"><%= openDay.title %></h1>
+    <h1 class="font-display text-display-lg-mobile md:text-display-lg leading-tight mb-4 max-w-3xl"><%= openDay.title %></h1>
     <div class="flex flex-wrap gap-x-8 gap-y-2 text-on-primary-container">
       <span class="inline-flex items-center gap-2"><span class="material-symbols-outlined">calendar_month</span> <%= formatDateTime(openDay.starts_at) %><% if (openDay.ends_at) { %> – <%= new Date(openDay.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) %><% } %></span>
       <span class="inline-flex items-center gap-2"><span class="material-symbols-outlined"><%= openDay.is_online ? 'videocam' : 'location_on' %></span> <%= openDay.is_online ? 'Online event' : (openDay.location || 'Venue TBC') %></span>

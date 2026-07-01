@@ -1881,6 +1881,7 @@ router.post('/open-days', async (req, res, next) => {
       starts_at: req.body.starts_at, ends_at: req.body.ends_at || null,
       location: req.body.location || null, is_online: req.body.is_online === 'on',
       join_url: req.body.join_url || null, capacity: req.body.capacity ? Number(req.body.capacity) : null,
+      image_url: req.body.image_url || null,
       published: req.body.published === 'on',
     });
     const id = Array.isArray(idRaw) ? idRaw[0] : idRaw;
@@ -1904,6 +1905,7 @@ router.post('/open-days/:id/edit', async (req, res, next) => {
       starts_at: req.body.starts_at, ends_at: req.body.ends_at || null,
       location: req.body.location || null, is_online: req.body.is_online === 'on',
       join_url: req.body.join_url || null, capacity: req.body.capacity ? Number(req.body.capacity) : null,
+      image_url: req.body.image_url || null,
       published: req.body.published === 'on', updated_at: knex.fn.now(),
     });
     req.flash('success', 'Open day updated.');

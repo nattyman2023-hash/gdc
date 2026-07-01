@@ -11,14 +11,16 @@
     <% } %>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
       <% upcoming.forEach(function(o){ %>
-      <a href="/open-days/<%= o.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden group hover:border-secondary hover:shadow-md transition-all flex flex-col">
-        <div class="relative h-36 bg-primary text-on-primary">
-          <div class="relative h-full p-5 flex items-center justify-between">
-            <div>
+      <a href="/open-days/<%= o.slug %>" class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col">
+        <div class="relative h-40 bg-primary text-on-primary overflow-hidden">
+          <img src="<%= o.image_url || '/img/generated/gdcu-community.webp' %>" alt="" class="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" onerror="this.style.display='none'" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/70 to-primary/25"></div>
+          <div class="relative h-full p-5 flex items-start justify-between">
+            <div class="rounded-xl bg-on-primary/10 backdrop-blur px-3.5 py-2 text-center ring-1 ring-on-primary/20 shadow-sm">
               <p class="font-display text-display-lg-mobile leading-none"><%= new Date(o.starts_at).getDate() %></p>
               <p class="font-tagline text-label-sm uppercase text-secondary-fixed"><%= new Date(o.starts_at).toLocaleDateString('en-GB',{month:'short'}) %></p>
             </div>
-            <span class="material-symbols-outlined text-secondary-fixed-dim text-3xl"><%= o.is_online ? 'videocam' : 'location_on' %></span>
+            <span class="material-symbols-outlined text-secondary-fixed-dim text-3xl drop-shadow-md"><%= o.is_online ? 'videocam' : 'location_on' %></span>
           </div>
         </div>
         <div class="p-5 flex flex-col flex-1">
