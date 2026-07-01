@@ -1,14 +1,23 @@
 <!-- Footer CTA (pages with their own closing CTA can opt out via hideFooterCta) -->
 <% if (typeof hideFooterCta === 'undefined' || !hideFooterCta) { %>
-<section class="bg-surface-bright py-16">
+<section class="bg-background py-16 lg:py-20">
   <div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop">
-    <div class="bg-primary text-on-primary rounded-xl px-8 py-12 md:px-16 md:py-14 text-center relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-56 h-56 border-t-8 border-r-8 border-secondary-fixed-dim/20 -translate-y-8 translate-x-8"></div>
-      <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-[0.25em]">Ready to answer the call?</p>
-      <h2 class="font-display text-display-lg-mobile md:text-display-lg mb-6 max-w-2xl mx-auto leading-tight">Begin your GDCU journey today</h2>
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="/admissions/apply" class="bg-secondary text-on-secondary px-10 py-3.5 rounded font-bold hover:shadow-lg active:scale-95 transition-all">Apply Now</a>
-        <a href="/open-days" class="border-2 border-secondary-fixed text-on-primary px-10 py-3.5 rounded font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-all">Book an open day</a>
+    <div class="relative overflow-hidden rounded-2xl bg-primary text-on-primary px-8 py-14 md:px-16 md:py-20 text-center shadow-xl">
+      <!-- background image + depth -->
+      <img src="/img/generated/gdcu-global-hero.webp" alt="" class="absolute inset-0 h-full w-full object-cover opacity-25" loading="lazy" decoding="async" />
+      <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary/92 to-primary/80"></div>
+      <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-secondary/15 blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-12 w-56 h-56 rounded-full bg-secondary-fixed/10 blur-3xl"></div>
+
+      <div class="relative hero-shadow max-w-2xl mx-auto">
+        <p class="font-tagline text-tagline text-secondary-fixed mb-3 uppercase tracking-[0.25em]">Ready to answer the call?</p>
+        <h2 class="font-display text-display-lg-mobile md:text-display-lg mb-5 leading-tight">Begin your GDCU journey today</h2>
+        <p class="text-on-primary text-body-lg mb-9 max-w-xl mx-auto">Join learners across 50+ nations in affordable, flexible, Christ-centred study — wherever your calling takes you.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="/admissions/apply" class="bg-secondary text-on-secondary px-10 py-4 rounded-lg font-bold inline-flex items-center justify-center gap-2 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all">Apply Now <span class="material-symbols-outlined text-base">arrow_forward</span></a>
+          <a href="/open-days" class="border-2 border-secondary-fixed text-on-primary px-10 py-4 rounded-lg font-bold hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-all">Book an open day</a>
+        </div>
+        <p class="text-on-primary/75 text-sm mt-7 inline-flex items-center gap-2"><span class="material-symbols-outlined text-base text-secondary-fixed">verified</span> No obligation · A real person replies within 1 working day</p>
       </div>
     </div>
   </div>
