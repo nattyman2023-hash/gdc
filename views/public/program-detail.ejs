@@ -45,6 +45,18 @@
           <div class="space-y-4">
             <% curriculum.forEach(function(course){ %>
               <% if (course.modules.length) { %>
+              <%
+                // Group this course's modules by academic year (from a "Year N ·"
+                // title prefix, or the sort_order convention where year = floor(order/100)).
+                var byYear = {}; var yrOrder = [];
+                course.modules.forEach(function(m){
+                  var ym = (m.title || '').match(/^Year\s+(\d+)/i);
+                  var yr = ym ? parseInt(ym[1], 10) : (m.sort_order >= 100 ? Math.floor(m.sort_order / 100) : 0);
+                  if (!byYear[yr]) { byYear[yr] = []; yrOrder.push(yr); }
+                  byYear[yr].push(m);
+                });
+                yrOrder.sort(function(a, b){ return a - b; });
+              %>
               <details class="group bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden" open>
                 <summary class="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none">
                   <span class="font-headline text-body-lg text-primary font-bold"><%= course.title %></span>
@@ -53,17 +65,27 @@
                     <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
                   </span>
                 </summary>
-                <ul class="px-5 pb-5 pt-1 divide-y divide-outline-variant/40">
-                  <% course.modules.forEach(function(m, i){ %>
-                  <li class="flex items-start gap-3 py-3">
-                    <span class="font-tagline text-label-sm text-secondary mt-0.5 w-6 shrink-0"><%= String(i+1).padStart(2,'0') %></span>
-                    <div>
-                      <p class="font-body text-body-md text-on-surface"><%= m.title %></p>
-                      <% if (m.summary) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= truncate(m.summary, 140) %></p><% } %>
+                <div class="px-5 pb-6 pt-1 space-y-7">
+                  <% yrOrder.forEach(function(yr){ %>
+                  <div>
+                    <% if (yr > 0) { %>
+                    <div class="flex items-center gap-3 mb-3">
+                      <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container font-bold text-sm shrink-0"><%= yr %></span>
+                      <p class="font-headline text-body-lg text-primary font-bold">Year <%= yr %></p>
+                      <span class="text-on-surface-variant text-sm">· <%= byYear[yr].length %> modules</span>
                     </div>
-                  </li>
+                    <% } %>
+                    <ul class="divide-y divide-outline-variant/40 <%= yr > 0 ? 'border-l-2 border-secondary/25 pl-4 ml-4' : '' %>">
+                      <% byYear[yr].forEach(function(m){ var clean = (m.title || '').replace(/^Year\s+\d+\s*·\s*/i, ''); %>
+                      <li class="py-2.5">
+                        <p class="font-body text-body-md text-on-surface font-medium"><%= clean %></p>
+                        <% if (m.summary) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= truncate(m.summary, 150) %></p><% } %>
+                      </li>
+                      <% }) %>
+                    </ul>
+                  </div>
                   <% }) %>
-                </ul>
+                </div>
               </details>
               <% } %>
             <% }) %>

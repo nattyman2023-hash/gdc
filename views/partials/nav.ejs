@@ -26,28 +26,32 @@
     if (g.href) return g.href === '/' ? currentPath === '/' : currentPath.startsWith(g.href);
     return (g.match || []).some((p) => currentPath.startsWith(p));
   }
-  const topLink = 'font-tagline text-label-sm font-medium transition-colors';
+  const topLink = 'font-body text-sm font-semibold transition-colors';
 %>
-<header id="site-header" class="bg-surface-container-lowest border-b border-outline-variant fixed top-0 w-full z-50 transition-shadow">
-  <nav class="flex justify-between items-center w-full px-margin-mobile lg:px-margin-desktop py-4 max-w-container-max mx-auto">
+<header id="site-header" class="bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant fixed top-0 w-full z-50 transition-shadow">
+  <nav class="flex justify-between items-center w-full px-margin-mobile lg:px-margin-desktop py-3.5 max-w-container-max mx-auto">
     <a href="/" class="flex items-center gap-3 shrink-0">
       <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1;">school</span>
       <span class="font-headline text-headline-sm font-bold text-on-surface leading-tight hidden sm:block">Global Diaspora<br/><span class="text-secondary">Christian University</span></span>
     </a>
 
-    <div class="hidden lg:flex items-center gap-7">
+    <div class="hidden lg:flex items-center gap-8">
       <% groups.forEach(function(g){ %>
         <% if (g.href) { %>
-          <a href="<%= g.href %>" class="<%= topLink %> <%= isActive(g) ? 'text-primary border-b-2 border-secondary pb-1 font-bold' : 'text-on-surface-variant hover:text-secondary' %>"><%= g.label %></a>
+          <a href="<%= g.href %>" class="<%= topLink %> relative py-1 <%= isActive(g) ? 'text-primary' : 'text-on-surface-variant hover:text-primary' %>">
+            <%= g.label %>
+            <span class="absolute -bottom-0.5 left-0 h-0.5 bg-secondary transition-all duration-300 <%= isActive(g) ? 'w-full' : 'w-0' %>"></span>
+          </a>
         <% } else { %>
-          <div class="relative group">
-            <button class="<%= topLink %> inline-flex items-center gap-1 <%= isActive(g) ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-secondary' %>">
+          <div class="relative group py-1">
+            <button class="<%= topLink %> inline-flex items-center gap-1 <%= isActive(g) ? 'text-primary' : 'text-on-surface-variant group-hover:text-primary' %>">
               <%= g.label %> <span class="material-symbols-outlined text-base transition-transform group-hover:rotate-180">expand_more</span>
             </button>
-            <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
-              <div class="bg-surface-container-lowest border border-outline-variant rounded-lg shadow-lg py-2 w-60">
+            <span class="absolute -bottom-0.5 left-0 h-0.5 bg-secondary transition-all duration-300 <%= isActive(g) ? 'w-[calc(100%-1.5rem)]' : 'w-0' %>"></span>
+            <div class="absolute left-1/2 -translate-x-1/2 top-full pt-4 hidden group-hover:block">
+              <div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl py-2 w-64 overflow-hidden">
                 <% g.items.forEach(function(it){ %>
-                  <a href="<%= it[1] %>" class="block px-4 py-2 text-sm <%= currentPath===it[1] ? 'text-secondary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' %>"><%= it[0] %></a>
+                  <a href="<%= it[1] %>" class="flex items-center gap-2 px-4 py-2.5 text-sm border-l-2 <%= currentPath===it[1] ? 'text-primary font-bold border-secondary bg-secondary-fixed/15' : 'text-on-surface-variant border-transparent hover:bg-surface-container-low hover:text-primary hover:border-secondary/50' %> transition-colors"><%= it[0] %></a>
                 <% }) %>
               </div>
             </div>
@@ -61,12 +65,12 @@
         <span class="material-symbols-outlined text-lg">dark_mode</span>
       </button>
       <% if (currentUser) { %>
-        <a href="<%= currentUser.role==='student' ? '/portal' : (currentUser.role==='faculty' ? '/faculty' : '/admin') %>" class="hidden sm:inline font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary">My Portal</a>
-        <form action="/logout" method="post"><button class="font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary">Sign out</button></form>
+        <a href="<%= currentUser.role==='student' ? '/portal' : (currentUser.role==='faculty' ? '/faculty' : '/admin') %>" class="hidden sm:inline font-body text-sm font-medium text-on-surface-variant hover:text-primary">My Portal</a>
+        <form action="/logout" method="post"><button class="font-body text-sm font-medium text-on-surface-variant hover:text-primary">Sign out</button></form>
       <% } else { %>
-        <a href="/login" class="hidden sm:inline font-tagline text-label-sm text-on-primary-fixed-variant hover:text-primary transition-all">Student Login</a>
+        <a href="/login" class="hidden sm:inline font-body text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Student Login</a>
       <% } %>
-      <a href="/admissions/apply" class="bg-primary text-on-primary px-5 py-2 rounded font-tagline text-label-sm font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">Apply Now</a>
+      <a href="/admissions/apply" class="bg-secondary text-on-secondary px-5 py-2.5 rounded-lg font-body text-sm font-bold shadow-sm inline-flex items-center gap-1.5 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all">Apply Now <span class="material-symbols-outlined text-base">arrow_forward</span></a>
       <button id="mobile-menu-btn" class="lg:hidden text-primary" aria-label="Open menu"><span class="material-symbols-outlined text-3xl">menu</span></button>
     </div>
   </nav>
