@@ -1,0 +1,12 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^node -e \"const knex=require\\('\\./src/config/db'\\); knex\\('webinars'\\)\\.select\\('id','title','provider','stream_embed_url','join_url'\\)\\.then\\(r=>\\{console\\.log\\(r\\); process\\.exit\\(\\)\\}\\)\\.catch\\(e=>\\{console\\.error\\(e\\); process\\.exit\\(1\\)\\}\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"const st=require\\('\\./src/lib/stripe'\\); const zm=require\\('\\./src/lib/zoom'\\); console\\.log\\(JSON\\.stringify\\(\\{stripe: st\\.isConfigured, zoom: zm\\.isConfigured\\(\\)\\}\\)\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

@@ -46,7 +46,23 @@ async function recalcProgress(enrollment) {
  * with completion flags for a given enrollment.
  */
 async function getCourseStructure(courseId, enrollmentId = null) {
-  const modules = await knex('modules').where({ course_id: courseId }).orderBy('sort_order');
+  // Get shared modules assigned to this course, plus dedicated modules
+  const sharedModuleIds = await knex('course_shared_modules')
+    .where({ course_id: courseId })
+    .orderBy('sort_order')
+    .pluck('shared_module_id');
+
+  let modules;
+  if (sharedModuleIds.length > 0) {
+    // Course uses shared module system
+    modules = await knex('modules')
+      .whereIn('shared_module_id', sharedModuleIds)
+      .orderByRaw('(SELECT sort_order FROM course_shared_modules WHERE course_shared_modules.shared_module_id = modules.shared_module_id AND course_shared_modules.course_id = ?) ASC', [courseId]);
+  } else {
+    // Legacy: direct course_id relationship
+    modules = await knex('modules').where({ course_id: courseId }).orderBy('sort_order');
+  }
+
   const lessons = await knex('lessons')
     .whereIn('module_id', modules.map((m) => m.id))
     .orderBy(['module_id', 'sort_order']);
@@ -65,9 +81,7 @@ async function getCourseStructure(courseId, enrollmentId = null) {
       .filter((l) => l.module_id === m.id)
       .map((l) => ({ ...l, completed: completedIds.has(l.id) })),
   }));
-}
-
-// ─────────────────────────────────────────────────────────────────
+}// ─────────────────────────────────────────────────────────────────
 // Drip feed helpers
 // ─────────────────────────────────────────────────────────────────
 
