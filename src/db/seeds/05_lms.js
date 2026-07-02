@@ -45,7 +45,7 @@ exports.seed = async function (knex) {
   }
 
   // Link courses to a couple of seeded programs (by slug).
-  const leadershipProgram = await knex('programs').where({ slug: 'diploma-church-leadership' }).first();
+  const leadershipProgram = await knex('programs').where({ slug: 'diploma-christian-leadership' }).first();
   const theologyProgram = await knex('programs').where({ slug: 'ba-theology-ministry' }).first();
 
   // ─── Helper to insert a course with modules + lessons ──────
@@ -66,6 +66,10 @@ exports.seed = async function (knex) {
           type: l.type || 'reading',
           content: l.content || null,
           video_url: l.video_url || null,
+          live_provider: l.live_provider || null,
+          live_join_url: l.live_join_url || null,
+          live_embed_url: l.live_embed_url || null,
+          live_passcode: l.live_passcode || null,
           duration_min: l.duration_min || 15,
           sort_order: li + 1,
         });
@@ -102,7 +106,7 @@ exports.seed = async function (knex) {
         lessons: [
           { title: 'What the Bible says about leadership', content: lessonBody('Leadership in Scripture begins with character and calling, not position.'), duration_min: 20 },
           { title: 'Servant leadership models', content: lessonBody('Jesus redefined greatness as service. We examine practical models of servant leadership.'), duration_min: 25 },
-          { title: 'Live session: Leading from who you are', type: 'live', content: lessonBody('Join the live webinar to discuss leading from identity in Christ.'), video_url: 'https://example.com/live/lead101-m1', duration_min: 60 },
+          { title: 'Leading from who you are', type: 'video', content: lessonBody('Watch the recorded session on leading from identity in Christ and reflect on practical next steps.'), video_url: 'https://youtu.be/dQw4w9WgXcQ', duration_min: 60 },
         ],
       },
       {
@@ -153,6 +157,7 @@ exports.seed = async function (knex) {
         lessons: [
           { title: 'Reading narrative', content: lessonBody('Biblical narrative teaches through story; we learn to read it well.'), duration_min: 25 },
           { title: 'Reading the epistles', content: lessonBody('Letters demand attention to argument and audience.'), duration_min: 25 },
+          { title: 'Genre-specific interpretation reflection', type: 'video', content: lessonBody('Watch the recorded session on genre-specific interpretation and reflect on how theological meaning is shaped by each literary form.'), video_url: 'https://youtu.be/dQw4w9WgXcQ', duration_min: 60 },
           { title: 'Divine sovereignty and human will', content: lessonBody('A worked example interpreting a difficult theological theme.'), duration_min: 30 },
         ],
       },

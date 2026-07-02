@@ -753,7 +753,13 @@ router.get('/webinars/:id', async (req, res, next) => {
     const questions = await knex('webinar_questions').where({ webinar_id: webinar.id }).orderBy('upvotes', 'desc').orderBy('created_at', 'desc');
     const resources = (webinar.resources || '').split('\n').map((r) => r.trim()).filter(Boolean)
       .map((r) => { const [label, url] = r.split('|'); return { label: label || url, url: url || '#' }; });
-    res.render('portal/webinar', { pageTitle: `${webinar.title} | GDCU`, portalActive: 'webinars', webinar, questions, resources });
+    let embedHtml = null;
+    if (webinar.provider === 'onestream' && webinar.stream_embed_url) {
+      embedHtml = `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px"><iframe src="${webinar.stream_embed_url}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`;
+    } else if (webinar.provider === 'zoom' && webinar.join_url) {
+      embedHtml = `<div class="bg-surface-container-lowest rounded-lg p-6 mb-6"><p class="text-sm text-on-surface-variant">Join the Zoom meeting from the link below. Start URL is available to instructors only.</p><a href="${webinar.join_url}" target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-2 bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Join Zoom meeting</a></div>`;
+    }
+    res.render('portal/webinar', { pageTitle: `${webinar.title} | GDCU`, portalActive: 'webinars', webinar, questions, resources, embedHtml });
   } catch (err) { next(err); }
 });
 

@@ -33,7 +33,7 @@ exports.seed = async function (knex) {
     { first_name: 'Amina', last_name: 'Hassan', email: 'amina.h@example.com', phone: '+254700111222', country: 'Kenya', program_id: pid('msc-global-leadership'), interest: 'Leadership', source: 'request_info', status: 'new', assigned_to: staff ? staff.id : null, created_at: daysAgo(1), updated_at: daysAgo(1) },
     { first_name: 'David', last_name: 'Okoro', email: 'david.okoro@example.com', phone: '+2348030001111', country: 'Nigeria', program_id: pid('mba-faith-led-business') || pid('msc-business-administration'), interest: 'Business', source: 'request_info', status: 'contacted', assigned_to: staff ? staff.id : null, created_at: daysAgo(3), updated_at: daysAgo(2) },
     { first_name: 'Sofia', last_name: 'Mensah', email: 'sofia.m@example.com', country: 'Ghana', program_id: pid('ma-postcolonial-theology'), interest: 'Theology', source: 'request_info', status: 'qualified', created_at: daysAgo(6), updated_at: daysAgo(4) },
-    { first_name: 'John', last_name: 'Banda', email: 'john.banda@example.com', phone: '+260970000000', country: 'Zambia', program_id: pid('diploma-church-leadership'), interest: 'Ministry', source: 'request_info', status: 'nurturing', created_at: daysAgo(10), updated_at: daysAgo(7) },
+    { first_name: 'John', last_name: 'Banda', email: 'john.banda@example.com', phone: '+260970000000', country: 'Zambia', program_id: pid('diploma-christian-leadership'), interest: 'Ministry', source: 'request_info', status: 'nurturing', created_at: daysAgo(10), updated_at: daysAgo(7) },
     { first_name: 'Mary', last_name: 'Achieng', email: 'mary.a@example.com', country: 'Kenya', program_id: pid('certificate-diaspora-mission'), source: 'request_info', status: 'converted', created_at: daysAgo(20), updated_at: daysAgo(15) },
     { first_name: 'Peter', last_name: 'Nkosi', email: 'peter.n@example.com', country: 'South Africa', program_id: pid('ba-theology-ministry'), source: 'request_info', status: 'lost', created_at: daysAgo(30), updated_at: daysAgo(22) },
   ]);
@@ -50,7 +50,7 @@ exports.seed = async function (knex) {
   const apps = [
     { reference: 'GDCU-2026-AP001', program_id: pid('msc-global-leadership'), first_name: 'Daniel', last_name: 'Otieno', email: 'daniel.otieno@example.com', phone: '+254712000000', country: 'Kenya', intake: 'September 2026', status: 'new', payment_status: 'paid', created_at: daysAgo(2), updated_at: daysAgo(2) },
     { reference: 'GDCU-2026-AP002', program_id: pid('ma-postcolonial-theology'), first_name: 'Esther', last_name: 'Abebe', email: 'esther.abebe@example.com', country: 'Ethiopia', intake: 'September 2026', status: 'in_review', payment_status: 'paid', created_at: daysAgo(5), updated_at: daysAgo(3) },
-    { reference: 'GDCU-2026-AP003', program_id: pid('diploma-church-leadership'), first_name: 'Samuel', last_name: 'Kofi', email: 'samuel.kofi@example.com', country: 'Ghana', intake: 'January 2027', status: 'interview', payment_status: 'paid', created_at: daysAgo(8), updated_at: daysAgo(4) },
+    { reference: 'GDCU-2026-AP003', program_id: pid('diploma-christian-leadership'), first_name: 'Samuel', last_name: 'Kofi', email: 'samuel.kofi@example.com', country: 'Ghana', intake: 'January 2027', status: 'interview', payment_status: 'paid', created_at: daysAgo(8), updated_at: daysAgo(4) },
     { reference: 'GDCU-2026-AP004', program_id: pid('ba-theology-ministry'), first_name: 'Ruth', last_name: 'Mwale', email: 'ruth.mwale@example.com', country: 'Malawi', intake: 'September 2026', status: 'offer', payment_status: 'paid', created_at: daysAgo(12), updated_at: daysAgo(6) },
   ];
   await knex('applications').insert(apps);
@@ -65,7 +65,7 @@ exports.seed = async function (knex) {
 
   // ─── Invoices for the demo student (tuition instalments) ───
   if (student) {
-    const program = programs.find((p) => p.slug === 'diploma-church-leadership') || programs[0];
+    const program = programs.find((p) => p.slug === 'diploma-christian-leadership') || programs[0];
     const total = program ? Number(program.tuition) : 2800;
     const per = Math.round((total / 4) * 100) / 100;
     await knex('invoices').insert([

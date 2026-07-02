@@ -291,6 +291,29 @@
           <label class="block text-xs font-medium mb-1">Video URL <span class="text-on-surface-variant">(if including a video — YouTube/Vimeo/MP4)</span></label>
           <input type="url" name="video_url" placeholder="https://youtu.be/…" class="w-full px-3 py-2 border rounded text-sm">
         </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-medium mb-1">Live provider</label>
+            <select name="live_provider" class="w-full px-2 py-1.5 border rounded text-sm">
+              <option value="">None</option>
+              <option value="zoom">Zoom</option>
+              <option value="onestream">OneStream</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1">Live join URL</label>
+            <input type="url" name="live_join_url" placeholder="https://zoom.us/j/…" class="w-full px-2 py-1.5 border rounded text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1">Live embed URL</label>
+            <input type="url" name="live_embed_url" placeholder="https://onestream.live/…" class="w-full px-2 py-1.5 border rounded text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Live passcode</label>
+          <input type="text" name="live_passcode" class="w-full px-3 py-2 border rounded text-sm">
+        </div>
+        <p class="text-xs text-on-surface-variant">Use Zoom when you have a join link; use OneStream when you want the session embedded directly in the student portal.</p>
         <label class="flex items-center gap-2 text-sm bg-indigo-50 border border-indigo-200 rounded px-3 py-2">
           <input type="checkbox" name="add_quiz" value="on" class="w-4 h-4">
           <span class="material-symbols-outlined text-base text-indigo-600">quiz</span>
@@ -395,7 +418,26 @@
               <input type="url" name="video_url" value="<%= lesson.video_url || '' %>" class="w-full px-2 py-1 border rounded text-sm">
             </div>
           </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-xs font-medium mb-1">Live provider</label>
+              <select name="live_provider" class="w-full px-2 py-1 border rounded text-sm">
+                <option value="" <%= !lesson.live_provider ? 'selected' : '' %>>None</option>
+                <option value="zoom" <%= lesson.live_provider === 'zoom' ? 'selected' : '' %>>Zoom</option>
+                <option value="onestream" <%= lesson.live_provider === 'onestream' ? 'selected' : '' %>>OneStream</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1">Live join URL</label>
+              <input type="url" name="live_join_url" value="<%= lesson.live_join_url || '' %>" placeholder="https://zoom.us/j/…" class="w-full px-2 py-1 border rounded text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-medium mb-1">Live embed URL</label>
+              <input type="url" name="live_embed_url" value="<%= lesson.live_embed_url || '' %>" placeholder="https://onestream.live/…" class="w-full px-2 py-1 border rounded text-sm">
+            </div>
+          </div>
           <div class="grid grid-cols-4 gap-2">
+            <div><label class="block text-xs font-medium mb-1">Live passcode</label><input type="text" name="live_passcode" value="<%= lesson.live_passcode || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>
             <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="<%= lesson.duration_min || 15 %>" class="w-full px-2 py-1 border rounded text-sm"></div>
             <div><label class="block text-xs font-medium mb-1">Sort order</label><input type="number" name="sort_order" value="<%= lesson.sort_order || li+1 %>" class="w-full px-2 py-1 border rounded text-sm"></div>
             <div><label class="block text-xs font-medium mb-1">Lesson (block) #</label><input type="number" name="block_no" min="1" value="<%= lesson.block_no || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>

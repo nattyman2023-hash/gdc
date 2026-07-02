@@ -150,6 +150,10 @@ function videoEmbed(url) {
   m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (m) return frame(`https://player.vimeo.com/video/${m[1]}${start ? '#t=' + start + 's' : ''}`);
   if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(u)) return `<video controls preload="metadata" style="width:100%;border-radius:8px"><source src="${u}"></video>`;
+  if (u.includes('onestream.live') || u.includes('www.onestream.live')) {
+    const src = u.includes('iframe') ? u : u.replace(/\/\/onestream\.live/, '//www.onestream.live');
+    return frame(src);
+  }
   return null;
 }
 

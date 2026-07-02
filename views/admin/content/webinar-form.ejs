@@ -13,8 +13,15 @@
   <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Description</label><textarea name="description" rows="3" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><%= f('description') %></textarea></div>
   <div class="grid sm:grid-cols-3 gap-5">
     <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Starts *</label><input name="starts_at" type="datetime-local" required value="<%= dtLocal(f('starts_at')) %>" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Delivery</label><select name="provider" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><option value="external" <%= f('provider') === 'external' ? 'selected' : '' %>>External link</option><option value="zoom" <%= f('provider') === 'zoom' ? 'selected' : '' %>>Zoom meeting</option><option value="onestream" <%= f('provider') === 'onestream' ? 'selected' : '' %>>OneStream.live embed</option></select></div>
     <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Join URL</label><input name="join_url" value="<%= f('join_url') %>" placeholder="https://…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-5">
     <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Recording URL</label><input name="recording_url" value="<%= f('recording_url') %>" placeholder="https://…" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">OneStream Embed URL</label><input name="stream_embed_url" value="<%= f('stream_embed_url') %>" placeholder="https://www.onestream.live/embed/..." class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
+  </div>
+  <div class="grid sm:grid-cols-3 gap-5">
+    <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Zoom passcode</label><input name="zoom_passcode" value="<%= f('zoom_passcode') %>" placeholder="Optional" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" /></div>
   </div>
   <div><label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Resource pack <span class="normal-case text-on-surface-variant/70">(one per line: Label|https://url)</span></label><textarea name="resources" rows="3" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary font-mono text-sm"><%= f('resources') %></textarea></div>
   <label class="flex items-center gap-2"><input type="checkbox" name="published" <%= (isNew || webinar.published) ? 'checked' : '' %> class="rounded text-secondary" /> <span class="text-sm">Published</span></label>

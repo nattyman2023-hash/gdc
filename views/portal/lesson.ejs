@@ -66,7 +66,23 @@
         <img src="<%= lesson.image_url %>" alt="" class="w-full max-h-72 object-cover rounded-lg mb-6" loading="lazy" onerror="this.style.display='none'" />
       <% } %>
 
-      <% if (lesson.video_url) { var embed = videoEmbed(lesson.video_url); %>
+      <% if (lesson.live_provider === 'onestream' && lesson.live_embed_url) { %>
+        <% const liveEmbed = videoEmbed(lesson.live_embed_url); %>
+        <% if (liveEmbed) { %>
+          <div class="mb-6"><%- liveEmbed %></div>
+        <% } else { %>
+          <div class="bg-primary rounded-lg aspect-video flex flex-col items-center justify-center text-on-primary mb-6">
+            <span class="material-symbols-outlined text-secondary-fixed-dim" style="font-size:64px;">smart_display</span>
+            <a href="<%= lesson.live_embed_url %>" target="_blank" rel="noopener" class="mt-2 bg-secondary text-on-secondary px-5 py-2 rounded font-bold">Open live session</a>
+          </div>
+        <% } %>
+      <% } else if (lesson.live_provider === 'zoom' && lesson.live_join_url) { %>
+        <div class="mb-6 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+          <p class="text-sm text-on-surface-variant mb-3">This lesson is delivered as a live Zoom session. Join from the link below.</p>
+          <a href="<%= lesson.live_join_url %>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded font-bold">Join Zoom meeting</a>
+          <% if (lesson.live_passcode) { %><p class="text-on-surface-variant text-sm mt-3">Passcode: <strong><%= lesson.live_passcode %></strong></p><% } %>
+        </div>
+      <% } else if (lesson.video_url) { var embed = videoEmbed(lesson.video_url); %>
         <% if (embed) { %>
           <div class="mb-6"><%- embed %></div>
         <% } else { %>

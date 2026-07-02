@@ -8,7 +8,14 @@
  * used by the other modules (Read / Study / Watch per block).
  */
 exports.seed = async function (knex) {
-  const course = await knex('courses').where({ slug: 'ba-theology-ministry' }).first();
+  let course = await knex('courses').where({ slug: 'ba-theology-ministry' }).first();
+  if (!course) {
+    // Try common legacy/year-based slugs or title match
+    course = await knex('courses').where('slug', 'like', 'ba-theology%').first();
+  }
+  if (!course) {
+    course = await knex('courses').where('title', 'like', '%BA Theology%').first();
+  }
   if (!course) { console.log('  ⚠ BA Theology course not found — skipping fix.'); return; }
 
   const courseId = course.id;

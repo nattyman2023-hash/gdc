@@ -2806,8 +2806,18 @@ router.post('/modules/:id/block', async (req, res, next) => {
     for (const p of parts) {
       sort += 1;
       await knex('lessons').insert({
-        module_id: mod.id, title: p.title, type: p.type, video_url: p.video || null,
-        duration_min: p.dur, sort_order: sort, block_no: blockNo, block_title: title,
+        module_id: mod.id,
+        title: p.title,
+        type: p.type,
+        video_url: p.video || null,
+        live_provider: req.body.live_provider || null,
+        live_join_url: req.body.live_join_url || null,
+        live_embed_url: req.body.live_embed_url || null,
+        live_passcode: req.body.live_passcode || null,
+        duration_min: p.dur,
+        sort_order: sort,
+        block_no: blockNo,
+        block_title: title,
       });
     }
 
@@ -2835,6 +2845,10 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
       content: req.body.content || null,
       video_url: req.body.video_url || null,
       image_url: req.body.image_url || null,
+      live_provider: req.body.live_provider || null,
+      live_join_url: req.body.live_join_url || null,
+      live_embed_url: req.body.live_embed_url || null,
+      live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
       sort_order: req.body.sort_order ? Number(req.body.sort_order) : (maxSort.m || 0) + 1,
       block_no: req.body.block_no ? Number(req.body.block_no) : null,
@@ -2858,6 +2872,10 @@ router.post('/lessons/:id', async (req, res, next) => {
       content: req.body.content || null,
       video_url: req.body.video_url || null,
       image_url: req.body.image_url || null,
+      live_provider: req.body.live_provider || null,
+      live_join_url: req.body.live_join_url || null,
+      live_embed_url: req.body.live_embed_url || null,
+      live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
       sort_order: req.body.sort_order || 0,
       block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),

@@ -8,6 +8,7 @@ const knex = require('../config/db');
 const { requireRole } = require('../middleware/auth');
 const { slugify } = require('../lib/helpers');
 const { notifyUser } = require('../lib/notify');
+const { isConfigured: zoomConfigured, createMeeting, updateMeeting } = require('../lib/zoom');
 
 // Notify the relevant students about an announcement (course cohort or all students).
 async function notifyAnnouncement(courseId, title) {
@@ -584,16 +585,59 @@ router.get('/webinars/:id/edit', async (req, res, next) => {
 
 function webinarData(body) {
   return {
-    title: body.title, presenter: body.presenter || null, description: body.description || null,
+    title: body.title,
+    presenter: body.presenter || null,
+    description: body.description || null,
     starts_at: body.starts_at ? body.starts_at.replace('T', ' ') + ':00' : null,
-    join_url: body.join_url || null, recording_url: body.recording_url || null,
-    resources: body.resources || null, published: bool(body.published),
+    provider: body.provider || 'external',
+    join_url: body.join_url || null,
+    recording_url: body.recording_url || null,
+    stream_embed_url: body.stream_embed_url || null,
+    zoom_passcode: body.zoom_passcode || null,
+    resources: body.resources || null,
+    published: bool(body.published),
   };
+}
+
+async function ensureZoomMeeting(data, existingWebinar = null) {
+  if (data.provider !== 'zoom' || !zoomConfigured()) return data;
+  try {
+    if (existingWebinar && existingWebinar.zoom_meeting_id) {
+      await updateMeeting(existingWebinar.zoom_meeting_id, {
+        topic: data.title,
+        startsAt: data.starts_at,
+        durationMin: 60,
+      });
+      data.zoom_meeting_id = existingWebinar.zoom_meeting_id;
+      data.zoom_start_url = existingWebinar.zoom_start_url;
+      data.zoom_passcode = existingWebinar.zoom_passcode;
+      data.join_url = data.join_url || existingWebinar.join_url;
+      return data;
+    }
+
+    const meeting = await createMeeting({
+      topic: data.title,
+      startsAt: data.starts_at,
+      durationMin: 60,
+      agenda: data.description || '',
+    });
+    if (meeting) {
+      data.zoom_meeting_id = meeting.meetingId;
+      data.zoom_start_url = meeting.startUrl;
+      data.zoom_passcode = meeting.passcode;
+      data.join_url = data.join_url || meeting.joinUrl;
+    }
+  } catch (err) {
+    console.error('Zoom meeting creation/update failed:', err.message || err);
+  }
+  return data;
 }
 
 router.post('/webinars', async (req, res, next) => {
   try {
-    const data = webinarData(req.body); data.created_at = knex.fn.now(); data.updated_at = knex.fn.now();
+    let data = webinarData(req.body);
+    data = await ensureZoomMeeting(data);
+    data.created_at = knex.fn.now(); data.updated_at = knex.fn.now();
     await knex('webinars').insert(data);
     req.flash('success', 'Webinar scheduled.');
     res.redirect('/admin/content/webinars');
@@ -602,7 +646,11 @@ router.post('/webinars', async (req, res, next) => {
 
 router.post('/webinars/:id', async (req, res, next) => {
   try {
-    const data = webinarData(req.body); data.updated_at = knex.fn.now();
+    const existingWebinar = await knex('webinars').where({ id: req.params.id }).first();
+    if (!existingWebinar) return res.status(404).render('errors/404', { pageTitle: 'Not found', layout: 'layouts/admin' });
+    let data = webinarData(req.body);
+    data = await ensureZoomMeeting(data, existingWebinar);
+    data.updated_at = knex.fn.now();
     await knex('webinars').where({ id: req.params.id }).update(data);
     req.flash('success', 'Webinar updated.');
     res.redirect('/admin/content/webinars');

@@ -49,7 +49,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
         imgSrc: ["'self'", 'data:', 'https:'],
-        frameSrc: ['https://js.stripe.com', 'https://hooks.stripe.com', 'https://www.youtube.com', 'https://www.youtube-nocookie.com', 'https://player.vimeo.com'],
+        frameSrc: ['https://js.stripe.com', 'https://hooks.stripe.com', 'https://www.youtube.com', 'https://www.youtube-nocookie.com', 'https://player.vimeo.com', 'https://www.onestream.live', 'https://onestream.live'],
         connectSrc: ["'self'", 'https://api.stripe.com'],
       },
     },
