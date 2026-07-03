@@ -129,6 +129,22 @@ router.get('/courses/:slug', async (req, res, next) => {
     }
 
     const structure = await getCourseStructure(course.id, enrollment.id);
+
+    // Assignments belonging to a specific module are shown inside that
+    // module's card rather than one flat list; attach them onto `structure`
+    // before building `curriculum` so getBlockedCurriculum's `{...m}` spread
+    // carries them through into the block-grouped view too.
+    const moduleAssignments = await knex('assignments')
+      .where({ course_id: course.id, published: true })
+      .whereNotNull('module_id')
+      .orderBy('sort_order');
+    for (const asg of moduleAssignments) {
+      asg.submission = await knex('assignment_submissions').where({ assignment_id: asg.id, user_id: userId }).first();
+    }
+    for (const m of structure) {
+      m.assignments = moduleAssignments.filter((a) => a.module_id === m.id);
+    }
+
     // Block-grouped curriculum (Lesson 1, 2, …) with microlearning gates, when the course uses blocks.
     const usesBlocks = structure.some((m) => m.lessons.some((l) => l.block_no));
     const curriculum = usesBlocks ? await getBlockedCurriculum(enrollment.id, structure, course) : null;
@@ -177,7 +193,8 @@ router.get('/courses/:slug', async (req, res, next) => {
     const finalExamUnlocked = finalExam ? allLessonsComplete : false;
     const finalExamPassed = finalExam && finalExam.best ? !!finalExam.best.passed : false;
 
-    const assignments = await knex('assignments').where({ course_id: course.id, published: true }).orderBy('created_at', 'desc');
+    // Course-wide assignments (no module_id) still show in the flat list below.
+    const assignments = await knex('assignments').where({ course_id: course.id, published: true }).whereNull('module_id').orderBy('created_at', 'desc');
     for (const asg of assignments) {
       asg.submission = await knex('assignment_submissions').where({ assignment_id: asg.id, user_id: userId }).first();
     }

@@ -1,0 +1,17 @@
+<% if (typeof moduleAssignments !== 'undefined' && moduleAssignments && moduleAssignments.length) { %>
+<div class="border-t border-outline-variant/40 divide-y divide-outline-variant/30 bg-blue-50/30">
+  <% moduleAssignments.forEach(function(asg){ var sub = asg.submission; %>
+  <div class="px-4 py-3 flex items-center justify-between gap-3">
+    <div class="min-w-0">
+      <p class="text-sm font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-base text-blue-500">assignment</span> <%= asg.title %></p>
+      <p class="text-xs text-on-surface-variant mt-0.5">
+        <% if (asg.due_date) { %>Due <%= formatDate(asg.due_date) %> · <% } %>Out of <%= asg.max_points %>
+        <% if (sub && sub.status === 'graded') { %>· <span class="text-secondary font-bold">Graded: <%= sub.grade %>/<%= asg.max_points %></span>
+        <% } else if (sub) { %>· <span class="text-secondary">Submitted</span><% } %>
+      </p>
+    </div>
+    <a href="/portal/assignments/<%= asg.id %>" class="<%= sub ? 'border border-outline text-primary' : 'bg-primary text-on-primary' %> px-3 py-1.5 rounded text-xs font-bold shrink-0 hover:opacity-90"><%= sub ? 'View' : 'Submit' %></a>
+  </div>
+  <% }) %>
+</div>
+<% } %>

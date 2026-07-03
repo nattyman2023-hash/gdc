@@ -151,6 +151,7 @@
           </details>
           <% }) %>
         </div>
+        <%- include('../partials/module-assignments', { moduleAssignments: m.assignments, course: course, formatDate: formatDate }) %>
         </details>
         <% }) %>
         <% if (y) { %></div></details><% } %>
@@ -176,6 +177,7 @@
             </li>
             <% }) %>
           </ul>
+          <%- include('../partials/module-assignments', { moduleAssignments: m.assignments, course: course, formatDate: formatDate }) %>
         </div>
         <% }) %>
       </div>
@@ -214,7 +216,7 @@
     <% } %>
 
     <% if (assignments && assignments.length) { %>
-    <h2 class="font-headline text-headline-sm text-primary pt-4">Assignments</h2>
+    <h2 class="font-headline text-headline-sm text-primary pt-4">Other Assignments</h2>
     <% assignments.forEach(function(asg){ var sub = asg.submission; %>
     <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 flex items-center justify-between gap-4">
       <div>

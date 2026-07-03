@@ -2703,6 +2703,12 @@ router.get('/courses/:id/modules', async (req, res, next) => {
       for (const l of m.lessons) {
         l.materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
       }
+      // Assignments belonging to this specific module, shown inside its card
+      // rather than lumped into one flat course-wide list.
+      m.assignments = await knex('assignments').where({ course_id: course.id, module_id: m.id }).orderBy('sort_order');
+      for (const a of m.assignments) {
+        a.submissionCount = Number((await knex('assignment_submissions').where({ assignment_id: a.id }).count({ c: '*' }).first()).c);
+      }
     }
 
     const allQuizzes = await knex('quizzes').where({ course_id: course.id }).orderBy('sort_order');
@@ -2710,7 +2716,9 @@ router.get('/courses/:id/modules', async (req, res, next) => {
     if (finalExam) {
       finalExam.questionCount = Number((await knex('quiz_questions').where({ quiz_id: finalExam.id }).count({ c: '*' }).first()).c);
     }
-    const assignments = await knex('assignments').where({ course_id: course.id }).orderBy('created_at', 'desc');
+    // Course-wide assignments (not tied to any module) still show in the panel
+    // at the top of the page.
+    const assignments = await knex('assignments').where({ course_id: course.id }).whereNull('module_id').orderBy('created_at', 'desc');
     for (const a of assignments) {
       a.submissionCount = Number((await knex('assignment_submissions').where({ assignment_id: a.id }).count({ c: '*' }).first()).c);
     }
@@ -2948,6 +2956,7 @@ router.post('/courses/:id/assignments', async (req, res, next) => {
     if (!req.body.title) { req.flash('error', 'Assignment title is required.'); return res.redirect(`/admin/courses/${course.id}/modules`); }
     await knex('assignments').insert({
       course_id: course.id,
+      module_id: req.body.module_id || null,
       title: req.body.title,
       instructions: req.body.instructions || null,
       due_date: req.body.due_date || null,

@@ -105,12 +105,13 @@
     <% } %>
   </div>
 
-  <!-- Assignments (course-level) -->
+  <!-- Course-wide assignments (not tied to a specific module). Assignments that
+       belong to a module are shown inside that module's card, further down. -->
   <div class="bg-white rounded-lg shadow mb-4 overflow-hidden border-l-4 border-blue-400">
     <div class="px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <span class="material-symbols-outlined text-blue-500">assignment</span>
-        <div><h3 class="font-semibold text-primary">Assignments</h3><p class="text-xs text-on-surface-variant">Written tasks students submit for grading.</p></div>
+        <div><h3 class="font-semibold text-primary">Course-wide assignments</h3><p class="text-xs text-on-surface-variant">Written tasks not tied to a specific module. Module assignments appear inside each module below.</p></div>
       </div>
       <button type="button" onclick="document.getElementById('add-assignment').classList.toggle('hidden')" class="px-3 py-1.5 bg-blue-500 text-white rounded text-xs font-medium hover:bg-blue-600">+ Add assignment</button>
     </div>
@@ -135,7 +136,7 @@
       <% }) %>
     </div>
     <% } else { %>
-    <div class="px-6 pb-4"><p class="text-xs text-on-surface-variant">No assignments yet. Click <strong>+ Add assignment</strong> to create one.</p></div>
+    <div class="px-6 pb-4"><p class="text-xs text-on-surface-variant">No course-wide assignments. Assignments tied to a module appear inside that module's card below.</p></div>
     <% } %>
   </div>
 
@@ -514,6 +515,38 @@
         </div>
       <% } else { %>
         <p class="text-xs text-on-surface-variant">No quizzes in this module yet. Click <strong>+ Quiz</strong> to build one.</p>
+      <% } %>
+    </div>
+
+    <!-- Module assignments -->
+    <div class="px-6 py-4 border-t border-outline-variant bg-blue-50/40">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wide inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">assignment</span> Assignments in this module</p>
+        <button type="button" onclick="document.getElementById('add-assignment-<%= mod.id %>').classList.toggle('hidden')" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-medium hover:bg-blue-600">+ Add assignment</button>
+      </div>
+      <div id="add-assignment-<%= mod.id %>" class="hidden mb-2">
+        <form method="POST" action="/admin/courses/<%= course.id %>/assignments" class="space-y-2 bg-white border border-blue-200 rounded p-3">
+          <input type="hidden" name="module_id" value="<%= mod.id %>">
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          </div>
+          <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"></textarea></div>
+          <div class="w-32"><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-assignment-<%= mod.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Create assignment</button></div>
+        </form>
+      </div>
+      <% if (mod.assignments && mod.assignments.length) { %>
+        <div class="space-y-1.5">
+          <% mod.assignments.forEach(function(a){ %>
+          <div class="flex items-center justify-between text-sm bg-white border border-outline-variant rounded px-3 py-2">
+            <div><span class="font-medium text-primary"><%= a.title %></span><span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span></div>
+            <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+          </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-xs text-on-surface-variant">No assignments in this module yet. Click <strong>+ Add assignment</strong> to create one.</p>
       <% } %>
     </div>
     </div>
