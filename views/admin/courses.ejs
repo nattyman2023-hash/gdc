@@ -45,9 +45,9 @@
       <a href="/admin/courses/<%= c.id %>/modules" class="absolute inset-0 z-0" title="Open course builder"></a>
       <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
       <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-black/30 pointer-events-none"></div>
-      <span class="absolute top-3 left-0 text-white text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug pointer-events-none" style="background:<%= c.levelColor %>"><%= c.title %></span>
+      <span class="absolute top-3 left-0 text-white text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[62%] leading-snug pointer-events-none" style="background:<%= c.levelColor %>"><%= c.title %></span>
       <div class="absolute top-3 right-3 flex flex-col items-end gap-1 pointer-events-none">
-        <% if (c.levelLabel) { %><span class="text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow" style="background:<%= c.levelColor %>"><%= c.levelLabel %></span><% } %>
+        <% if (c.levelLabel) { %><span class="bg-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow border" style="color:<%= c.levelColor %>;border-color:<%= c.levelColor %>"><%= c.levelLabel %></span><% } %>
         <% if (!c.published) { %><span class="bg-gray-200 text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Draft</span><% } %>
       </div>
       <div class="absolute bottom-2 left-3 text-white text-xs pointer-events-none"><%= c.moduleCount %> modules · <%= c.enrollmentCount %> enrolled</div>

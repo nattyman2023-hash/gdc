@@ -2672,14 +2672,34 @@ router.get('/courses/:id/modules', async (req, res, next) => {
     const course = await knex('courses').where({ id: req.params.id }).first();
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
 
-    const modules = await knex('modules').where({ course_id: course.id }).orderBy('sort_order');
+    // Modules reach a course one of two ways: legacy dedicated (modules.course_id)
+    // or the shared-module system (course_shared_modules junction, pointing at a
+    // template row in `modules` that many courses reuse). Show both, in the
+    // course's assigned order, so shared-system courses aren't shown as empty.
+    const sharedLinks = await knex('course_shared_modules').where({ course_id: course.id }).orderBy('sort_order');
+    const sharedModuleIds = sharedLinks.map((l) => l.shared_module_id);
+    let modules;
+    if (sharedModuleIds.length) {
+      const tmplModules = await knex('modules').whereIn('shared_module_id', sharedModuleIds);
+      const bySmId = {};
+      tmplModules.forEach((m) => { bySmId[m.shared_module_id] = m; });
+      modules = sharedLinks.map((l) => bySmId[l.shared_module_id]).filter(Boolean).map((m) => ({ ...m, isShared: true }));
+    } else {
+      modules = (await knex('modules').where({ course_id: course.id }).orderBy('sort_order')).map((m) => ({ ...m, isShared: false }));
+    }
+
     for (const m of modules) {
       m.lessons = await knex('lessons').where({ module_id: m.id }).orderBy('sort_order');
-      m.quizzes = await knex('quizzes').where({ module_id: m.id }).orderBy('sort_order');
+      // A shared module has one quiz copy per course that uses it — scope to
+      // this course, or every course's copy would show up mixed together.
+      m.quizzes = await knex('quizzes').where({ module_id: m.id, course_id: course.id }).orderBy('sort_order');
       for (const qz of m.quizzes) {
         qz.questionCount = Number((await knex('quiz_questions').where({ quiz_id: qz.id }).count({ c: '*' }).first()).c);
       }
       m.essayCount = (await knex('essay_submissions').where({ module_id: m.id }).count({ c: '*' }).first()).c;
+      if (m.isShared) {
+        m.sharedCourseCount = Number((await knex('course_shared_modules').where({ shared_module_id: m.shared_module_id }).count({ c: '*' }).first()).c);
+      }
       for (const l of m.lessons) {
         l.materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
       }

@@ -62,9 +62,6 @@ app.use(
 app.use(compression());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
-// ─── Response cache (production only) ────────────────────────
-app.use(cache(60 * 1000)); // Cache public pages for 60 seconds
-
 // ─── Rate limiting (auth only - global limiter used in production) ──
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -117,6 +114,14 @@ app.use(
 );
 app.use(flash());
 app.use(locals);
+
+// ─── Response cache (production only) ────────────────────────
+// Must come AFTER session/locals — its "skip if logged in" check reads
+// req.session.user, which doesn't exist until the session middleware runs.
+// Caching earlier in the chain served one visitor's authenticated header
+// (My Portal / Sign out) to the next anonymous visitor on the same URL,
+// and could just as easily serve a logged-in user a stale logged-out page.
+app.use(cache(60 * 1000)); // Cache public pages for 60 seconds
 
 // View helpers available in every template.
 app.locals.formatMoney = formatMoney;
