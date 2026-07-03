@@ -73,22 +73,9 @@ async function runStartupTasks() {
     console.error('ensureAdminUser failed:', err);
   }
 
-  // Run course seed on first boot (no published courses with content yet).
-  // This runs AFTER migrations so shared_modules table exists.
-  try {
-    const hasCourses = await knex('courses').where({ published: true }).count('* as c').first();
-    if (hasCourses && Number(hasCourses.c) > 0) {
-      const hasContent = await knex('shared_modules').count('* as c').first();
-      if (!hasContent || Number(hasContent.c) === 0) {
-        console.log('📚 First boot — seeding course content...');
-        const { execSync } = require('child_process');
-        execSync('node seed_production.js', { cwd: __dirname.replace('/src',''), stdio: 'inherit', timeout: 120000 });
-        console.log('✓ Course seed complete');
-      }
-    }
-  } catch (err) {
-    console.error('Seed attempt failed:', err.message);
-  }
+  // Course content is provisioned via restore-courses.sql (imported through
+  // phpMyAdmin) — see scripts/export-lms.js. The old boot-time seed script was
+  // removed; nothing to run here.
 
   // Daily attendance sweep: escalating warning emails to inactive students.
   if (process.env.NODE_ENV !== 'test') {

@@ -17,24 +17,39 @@
   <% } %>
 
   <div class="flex items-center justify-between mb-4">
-    <h2 class="font-semibold text-lg">All Courses (<%= courses.length %>)</h2>
+    <h2 class="font-semibold text-lg">All Courses (<span id="course-count"><%= courses.length %></span>)</h2>
     <div class="inline-flex border border-outline-variant rounded overflow-hidden text-sm">
       <a href="/admin/courses?view=list" class="px-3 py-1.5 inline-flex items-center gap-1 <%= view==='list' ? 'bg-primary text-on-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-lowest' %>"><span class="material-symbols-outlined text-base">view_list</span> List</a>
       <a href="/admin/courses?view=grid" class="px-3 py-1.5 inline-flex items-center gap-1 <%= view==='grid' ? 'bg-primary text-on-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-lowest' %>"><span class="material-symbols-outlined text-base">grid_view</span> Cards</a>
     </div>
   </div>
 
+  <!-- Study-level filters -->
+  <% if (levels && levels.length) { %>
+  <div class="flex flex-wrap gap-2 mb-5" id="course-filters">
+    <button type="button" data-filter="all" class="course-filter px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors" style="background:#071d3a;color:#fff;border-color:#071d3a">All</button>
+    <% levels.forEach(function(l){ %>
+      <button type="button" data-filter="<%= l.key %>" class="course-filter px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors" style="background:#fff;color:<%= l.color %>;border-color:<%= l.color %>">
+        <span class="inline-block w-2.5 h-2.5 rounded-full align-middle mr-1.5" style="background:<%= l.color %>"></span><%= l.label %>
+      </button>
+    <% }) %>
+  </div>
+  <% } %>
+
   <% if (view === 'grid') { %>
   <!-- Card grid -->
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <% courses.forEach(function(c){ %>
-    <div class="group relative h-44 rounded-lg overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-shadow">
+    <div class="course-card group relative h-44 rounded-lg overflow-hidden border border-outline-variant shadow-sm hover:shadow-lg transition-shadow" data-category="<%= c.levelKey %>">
       <!-- Whole card opens the builder (the main place to manage a course) -->
       <a href="/admin/courses/<%= c.id %>/modules" class="absolute inset-0 z-0" title="Open course builder"></a>
       <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
       <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-black/30 pointer-events-none"></div>
-      <span class="absolute top-3 left-0 bg-primary text-on-primary text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug pointer-events-none"><%= c.title %></span>
-      <% if (!c.published) { %><span class="absolute top-3 right-3 bg-gray-200 text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded-full pointer-events-none">Draft</span><% } %>
+      <span class="absolute top-3 left-0 text-white text-sm font-bold px-3 py-1.5 rounded-r-md shadow max-w-[88%] leading-snug pointer-events-none" style="background:<%= c.levelColor %>"><%= c.title %></span>
+      <div class="absolute top-3 right-3 flex flex-col items-end gap-1 pointer-events-none">
+        <% if (c.levelLabel) { %><span class="text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow" style="background:<%= c.levelColor %>"><%= c.levelLabel %></span><% } %>
+        <% if (!c.published) { %><span class="bg-gray-200 text-gray-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Draft</span><% } %>
+      </div>
       <div class="absolute bottom-2 left-3 text-white text-xs pointer-events-none"><%= c.moduleCount %> modules · <%= c.enrollmentCount %> enrolled</div>
       <div class="absolute bottom-2 right-3 flex items-center gap-1 z-10">
         <a href="/admin/courses/<%= c.id %>/preview" target="_blank" class="bg-white/95 text-primary p-1.5 rounded-full hover:bg-white" title="Preview as a student"><span class="material-symbols-outlined text-sm align-middle">visibility</span></a>
@@ -48,7 +63,7 @@
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="divide-y divide-outline-variant">
       <% courses.forEach(function(c){ %>
-      <div class="p-6 hover:bg-surface-container-lowest transition-colors">
+      <div class="course-card p-6 hover:bg-surface-container-lowest transition-colors border-l-4" data-category="<%= c.levelKey %>" style="border-left-color:<%= c.levelColor %>">
         <div class="flex items-center justify-between gap-4">
           <div class="w-24 h-16 shrink-0 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant">
             <img src="<%= c.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
@@ -56,6 +71,7 @@
           <div class="flex-1">
             <div class="flex items-center gap-3 mb-1">
               <h3 class="font-semibold text-primary"><%= c.title %></h3>
+              <% if (c.levelLabel) { %><span class="text-xs font-bold px-2 py-0.5 rounded-full text-white" style="background:<%= c.levelColor %>"><%= c.levelLabel %></span><% } %>
               <% if (c.code) { %><span class="text-xs bg-surface-container-high px-2 py-0.5 rounded"><%= c.code %></span><% } %>
               <span class="px-2 py-0.5 rounded-full text-xs font-medium <%= c.published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
                 <%= c.published ? 'Published' : 'Draft' %>
@@ -95,3 +111,37 @@
   </div>
   <% } %>
 </div>
+
+<script>
+(function () {
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.course-filter'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.course-card'));
+  var countEl = document.getElementById('course-count');
+  if (!buttons.length) return;
+
+  function apply(filter, activeBtn) {
+    var shown = 0;
+    cards.forEach(function (card) {
+      var match = filter === 'all' || card.getAttribute('data-category') === filter;
+      card.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+    if (countEl) countEl.textContent = shown;
+    buttons.forEach(function (b) {
+      var color = b.getAttribute('data-color') || '#071d3a';
+      var active = b === activeBtn;
+      // Active = solid fill; inactive = outline.
+      b.style.background = active ? color : '#fff';
+      b.style.color = active ? '#fff' : color;
+    });
+  }
+
+  buttons.forEach(function (btn) {
+    // Capture each button's own colour (its border) for toggling.
+    btn.setAttribute('data-color', btn.style.borderColor || '#071d3a');
+    btn.addEventListener('click', function () {
+      apply(btn.getAttribute('data-filter'), btn);
+    });
+  });
+})();
+</script>

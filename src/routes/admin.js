@@ -2548,19 +2548,41 @@ router.get('/exams', async (req, res, next) => {
 });
 
 // ─── LMS Course & Module Management ─────────────────────────
+// Study-level metadata: label + banner colour shown on the Manage Courses page.
+const COURSE_LEVELS = {
+  certificate: { label: 'Certificate', color: '#0f766e' }, // teal
+  diploma: { label: 'Diploma', color: '#1d4ed8' }, // blue
+  bachelor: { label: 'Bachelor', color: '#6d28d9' }, // violet
+  master: { label: "Master's", color: '#b45309' }, // amber
+  doctor: { label: 'Doctorate (PhD)', color: '#be123c' }, // rose
+};
+
 router.get('/courses', async (req, res, next) => {
   try {
     const courses = await knex('courses').orderBy('sort_order');
     for (const c of courses) {
-      c.moduleCount = (await knex('modules').where({ course_id: c.id }).count({ c: '*' }).first()).c;
+      // Modules can be attached directly (legacy course_id) or via the shared-
+      // module system (course_shared_modules); count whichever this course uses.
+      const shared = Number((await knex('course_shared_modules').where({ course_id: c.id }).count({ c: '*' }).first()).c);
+      const legacy = Number((await knex('modules').where({ course_id: c.id }).count({ c: '*' }).first()).c);
+      c.moduleCount = shared > 0 ? shared : legacy;
       c.enrollmentCount = (await knex('enrollments').where({ course_id: c.id }).count({ c: '*' }).first()).c;
+      const lvl = COURSE_LEVELS[String(c.category || '').toLowerCase()];
+      c.levelKey = lvl ? String(c.category).toLowerCase() : 'other';
+      c.levelLabel = lvl ? lvl.label : null;
+      c.levelColor = lvl ? lvl.color : '#071d3a';
     }
+    // Filter buttons, in study order, for the levels actually present.
+    const levels = Object.entries(COURSE_LEVELS)
+      .filter(([key]) => courses.some((c) => c.levelKey === key))
+      .map(([key, v]) => ({ key, ...v }));
     if (req.query.view === 'grid' || req.query.view === 'list') req.session.adminCourseView = req.query.view;
     const view = req.session.adminCourseView || 'grid';
     res.render('admin/courses', {
       pageTitle: 'Manage Courses | GDCU',
       adminActive: 'lms-courses',
       courses,
+      levels,
       view,
     });
   } catch (err) { next(err); }

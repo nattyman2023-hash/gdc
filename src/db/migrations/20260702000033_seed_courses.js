@@ -60,7 +60,15 @@ exports.up = async function (knex) {
   }
 
   // 2. Create module content (lessons + quizzes)
-  const firstId = (await knex('courses').orderBy('id').first()).id;
+  // Requires an existing course to anchor the template modules. On a fresh
+  // database (no courses/programs seeded yet) there is nothing to attach to —
+  // bail out cleanly rather than crash on `.id` of undefined.
+  const firstCourse = await knex('courses').orderBy('id').first();
+  if (!firstCourse) {
+    console.log('  No courses found — skipping course-content seed.');
+    return;
+  }
+  const firstId = firstCourse.id;
   for (const [code, ttl] of Object.entries(MODS)) {
     const [mid] = await knex('modules').insert({
       course_id: firstId, shared_module_id: smMap[code], title: ttl, summary: ttl,
