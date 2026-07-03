@@ -95,7 +95,7 @@
           </div>
         <% } else { %>
           <div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 text-on-surface-variant">
-            <p>The full module breakdown for this programme is being finalised. <a href="#enquire" class="text-secondary font-bold">Request the curriculum</a> and our team will send you the detailed module guide.</p>
+            <p>The full module breakdown for this programme is being finalised. <a href="#" onclick="openEnquireModal(event)" class="text-secondary font-bold">Request the curriculum</a> and our team will send you the detailed module guide.</p>
           </div>
         <% } %>
       </div>
@@ -111,7 +111,7 @@
           </li>
           <% }) %>
         </ul>
-        <p class="text-on-surface-variant text-sm mt-4 italic">Unsure if you qualify? <a href="#enquire" class="text-secondary font-bold not-italic">Talk to admissions</a> — we assess experience as well as qualifications.</p>
+        <p class="text-on-surface-variant text-sm mt-4 italic">Unsure if you qualify? <a href="#" onclick="openEnquireModal(event)" class="text-secondary font-bold not-italic">Talk to admissions</a> — we assess experience as well as qualifications.</p>
       </div>
 
       <!-- Career prospects -->
@@ -140,7 +140,7 @@
           <div class="flex justify-between"><span class="text-on-surface-variant">Tuition</span><span class="font-bold text-primary text-right"><%= formatMoney(program.tuition, program.tuition_currency) %></span></div>
         </div>
         <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded-lg font-bold mb-3 hover:opacity-90 active:scale-95 transition">Apply for this programme</a>
-        <a href="#enquire" class="block text-center border-2 border-secondary text-primary px-6 py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-colors">Request information</a>
+        <a href="#" onclick="openEnquireModal(event)" class="block text-center border-2 border-secondary text-primary px-6 py-3 rounded-lg font-bold hover:bg-secondary-fixed transition-colors">Request information</a>
       </div>
     </aside>
   </div>
@@ -164,8 +164,28 @@
 </section>
 <% } %>
 
-<section id="enquire" class="py-16 bg-surface-container">
-  <div class="max-w-2xl mx-auto px-margin-mobile lg:px-margin-desktop">
+<!-- Enquiry modal — opened instantly by "Request information" / "Talk to admissions" /
+     "Request the curriculum" above, instead of scrolling to a section. -->
+<div id="enquire-modal" class="hidden fixed inset-0 overflow-y-auto p-4 sm:p-6" style="z-index:60">
+  <div class="fixed inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeEnquireModal()"></div>
+  <div class="relative max-w-2xl mx-auto my-6 sm:my-12">
+    <button type="button" onclick="closeEnquireModal()" aria-label="Close" class="absolute -top-3 -right-3 z-10 bg-white text-on-surface-variant hover:text-primary rounded-full p-2 shadow-lg">
+      <span class="material-symbols-outlined text-xl align-middle">close</span>
+    </button>
     <%- include('../partials/request-info', { programs: [program].concat(related || []) }) %>
   </div>
-</section>
+</div>
+<script>
+  function openEnquireModal(e) {
+    if (e) e.preventDefault();
+    document.getElementById('enquire-modal').classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+  function closeEnquireModal() {
+    document.getElementById('enquire-modal').classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeEnquireModal();
+  });
+</script>
