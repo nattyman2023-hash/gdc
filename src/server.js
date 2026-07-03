@@ -73,6 +73,15 @@ async function runStartupTasks() {
     console.error('ensureAdminUser failed:', err);
   }
 
+  // Auto-seed course content on first-ever boot (no shared_modules yet).
+  try {
+    const { autoSeedIfEmpty } = require('./lib/seed');
+    await autoSeedIfEmpty();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Auto-seed failed:', err);
+  }
+
   // Daily attendance sweep: escalating warning emails to inactive students.
   if (process.env.NODE_ENV !== 'test') {
     const { runSweep } = require('./lib/attendance');
