@@ -73,13 +73,21 @@ async function runStartupTasks() {
     console.error('ensureAdminUser failed:', err);
   }
 
-  // Auto-seed course content on first-ever boot (no shared_modules yet).
+  // Run course seed on first boot (no published courses with content yet).
+  // This runs AFTER migrations so shared_modules table exists.
   try {
-    const { autoSeedIfEmpty } = require('./lib/seed');
-    await autoSeedIfEmpty();
+    const hasCourses = await knex('courses').where({ published: true }).count('* as c').first();
+    if (hasCourses && Number(hasCourses.c) > 0) {
+      const hasContent = await knex('shared_modules').count('* as c').first();
+      if (!hasContent || Number(hasContent.c) === 0) {
+        console.log('📚 First boot — seeding course content...');
+        const { execSync } = require('child_process');
+        execSync('node seed_production.js', { cwd: __dirname.replace('/src',''), stdio: 'inherit', timeout: 120000 });
+        console.log('✓ Course seed complete');
+      }
+    }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('Auto-seed failed:', err);
+    console.error('Seed attempt failed:', err.message);
   }
 
   // Daily attendance sweep: escalating warning emails to inactive students.

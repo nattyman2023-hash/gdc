@@ -251,7 +251,7 @@ ${bi<bl-1?`<p><em>✅ Section complete. Continue with Part ${p+1}.</em></p>`:'<p
     for (const code of codes) {
       const sid = smMap[code];
       if (!sid) continue;
-      await knex.raw('INSERT OR IGNORE INTO course_shared_modules (course_id, shared_module_id, sort_order) VALUES (?,?,?)', [c.id, sid, so++]);
+      await knex.raw('INSERT IGNORE INTO course_shared_modules (course_id, shared_module_id, sort_order) VALUES (?,?,?)', [c.id, sid, so++]);
 
       const mod = await knex('modules').where({ shared_module_id: sid }).first();
       if (!mod) continue;
