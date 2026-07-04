@@ -2963,6 +2963,165 @@ router.post('/modules/:id/duplicate', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ─── Import / export (admin-UI JSON content portability) ──────
+// Distinct from scripts/export-lms.js, a dev-only CLI script that dumps the
+// whole local DB to a MySQL-import file for provisioning production — this
+// is a browser-facing feature for moving one module or course's content
+// between courses (or environments) as a plain JSON file.
+async function exportLessonsForModule(moduleId) {
+  const lessons = await knex('lessons').where({ module_id: moduleId }).orderBy('sort_order');
+  const out = [];
+  for (const l of lessons) {
+    const materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
+    out.push({
+      title: l.title, type: l.type, content: l.content, video_url: l.video_url,
+      duration_min: l.duration_min, sort_order: l.sort_order, block_no: l.block_no, block_title: l.block_title,
+      materials: materials.map((m) => ({ label: m.label, url: m.url, type: m.type })),
+    });
+  }
+  return out;
+}
+
+async function exportQuizzesForModule(moduleId, courseId) {
+  const quizzes = await knex('quizzes').where({ module_id: moduleId, course_id: courseId });
+  const out = [];
+  for (const q of quizzes) {
+    const questions = await knex('quiz_questions').where({ quiz_id: q.id }).orderBy('sort_order');
+    const questionsOut = [];
+    for (const qq of questions) {
+      const options = await knex('quiz_options').where({ question_id: qq.id }).orderBy('sort_order');
+      questionsOut.push({ prompt: qq.prompt, type: qq.type, explanation: qq.explanation, options: options.map((o) => ({ text: o.text, is_correct: !!o.is_correct })) });
+    }
+    out.push({ title: q.title, description: q.description, pass_mark: q.pass_mark, time_limit_min: q.time_limit_min, after_block: q.after_block, covers_blocks: q.covers_blocks, questions: questionsOut });
+  }
+  return out;
+}
+
+router.get('/modules/:id/export.json', async (req, res, next) => {
+  try {
+    const mod = await knex('modules').where({ id: req.params.id }).first();
+    if (!mod) return res.status(404).send('Module not found');
+    const doc = {
+      type: 'module',
+      exportedAt: new Date().toISOString(),
+      module: { title: mod.title, summary: mod.summary, year_level: mod.year_level, essay_required: !!mod.essay_required, essay_prompt: mod.essay_prompt },
+      lessons: await exportLessonsForModule(mod.id),
+    };
+    res.setHeader('Content-Disposition', `attachment; filename="module-${mod.id}.json"`);
+    res.json(doc);
+  } catch (err) { next(err); }
+});
+
+router.get('/courses/:id/export.json', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.status(404).send('Course not found');
+    const sharedLinks = await knex('course_shared_modules').where({ course_id: course.id }).orderBy('sort_order');
+    const sharedIds = sharedLinks.map((l) => l.shared_module_id);
+    let mods;
+    if (sharedIds.length) {
+      const tmplMods = await knex('modules').whereIn('shared_module_id', sharedIds);
+      const bySm = {};
+      tmplMods.forEach((m) => { bySm[m.shared_module_id] = m; });
+      mods = sharedLinks.map((l) => bySm[l.shared_module_id]).filter(Boolean);
+    } else {
+      mods = await knex('modules').where({ course_id: course.id }).orderBy('sort_order');
+    }
+
+    const modulesOut = [];
+    for (const mod of mods) {
+      const assignments = await knex('assignments').where({ module_id: mod.id, course_id: course.id });
+      modulesOut.push({
+        title: mod.title, summary: mod.summary, year_level: mod.year_level, essay_required: !!mod.essay_required, essay_prompt: mod.essay_prompt,
+        lessons: await exportLessonsForModule(mod.id),
+        quizzes: await exportQuizzesForModule(mod.id, course.id),
+        assignments: assignments.map((a) => ({ title: a.title, instructions: a.instructions, max_points: a.max_points, assignment_type: a.assignment_type })),
+      });
+    }
+
+    const doc = {
+      type: 'course',
+      exportedAt: new Date().toISOString(),
+      course: { title: course.title, summary: course.summary, credits: course.credits, category: course.category, year_level: course.year_level },
+      modules: modulesOut,
+    };
+    res.setHeader('Content-Disposition', `attachment; filename="course-${course.id}.json"`);
+    res.json(doc);
+  } catch (err) { next(err); }
+});
+
+// Import always creates NEW dedicated (never shared) content on the
+// importing course, published as drafts pending review — it never
+// auto-links to shared_modules, so an import can't silently graft content
+// onto other courses that happen to reuse the same shared module.
+router.post('/courses/:id/import', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.redirect('/admin/courses');
+    const back = `/admin/courses/${course.id}/modules`;
+    let doc;
+    try { doc = JSON.parse(req.body.json || ''); } catch (e) { req.flash('error', 'That file is not valid JSON.'); return res.redirect(back); }
+
+    const modulesToImport = doc.type === 'course' ? (doc.modules || [])
+      : (Array.isArray(doc.lessons) ? [{ ...doc.module, lessons: doc.lessons }] : []);
+    if (!modulesToImport.length) { req.flash('error', 'No importable modules found in that file.'); return res.redirect(back); }
+
+    let importedCount = 0;
+    const newModuleIds = [];
+    await knex.transaction(async (trx) => {
+      const maxModSort = await trx('modules').where({ course_id: course.id }).max('sort_order as m').first();
+      let so = maxModSort.m || 0;
+      for (const modDoc of modulesToImport) {
+        so++;
+        const [newModId] = await trx('modules').insert({
+          course_id: course.id, shared_module_id: null, title: (modDoc.title || 'Imported module') + ' (Imported)',
+          summary: modDoc.summary || null, year_level: modDoc.year_level || 1,
+          essay_required: !!modDoc.essay_required, essay_prompt: modDoc.essay_prompt || null,
+          sort_order: so, published: false,
+        });
+        newModuleIds.push(newModId);
+        for (const l of (modDoc.lessons || [])) {
+          const [newLid] = await trx('lessons').insert({
+            module_id: newModId, title: l.title || 'Untitled lesson', type: l.type || 'reading', content: l.content || null,
+            video_url: l.video_url || null, duration_min: l.duration_min || 15, sort_order: l.sort_order || 0,
+            block_no: l.block_no || null, block_title: l.block_title || null, published: false,
+          });
+          for (const m of (l.materials || [])) {
+            await trx('lesson_materials').insert({ lesson_id: newLid, label: m.label || 'Material', url: m.url || '#', type: m.type || 'link' });
+          }
+        }
+        for (const q of (modDoc.quizzes || [])) {
+          const [newQid] = await trx('quizzes').insert({
+            course_id: course.id, module_id: newModId, title: q.title || 'Imported quiz', description: q.description || null,
+            pass_mark: q.pass_mark || 60, time_limit_min: q.time_limit_min || null, after_block: q.after_block || null,
+            covers_blocks: q.covers_blocks || null, published: false,
+          });
+          for (const qq of (q.questions || [])) {
+            const [newQqId] = await trx('quiz_questions').insert({ quiz_id: newQid, prompt: qq.prompt || '', type: qq.type || 'single', explanation: qq.explanation || null });
+            for (const o of (qq.options || [])) {
+              await trx('quiz_options').insert({ question_id: newQqId, text: o.text || '', is_correct: !!o.is_correct });
+            }
+          }
+        }
+        for (const a of (modDoc.assignments || [])) {
+          await trx('assignments').insert({
+            course_id: course.id, module_id: newModId, title: a.title || 'Imported assignment', instructions: a.instructions || null,
+            max_points: a.max_points || 100, assignment_type: a.assignment_type || 'essay', published: false,
+          });
+        }
+        importedCount++;
+      }
+    });
+
+    for (const newModId of newModuleIds) {
+      const created = await knex('modules').where({ id: newModId }).first();
+      await snapshot({ entityType: 'module', entityId: newModId, courseId: course.id, action: 'create', actorId: req.session.user.id, data: created });
+    }
+    req.flash('success', `Imported ${importedCount} module(s) as drafts — review and publish when ready.`);
+    res.redirect(back);
+  } catch (err) { next(err); }
+});
+
 // ─── Reusable module library ──────────────────────────────────
 // Browse/search every shared module, and (when opened with ?for_course=)
 // attach one to a course without re-authoring it from scratch.
