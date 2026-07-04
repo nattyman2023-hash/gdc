@@ -233,10 +233,12 @@
           <span class="material-symbols-outlined transition-transform group-open/yr:rotate-180">expand_more</span>
         </div>
       </summary>
-      <div class="p-4 bg-surface-container-low/40">
+      <div class="p-4 bg-surface-container-low/40 grid gap-0" data-sortable-list data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
+    <% } else { %>
+    <div data-sortable-list data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
     <% } %>
     <% yMods.forEach(function(mod){ var mi = modules.indexOf(mod); %>
-  <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden">
+  <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden" data-sortable-id="<%= mod.id %>">
     <!-- Card summary (the box) -->
     <summary class="list-none select-none cursor-pointer flex items-stretch hover:bg-surface-container-lowest">
       <div class="w-32 sm:w-44 shrink-0 bg-primary-container relative">
@@ -244,6 +246,7 @@
       </div>
       <div class="flex-1 flex items-center justify-between gap-3 px-5 py-4 min-w-0">
         <div class="flex items-center gap-3 min-w-0">
+          <span class="drag-handle material-symbols-outlined text-on-surface-variant cursor-grab active:cursor-grabbing shrink-0" title="Drag to reorder" draggable="true">drag_indicator</span>
           <input type="checkbox" name="ids" value="<%= mod.id %>" form="bulk-modules" class="w-4 h-4 shrink-0" title="Select for bulk action">
           <span class="bg-primary text-on-primary w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-sm"><%= mi + 1 %></span>
           <div class="min-w-0">
@@ -457,7 +460,7 @@
     </form>
     <% } %>
     <!-- Lessons List (grouped into blocks: "Lesson 1, 2, …") -->
-    <div class="divide-y divide-outline-variant">
+    <div class="divide-y divide-outline-variant" data-sortable-list data-sortable-url="/admin/modules/<%= mod.id %>/lessons/reorder">
       <% var lastBlk = null; %>
       <% mod.lessons.forEach(function(lesson, li){ %>
       <% if (lesson.block_no && lesson.block_no !== lastBlk) { lastBlk = lesson.block_no; var blkTitle = lesson.block_title || ('Lesson '+lesson.block_no); %>
@@ -490,8 +493,9 @@
         </form>
       </div>
       <% } %>
-      <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>">
+      <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>" data-sortable-id="<%= lesson.id %>">
         <div class="flex items-center gap-3">
+          <span class="drag-handle material-symbols-outlined text-on-surface-variant text-base cursor-grab active:cursor-grabbing shrink-0" title="Drag to reorder" draggable="true">drag_indicator</span>
           <input type="checkbox" name="ids" value="<%= lesson.id %>" form="bulk-lessons-<%= mod.id %>" class="w-4 h-4 shrink-0" title="Select for bulk action">
           <span class="text-xs text-on-surface-variant w-6"><%= li + 1 %>.</span>
           <div>
@@ -742,7 +746,7 @@
     </div>
   </details>
     <% }) %>
-    <% if (y) { %></div></details><% } %>
+    <% if (y) { %></div></details><% } else { %></div><% } %>
   <% }) %>
 
   <% if (modules.length === 0) { %>

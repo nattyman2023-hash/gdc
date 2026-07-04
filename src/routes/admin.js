@@ -3025,6 +3025,36 @@ router.post('/courses/:id/modules/detach/:sharedModuleId', async (req, res, next
   } catch (err) { next(err); }
 });
 
+// Drag-and-drop module reordering (AJAX). A shared-module course orders via
+// course_shared_modules.sort_order (per-course position — modules.sort_order
+// itself is shared across every course using that template and must not be
+// touched here); a dedicated-module course orders via modules.sort_order
+// directly, matching how getCourseStructure resolves a course's modules.
+router.post('/courses/:id/modules/reorder', async (req, res, next) => {
+  try {
+    let ids = req.body.ids || [];
+    if (!Array.isArray(ids)) ids = [ids];
+    ids = ids.map(Number).filter(Boolean);
+    if (!ids.length) return res.status(400).json({ ok: false, error: 'No ids supplied.' });
+    const courseId = req.params.id;
+    const sharedCount = Number((await knex('course_shared_modules').where({ course_id: courseId }).count({ c: '*' }).first()).c);
+    if (sharedCount > 0) {
+      const mods = await knex('modules').whereIn('id', ids).select('id', 'shared_module_id');
+      const smById = {};
+      mods.forEach((m) => { smById[m.id] = m.shared_module_id; });
+      for (let i = 0; i < ids.length; i++) {
+        const smId = smById[ids[i]];
+        if (smId) await knex('course_shared_modules').where({ course_id: courseId, shared_module_id: smId }).update({ sort_order: i + 1 });
+      }
+    } else {
+      for (let i = 0; i < ids.length; i++) {
+        await knex('modules').where({ id: ids[i], course_id: courseId }).update({ sort_order: i + 1 });
+      }
+    }
+    res.json({ ok: true });
+  } catch (err) { next(err); }
+});
+
 // Bulk publish/unpublish modules on a course. No bulk delete here — a
 // module can be a shared template used by many other courses (see the
 // single-module delete route's confirm text), so deleting several at once
@@ -3222,6 +3252,20 @@ router.post('/modules/:id/lessons/bulk', async (req, res, next) => {
       req.flash('error', 'Choose an action.');
     }
     res.redirect(back);
+  } catch (err) { next(err); }
+});
+
+// Drag-and-drop lesson reordering within one module (AJAX).
+router.post('/modules/:id/lessons/reorder', async (req, res, next) => {
+  try {
+    let ids = req.body.ids || [];
+    if (!Array.isArray(ids)) ids = [ids];
+    ids = ids.map(Number).filter(Boolean);
+    if (!ids.length) return res.status(400).json({ ok: false, error: 'No ids supplied.' });
+    for (let i = 0; i < ids.length; i++) {
+      await knex('lessons').where({ id: ids[i], module_id: req.params.id }).update({ sort_order: i + 1 });
+    }
+    res.json({ ok: true });
   } catch (err) { next(err); }
 });
 
