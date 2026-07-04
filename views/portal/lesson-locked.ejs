@@ -23,6 +23,12 @@
           <%= availability.next_available.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
         </div>
       </div>
+    <% } else if (availability.reason === 'unpublished') { %>
+      <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">edit_off</span>
+        <h3 class="font-semibold text-gray-800 mb-2">Not Published Yet</h3>
+        <p class="text-gray-600">This lesson is still being prepared by your instructor.</p>
+      </div>
     <% } else if (availability.reason === 'essay_required') { %>
       <div class="bg-white rounded-lg p-6 mb-6 shadow-sm">
         <span class="material-symbols-outlined text-4xl text-blue-500 mb-2">edit_note</span>

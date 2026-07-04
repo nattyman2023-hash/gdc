@@ -2420,6 +2420,8 @@ router.post('/quizzes', async (req, res, next) => {
       sort_order: req.body.sort_order || 0,
       after_block: req.body.after_block || null,
       covers_blocks: req.body.covers_blocks || null,
+      published: req.body.published === '1',
+      available_from: req.body.available_from || null,
     });
     
     // Create questions if provided
@@ -2506,6 +2508,8 @@ router.post('/quizzes/:id', async (req, res, next) => {
       pass_mark: req.body.pass_mark || 60,
       time_limit_min: req.body.time_limit_min || null,
       sort_order: req.body.sort_order || 0,
+      published: req.body.published === '1',
+      available_from: req.body.available_from || null,
     });
 
     // Rebuild questions + options from the submitted JSON (full edit support).
@@ -2837,6 +2841,7 @@ router.post('/modules/:id', async (req, res, next) => {
       prerequisite_module_id: req.body.prerequisite_module_id || null,
       essay_required: req.body.essay_required === '1',
       essay_prompt: req.body.essay_prompt || null,
+      published: req.body.published === '1' || req.body.published === 'on',
     });
 
     req.flash('success', 'Module updated.');
@@ -2957,6 +2962,8 @@ router.post('/lessons/:id', async (req, res, next) => {
       sort_order: req.body.sort_order || 0,
       block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),
       block_title: req.body.block_title !== undefined && req.body.block_title !== '' ? req.body.block_title : lesson.block_title,
+      published: req.body.published === '1' || req.body.published === 'on',
+      available_from: req.body.available_from || null,
     });
 
     req.flash('success', 'Lesson updated.');
@@ -2988,11 +2995,32 @@ router.post('/courses/:id/assignments', async (req, res, next) => {
       title: req.body.title,
       instructions: req.body.instructions || null,
       due_date: req.body.due_date || null,
+      available_from: req.body.available_from || null,
       max_points: req.body.max_points ? Number(req.body.max_points) : 100,
-      published: req.body.published === '1' || req.body.published === 'on' ? true : true,
+      published: req.body.published === '1' || req.body.published === 'on',
     });
     req.flash('success', 'Assignment created.');
     res.redirect(`/admin/courses/${course.id}/modules`);
+  } catch (err) { next(err); }
+});
+
+router.post('/assignments/:id', async (req, res, next) => {
+  try {
+    const a = await knex('assignments').where({ id: req.params.id }).first();
+    if (!a) return res.status(404).render('errors/404', { pageTitle: 'Assignment not found', layout: 'layouts/admin' });
+
+    await snapshot({ entityType: 'assignment', entityId: a.id, courseId: a.course_id, action: 'update', actorId: req.session.user.id, data: a });
+
+    await knex('assignments').where({ id: a.id }).update({
+      title: req.body.title,
+      instructions: req.body.instructions || null,
+      due_date: req.body.due_date || null,
+      available_from: req.body.available_from || null,
+      max_points: req.body.max_points ? Number(req.body.max_points) : 100,
+      published: req.body.published === '1' || req.body.published === 'on',
+    });
+    req.flash('success', 'Assignment updated.');
+    res.redirect(req.body.return_to && req.body.return_to.startsWith('/admin/') ? req.body.return_to : `/admin/courses/${a.course_id}/modules`);
   } catch (err) { next(err); }
 });
 

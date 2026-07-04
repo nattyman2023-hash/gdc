@@ -3,14 +3,20 @@
  */
 const knex = require('../config/db');
 
-/** Total number of lessons in a course. */
+/**
+ * Total number of published lessons a student could actually complete in a
+ * course. Delegates to getCourseStructure (below) rather than joining
+ * lessons -> modules.course_id directly: for the shared-module system, a
+ * module's course_id points at the one course that originally owns the
+ * template row, not every course that links to it via course_shared_modules
+ * — a plain join here would undercount (or return zero) for every course
+ * except that original owner.
+ */
 async function countLessons(courseId) {
-  const row = await knex('lessons')
-    .join('modules', 'lessons.module_id', 'modules.id')
-    .where('modules.course_id', courseId)
-    .count({ c: '*' })
-    .first();
-  return Number(row.c);
+  const structure = await getCourseStructure(courseId);
+  let n = 0;
+  structure.forEach((m) => { n += m.lessons.length; });
+  return n;
 }
 
 /** Number of completed lessons for an enrollment. */
@@ -57,14 +63,16 @@ async function getCourseStructure(courseId, enrollmentId = null) {
     // Course uses shared module system
     modules = await knex('modules')
       .whereIn('shared_module_id', sharedModuleIds)
+      .andWhere('published', true)
       .orderByRaw('(SELECT sort_order FROM course_shared_modules WHERE course_shared_modules.shared_module_id = modules.shared_module_id AND course_shared_modules.course_id = ?) ASC', [courseId]);
   } else {
     // Legacy: direct course_id relationship
-    modules = await knex('modules').where({ course_id: courseId }).orderBy('sort_order');
+    modules = await knex('modules').where({ course_id: courseId, published: true }).orderBy('sort_order');
   }
 
   const lessons = await knex('lessons')
     .whereIn('module_id', modules.map((m) => m.id))
+    .andWhere('published', true)
     .orderBy(['module_id', 'sort_order']);
 
   let completedIds = new Set();
@@ -182,12 +190,31 @@ async function isLessonAvailable(enrollmentId, lessonId, structure) {
     return { available: true, reason: 'already_completed' };
   }
 
+  const lesson = await knex('lessons').where({ id: lessonId }).first();
+  if (!lesson) return { available: false, reason: 'not_found' };
+  const mod = await knex('modules').where({ id: lesson.module_id }).first();
+  if (!mod) return { available: false, reason: 'not_found' };
+
+  // Draft content is never available to students, regardless of drip-feed
+  // settings or scheduling below.
+  if (!lesson.published || !mod.published) {
+    return { available: false, reason: 'unpublished' };
+  }
+
+  // A scheduled release (module.release_date or lesson.available_from) is a
+  // separate concern from drip-feed pacing and applies independent of it.
+  const scheduledDates = [];
+  if (mod.release_date) scheduledDates.push(new Date(mod.release_date));
+  if (lesson.available_from) scheduledDates.push(new Date(lesson.available_from));
+  if (scheduledDates.length) {
+    const latest = new Date(Math.max(...scheduledDates.map((d) => d.getTime())));
+    if (new Date() < latest) return { available: false, reason: 'scheduled_release', next_available: latest };
+  }
+
   // Block-structured courses use block-level gating.
-  const blockLesson = await knex('lessons').where({ id: lessonId }).first();
-  if (blockLesson && blockLesson.block_no) {
-    const bmod = await knex('modules').where({ id: blockLesson.module_id }).first();
-    const bcourse = bmod ? await knex('courses').where({ id: bmod.course_id }).first() : null;
-    if (bcourse && bcourse.drip_feed_enabled) return blockLessonAvailable(enrollmentId, blockLesson, structure, bcourse);
+  if (lesson.block_no) {
+    const bcourse = await knex('courses').where({ id: mod.course_id }).first();
+    if (bcourse && bcourse.drip_feed_enabled) return blockLessonAvailable(enrollmentId, lesson, structure, bcourse);
     return { available: true, reason: 'drip_disabled' };
   }
 
@@ -198,24 +225,11 @@ async function isLessonAvailable(enrollmentId, lessonId, structure) {
   // First lesson is always available
   if (idx === 0) return { available: true, reason: 'first_lesson' };
 
-  // Find the course to check drip feed settings
-  const lesson = await knex('lessons').where({ id: lessonId }).first();
-  if (!lesson) return { available: false, reason: 'not_found' };
-  const mod = await knex('modules').where({ id: lesson.module_id }).first();
-  if (!mod) return { available: false, reason: 'not_found' };
   const course = await knex('courses').where({ id: mod.course_id }).first();
 
   // If drip feed is disabled, lesson is available
   if (!course || !course.drip_feed_enabled) {
     return { available: true, reason: 'drip_disabled' };
-  }
-
-  // Check module release date
-  if (mod.release_date) {
-    const releaseDate = new Date(mod.release_date);
-    if (new Date() < releaseDate) {
-      return { available: false, reason: 'scheduled_release', next_available: releaseDate };
-    }
   }
 
   // Check module prerequisite
@@ -379,7 +393,7 @@ async function getBlockedCurriculum(enrollmentId, structure, course) {
   const intervalMs = (course.drip_feed_interval_hours || 4) * 3600 * 1000;
   const prog = await knex('lesson_progress').where({ enrollment_id: enrollmentId, completed: true }).select('lesson_id', 'completed_at');
   const compAt = {}; prog.forEach((p) => { compAt[p.lesson_id] = p.completed_at ? new Date(p.completed_at) : null; });
-  const allQuizzes = await knex('quizzes').whereIn('module_id', structure.map((m) => m.id)).whereNotNull('after_block');
+  const allQuizzes = await knex('quizzes').whereIn('module_id', structure.map((m) => m.id)).whereNotNull('after_block').andWhere('published', true);
 
   let gateOpen = true;
   let gateQuiz = null; // the unpassed quiz currently holding the gate shut, if any
@@ -394,6 +408,20 @@ async function getBlockedCurriculum(enrollmentId, structure, course) {
       else if (gateOpen) {
         if (lastBlockCompletedAt) { const na = new Date(lastBlockCompletedAt.getTime() + intervalMs); if (new Date() < na) { next_available = na; } else open = true; }
         else open = true;
+      }
+      // A scheduled release (module.release_date or a lesson's available_from)
+      // can hold a block shut even if drip-feed pacing above would open it.
+      if (open && !complete) {
+        const scheduledDates = [];
+        if (m.release_date) scheduledDates.push(new Date(m.release_date));
+        ls.forEach((l) => { if (l.available_from) scheduledDates.push(new Date(l.available_from)); });
+        if (scheduledDates.length) {
+          const latestSchedule = new Date(Math.max(...scheduledDates.map((d) => d.getTime())));
+          if (new Date() < latestSchedule) {
+            open = false;
+            next_available = (!next_available || latestSchedule > next_available) ? latestSchedule : next_available;
+          }
+        }
       }
       const quizRow = allQuizzes.find((q) => q.module_id === m.id && q.after_block === b);
       const quiz = quizRow ? { id: quizRow.id, title: quizRow.title, covers: quizRow.covers_blocks, passed: passed.has(quizRow.id), available: complete } : null;

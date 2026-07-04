@@ -122,16 +122,45 @@
           <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" class="w-full px-2 py-1.5 border rounded text-sm"></div>
         </div>
         <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm"></textarea></div>
-        <div class="w-40"><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        <div class="grid grid-cols-2 gap-3 items-end">
+          <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div><label class="block text-xs font-medium mb-1">Available from <span class="font-normal text-on-surface-variant">(optional)</span></label><input type="datetime-local" name="available_from" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        </div>
+        <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" checked class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
         <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-assignment').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Create assignment</button></div>
       </form>
     </div>
     <% if (assignments && assignments.length) { %>
     <div class="px-6 pb-4 space-y-1.5">
       <% assignments.forEach(function(a){ %>
-      <div class="flex items-center justify-between text-sm bg-blue-50 border border-blue-200 rounded px-3 py-2">
-        <div><span class="font-medium text-primary"><%= a.title %></span><span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span></div>
-        <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+      <div class="bg-blue-50 border border-blue-200 rounded px-3 py-2">
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <span class="font-medium text-primary"><%= a.title %></span>
+            <% if (!a.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
+            <% if (a.available_from && new Date(a.available_from) > new Date()) { %><span class="text-[10px] bg-blue-200 text-blue-900 font-bold px-1.5 py-0.5 rounded ml-1">Scheduled</span><% } %>
+            <span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.toggle('hidden')" class="p-1 text-on-surface-variant hover:text-primary rounded"><span class="material-symbols-outlined text-sm">edit</span></button>
+            <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+          </div>
+        </div>
+        <div id="edit-assignment-<%= a.id %>" class="hidden mt-2">
+          <form method="POST" action="/admin/assignments/<%= a.id %>" class="space-y-2 bg-white border border-blue-200 rounded p-3">
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" value="<%= a.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= a.due_date ? new Date(a.due_date).toISOString().slice(0,10) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            </div>
+            <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= a.instructions || '' %></textarea></div>
+            <div class="grid grid-cols-2 gap-2 items-end">
+              <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="<%= a.max_points %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= a.available_from ? new Date(a.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            </div>
+            <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" <%= a.published ? 'checked' : '' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
+            <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Save</button></div>
+          </form>
+        </div>
       </div>
       <% }) %>
     </div>
@@ -171,6 +200,8 @@
           <div class="min-w-0">
             <h3 class="font-semibold text-primary truncate">
               <%= mod.title %>
+              <% if (!mod.published) { %><span class="inline-block bg-gray-200 text-gray-800 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1 align-middle">Draft</span><% } %>
+              <% if (mod.release_date && new Date(mod.release_date) > new Date()) { %><span class="inline-block bg-blue-100 text-blue-800 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1 align-middle" title="Hidden from students until <%= new Date(mod.release_date).toLocaleString() %>">Scheduled</span><% } %>
               <% if (mod.isShared) { %><span class="inline-block bg-indigo-100 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1 align-middle" title="This module's lessons are shared — editing them here changes them for every course listed.">Shared · <%= mod.sharedCourseCount %> courses</span><% } %>
             </h3>
             <div class="flex flex-wrap gap-3 text-xs text-on-surface-variant mt-0.5">
@@ -212,10 +243,14 @@
             <input type="text" name="title" value="<%= mod.title %>" required class="w-full px-2 py-1.5 border rounded text-sm">
           </div>
           <div>
-            <label class="block text-xs font-medium mb-1">Release Date</label>
+            <label class="block text-xs font-medium mb-1">Release Date <span class="font-normal text-on-surface-variant">(hides the module until this date, even if published)</span></label>
             <input type="datetime-local" name="release_date" value="<%= mod.release_date ? new Date(mod.release_date).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm">
           </div>
         </div>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="published" value="1" <%= mod.published ? 'checked' : '' %> class="w-4 h-4">
+          <span class="text-xs font-medium">Published <span class="font-normal text-on-surface-variant">(uncheck to hide from students as a draft)</span></span>
+        </label>
         <div>
           <label class="block text-xs font-medium mb-1">Summary</label>
           <textarea name="summary" rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= mod.summary || '' %></textarea>
@@ -375,6 +410,8 @@
           <div>
             <span class="text-sm font-medium"><%= lesson.title %></span>
             <span class="ml-2 px-1.5 py-0.5 rounded text-xs <%= lesson.type === 'video' ? 'bg-red-100 text-red-700' : lesson.type === 'live' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>"><%= lesson.type %></span>
+            <% if (!lesson.published) { %><span class="ml-1 px-1.5 py-0.5 rounded text-xs bg-gray-200 text-gray-800 font-bold">Draft</span><% } %>
+            <% if (lesson.available_from && new Date(lesson.available_from) > new Date()) { %><span class="ml-1 px-1.5 py-0.5 rounded text-xs bg-blue-100 text-blue-800 font-bold" title="Hidden from students until <%= new Date(lesson.available_from).toLocaleString() %>">Scheduled</span><% } %>
             <% if (lesson.image_url) { %><span class="material-symbols-outlined text-sm text-on-surface-variant align-middle ml-1" title="Has image">image</span><% } %>
             <% if (lesson.video_url) { %><span class="material-symbols-outlined text-sm text-on-surface-variant align-middle ml-1" title="Has video">smart_display</span><% } %>
             <% if (lesson.materials && lesson.materials.length) { %><span class="ml-1 text-xs text-on-surface-variant">· <%= lesson.materials.length %> material<%= lesson.materials.length !== 1 ? 's' : '' %></span><% } %>
@@ -454,6 +491,16 @@
             <div><label class="block text-xs font-medium mb-1">Lesson (block) #</label><input type="number" name="block_no" min="1" value="<%= lesson.block_no || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>
             <div><label class="block text-xs font-medium mb-1">Block title</label><input type="text" name="block_title" value="<%= lesson.block_title || '' %>" class="w-full px-2 py-1 border rounded text-sm"></div>
           </div>
+          <div class="grid grid-cols-2 gap-2 items-end">
+            <div>
+              <label class="block text-xs font-medium mb-1">Available from <span class="font-normal text-on-surface-variant">(hides until this date)</span></label>
+              <input type="datetime-local" name="available_from" value="<%= lesson.available_from ? new Date(lesson.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1 border rounded text-sm">
+            </div>
+            <label class="flex items-center gap-2 pb-1.5">
+              <input type="checkbox" name="published" value="1" <%= lesson.published ? 'checked' : '' %> class="w-4 h-4">
+              <span class="text-xs font-medium">Published</span>
+            </label>
+          </div>
           <% if (lesson.image_url) { %><img src="<%= lesson.image_url %>" alt="" class="h-20 rounded border border-outline-variant object-cover" onerror="this.style.display='none'"><% } %>
           <div class="flex justify-end gap-2">
             <button type="button" onclick="document.getElementById('edit-lesson-<%= lesson.id %>').classList.add('hidden')" class="px-2 py-1 border rounded text-xs">Cancel</button>
@@ -511,6 +558,8 @@
               <span class="font-medium text-primary"><%= qz.title %></span>
               <span class="text-xs text-on-surface-variant ml-2"><%= qz.questionCount %> question<%= qz.questionCount===1?'':'s' %> · pass <%= qz.pass_mark %>%<%= qz.time_limit_min ? (' · ' + qz.time_limit_min + ' min') : '' %></span>
               <% if (qz.questionCount === 0) { %><span class="text-[10px] text-red-600 font-bold ml-1">⚠ no questions yet</span><% } %>
+              <% if (!qz.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
+              <% if (qz.available_from && new Date(qz.available_from) > new Date()) { %><span class="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded ml-1" title="Hidden from students until <%= new Date(qz.available_from).toLocaleString() %>">Scheduled</span><% } %>
             </div>
             <div class="flex items-center gap-2">
               <a href="/admin/quizzes/<%= qz.id %>/edit?return=/admin/courses/<%= course.id %>/modules" class="p-1 text-on-surface-variant hover:text-primary rounded" title="Edit quiz"><span class="material-symbols-outlined text-sm">edit</span></a>
@@ -539,16 +588,45 @@
             <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" class="w-full px-2 py-1.5 border rounded text-sm"></div>
           </div>
           <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"></textarea></div>
-          <div class="w-32"><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div class="grid grid-cols-2 gap-2 items-end">
+            <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="100" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            <div><label class="block text-xs font-medium mb-1">Available from <span class="font-normal text-on-surface-variant">(optional)</span></label><input type="datetime-local" name="available_from" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          </div>
+          <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" checked class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
           <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-assignment-<%= mod.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Create assignment</button></div>
         </form>
       </div>
       <% if (mod.assignments && mod.assignments.length) { %>
         <div class="space-y-1.5">
           <% mod.assignments.forEach(function(a){ %>
-          <div class="flex items-center justify-between text-sm bg-white border border-outline-variant rounded px-3 py-2">
-            <div><span class="font-medium text-primary"><%= a.title %></span><span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span></div>
-            <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+          <div class="bg-white border border-outline-variant rounded px-3 py-2">
+            <div class="flex items-center justify-between text-sm">
+              <div>
+                <span class="font-medium text-primary"><%= a.title %></span>
+                <% if (!a.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
+                <% if (a.available_from && new Date(a.available_from) > new Date()) { %><span class="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded ml-1">Scheduled</span><% } %>
+                <span class="text-xs text-on-surface-variant ml-2"><%= a.due_date ? ('due ' + formatDate(a.due_date) + ' · ') : '' %><%= a.max_points %> pts · <%= a.submissionCount %> submitted</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.toggle('hidden')" class="p-1 text-on-surface-variant hover:text-primary rounded"><span class="material-symbols-outlined text-sm">edit</span></button>
+                <form method="POST" action="/admin/assignments/<%= a.id %>/delete" onsubmit="return confirm('Delete this assignment and its submissions?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+              </div>
+            </div>
+            <div id="edit-assignment-<%= a.id %>" class="hidden mt-2">
+              <form method="POST" action="/admin/assignments/<%= a.id %>" class="space-y-2 bg-surface-container-lowest border border-outline-variant rounded p-3">
+                <div class="grid grid-cols-2 gap-2">
+                  <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" value="<%= a.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                  <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= a.due_date ? new Date(a.due_date).toISOString().slice(0,10) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                </div>
+                <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= a.instructions || '' %></textarea></div>
+                <div class="grid grid-cols-2 gap-2 items-end">
+                  <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="<%= a.max_points %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                  <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= a.available_from ? new Date(a.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                </div>
+                <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" <%= a.published ? 'checked' : '' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
+                <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Save</button></div>
+              </form>
+            </div>
           </div>
           <% }) %>
         </div>

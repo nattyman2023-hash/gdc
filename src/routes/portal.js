@@ -137,6 +137,7 @@ router.get('/courses/:slug', async (req, res, next) => {
     const moduleAssignments = await knex('assignments')
       .where({ course_id: course.id, published: true })
       .whereNotNull('module_id')
+      .andWhere((b) => b.whereNull('available_from').orWhere('available_from', '<=', new Date()))
       .orderBy('sort_order');
     for (const asg of moduleAssignments) {
       asg.submission = await knex('assignment_submissions').where({ assignment_id: asg.id, user_id: userId }).first();
@@ -171,7 +172,10 @@ router.get('/courses/:slug', async (req, res, next) => {
         if (continueTo) break;
       }
     }
-    const allQuizzes = await knex('quizzes').where({ course_id: course.id }).orderBy('sort_order');
+    const allQuizzes = await knex('quizzes')
+      .where({ course_id: course.id, published: true })
+      .andWhere((b) => b.whereNull('available_from').orWhere('available_from', '<=', new Date()))
+      .orderBy('sort_order');
     const instructor = course.instructor_id
       ? await knex('users').where({ id: course.instructor_id }).first()
       : null;
@@ -194,7 +198,11 @@ router.get('/courses/:slug', async (req, res, next) => {
     const finalExamPassed = finalExam && finalExam.best ? !!finalExam.best.passed : false;
 
     // Course-wide assignments (no module_id) still show in the flat list below.
-    const assignments = await knex('assignments').where({ course_id: course.id, published: true }).whereNull('module_id').orderBy('created_at', 'desc');
+    const assignments = await knex('assignments')
+      .where({ course_id: course.id, published: true })
+      .whereNull('module_id')
+      .andWhere((b) => b.whereNull('available_from').orWhere('available_from', '<=', new Date()))
+      .orderBy('created_at', 'desc');
     for (const asg of assignments) {
       asg.submission = await knex('assignment_submissions').where({ assignment_id: asg.id, user_id: userId }).first();
     }
@@ -439,6 +447,12 @@ router.get('/quizzes/:id', async (req, res, next) => {
     const access = await examAccess(userId, quiz);
     if (!access.allowed) {
       req.flash('info', quiz.is_final_exam && quiz.exam_scope !== 'course' ? 'This exam is for students of its programme.' : 'Enrol in the course to take this quiz.');
+      return res.redirect(access.backUrl);
+    }
+    // A direct link to a draft or not-yet-scheduled quiz must be blocked the
+    // same as it would be if the student found it through the course listing.
+    if (!quiz.published || (quiz.available_from && new Date(quiz.available_from) > new Date())) {
+      req.flash('info', 'This quiz is not available yet.');
       return res.redirect(access.backUrl);
     }
     // Block-sequence quizzes: the covered lessons must be completed first.
