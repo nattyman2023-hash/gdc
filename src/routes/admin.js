@@ -2861,6 +2861,29 @@ router.post('/modules/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// Bulk publish/unpublish modules on a course. No bulk delete here — a
+// module can be a shared template used by many other courses (see the
+// single-module delete route's confirm text), so deleting several at once
+// is left to the individually-confirmed single-item flow.
+router.post('/courses/:id/modules/bulk', async (req, res, next) => {
+  try {
+    let ids = req.body.ids || [];
+    if (!Array.isArray(ids)) ids = [ids];
+    ids = ids.map(Number).filter(Boolean);
+    const back = `/admin/courses/${req.params.id}/modules`;
+    if (!ids.length) { req.flash('error', 'Select at least one module.'); return res.redirect(back); }
+    const action = req.body.action;
+    if (action !== 'publish' && action !== 'unpublish') { req.flash('error', 'Choose an action.'); return res.redirect(back); }
+    const mods = await knex('modules').whereIn('id', ids);
+    for (const mod of mods) {
+      await snapshot({ entityType: 'module', entityId: mod.id, courseId: mod.course_id, action: 'update', actorId: req.session.user.id, data: mod });
+    }
+    await knex('modules').whereIn('id', ids).update({ published: action === 'publish' });
+    req.flash('success', `${mods.length} module(s) ${action === 'publish' ? 'published' : 'set to draft'}.`);
+    res.redirect(back);
+  } catch (err) { next(err); }
+});
+
 // Streamlined: create a whole Lesson (block) — its readings + video — in one step,
 // auto-placed as the next Lesson in the module. Optionally launches the quiz builder
 // for that lesson afterwards.
@@ -2983,6 +3006,37 @@ router.post('/lessons/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// Bulk publish/unpublish/delete lessons within one module. Scoped to
+// module_id so a tampered request can't touch lessons elsewhere.
+router.post('/modules/:id/lessons/bulk', async (req, res, next) => {
+  try {
+    const mod = await knex('modules').where({ id: req.params.id }).first();
+    if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    let ids = req.body.ids || [];
+    if (!Array.isArray(ids)) ids = [ids];
+    ids = ids.map(Number).filter(Boolean);
+    const back = `/admin/courses/${mod.course_id}/modules`;
+    if (!ids.length) { req.flash('error', 'Select at least one lesson.'); return res.redirect(back); }
+    const action = req.body.action;
+    const lessons = await knex('lessons').where({ module_id: mod.id }).whereIn('id', ids);
+    if (!lessons.length) { req.flash('error', 'No matching lessons found.'); return res.redirect(back); }
+    const lessonIds = lessons.map((l) => l.id);
+    for (const lesson of lessons) {
+      await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod.course_id, action: action === 'delete' ? 'delete' : 'update', actorId: req.session.user.id, data: lesson });
+    }
+    if (action === 'delete') {
+      await knex('lessons').whereIn('id', lessonIds).del();
+      req.flash('success', `${lessons.length} lesson(s) deleted.`);
+    } else if (action === 'publish' || action === 'unpublish') {
+      await knex('lessons').whereIn('id', lessonIds).update({ published: action === 'publish' });
+      req.flash('success', `${lessons.length} lesson(s) ${action === 'publish' ? 'published' : 'set to draft'}.`);
+    } else {
+      req.flash('error', 'Choose an action.');
+    }
+    res.redirect(back);
+  } catch (err) { next(err); }
+});
+
 // ─── Assignments (course-level) ──────────────────────────────
 router.post('/courses/:id/assignments', async (req, res, next) => {
   try {
@@ -3034,6 +3088,37 @@ router.post('/assignments/:id/delete', async (req, res, next) => {
       req.flash('success', 'Assignment deleted.');
     }
     res.redirect(req.get('referer') || '/admin/courses');
+  } catch (err) { next(err); }
+});
+
+// Bulk publish/unpublish/delete assignments on a course — covers both the
+// course-wide list and each module's own list, since both are scoped by
+// course_id and submit ids from whichever rows were checked.
+router.post('/courses/:id/assignments/bulk', async (req, res, next) => {
+  try {
+    let ids = req.body.ids || [];
+    if (!Array.isArray(ids)) ids = [ids];
+    ids = ids.map(Number).filter(Boolean);
+    const back = `/admin/courses/${req.params.id}/modules`;
+    if (!ids.length) { req.flash('error', 'Select at least one assignment.'); return res.redirect(back); }
+    const action = req.body.action;
+    const assignments = await knex('assignments').where({ course_id: req.params.id }).whereIn('id', ids);
+    if (!assignments.length) { req.flash('error', 'No matching assignments found.'); return res.redirect(back); }
+    const asgIds = assignments.map((a) => a.id);
+    for (const a of assignments) {
+      await snapshot({ entityType: 'assignment', entityId: a.id, courseId: a.course_id, action: action === 'delete' ? 'delete' : 'update', actorId: req.session.user.id, data: a });
+    }
+    if (action === 'delete') {
+      await knex('assignment_submissions').whereIn('assignment_id', asgIds).del();
+      await knex('assignments').whereIn('id', asgIds).del();
+      req.flash('success', `${assignments.length} assignment(s) deleted.`);
+    } else if (action === 'publish' || action === 'unpublish') {
+      await knex('assignments').whereIn('id', asgIds).update({ published: action === 'publish' });
+      req.flash('success', `${assignments.length} assignment(s) ${action === 'publish' ? 'published' : 'set to draft'}.`);
+    } else {
+      req.flash('error', 'Choose an action.');
+    }
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 

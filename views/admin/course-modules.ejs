@@ -145,11 +145,24 @@
       </form>
     </div>
     <% if (assignments && assignments.length) { %>
+    <form method="POST" action="/admin/courses/<%= course.id %>/assignments/bulk" data-bulk id="bulk-assignments" class="px-6">
+      <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 bg-secondary-fixed border border-secondary rounded-lg p-2.5 mb-2">
+        <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-bulk-all title="Select all"> <strong data-bulk-count>0</strong> selected</label>
+        <select name="action" data-bulk-action class="px-2 py-1 rounded border border-outline text-sm">
+          <option value="">Choose action…</option>
+          <option value="publish">Publish</option>
+          <option value="unpublish">Set to draft</option>
+          <option value="delete">Delete</option>
+        </select>
+        <button class="bg-primary text-on-primary px-3 py-1 rounded font-bold text-sm">Apply</button>
+      </div>
+    </form>
     <div class="px-6 pb-4 space-y-1.5">
       <% assignments.forEach(function(a){ %>
       <div class="bg-blue-50 border border-blue-200 rounded px-3 py-2">
         <div class="flex items-center justify-between text-sm">
-          <div>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" name="ids" value="<%= a.id %>" form="bulk-assignments" class="w-4 h-4" title="Select for bulk action">
             <span class="font-medium text-primary"><%= a.title %></span>
             <% if (!a.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
             <% if (a.available_from && new Date(a.available_from) > new Date()) { %><span class="text-[10px] bg-blue-200 text-blue-900 font-bold px-1.5 py-0.5 rounded ml-1">Scheduled</span><% } %>
@@ -183,6 +196,23 @@
     <% } %>
   </div>
 
+  <!-- Bulk actions across all modules on this course (publish/unpublish only —
+       no bulk delete; a module can be a shared template used by other
+       courses too, so deleting is left to the individually-confirmed flow). -->
+  <% if (modules.length) { %>
+  <form method="POST" action="/admin/courses/<%= course.id %>/modules/bulk" data-bulk id="bulk-modules" class="mb-3">
+    <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 bg-secondary-fixed border border-secondary rounded-lg p-3">
+      <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-bulk-all title="Select all modules"> <strong data-bulk-count>0</strong> selected</label>
+      <select name="action" data-bulk-action class="px-3 py-1.5 rounded border border-outline text-sm">
+        <option value="">Choose action…</option>
+        <option value="publish">Publish</option>
+        <option value="unpublish">Set to draft</option>
+      </select>
+      <button class="bg-primary text-on-primary px-4 py-1.5 rounded font-bold text-sm">Apply</button>
+    </div>
+  </form>
+  <% } %>
+
   <!-- Year → Module → Lesson hierarchy, all collapsible (folded until clicked) -->
   <%
     var byYear = {}; var yearOrder = [];
@@ -210,6 +240,7 @@
       </div>
       <div class="flex-1 flex items-center justify-between gap-3 px-5 py-4 min-w-0">
         <div class="flex items-center gap-3 min-w-0">
+          <input type="checkbox" name="ids" value="<%= mod.id %>" form="bulk-modules" class="w-4 h-4 shrink-0" title="Select for bulk action">
           <span class="bg-primary text-on-primary w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-sm"><%= mi + 1 %></span>
           <div class="min-w-0">
             <h3 class="font-semibold text-primary truncate">
@@ -384,6 +415,21 @@
       </form>
     </div>
 
+    <!-- Bulk actions for this module's lessons -->
+    <% if (mod.lessons.length) { %>
+    <form method="POST" action="/admin/modules/<%= mod.id %>/lessons/bulk" data-bulk id="bulk-lessons-<%= mod.id %>" class="px-6 pt-3">
+      <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 bg-secondary-fixed border border-secondary rounded-lg p-2.5 mb-2">
+        <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-bulk-all title="Select all lessons in this module"> <strong data-bulk-count>0</strong> selected</label>
+        <select name="action" data-bulk-action class="px-2 py-1 rounded border border-outline text-sm">
+          <option value="">Choose action…</option>
+          <option value="publish">Publish</option>
+          <option value="unpublish">Set to draft</option>
+          <option value="delete">Delete</option>
+        </select>
+        <button class="bg-primary text-on-primary px-3 py-1 rounded font-bold text-sm">Apply</button>
+      </div>
+    </form>
+    <% } %>
     <!-- Lessons List (grouped into blocks: "Lesson 1, 2, …") -->
     <div class="divide-y divide-outline-variant">
       <% var lastBlk = null; %>
@@ -420,6 +466,7 @@
       <% } %>
       <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>">
         <div class="flex items-center gap-3">
+          <input type="checkbox" name="ids" value="<%= lesson.id %>" form="bulk-lessons-<%= mod.id %>" class="w-4 h-4 shrink-0" title="Select for bulk action">
           <span class="text-xs text-on-surface-variant w-6"><%= li + 1 %>.</span>
           <div>
             <span class="text-sm font-medium"><%= lesson.title %></span>
@@ -611,11 +658,24 @@
         </form>
       </div>
       <% if (mod.assignments && mod.assignments.length) { %>
+        <form method="POST" action="/admin/courses/<%= course.id %>/assignments/bulk" data-bulk id="bulk-assignments-mod-<%= mod.id %>">
+          <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 bg-secondary-fixed border border-secondary rounded-lg p-2 mb-2">
+            <label class="flex items-center gap-2 text-xs"><input type="checkbox" data-bulk-all title="Select all"> <strong data-bulk-count>0</strong> selected</label>
+            <select name="action" data-bulk-action class="px-2 py-1 rounded border border-outline text-xs">
+              <option value="">Choose action…</option>
+              <option value="publish">Publish</option>
+              <option value="unpublish">Set to draft</option>
+              <option value="delete">Delete</option>
+            </select>
+            <button class="bg-primary text-on-primary px-2.5 py-1 rounded font-bold text-xs">Apply</button>
+          </div>
+        </form>
         <div class="space-y-1.5">
           <% mod.assignments.forEach(function(a){ %>
           <div class="bg-white border border-outline-variant rounded px-3 py-2">
             <div class="flex items-center justify-between text-sm">
-              <div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" name="ids" value="<%= a.id %>" form="bulk-assignments-mod-<%= mod.id %>" class="w-4 h-4" title="Select for bulk action">
                 <span class="font-medium text-primary"><%= a.title %></span>
                 <% if (!a.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
                 <% if (a.available_from && new Date(a.available_from) > new Date()) { %><span class="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded ml-1">Scheduled</span><% } %>
