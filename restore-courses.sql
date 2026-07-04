@@ -3,6 +3,7 @@ USE `u514321141_gdcu`;
 SET FOREIGN_KEY_CHECKS=0;
 SET NAMES utf8mb4;
 
+DROP TABLE IF EXISTS `content_revisions`;
 DROP TABLE IF EXISTS `assignments`;
 DROP TABLE IF EXISTS `quiz_options`;
 DROP TABLE IF EXISTS `quiz_questions`;
@@ -1218,11 +1219,6 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6084, 771, 'Which challenge is specifically associated with military chaplaincy in this module?', 'single', NULL, 3),
 (6085, 771, 'How does the module describe the chaplain\'s stance when caring for a person of another faith?', 'single', NULL, 4),
 (6086, 771, 'What does the module identify as good practice regarding the limits of confidentiality?', 'single', NULL, 5),
-(6087, 426, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
-(6088, 426, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
-(6089, 426, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
-(6090, 426, 'In Hebrew poetry such as the Psalms, the characteristic feature by which a second line echoes, intensifies, or contrasts the first is called what?', 'single', NULL, 4),
-(6091, 426, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5),
 (6092, 441, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (6093, 441, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
 (6094, 441, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
@@ -1292,13 +1288,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6158, 570, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
 (6159, 570, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
 (6160, 570, 'In Hebrew poetry such as the Psalms, the characteristic feature by which a second line echoes, intensifies, or contrasts the first is called what?', 'single', NULL, 4),
-(6161, 570, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6161, 570, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5),
 (6162, 581, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (6163, 581, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
 (6164, 581, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
 (6165, 581, 'In Hebrew poetry such as the Psalms, the characteristic feature by which a second line echoes, intensifies, or contrasts the first is called what?', 'single', NULL, 4),
-(6166, 581, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5),
+(6166, 581, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6167, 591, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (6168, 591, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
 (6169, 591, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
@@ -1393,13 +1389,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6258, 442, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6259, 442, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
 (6260, 442, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 4),
-(6261, 442, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6261, 442, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5),
 (6262, 451, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 1),
 (6263, 451, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6264, 451, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
 (6265, 451, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 4),
-(6266, 451, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5),
+(6266, 451, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6267, 460, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 1),
 (6268, 460, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6269, 460, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
@@ -1494,13 +1490,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6358, 653, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6359, 653, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
 (6360, 653, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 4),
-(6361, 653, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6361, 653, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5),
 (6362, 667, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 1),
 (6363, 667, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6364, 667, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
 (6365, 667, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 4),
-(6366, 667, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5),
+(6366, 667, 'How does the module describe the Protestant understanding of justification, drawing on Ephesians 2:8-9?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6367, 682, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 1),
 (6368, 682, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (6369, 682, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 3),
@@ -1595,13 +1591,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6458, 506, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6459, 506, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
 (6460, 506, 'Which doctrine, grounded in passages such as Romans 1:17 and Ephesians 2:8–9, stood at the center of Martin Luther’s Reformation message?', 'single', NULL, 4),
-(6461, 506, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6461, 506, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5),
 (6462, 514, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 1),
 (6463, 514, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6464, 514, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
 (6465, 514, 'Which doctrine, grounded in passages such as Romans 1:17 and Ephesians 2:8–9, stood at the center of Martin Luther’s Reformation message?', 'single', NULL, 4),
-(6466, 514, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5),
+(6466, 514, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6467, 526, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 1),
 (6468, 526, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6469, 526, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
@@ -1696,13 +1692,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6558, 754, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6559, 754, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
 (6560, 754, 'Which doctrine, grounded in passages such as Romans 1:17 and Ephesians 2:8–9, stood at the center of Martin Luther’s Reformation message?', 'single', NULL, 4),
-(6561, 754, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6561, 754, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5),
 (6562, 767, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 1),
 (6563, 767, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6564, 767, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
 (6565, 767, 'Which doctrine, grounded in passages such as Romans 1:17 and Ephesians 2:8–9, stood at the center of Martin Luther’s Reformation message?', 'single', NULL, 4),
-(6566, 767, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5),
+(6566, 767, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6567, 778, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 1),
 (6568, 778, 'Which ecumenical council of 325 responded to Arianism by affirming that the Son is “of one substance” (homoousios) with the Father?', 'single', NULL, 2),
 (6569, 778, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
@@ -1797,13 +1793,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6658, 584, 'A student reads Philippians 4:13, \'I can do all things through him who strengthens me,\' as a promise of unlimited personal achievement. According to the module, what interpretive principle has the student most clearly neglected?', 'single', NULL, 2),
 (6659, 584, 'Why does the module treat sensitivity to genre as one of the most important safeguards against interpretive error?', 'single', NULL, 3),
 (6660, 584, 'The Reformation phrase \'Scripture is its own interpreter\' (Scriptura sui ipsius interpres) expresses which interpretive practice?', 'single', NULL, 4),
-(6661, 584, 'The module recommends a disciplined method for applying an ancient text to life today, illustrated by Paul\'s instruction to greet one another \'with a holy kiss\' (1 Corinthians 16:20). What is the core of that method?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6661, 584, 'The module recommends a disciplined method for applying an ancient text to life today, illustrated by Paul\'s instruction to greet one another \'with a holy kiss\' (1 Corinthians 16:20). What is the core of that method?', 'single', NULL, 5),
 (6662, 594, 'The terms exegesis and eisegesis describe opposite interpretive activities. Which statement correctly distinguishes them?', 'single', NULL, 1),
 (6663, 594, 'A student reads Philippians 4:13, \'I can do all things through him who strengthens me,\' as a promise of unlimited personal achievement. According to the module, what interpretive principle has the student most clearly neglected?', 'single', NULL, 2),
 (6664, 594, 'Why does the module treat sensitivity to genre as one of the most important safeguards against interpretive error?', 'single', NULL, 3),
 (6665, 594, 'The Reformation phrase \'Scripture is its own interpreter\' (Scriptura sui ipsius interpres) expresses which interpretive practice?', 'single', NULL, 4),
-(6666, 594, 'The module recommends a disciplined method for applying an ancient text to life today, illustrated by Paul\'s instruction to greet one another \'with a holy kiss\' (1 Corinthians 16:20). What is the core of that method?', 'single', NULL, 5),
+(6666, 594, 'The module recommends a disciplined method for applying an ancient text to life today, illustrated by Paul\'s instruction to greet one another \'with a holy kiss\' (1 Corinthians 16:20). What is the core of that method?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6667, 607, 'The terms exegesis and eisegesis describe opposite interpretive activities. Which statement correctly distinguishes them?', 'single', NULL, 1),
 (6668, 607, 'A student reads Philippians 4:13, \'I can do all things through him who strengthens me,\' as a promise of unlimited personal achievement. According to the module, what interpretive principle has the student most clearly neglected?', 'single', NULL, 2),
 (6669, 607, 'Why does the module treat sensitivity to genre as one of the most important safeguards against interpretive error?', 'single', NULL, 3),
@@ -1898,13 +1894,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6758, 454, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6759, 454, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
 (6760, 454, 'Christian wisdom describes a genuine calling to ministry as involving which two dimensions that must meet together?', 'single', NULL, 4),
-(6761, 454, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6761, 454, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5),
 (6762, 463, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 1),
 (6763, 463, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6764, 463, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
 (6765, 463, 'Christian wisdom describes a genuine calling to ministry as involving which two dimensions that must meet together?', 'single', NULL, 4),
-(6766, 463, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5),
+(6766, 463, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6767, 472, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 1),
 (6768, 472, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6769, 472, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
@@ -1999,13 +1995,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6858, 670, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6859, 670, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
 (6860, 670, 'Christian wisdom describes a genuine calling to ministry as involving which two dimensions that must meet together?', 'single', NULL, 4),
-(6861, 670, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6861, 670, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5),
 (6862, 685, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 1),
 (6863, 685, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6864, 685, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
 (6865, 685, 'Christian wisdom describes a genuine calling to ministry as involving which two dimensions that must meet together?', 'single', NULL, 4),
-(6866, 685, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5),
+(6866, 685, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6867, 700, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 1),
 (6868, 700, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 2),
 (6869, 700, 'In Ephesians 4:11-12, what is the stated purpose of the ministers Christ gives to the church?', 'single', NULL, 3),
@@ -2100,13 +2096,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (6958, 517, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (6959, 517, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
 (6960, 517, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 4),
-(6961, 517, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(6961, 517, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5),
 (6962, 529, 'According to the module, what is the ultimate goal (telos) toward which Christian spiritual formation aims?', 'single', NULL, 1),
 (6963, 529, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (6964, 529, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
 (6965, 529, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 4),
-(6966, 529, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5),
+(6966, 529, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (6967, 541, 'According to the module, what is the ultimate goal (telos) toward which Christian spiritual formation aims?', 'single', NULL, 1),
 (6968, 541, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (6969, 541, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
@@ -2201,13 +2197,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7058, 770, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (7059, 770, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
 (7060, 770, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 4),
-(7061, 770, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7061, 770, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5),
 (7062, 781, 'According to the module, what is the ultimate goal (telos) toward which Christian spiritual formation aims?', 'single', NULL, 1),
 (7063, 781, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (7064, 781, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
 (7065, 781, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 4),
-(7066, 781, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5),
+(7066, 781, 'How does the module characterize the role of community and mission in spiritual formation?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7067, 808, 'According to the module, what is the ultimate goal (telos) toward which Christian spiritual formation aims?', 'single', NULL, 1),
 (7068, 808, 'How does the module describe the relationship between divine grace and human effort in formation?', 'single', NULL, 2),
 (7069, 808, 'Which pairing correctly matches a category of spiritual discipline with an example given in the module?', 'single', NULL, 3),
@@ -2302,13 +2298,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7158, 772, 'According to the module, what does the scriptural counsel of James 1:19 most directly commend as foundational to the helping conversation?', 'single', NULL, 2),
 (7159, 772, 'The example of Job\'s friends sitting silently with him for seven days is used in the module to illustrate which principle?', 'single', NULL, 3),
 (7160, 772, 'Which of the following is identified as an appropriate reason for a pastoral counsellor to break confidentiality?', 'single', NULL, 4),
-(7161, 772, 'How does the module characterise the practice of referring a counsellee to a licensed professional?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7161, 772, 'How does the module characterise the practice of referring a counsellee to a licensed professional?', 'single', NULL, 5),
 (7162, 483, 'In Mark 10:42-45, how does Jesus redefine greatness for his followers in contrast to the rulers of the Gentiles?', 'single', NULL, 1),
 (7163, 483, 'According to the qualifications in 1 Timothy 3:1-13 and Titus 1:5-9, what is the primary emphasis in choosing spiritual leaders?', 'single', NULL, 2),
 (7164, 483, 'Which pair correctly describes the two dimensions of calling that Christian tradition holds together?', 'single', NULL, 3),
 (7165, 483, 'What sequence does Nehemiah model when responding to the ruined walls of Jerusalem?', 'single', NULL, 4),
-(7166, 483, 'According to Matthew 18:15-17 and Galatians 6:1, what should characterise a leader\'s approach to conflict and correction?', 'single', NULL, 5),
+(7166, 483, 'According to Matthew 18:15-17 and Galatians 6:1, what should characterise a leader\'s approach to conflict and correction?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7167, 600, 'In Mark 10:42-45, how does Jesus redefine greatness for his followers in contrast to the rulers of the Gentiles?', 'single', NULL, 1),
 (7168, 600, 'According to the qualifications in 1 Timothy 3:1-13 and Titus 1:5-9, what is the primary emphasis in choosing spiritual leaders?', 'single', NULL, 2),
 (7169, 600, 'Which pair correctly describes the two dimensions of calling that Christian tradition holds together?', 'single', NULL, 3),
@@ -2403,13 +2399,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7258, 689, 'How does the module characterise the relationship between careful planning and dependence on the Holy Spirit?', 'single', NULL, 2),
 (7259, 689, 'In the module\'s discussion of goal-setting, what distinguishes a goal from an activity?', 'single', NULL, 3),
 (7260, 689, 'Which biblical example does the module use to illustrate honest assessment of context before announcing a plan?', 'single', NULL, 4),
-(7261, 689, 'What does the module identify as the clearest indicator of a ministry\'s true, as opposed to merely stated, priorities?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7261, 689, 'What does the module identify as the clearest indicator of a ministry\'s true, as opposed to merely stated, priorities?', 'single', NULL, 5),
 (7262, 784, 'According to the module, what is the essential difference between a ministry\'s mission and its vision?', 'single', NULL, 1),
 (7263, 784, 'How does the module characterise the relationship between careful planning and dependence on the Holy Spirit?', 'single', NULL, 2),
 (7264, 784, 'In the module\'s discussion of goal-setting, what distinguishes a goal from an activity?', 'single', NULL, 3),
 (7265, 784, 'Which biblical example does the module use to illustrate honest assessment of context before announcing a plan?', 'single', NULL, 4),
-(7266, 784, 'What does the module identify as the clearest indicator of a ministry\'s true, as opposed to merely stated, priorities?', 'single', NULL, 5),
+(7266, 784, 'What does the module identify as the clearest indicator of a ministry\'s true, as opposed to merely stated, priorities?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7267, 833, 'According to the module, what is the essential difference between a ministry\'s mission and its vision?', 'single', NULL, 1),
 (7268, 833, 'How does the module characterise the relationship between careful planning and dependence on the Holy Spirit?', 'single', NULL, 2),
 (7269, 833, 'In the module\'s discussion of goal-setting, what distinguishes a goal from an activity?', 'single', NULL, 3),
@@ -2504,13 +2500,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7358, 773, 'Job\'s friends are cited in the module as an example of both good and bad care. What did they do well before they failed?', 'single', NULL, 2),
 (7359, 773, 'Paul\'s instruction to "admonish the idle, encourage the fainthearted, help the weak" (1 Thessalonians 5:14) is used in the module to illustrate which principle of pastoral care?', 'single', NULL, 3),
 (7360, 773, 'How does the module characterise referral to counsellors, physicians, or mental-health professionals?', 'single', NULL, 4),
-(7361, 773, 'What does the example of Elijah under the broom tree (1 Kings 19) teach about the carer, according to the module?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7361, 773, 'What does the example of Elijah under the broom tree (1 Kings 19) teach about the carer, according to the module?', 'single', NULL, 5),
 (7362, 787, 'According to the biblical shepherd metaphor developed in this module, what is the fundamental status of the human pastor in relation to the flock?', 'single', NULL, 1),
 (7363, 787, 'Job\'s friends are cited in the module as an example of both good and bad care. What did they do well before they failed?', 'single', NULL, 2),
 (7364, 787, 'Paul\'s instruction to "admonish the idle, encourage the fainthearted, help the weak" (1 Thessalonians 5:14) is used in the module to illustrate which principle of pastoral care?', 'single', NULL, 3),
 (7365, 787, 'How does the module characterise referral to counsellors, physicians, or mental-health professionals?', 'single', NULL, 4),
-(7366, 787, 'What does the example of Elijah under the broom tree (1 Kings 19) teach about the carer, according to the module?', 'single', NULL, 5),
+(7366, 787, 'What does the example of Elijah under the broom tree (1 Kings 19) teach about the carer, according to the module?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7367, 811, 'According to the biblical shepherd metaphor developed in this module, what is the fundamental status of the human pastor in relation to the flock?', 'single', NULL, 1),
 (7368, 811, 'Job\'s friends are cited in the module as an example of both good and bad care. What did they do well before they failed?', 'single', NULL, 2),
 (7369, 811, 'Paul\'s instruction to "admonish the idle, encourage the fainthearted, help the weak" (1 Thessalonians 5:14) is used in the module to illustrate which principle of pastoral care?', 'single', NULL, 3),
@@ -2605,13 +2601,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7458, 646, 'According to the module, what is the primary theological foundation for the practice of contextualization?', 'single', NULL, 2),
 (7459, 646, 'What did the Jerusalem Council of Acts 15 establish regarding Gentile believers?', 'single', NULL, 3),
 (7460, 646, 'In Paul Hiebert\'s framework, what danger does \'critical contextualization\' specifically seek to avoid?', 'single', NULL, 4),
-(7461, 646, 'Which of the following best defines the phenomenon known as \'reverse mission\'?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7461, 646, 'Which of the following best defines the phenomenon known as \'reverse mission\'?', 'single', NULL, 5),
 (7462, 679, 'Which statement best describes the demographic shift that gave rise to the study of world Christianity?', 'single', NULL, 1),
 (7463, 679, 'According to the module, what is the primary theological foundation for the practice of contextualization?', 'single', NULL, 2),
 (7464, 679, 'What did the Jerusalem Council of Acts 15 establish regarding Gentile believers?', 'single', NULL, 3),
 (7465, 679, 'In Paul Hiebert\'s framework, what danger does \'critical contextualization\' specifically seek to avoid?', 'single', NULL, 4),
-(7466, 679, 'Which of the following best defines the phenomenon known as \'reverse mission\'?', 'single', NULL, 5),
+(7466, 679, 'Which of the following best defines the phenomenon known as \'reverse mission\'?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7467, 694, 'Which statement best describes the demographic shift that gave rise to the study of world Christianity?', 'single', NULL, 1),
 (7468, 694, 'According to the module, what is the primary theological foundation for the practice of contextualization?', 'single', NULL, 2),
 (7469, 694, 'What did the Jerusalem Council of Acts 15 establish regarding Gentile believers?', 'single', NULL, 3),
@@ -2706,13 +2702,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7558, 785, 'What did the Council of Nicaea affirm about the Son in response to the teaching of Arius?', 'single', NULL, 2),
 (7559, 785, 'According to the Chalcedonian Definition, how is the union of natures in Christ described?', 'single', NULL, 3),
 (7560, 785, 'What point did Gregory of Nazianzus make with the axiom "that which is not assumed is not healed"?', 'single', NULL, 4),
-(7561, 785, 'Which statement best reflects an irenic, orthodox approach to the models of the atonement?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7561, 785, 'Which statement best reflects an irenic, orthodox approach to the models of the atonement?', 'single', NULL, 5),
 (7562, 834, 'In classical theological method, how are Scripture and the ecumenical creeds properly related to one another?', 'single', NULL, 1),
 (7563, 834, 'What did the Council of Nicaea affirm about the Son in response to the teaching of Arius?', 'single', NULL, 2),
 (7564, 834, 'According to the Chalcedonian Definition, how is the union of natures in Christ described?', 'single', NULL, 3),
 (7565, 834, 'What point did Gregory of Nazianzus make with the axiom "that which is not assumed is not healed"?', 'single', NULL, 4),
-(7566, 834, 'Which statement best reflects an irenic, orthodox approach to the models of the atonement?', 'single', NULL, 5),
+(7566, 834, 'Which statement best reflects an irenic, orthodox approach to the models of the atonement?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7567, 436, 'According to the module, what best describes the overarching question that Christian ethics seeks to answer?', 'single', NULL, 1),
 (7568, 436, 'Which set of sources does the module identify as informing Christian moral discernment, with Scripture holding primacy for most Christians?', 'single', NULL, 2),
 (7569, 436, 'How does the module distinguish deontological ethics from teleological ethics?', 'single', NULL, 3),
@@ -2807,13 +2803,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7658, 437, 'Which statement best characterizes the presuppositional approach to apologetics as developed by Cornelius Van Til?', 'single', NULL, 2),
 (7659, 437, 'According to the kalam cosmological argument as defended by William Lane Craig, what must be true of the cause of the universe?', 'single', NULL, 3),
 (7660, 437, 'The \'minimal facts\' approach to defending the resurrection, associated with Gary Habermas, is distinctive because it does which of the following?', 'single', NULL, 4),
-(7661, 437, 'How does the module recommend that a Christian hold to the exclusivity of salvation in Christ (John 14:6) within a pluralist culture?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7661, 437, 'How does the module recommend that a Christian hold to the exclusivity of salvation in Christ (John 14:6) within a pluralist culture?', 'single', NULL, 5),
 (7662, 557, 'The Greek word from which we derive the term apologetics, appearing in 1 Peter 3:15, most directly refers to which of the following?', 'single', NULL, 1),
 (7663, 557, 'Which statement best characterizes the presuppositional approach to apologetics as developed by Cornelius Van Til?', 'single', NULL, 2),
 (7664, 557, 'According to the kalam cosmological argument as defended by William Lane Craig, what must be true of the cause of the universe?', 'single', NULL, 3),
 (7665, 557, 'The \'minimal facts\' approach to defending the resurrection, associated with Gary Habermas, is distinctive because it does which of the following?', 'single', NULL, 4),
-(7666, 557, 'How does the module recommend that a Christian hold to the exclusivity of salvation in Christ (John 14:6) within a pluralist culture?', 'single', NULL, 5),
+(7666, 557, 'How does the module recommend that a Christian hold to the exclusivity of salvation in Christ (John 14:6) within a pluralist culture?', 'single', NULL, 5);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7667, 568, 'The Greek word from which we derive the term apologetics, appearing in 1 Peter 3:15, most directly refers to which of the following?', 'single', NULL, 1),
 (7668, 568, 'Which statement best characterizes the presuppositional approach to apologetics as developed by Cornelius Van Til?', 'single', NULL, 2),
 (7669, 568, 'According to the kalam cosmological argument as defended by William Lane Craig, what must be true of the cause of the universe?', 'single', NULL, 3),
@@ -2908,13 +2904,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7758, 467, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 2),
 (7759, 467, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 3),
 (7760, 467, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 4),
-(7761, 467, 'A student reads Philippians 4:13, \'I can do all things through him who strengthens me,\' as a promise of unlimited personal achievement. According to the module, what interpretive principle has the student most clearly neglected?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7761, 467, 'A student reads Philippians 4:13, \'I can do all things through him who strengthens me,\' as a promise of unlimited personal achievement. According to the module, what interpretive principle has the student most clearly neglected?', 'single', NULL, 5),
 (7762, 467, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 6),
 (7763, 467, 'When 1 Timothy 3 lists qualifications for an overseer, what does it emphasize far more than skill or talent?', 'single', NULL, 7),
 (7764, 467, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 8),
 (7765, 467, 'Paul\'s instruction to "admonish the idle, encourage the fainthearted, help the weak" (1 Thessalonians 5:14) is used in the module to illustrate which principle of pastoral care?', 'single', NULL, 9),
-(7766, 467, 'According to the module, what does the scriptural counsel of James 1:19 most directly commend as foundational to the helping conversation?', 'single', NULL, 10),
+(7766, 467, 'According to the module, what does the scriptural counsel of James 1:19 most directly commend as foundational to the helping conversation?', 'single', NULL, 10);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7767, 476, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (7768, 476, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 2),
 (7769, 476, 'Which pairing correctly matches a term in Christian theology with its meaning?', 'single', NULL, 3),
@@ -3009,13 +3005,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7858, 569, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 2),
 (7859, 569, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 3),
 (7860, 569, 'The terms exegesis and eisegesis describe opposite interpretive activities. Which statement correctly distinguishes them?', 'single', NULL, 4),
-(7861, 569, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7861, 569, 'The New Testament word most commonly translated as "ministry" is diakonia. What does this term fundamentally mean?', 'single', NULL, 5),
 (7862, 569, 'According to the module, what is the ultimate goal (telos) toward which Christian spiritual formation aims?', 'single', NULL, 6),
 (7863, 569, 'The Latin phrase missio Dei expresses which foundational conviction about mission?', 'single', NULL, 7),
 (7864, 569, 'Which statement best describes the demographic shift that gave rise to the study of world Christianity?', 'single', NULL, 8),
 (7865, 569, 'The term used for the first three Gospels because of their shared material and similar perspective is:', 'single', NULL, 9),
-(7866, 569, 'The Greek word from which we derive the term apologetics, appearing in 1 Peter 3:15, most directly refers to which of the following?', 'single', NULL, 10),
+(7866, 569, 'The Greek word from which we derive the term apologetics, appearing in 1 Peter 3:15, most directly refers to which of the following?', 'single', NULL, 10);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7867, 580, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (7868, 580, 'The phrase \'faith seeking understanding\' (fides quaerens intellectum), used to describe the task of theology, is associated with which theologian?', 'single', NULL, 2),
 (7869, 580, 'According to Acts 2:42, to which four practices did the first Christian community devote itself?', 'single', NULL, 3),
@@ -3110,13 +3106,13 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (7958, 695, 'According to the Council of Chalcedon (451), how are the divine and human natures related in the person of Christ?', 'single', NULL, 2),
 (7959, 695, 'Which statement best describes a major shift in the Church during the twentieth century?', 'single', NULL, 3),
 (7960, 695, 'According to the doctrine of the munus triplex, which three offices does Jesus Christ fulfill?', 'single', NULL, 4),
-(7961, 695, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 5);
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
+(7961, 695, 'What primary caution does the module raise about practicing the spiritual disciplines?', 'single', NULL, 5),
 (7962, 695, 'In the account of Acts 6:1-7, how did the apostles respond when the daily distribution to widows was being neglected?', 'single', NULL, 6),
 (7963, 695, 'In the module\'s discussion of goal-setting, what distinguishes a goal from an activity?', 'single', NULL, 7),
 (7964, 695, 'What does the example of Elijah under the broom tree (1 Kings 19) teach about the carer, according to the module?', 'single', NULL, 8),
 (7965, 695, 'Which statement best characterizes the presuppositional approach to apologetics as developed by Cornelius Van Til?', 'single', NULL, 9),
-(7966, 695, 'Which of the following is identified as an appropriate reason for a pastoral counsellor to break confidentiality?', 'single', NULL, 10),
+(7966, 695, 'Which of the following is identified as an appropriate reason for a pastoral counsellor to break confidentiality?', 'single', NULL, 10);
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, `sort_order`) VALUES
 (7967, 708, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
 (7968, 708, 'Which statement best expresses the doctrine of the Trinity as confessed in the Nicene tradition?', 'single', NULL, 2),
 (7969, 708, 'The event in 1054 that formalized the long-standing estrangement between the Roman Catholic and Eastern Orthodox Churches is known as:', 'single', NULL, 3),
@@ -3206,7 +3202,12 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `prompt`, `type`, `explanation`, 
 (8053, 836, 'In Mark 10:42-45, how does Jesus redefine greatness for his followers in contrast to the rulers of the Gentiles?', 'single', NULL, 7),
 (8054, 836, 'In the account of Acts 6:1-7, how did the apostles respond when the daily distribution to widows was being neglected?', 'single', NULL, 8),
 (8055, 836, 'According to the module, what is the essential difference between a ministry\'s mission and its vision?', 'single', NULL, 9),
-(8056, 836, 'In classical theological method, how are Scripture and the ecumenical creeds properly related to one another?', 'single', NULL, 10);
+(8056, 836, 'In classical theological method, how are Scripture and the ecumenical creeds properly related to one another?', 'single', NULL, 10),
+(8058, 426, 'The word "testament," as in Old and New Testament, is a translation of a term that most directly means which of the following?', 'single', NULL, 1),
+(8059, 426, 'Which statement best describes how the Christian canon of Scripture came to be recognized?', 'single', NULL, 2),
+(8060, 426, 'The doctrine of inspiration, as historically confessed by the mainstream Church, is best summarized by which view?', 'single', NULL, 3),
+(8061, 426, 'In Hebrew poetry such as the Psalms, the characteristic feature by which a second line echoes, intensifies, or contrasts the first is called what?', 'single', NULL, 4),
+(8062, 426, 'According to the module, what is the difference between exegesis and eisegesis?', 'single', NULL, 5);
 
 CREATE TABLE `quiz_options` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -3723,26 +3724,6 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24019, 6086, 'Routinely reporting all conversations to institutional authorities', 0, 3),
 (24020, 6086, 'Keeping no records of any pastoral encounter whatsoever', 0, 4);
 INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
-(24021, 6087, 'Covenant', 1, 1),
-(24022, 6087, 'Scroll', 0, 2),
-(24023, 6087, 'Prophecy', 0, 3),
-(24024, 6087, 'Commandment', 0, 4),
-(24025, 6088, 'A single emperor decreed the entire contents of the Bible at one council in the second century.', 0, 1),
-(24026, 6088, 'The Church largely received and acknowledged writings already functioning with authority, using criteria such as apostolic origin and use in worship.', 1, 2),
-(24027, 6088, 'Each local congregation independently chose whatever books it preferred, with no shared criteria at all.', 0, 3),
-(24028, 6088, 'The Apostle Paul fixed the complete canon before any Gospel had been written.', 0, 4),
-(24029, 6089, 'God dictated every word while the human authors served merely as passive stenographers.', 0, 1),
-(24030, 6089, 'The biblical books are inspiring human reflections with no genuine divine authorship.', 0, 2),
-(24031, 6089, 'The Holy Spirit guided fully engaged human authors so that what they freely wrote is also truly the Word of God.', 1, 3),
-(24032, 6089, 'Only the words spoken directly by Jesus are inspired, while the rest is ordinary history.', 0, 4),
-(24033, 6090, 'Rhyme scheme', 0, 1),
-(24034, 6090, 'Meter', 0, 2),
-(24035, 6090, 'Alliteration', 0, 3),
-(24036, 6090, 'Parallelism', 1, 4),
-(24037, 6091, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
-(24038, 6091, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
-(24039, 6091, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24040, 6091, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24041, 6092, 'Covenant', 1, 1),
 (24042, 6092, 'Scroll', 0, 2),
 (24043, 6092, 'Prophecy', 0, 3),
@@ -3822,8 +3803,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24117, 6111, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24118, 6111, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24119, 6111, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24120, 6111, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24120, 6111, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24121, 6112, 'Covenant', 1, 1),
 (24122, 6112, 'Scroll', 0, 2),
 (24123, 6112, 'Prophecy', 0, 3),
@@ -3843,7 +3823,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24137, 6116, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24138, 6116, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24139, 6116, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24140, 6116, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24140, 6116, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24141, 6117, 'Covenant', 1, 1),
 (24142, 6117, 'Scroll', 0, 2),
 (24143, 6117, 'Prophecy', 0, 3),
@@ -3923,8 +3904,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24217, 6136, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24218, 6136, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24219, 6136, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24220, 6136, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24220, 6136, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24221, 6137, 'Covenant', 1, 1),
 (24222, 6137, 'Scroll', 0, 2),
 (24223, 6137, 'Prophecy', 0, 3),
@@ -3944,7 +3924,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24237, 6141, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24238, 6141, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24239, 6141, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24240, 6141, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24240, 6141, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24241, 6142, 'Covenant', 1, 1),
 (24242, 6142, 'Scroll', 0, 2),
 (24243, 6142, 'Prophecy', 0, 3),
@@ -4024,8 +4005,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24317, 6161, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24318, 6161, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24319, 6161, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24320, 6161, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24320, 6161, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24321, 6162, 'Covenant', 1, 1),
 (24322, 6162, 'Scroll', 0, 2),
 (24323, 6162, 'Prophecy', 0, 3),
@@ -4045,7 +4025,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24337, 6166, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24338, 6166, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24339, 6166, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24340, 6166, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24340, 6166, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24341, 6167, 'Covenant', 1, 1),
 (24342, 6167, 'Scroll', 0, 2),
 (24343, 6167, 'Prophecy', 0, 3),
@@ -4125,8 +4106,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24417, 6186, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24418, 6186, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24419, 6186, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24420, 6186, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24420, 6186, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24421, 6187, 'Covenant', 1, 1),
 (24422, 6187, 'Scroll', 0, 2),
 (24423, 6187, 'Prophecy', 0, 3),
@@ -4146,7 +4126,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24437, 6191, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24438, 6191, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24439, 6191, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24440, 6191, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24440, 6191, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24441, 6192, 'Covenant', 1, 1),
 (24442, 6192, 'Scroll', 0, 2),
 (24443, 6192, 'Prophecy', 0, 3),
@@ -4226,8 +4207,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24517, 6211, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24518, 6211, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24519, 6211, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24520, 6211, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24520, 6211, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24521, 6212, 'Covenant', 1, 1),
 (24522, 6212, 'Scroll', 0, 2),
 (24523, 6212, 'Prophecy', 0, 3),
@@ -4247,7 +4227,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24537, 6216, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24538, 6216, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24539, 6216, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24540, 6216, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24540, 6216, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24541, 6217, 'Covenant', 1, 1),
 (24542, 6217, 'Scroll', 0, 2),
 (24543, 6217, 'Prophecy', 0, 3),
@@ -4327,8 +4308,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24617, 6236, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24618, 6236, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24619, 6236, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24620, 6236, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24620, 6236, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
 (24621, 6237, 'Covenant', 1, 1),
 (24622, 6237, 'Scroll', 0, 2),
 (24623, 6237, 'Prophecy', 0, 3),
@@ -4348,7 +4328,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24637, 6241, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
 (24638, 6241, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
 (24639, 6241, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
-(24640, 6241, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4),
+(24640, 6241, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24641, 6242, 'Covenant', 1, 1),
 (24642, 6242, 'Scroll', 0, 2),
 (24643, 6242, 'Prophecy', 0, 3),
@@ -4428,8 +4409,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24717, 6261, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24718, 6261, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24719, 6261, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24720, 6261, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24720, 6261, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (24721, 6262, 'Anselm of Canterbury', 1, 1),
 (24722, 6262, 'Arius of Alexandria', 0, 2),
 (24723, 6262, 'Nestorius of Constantinople', 0, 3),
@@ -4449,7 +4429,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24737, 6266, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24738, 6266, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24739, 6266, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24740, 6266, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(24740, 6266, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24741, 6267, 'Anselm of Canterbury', 1, 1),
 (24742, 6267, 'Arius of Alexandria', 0, 2),
 (24743, 6267, 'Nestorius of Constantinople', 0, 3),
@@ -4529,8 +4510,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24817, 6286, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24818, 6286, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24819, 6286, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24820, 6286, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24820, 6286, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (24821, 6287, 'Anselm of Canterbury', 1, 1),
 (24822, 6287, 'Arius of Alexandria', 0, 2),
 (24823, 6287, 'Nestorius of Constantinople', 0, 3),
@@ -4550,7 +4530,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24837, 6291, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24838, 6291, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24839, 6291, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24840, 6291, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(24840, 6291, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24841, 6292, 'Anselm of Canterbury', 1, 1),
 (24842, 6292, 'Arius of Alexandria', 0, 2),
 (24843, 6292, 'Nestorius of Constantinople', 0, 3),
@@ -4630,8 +4611,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24917, 6311, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24918, 6311, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24919, 6311, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24920, 6311, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(24920, 6311, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (24921, 6312, 'Anselm of Canterbury', 1, 1),
 (24922, 6312, 'Arius of Alexandria', 0, 2),
 (24923, 6312, 'Nestorius of Constantinople', 0, 3),
@@ -4651,7 +4631,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (24937, 6316, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (24938, 6316, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (24939, 6316, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(24940, 6316, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(24940, 6316, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (24941, 6317, 'Anselm of Canterbury', 1, 1),
 (24942, 6317, 'Arius of Alexandria', 0, 2),
 (24943, 6317, 'Nestorius of Constantinople', 0, 3),
@@ -4731,8 +4712,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25017, 6336, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25018, 6336, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25019, 6336, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25020, 6336, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25020, 6336, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (25021, 6337, 'Anselm of Canterbury', 1, 1),
 (25022, 6337, 'Arius of Alexandria', 0, 2),
 (25023, 6337, 'Nestorius of Constantinople', 0, 3),
@@ -4752,7 +4732,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25037, 6341, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25038, 6341, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25039, 6341, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25040, 6341, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(25040, 6341, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25041, 6342, 'Anselm of Canterbury', 1, 1),
 (25042, 6342, 'Arius of Alexandria', 0, 2),
 (25043, 6342, 'Nestorius of Constantinople', 0, 3),
@@ -4832,8 +4813,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25117, 6361, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25118, 6361, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25119, 6361, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25120, 6361, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25120, 6361, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (25121, 6362, 'Anselm of Canterbury', 1, 1),
 (25122, 6362, 'Arius of Alexandria', 0, 2),
 (25123, 6362, 'Nestorius of Constantinople', 0, 3),
@@ -4853,7 +4833,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25137, 6366, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25138, 6366, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25139, 6366, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25140, 6366, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(25140, 6366, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25141, 6367, 'Anselm of Canterbury', 1, 1),
 (25142, 6367, 'Arius of Alexandria', 0, 2),
 (25143, 6367, 'Nestorius of Constantinople', 0, 3),
@@ -4933,8 +4914,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25217, 6386, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25218, 6386, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25219, 6386, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25220, 6386, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25220, 6386, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (25221, 6387, 'Anselm of Canterbury', 1, 1),
 (25222, 6387, 'Arius of Alexandria', 0, 2),
 (25223, 6387, 'Nestorius of Constantinople', 0, 3),
@@ -4954,7 +4934,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25237, 6391, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25238, 6391, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25239, 6391, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25240, 6391, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(25240, 6391, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25241, 6392, 'Anselm of Canterbury', 1, 1),
 (25242, 6392, 'Arius of Alexandria', 0, 2),
 (25243, 6392, 'Nestorius of Constantinople', 0, 3),
@@ -5034,8 +5015,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25317, 6411, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25318, 6411, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25319, 6411, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25320, 6411, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25320, 6411, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
 (25321, 6412, 'Anselm of Canterbury', 1, 1),
 (25322, 6412, 'Arius of Alexandria', 0, 2),
 (25323, 6412, 'Nestorius of Constantinople', 0, 3),
@@ -5055,7 +5035,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25337, 6416, 'As earned through a lifetime of accumulated good works and merit', 0, 1),
 (25338, 6416, 'As granted only after the final judgment on the basis of moral perfection', 0, 2),
 (25339, 6416, 'By grace through faith, as the gift of God rather than one\'s own doing', 1, 3),
-(25340, 6416, 'As unnecessary, since human beings are not truly affected by sin', 0, 4),
+(25340, 6416, 'As unnecessary, since human beings are not truly affected by sin', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25341, 6417, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25342, 6417, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25343, 6417, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5135,8 +5116,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25417, 6436, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25418, 6436, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25419, 6436, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25420, 6436, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25420, 6436, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25421, 6437, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25422, 6437, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25423, 6437, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5156,7 +5136,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25437, 6441, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25438, 6441, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25439, 6441, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25440, 6441, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25440, 6441, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25441, 6442, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25442, 6442, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25443, 6442, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5236,8 +5217,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25517, 6461, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25518, 6461, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25519, 6461, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25520, 6461, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25520, 6461, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25521, 6462, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25522, 6462, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25523, 6462, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5257,7 +5237,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25537, 6466, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25538, 6466, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25539, 6466, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25540, 6466, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25540, 6466, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25541, 6467, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25542, 6467, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25543, 6467, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5337,8 +5318,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25617, 6486, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25618, 6486, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25619, 6486, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25620, 6486, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25620, 6486, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25621, 6487, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25622, 6487, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25623, 6487, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5358,7 +5338,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25637, 6491, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25638, 6491, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25639, 6491, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25640, 6491, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25640, 6491, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25641, 6492, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25642, 6492, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25643, 6492, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5438,8 +5419,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25717, 6511, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25718, 6511, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25719, 6511, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25720, 6511, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25720, 6511, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25721, 6512, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25722, 6512, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25723, 6512, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5459,7 +5439,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25737, 6516, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25738, 6516, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25739, 6516, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25740, 6516, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25740, 6516, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25741, 6517, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25742, 6517, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25743, 6517, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5539,8 +5520,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25817, 6536, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25818, 6536, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25819, 6536, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25820, 6536, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25820, 6536, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25821, 6537, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25822, 6537, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25823, 6537, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5560,7 +5540,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25837, 6541, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25838, 6541, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25839, 6541, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25840, 6541, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25840, 6541, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25841, 6542, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25842, 6542, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25843, 6542, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5640,8 +5621,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25917, 6561, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25918, 6561, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25919, 6561, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25920, 6561, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(25920, 6561, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
 (25921, 6562, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25922, 6562, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25923, 6562, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5661,7 +5641,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (25937, 6566, 'The demographic center of Christianity shifted toward the Global South, with rapid growth in Africa, Latin America, and Asia', 1, 1),
 (25938, 6566, 'Christianity effectively disappeared from the Southern Hemisphere', 0, 2),
 (25939, 6566, 'The ecumenical movement succeeded in fully reuniting all Christian denominations', 0, 3),
-(25940, 6566, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4),
+(25940, 6566, 'The Roman Catholic Church rejected all engagement with the modern world at the Second Vatican Council', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (25941, 6567, 'The apostles’ teaching, the fellowship, the breaking of bread, and the prayers', 1, 1),
 (25942, 6567, 'Fasting, almsgiving, pilgrimage, and confession', 0, 2),
 (25943, 6567, 'Preaching, healing, prophecy, and speaking in tongues', 0, 3),
@@ -5741,8 +5722,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26017, 6586, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26018, 6586, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26019, 6586, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26020, 6586, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26020, 6586, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26021, 6587, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26022, 6587, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26023, 6587, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -5762,7 +5742,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26037, 6591, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26038, 6591, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26039, 6591, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26040, 6591, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26040, 6591, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26041, 6592, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26042, 6592, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26043, 6592, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -5842,8 +5823,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26117, 6611, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26118, 6611, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26119, 6611, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26120, 6611, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26120, 6611, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26121, 6612, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26122, 6612, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26123, 6612, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -5863,7 +5843,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26137, 6616, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26138, 6616, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26139, 6616, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26140, 6616, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26140, 6616, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26141, 6617, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26142, 6617, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26143, 6617, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -5943,8 +5924,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26217, 6636, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26218, 6636, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26219, 6636, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26220, 6636, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26220, 6636, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26221, 6637, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26222, 6637, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26223, 6637, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -5964,7 +5944,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26237, 6641, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26238, 6641, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26239, 6641, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26240, 6641, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26240, 6641, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26241, 6642, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26242, 6642, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26243, 6642, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6044,8 +6025,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26317, 6661, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26318, 6661, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26319, 6661, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26320, 6661, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26320, 6661, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26321, 6662, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26322, 6662, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26323, 6662, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6065,7 +6045,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26337, 6666, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26338, 6666, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26339, 6666, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26340, 6666, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26340, 6666, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26341, 6667, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26342, 6667, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26343, 6667, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6145,8 +6126,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26417, 6686, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26418, 6686, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26419, 6686, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26420, 6686, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26420, 6686, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26421, 6687, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26422, 6687, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26423, 6687, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6166,7 +6146,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26437, 6691, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26438, 6691, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26439, 6691, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26440, 6691, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26440, 6691, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26441, 6692, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26442, 6692, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26443, 6692, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6246,8 +6227,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26517, 6711, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26518, 6711, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26519, 6711, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26520, 6711, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26520, 6711, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26521, 6712, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26522, 6712, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26523, 6712, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6267,7 +6247,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26537, 6716, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26538, 6716, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26539, 6716, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26540, 6716, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26540, 6716, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26541, 6717, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26542, 6717, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26543, 6717, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6347,8 +6328,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26617, 6736, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26618, 6736, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26619, 6736, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26620, 6736, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26620, 6736, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
 (26621, 6737, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26622, 6737, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26623, 6737, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6368,7 +6348,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26637, 6741, 'Distinguish the enduring principle a text teaches from its original culturally specific form, then apply the principle appropriately.', 1, 1),
 (26638, 6741, 'Obey every command in exactly its original cultural form without adaptation.', 0, 2),
 (26639, 6741, 'Treat all commands in the epistles as merely symbolic and non-binding today.', 0, 3),
-(26640, 6741, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4),
+(26640, 6741, 'Apply a text only if a later New Testament passage explicitly repeats it.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26641, 6742, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (26642, 6742, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (26643, 6742, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -6448,8 +6429,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26717, 6761, 'The candidate\'s character and manner of life', 1, 1),
 (26718, 6761, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26719, 6761, 'The candidate\'s level of formal education', 0, 3),
-(26720, 6761, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26720, 6761, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (26721, 6762, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26722, 6762, 'Sacred authority reserved for those in high office', 0, 2),
 (26723, 6762, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6469,7 +6449,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26737, 6766, 'The candidate\'s character and manner of life', 1, 1),
 (26738, 6766, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26739, 6766, 'The candidate\'s level of formal education', 0, 3),
-(26740, 6766, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(26740, 6766, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26741, 6767, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26742, 6767, 'Sacred authority reserved for those in high office', 0, 2),
 (26743, 6767, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6549,8 +6530,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26817, 6786, 'The candidate\'s character and manner of life', 1, 1),
 (26818, 6786, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26819, 6786, 'The candidate\'s level of formal education', 0, 3),
-(26820, 6786, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26820, 6786, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (26821, 6787, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26822, 6787, 'Sacred authority reserved for those in high office', 0, 2),
 (26823, 6787, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6570,7 +6550,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26837, 6791, 'The candidate\'s character and manner of life', 1, 1),
 (26838, 6791, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26839, 6791, 'The candidate\'s level of formal education', 0, 3),
-(26840, 6791, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(26840, 6791, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26841, 6792, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26842, 6792, 'Sacred authority reserved for those in high office', 0, 2),
 (26843, 6792, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6650,8 +6631,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26917, 6811, 'The candidate\'s character and manner of life', 1, 1),
 (26918, 6811, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26919, 6811, 'The candidate\'s level of formal education', 0, 3),
-(26920, 6811, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(26920, 6811, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (26921, 6812, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26922, 6812, 'Sacred authority reserved for those in high office', 0, 2),
 (26923, 6812, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6671,7 +6651,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (26937, 6816, 'The candidate\'s character and manner of life', 1, 1),
 (26938, 6816, 'The candidate\'s eloquence in public speaking', 0, 2),
 (26939, 6816, 'The candidate\'s level of formal education', 0, 3),
-(26940, 6816, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(26940, 6816, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (26941, 6817, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (26942, 6817, 'Sacred authority reserved for those in high office', 0, 2),
 (26943, 6817, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6751,8 +6732,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27017, 6836, 'The candidate\'s character and manner of life', 1, 1),
 (27018, 6836, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27019, 6836, 'The candidate\'s level of formal education', 0, 3),
-(27020, 6836, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27020, 6836, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (27021, 6837, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27022, 6837, 'Sacred authority reserved for those in high office', 0, 2),
 (27023, 6837, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6772,7 +6752,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27037, 6841, 'The candidate\'s character and manner of life', 1, 1),
 (27038, 6841, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27039, 6841, 'The candidate\'s level of formal education', 0, 3),
-(27040, 6841, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(27040, 6841, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27041, 6842, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27042, 6842, 'Sacred authority reserved for those in high office', 0, 2),
 (27043, 6842, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6852,8 +6833,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27117, 6861, 'The candidate\'s character and manner of life', 1, 1),
 (27118, 6861, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27119, 6861, 'The candidate\'s level of formal education', 0, 3),
-(27120, 6861, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27120, 6861, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (27121, 6862, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27122, 6862, 'Sacred authority reserved for those in high office', 0, 2),
 (27123, 6862, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6873,7 +6853,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27137, 6866, 'The candidate\'s character and manner of life', 1, 1),
 (27138, 6866, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27139, 6866, 'The candidate\'s level of formal education', 0, 3),
-(27140, 6866, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(27140, 6866, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27141, 6867, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27142, 6867, 'Sacred authority reserved for those in high office', 0, 2),
 (27143, 6867, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6953,8 +6934,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27217, 6886, 'The candidate\'s character and manner of life', 1, 1),
 (27218, 6886, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27219, 6886, 'The candidate\'s level of formal education', 0, 3),
-(27220, 6886, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27220, 6886, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (27221, 6887, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27222, 6887, 'Sacred authority reserved for those in high office', 0, 2),
 (27223, 6887, 'Public teaching delivered from a position of honor', 0, 3),
@@ -6974,7 +6954,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27237, 6891, 'The candidate\'s character and manner of life', 1, 1),
 (27238, 6891, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27239, 6891, 'The candidate\'s level of formal education', 0, 3),
-(27240, 6891, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(27240, 6891, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27241, 6892, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (27242, 6892, 'Sacred authority reserved for those in high office', 0, 2),
 (27243, 6892, 'Public teaching delivered from a position of honor', 0, 3),
@@ -7054,8 +7035,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27317, 6911, 'The candidate\'s character and manner of life', 1, 1),
 (27318, 6911, 'The candidate\'s eloquence in public speaking', 0, 2),
 (27319, 6911, 'The candidate\'s level of formal education', 0, 3),
-(27320, 6911, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27320, 6911, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (27321, 6912, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27322, 6912, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27323, 6912, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7075,7 +7055,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27337, 6916, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27338, 6916, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27339, 6916, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27340, 6916, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27340, 6916, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27341, 6917, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27342, 6917, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27343, 6917, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7155,8 +7136,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27417, 6936, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27418, 6936, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27419, 6936, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27420, 6936, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27420, 6936, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27421, 6937, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27422, 6937, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27423, 6937, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7176,7 +7156,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27437, 6941, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27438, 6941, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27439, 6941, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27440, 6941, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27440, 6941, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27441, 6942, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27442, 6942, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27443, 6942, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7256,8 +7237,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27517, 6961, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27518, 6961, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27519, 6961, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27520, 6961, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27520, 6961, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27521, 6962, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27522, 6962, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27523, 6962, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7277,7 +7257,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27537, 6966, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27538, 6966, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27539, 6966, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27540, 6966, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27540, 6966, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27541, 6967, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27542, 6967, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27543, 6967, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7357,8 +7338,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27617, 6986, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27618, 6986, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27619, 6986, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27620, 6986, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27620, 6986, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27621, 6987, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27622, 6987, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27623, 6987, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7378,7 +7358,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27637, 6991, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27638, 6991, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27639, 6991, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27640, 6991, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27640, 6991, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27641, 6992, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27642, 6992, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27643, 6992, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7458,8 +7439,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27717, 7011, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27718, 7011, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27719, 7011, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27720, 7011, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27720, 7011, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27721, 7012, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27722, 7012, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27723, 7012, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7479,7 +7459,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27737, 7016, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27738, 7016, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27739, 7016, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27740, 7016, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27740, 7016, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27741, 7017, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27742, 7017, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27743, 7017, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7559,8 +7540,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27817, 7036, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27818, 7036, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27819, 7036, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27820, 7036, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27820, 7036, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27821, 7037, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27822, 7037, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27823, 7037, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7580,7 +7560,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27837, 7041, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27838, 7041, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27839, 7041, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27840, 7041, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27840, 7041, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27841, 7042, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27842, 7042, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27843, 7042, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7660,8 +7641,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27917, 7061, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27918, 7061, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27919, 7061, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27920, 7061, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(27920, 7061, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
 (27921, 7062, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27922, 7062, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27923, 7062, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7681,7 +7661,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (27937, 7066, 'Formation is essentially a solitary project, with community as an optional extra', 0, 1),
 (27938, 7066, 'Formation happens in community and is directed outward toward mission and vocation', 1, 2),
 (27939, 7066, 'Mission should be delayed until a believer has reached spiritual maturity in isolation', 0, 3),
-(27940, 7066, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4),
+(27940, 7066, 'Ordinary daily work is a distraction from the real work of spiritual formation', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (27941, 7067, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (27942, 7067, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (27943, 7067, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -7761,8 +7742,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28017, 7086, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28018, 7086, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28019, 7086, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28020, 7086, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28020, 7086, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
 (28021, 7087, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28022, 7087, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28023, 7087, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -7782,7 +7762,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28037, 7091, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28038, 7091, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28039, 7091, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28040, 7091, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
+(28040, 7091, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28041, 7092, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28042, 7092, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28043, 7092, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -7862,8 +7843,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28117, 7111, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28118, 7111, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28119, 7111, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28120, 7111, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28120, 7111, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
 (28121, 7112, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28122, 7112, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28123, 7112, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -7883,7 +7863,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28137, 7116, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28138, 7116, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28139, 7116, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28140, 7116, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
+(28140, 7116, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28141, 7117, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28142, 7117, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28143, 7117, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -7963,8 +7944,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28217, 7136, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28218, 7136, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28219, 7136, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28220, 7136, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28220, 7136, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
 (28221, 7137, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28222, 7137, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28223, 7137, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -7984,7 +7964,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28237, 7141, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28238, 7141, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28239, 7141, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28240, 7141, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
+(28240, 7141, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28241, 7142, 'Pastoral counselling addresses ordinary spiritual and relational struggles but is not a substitute for licensed clinical care.', 1, 1),
 (28242, 7142, 'Pastoral counselling fully replaces the need for any professional mental-health treatment.', 0, 2),
 (28243, 7142, 'Pastoral counselling and clinical treatment address entirely unrelated aspects of a person and never overlap.', 0, 3),
@@ -8064,8 +8045,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28317, 7161, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (28318, 7161, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (28319, 7161, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(28320, 7161, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28320, 7161, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
 (28321, 7162, 'Greatness is measured by becoming a servant and slave of all, following the Son of Man who came to serve', 1, 1),
 (28322, 7162, 'Greatness is achieved by exercising authority over others more effectively than the Gentiles do', 0, 2),
 (28323, 7162, 'Greatness belongs to those who secure positions of honour through faithful petition', 0, 3),
@@ -8085,7 +8065,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28337, 7166, 'Public exposure of the offender at the first opportunity to deter others', 0, 1),
 (28338, 7166, 'Complete avoidance of confrontation to preserve surface harmony', 0, 2),
 (28339, 7166, 'Escalation to the highest authority before any private conversation', 0, 3),
-(28340, 7166, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4),
+(28340, 7166, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28341, 7167, 'Greatness is measured by becoming a servant and slave of all, following the Son of Man who came to serve', 1, 1),
 (28342, 7167, 'Greatness is achieved by exercising authority over others more effectively than the Gentiles do', 0, 2),
 (28343, 7167, 'Greatness belongs to those who secure positions of honour through faithful petition', 0, 3),
@@ -8165,8 +8146,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28417, 7186, 'Public exposure of the offender at the first opportunity to deter others', 0, 1),
 (28418, 7186, 'Complete avoidance of confrontation to preserve surface harmony', 0, 2),
 (28419, 7186, 'Escalation to the highest authority before any private conversation', 0, 3),
-(28420, 7186, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28420, 7186, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4),
 (28421, 7187, 'Greatness is measured by becoming a servant and slave of all, following the Son of Man who came to serve', 1, 1),
 (28422, 7187, 'Greatness is achieved by exercising authority over others more effectively than the Gentiles do', 0, 2),
 (28423, 7187, 'Greatness belongs to those who secure positions of honour through faithful petition', 0, 3),
@@ -8186,7 +8166,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28437, 7191, 'Public exposure of the offender at the first opportunity to deter others', 0, 1),
 (28438, 7191, 'Complete avoidance of confrontation to preserve surface harmony', 0, 2),
 (28439, 7191, 'Escalation to the highest authority before any private conversation', 0, 3),
-(28440, 7191, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4),
+(28440, 7191, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28441, 7192, 'Greatness is measured by becoming a servant and slave of all, following the Son of Man who came to serve', 1, 1),
 (28442, 7192, 'Greatness is achieved by exercising authority over others more effectively than the Gentiles do', 0, 2),
 (28443, 7192, 'Greatness belongs to those who secure positions of honour through faithful petition', 0, 3),
@@ -8266,8 +8247,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28517, 7211, 'Public exposure of the offender at the first opportunity to deter others', 0, 1),
 (28518, 7211, 'Complete avoidance of confrontation to preserve surface harmony', 0, 2),
 (28519, 7211, 'Escalation to the highest authority before any private conversation', 0, 3),
-(28520, 7211, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28520, 7211, 'A graduated, gentle process aimed at restoration rather than humiliation', 1, 4),
 (28521, 7212, 'They appointed seven trustworthy men to oversee the matter so they could continue in prayer and the ministry of the Word', 1, 1),
 (28522, 7212, 'They abandoned preaching entirely in order to manage the distribution themselves', 0, 2),
 (28523, 7212, 'They dismissed the complaint as an unspiritual distraction from ministry', 0, 3),
@@ -8287,7 +8267,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28537, 7216, 'To keep the matter strictly confidential within the leadership to protect the church\'s reputation', 0, 1),
 (28538, 7216, 'To handle the matter internally through the church discipline process before involving anyone else', 0, 2),
 (28539, 7216, 'To wait until the accusation can be fully proven before taking any action', 0, 3),
-(28540, 7216, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4),
+(28540, 7216, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28541, 7217, 'They appointed seven trustworthy men to oversee the matter so they could continue in prayer and the ministry of the Word', 1, 1),
 (28542, 7217, 'They abandoned preaching entirely in order to manage the distribution themselves', 0, 2),
 (28543, 7217, 'They dismissed the complaint as an unspiritual distraction from ministry', 0, 3),
@@ -8367,8 +8348,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28617, 7236, 'To keep the matter strictly confidential within the leadership to protect the church\'s reputation', 0, 1),
 (28618, 7236, 'To handle the matter internally through the church discipline process before involving anyone else', 0, 2),
 (28619, 7236, 'To wait until the accusation can be fully proven before taking any action', 0, 3),
-(28620, 7236, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28620, 7236, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4),
 (28621, 7237, 'They appointed seven trustworthy men to oversee the matter so they could continue in prayer and the ministry of the Word', 1, 1),
 (28622, 7237, 'They abandoned preaching entirely in order to manage the distribution themselves', 0, 2),
 (28623, 7237, 'They dismissed the complaint as an unspiritual distraction from ministry', 0, 3),
@@ -8388,7 +8368,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28637, 7241, 'To keep the matter strictly confidential within the leadership to protect the church\'s reputation', 0, 1),
 (28638, 7241, 'To handle the matter internally through the church discipline process before involving anyone else', 0, 2),
 (28639, 7241, 'To wait until the accusation can be fully proven before taking any action', 0, 3),
-(28640, 7241, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4),
+(28640, 7241, 'To protect the vulnerable and cooperate fully with the civil authorities, never shielding the institution', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28641, 7242, 'They appointed seven trustworthy men to oversee the matter so they could continue in prayer and the ministry of the Word', 1, 1),
 (28642, 7242, 'They abandoned preaching entirely in order to manage the distribution themselves', 0, 2),
 (28643, 7242, 'They dismissed the complaint as an unspiritual distraction from ministry', 0, 3),
@@ -8468,8 +8449,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28717, 7261, 'The wording of its mission statement', 0, 1),
 (28718, 7261, 'The size of its Sunday congregation', 0, 2),
 (28719, 7261, 'The number of programmes listed on its website', 0, 3),
-(28720, 7261, 'How it actually allocates its budget and calendar', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28720, 7261, 'How it actually allocates its budget and calendar', 1, 4),
 (28721, 7262, 'Mission is the enduring purpose of why the ministry exists, while vision is a time-bound picture of a preferred future in a specific context', 1, 1),
 (28722, 7262, 'Mission is set by the denomination, while vision is set by the local congregation alone', 0, 2),
 (28723, 7262, 'Mission concerns finances and facilities, while vision concerns worship and preaching', 0, 3),
@@ -8489,7 +8469,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28737, 7266, 'The wording of its mission statement', 0, 1),
 (28738, 7266, 'The size of its Sunday congregation', 0, 2),
 (28739, 7266, 'The number of programmes listed on its website', 0, 3),
-(28740, 7266, 'How it actually allocates its budget and calendar', 1, 4),
+(28740, 7266, 'How it actually allocates its budget and calendar', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28741, 7267, 'Mission is the enduring purpose of why the ministry exists, while vision is a time-bound picture of a preferred future in a specific context', 1, 1),
 (28742, 7267, 'Mission is set by the denomination, while vision is set by the local congregation alone', 0, 2),
 (28743, 7267, 'Mission concerns finances and facilities, while vision concerns worship and preaching', 0, 3),
@@ -8569,8 +8550,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28817, 7286, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (28818, 7286, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (28819, 7286, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(28820, 7286, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28820, 7286, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
 (28821, 7287, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (28822, 7287, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (28823, 7287, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8590,7 +8570,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28837, 7291, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (28838, 7291, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (28839, 7291, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(28840, 7291, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
+(28840, 7291, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28841, 7292, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (28842, 7292, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (28843, 7292, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8670,8 +8651,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28917, 7311, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (28918, 7311, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (28919, 7311, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(28920, 7311, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(28920, 7311, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
 (28921, 7312, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (28922, 7312, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (28923, 7312, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8691,7 +8671,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (28937, 7316, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (28938, 7316, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (28939, 7316, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(28940, 7316, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
+(28940, 7316, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (28941, 7317, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (28942, 7317, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (28943, 7317, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8771,8 +8752,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29017, 7336, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (29018, 7336, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (29019, 7336, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(29020, 7336, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29020, 7336, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
 (29021, 7337, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (29022, 7337, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (29023, 7337, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8792,7 +8772,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29037, 7341, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (29038, 7341, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (29039, 7341, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(29040, 7341, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
+(29040, 7341, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29041, 7342, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (29042, 7342, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (29043, 7342, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8872,8 +8853,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29117, 7361, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (29118, 7361, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (29119, 7361, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(29120, 7361, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29120, 7361, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
 (29121, 7362, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (29122, 7362, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (29123, 7362, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8893,7 +8873,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29137, 7366, 'That effective ministers never experience exhaustion or despair', 0, 1),
 (29138, 7366, 'That even great servants of God can reach collapse and need rest, nourishment, and gentle re-commissioning', 1, 2),
 (29139, 7366, 'That despair in ministry is always evidence of hidden sin', 0, 3),
-(29140, 7366, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4),
+(29140, 7366, 'That pastors should withdraw permanently from ministry once they feel weary', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29141, 7367, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (29142, 7367, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (29143, 7367, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -8973,8 +8954,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29217, 7386, 'By the eloquence of the delivery and the size of the crowds gathered', 0, 1),
 (29218, 7386, 'By the number of sermons preached and lessons taught each year', 0, 2),
 (29219, 7386, 'By the long-term spiritual formation of hearers into the likeness of Christ', 1, 3),
-(29220, 7386, 'By the immediate emotional response of the congregation during the sermon', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29220, 7386, 'By the immediate emotional response of the congregation during the sermon', 0, 4),
 (29221, 7387, 'A theological event in which God addresses his people through the faithfully proclaimed Word', 1, 1),
 (29222, 7387, 'A neutral lecture whose main purpose is to convey religious information', 0, 2),
 (29223, 7387, 'A performance designed primarily to entertain and hold the congregation\'s attention', 0, 3),
@@ -8994,7 +8974,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29237, 7391, 'By the eloquence of the delivery and the size of the crowds gathered', 0, 1),
 (29238, 7391, 'By the number of sermons preached and lessons taught each year', 0, 2),
 (29239, 7391, 'By the long-term spiritual formation of hearers into the likeness of Christ', 1, 3),
-(29240, 7391, 'By the immediate emotional response of the congregation during the sermon', 0, 4),
+(29240, 7391, 'By the immediate emotional response of the congregation during the sermon', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29241, 7392, 'A theological event in which God addresses his people through the faithfully proclaimed Word', 1, 1),
 (29242, 7392, 'A neutral lecture whose main purpose is to convey religious information', 0, 2),
 (29243, 7392, 'A performance designed primarily to entertain and hold the congregation\'s attention', 0, 3),
@@ -9074,8 +9055,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29317, 7411, 'Christianity has become confined almost entirely to Europe and North America', 0, 1),
 (29318, 7411, 'The majority of the world\'s Christians now live in the Global South (Africa, Asia, and Latin America), making mission a movement from everywhere to everywhere', 1, 2),
 (29319, 7411, 'The global church has ceased sending any missionaries at all', 0, 3),
-(29320, 7411, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29320, 7411, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4),
 (29321, 7412, 'That mission originates in the triune God who sends, and the church participates in God\'s work rather than initiating its own', 1, 1),
 (29322, 7412, 'That mission is primarily a program of social reform organized by denominational committees', 0, 2),
 (29323, 7412, 'That mission is optional for individual believers but required of ordained clergy', 0, 3),
@@ -9095,7 +9075,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29337, 7416, 'Christianity has become confined almost entirely to Europe and North America', 0, 1),
 (29338, 7416, 'The majority of the world\'s Christians now live in the Global South (Africa, Asia, and Latin America), making mission a movement from everywhere to everywhere', 1, 2),
 (29339, 7416, 'The global church has ceased sending any missionaries at all', 0, 3),
-(29340, 7416, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4),
+(29340, 7416, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29341, 7417, 'That mission originates in the triune God who sends, and the church participates in God\'s work rather than initiating its own', 1, 1),
 (29342, 7417, 'That mission is primarily a program of social reform organized by denominational committees', 0, 2),
 (29343, 7417, 'That mission is optional for individual believers but required of ordained clergy', 0, 3),
@@ -9175,8 +9156,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29417, 7436, 'Christianity has become confined almost entirely to Europe and North America', 0, 1),
 (29418, 7436, 'The majority of the world\'s Christians now live in the Global South (Africa, Asia, and Latin America), making mission a movement from everywhere to everywhere', 1, 2),
 (29419, 7436, 'The global church has ceased sending any missionaries at all', 0, 3),
-(29420, 7436, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29420, 7436, 'The unreached peoples of the world have all now been reached, completing the missionary task', 0, 4),
 (29421, 7437, 'The majority of the world\'s Christians now live in the Global South rather than in Europe and North America.', 1, 1),
 (29422, 7437, 'Christianity has become numerically strongest in Western Europe due to a secular revival.', 0, 2),
 (29423, 7437, 'The total number of Christians worldwide has declined sharply since 1900.', 0, 3),
@@ -9196,7 +9176,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29437, 7441, 'Western missionaries returning home permanently after their assignments end.', 0, 1),
 (29438, 7441, 'The practice of translating the Bible back into its original languages.', 0, 2),
 (29439, 7441, 'Churches in the Global South sending missionaries to re-evangelize the secular West.', 1, 3),
-(29440, 7441, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4),
+(29440, 7441, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29441, 7442, 'The majority of the world\'s Christians now live in the Global South rather than in Europe and North America.', 1, 1),
 (29442, 7442, 'Christianity has become numerically strongest in Western Europe due to a secular revival.', 0, 2),
 (29443, 7442, 'The total number of Christians worldwide has declined sharply since 1900.', 0, 3),
@@ -9276,8 +9257,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29517, 7461, 'Western missionaries returning home permanently after their assignments end.', 0, 1),
 (29518, 7461, 'The practice of translating the Bible back into its original languages.', 0, 2),
 (29519, 7461, 'Churches in the Global South sending missionaries to re-evangelize the secular West.', 1, 3),
-(29520, 7461, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29520, 7461, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4),
 (29521, 7462, 'The majority of the world\'s Christians now live in the Global South rather than in Europe and North America.', 1, 1),
 (29522, 7462, 'Christianity has become numerically strongest in Western Europe due to a secular revival.', 0, 2),
 (29523, 7462, 'The total number of Christians worldwide has declined sharply since 1900.', 0, 3),
@@ -9297,7 +9277,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29537, 7466, 'Western missionaries returning home permanently after their assignments end.', 0, 1),
 (29538, 7466, 'The practice of translating the Bible back into its original languages.', 0, 2),
 (29539, 7466, 'Churches in the Global South sending missionaries to re-evangelize the secular West.', 1, 3),
-(29540, 7466, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4),
+(29540, 7466, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29541, 7467, 'The majority of the world\'s Christians now live in the Global South rather than in Europe and North America.', 1, 1),
 (29542, 7467, 'Christianity has become numerically strongest in Western Europe due to a secular revival.', 0, 2),
 (29543, 7467, 'The total number of Christians worldwide has declined sharply since 1900.', 0, 3),
@@ -9377,8 +9358,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29617, 7486, 'Western missionaries returning home permanently after their assignments end.', 0, 1),
 (29618, 7486, 'The practice of translating the Bible back into its original languages.', 0, 2),
 (29619, 7486, 'Churches in the Global South sending missionaries to re-evangelize the secular West.', 1, 3),
-(29620, 7486, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29620, 7486, 'The decision of a church to reject all forms of cross-cultural mission.', 0, 4),
 (29621, 7487, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29622, 7487, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29623, 7487, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9398,7 +9378,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29637, 7491, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29638, 7491, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29639, 7491, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29640, 7491, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
+(29640, 7491, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29641, 7492, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29642, 7492, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29643, 7492, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9478,8 +9459,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29717, 7511, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29718, 7511, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29719, 7511, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29720, 7511, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29720, 7511, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
 (29721, 7512, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29722, 7512, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29723, 7512, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9499,7 +9479,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29737, 7516, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29738, 7516, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29739, 7516, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29740, 7516, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
+(29740, 7516, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29741, 7517, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29742, 7517, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29743, 7517, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9579,8 +9560,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29817, 7536, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29818, 7536, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29819, 7536, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29820, 7536, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29820, 7536, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
 (29821, 7537, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29822, 7537, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29823, 7537, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9600,7 +9580,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29837, 7541, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29838, 7541, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29839, 7541, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29840, 7541, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
+(29840, 7541, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29841, 7542, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29842, 7542, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29843, 7542, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9680,8 +9661,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29917, 7561, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29918, 7561, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29919, 7561, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29920, 7561, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(29920, 7561, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
 (29921, 7562, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (29922, 7562, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (29923, 7562, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -9701,7 +9681,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (29937, 7566, 'Penal substitution alone is biblical, and the other models must be rejected as errors.', 0, 1),
 (29938, 7566, 'The moral influence model is the only one compatible with the love of God shown in Scripture.', 0, 2),
 (29939, 7566, 'The models are historically interesting but none of them corresponds to anything in the biblical text.', 0, 3),
-(29940, 7566, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4),
+(29940, 7566, 'The models&mdash;<em>Christus Victor</em>, satisfaction, penal substitution, and moral influence&mdash;are complementary facets of a single saving reality.', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (29941, 7567, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (29942, 7567, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (29943, 7567, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -9781,8 +9762,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30017, 7586, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30018, 7586, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30019, 7586, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30020, 7586, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30020, 7586, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
 (30021, 7587, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30022, 7587, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30023, 7587, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -9802,7 +9782,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30037, 7591, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30038, 7591, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30039, 7591, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30040, 7591, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
+(30040, 7591, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30041, 7592, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30042, 7592, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30043, 7592, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -9882,8 +9863,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30117, 7611, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30118, 7611, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30119, 7611, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30120, 7611, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30120, 7611, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
 (30121, 7612, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30122, 7612, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30123, 7612, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -9903,7 +9883,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30137, 7616, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30138, 7616, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30139, 7616, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30140, 7616, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
+(30140, 7616, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30141, 7617, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30142, 7617, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30143, 7617, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -9983,8 +9964,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30217, 7636, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30218, 7636, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30219, 7636, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30220, 7636, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30220, 7636, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
 (30221, 7637, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30222, 7637, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30223, 7637, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -10004,7 +9984,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30237, 7641, 'To avoid all contested topics as beyond the reach of ethics.', 0, 1),
 (30238, 7641, 'To understand opposing positions charitably and disagree with gentleness and respect.', 1, 2),
 (30239, 7641, 'To adopt whichever view is currently most popular in society.', 0, 3),
-(30240, 7641, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4),
+(30240, 7641, 'To treat every disagreement as evidence of the other side\'s bad faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30241, 7642, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (30242, 7642, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (30243, 7642, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
@@ -10084,8 +10065,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30317, 7661, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30318, 7661, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30319, 7661, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30320, 7661, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30320, 7661, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
 (30321, 7662, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30322, 7662, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30323, 7662, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10105,7 +10085,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30337, 7666, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30338, 7666, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30339, 7666, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30340, 7666, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
+(30340, 7666, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30341, 7667, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30342, 7667, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30343, 7667, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10185,8 +10166,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30417, 7686, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30418, 7686, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30419, 7686, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30420, 7686, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30420, 7686, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
 (30421, 7687, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30422, 7687, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30423, 7687, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10206,7 +10186,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30437, 7691, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30438, 7691, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30439, 7691, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30440, 7691, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
+(30440, 7691, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30441, 7692, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30442, 7692, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30443, 7692, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10286,8 +10267,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30517, 7711, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30518, 7711, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30519, 7711, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30520, 7711, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30520, 7711, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
 (30521, 7712, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30522, 7712, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30523, 7712, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10307,7 +10287,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30537, 7716, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (30538, 7716, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (30539, 7716, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(30540, 7716, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
+(30540, 7716, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30541, 7717, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (30542, 7717, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (30543, 7717, 'A mystical experience granted only to the spiritually mature', 0, 3),
@@ -10387,8 +10368,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30617, 7736, 'The use of the local mother tongue in worship services.', 0, 1),
 (30618, 7736, 'The translation of Scripture into indigenous languages.', 0, 2),
 (30619, 7736, 'Syncretism, the blending of the gospel with incompatible beliefs that compromise the claims of Christ.', 1, 3),
-(30620, 7736, 'The sending of missionaries from the Global South to the West.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30620, 7736, 'The sending of missionaries from the Global South to the West.', 0, 4),
 (30621, 7737, 'Covenant', 1, 1),
 (30622, 7737, 'Scroll', 0, 2),
 (30623, 7737, 'Prophecy', 0, 3),
@@ -10408,7 +10388,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30637, 7741, 'The need to consult the original Greek manuscripts before drawing any conclusion.', 0, 1),
 (30638, 7741, 'The rule that literary context, including the surrounding verses about contentment, determines meaning.', 1, 2),
 (30639, 7741, 'The requirement that every verse be interpreted allegorically rather than literally.', 0, 3),
-(30640, 7741, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4),
+(30640, 7741, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30641, 7742, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (30642, 7742, 'Sacred authority reserved for those in high office', 0, 2),
 (30643, 7742, 'Public teaching delivered from a position of honor', 0, 3),
@@ -10488,8 +10469,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30717, 7761, 'The need to consult the original Greek manuscripts before drawing any conclusion.', 0, 1),
 (30718, 7761, 'The rule that literary context, including the surrounding verses about contentment, determines meaning.', 1, 2),
 (30719, 7761, 'The requirement that every verse be interpreted allegorically rather than literally.', 0, 3),
-(30720, 7761, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30720, 7761, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4),
 (30721, 7762, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (30722, 7762, 'Sacred authority reserved for those in high office', 0, 2),
 (30723, 7762, 'Public teaching delivered from a position of honor', 0, 3),
@@ -10509,7 +10489,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30737, 7766, 'Offering advice as quickly as possible so the person is not left in doubt.', 0, 1),
 (30738, 7766, 'Being swift to hear and slow to speak, that is, the primacy of listening.', 1, 2),
 (30739, 7766, 'Correcting the person\'s theological errors before addressing their feelings.', 0, 3),
-(30740, 7766, 'Keeping conversations brief so the counsellor avoids emotional fatigue.', 0, 4),
+(30740, 7766, 'Keeping conversations brief so the counsellor avoids emotional fatigue.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30741, 7767, 'Covenant', 1, 1),
 (30742, 7767, 'Scroll', 0, 2),
 (30743, 7767, 'Prophecy', 0, 3),
@@ -10589,8 +10570,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30817, 7786, 'Prophecy', 0, 1),
 (30818, 7786, 'Stewardship', 1, 2),
 (30819, 7786, 'Sacrifice', 0, 3),
-(30820, 7786, 'Sanctification', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30820, 7786, 'Sanctification', 0, 4),
 (30821, 7787, 'Covenant', 1, 1),
 (30822, 7787, 'Scroll', 0, 2),
 (30823, 7787, 'Prophecy', 0, 3),
@@ -10610,7 +10590,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30837, 7791, 'The need to consult the original Greek manuscripts before drawing any conclusion.', 0, 1),
 (30838, 7791, 'The rule that literary context, including the surrounding verses about contentment, determines meaning.', 1, 2),
 (30839, 7791, 'The requirement that every verse be interpreted allegorically rather than literally.', 0, 3),
-(30840, 7791, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4),
+(30840, 7791, 'The principle that New Testament promises apply only to the original recipients and never to us.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30841, 7792, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (30842, 7792, 'Sacred authority reserved for those in high office', 0, 2),
 (30843, 7792, 'Public teaching delivered from a position of honor', 0, 3),
@@ -10690,8 +10671,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30917, 7811, 'The Babylonian Captivity of the Church', 0, 1),
 (30918, 7811, 'The Edict of Milan', 0, 2),
 (30919, 7811, 'The Great Schism', 1, 3),
-(30920, 7811, 'The Council of Constantinople', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(30920, 7811, 'The Council of Constantinople', 0, 4),
 (30921, 7812, 'Exegesis draws meaning out of the text, while eisegesis reads meaning into the text.', 1, 1),
 (30922, 7812, 'Exegesis reads meaning into the text, while eisegesis draws meaning out of it.', 0, 2),
 (30923, 7812, 'Both refer to translating the text from its original languages into English.', 0, 3),
@@ -10711,7 +10691,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (30937, 7816, 'Disciplines of abstinence include worship, celebration, and fellowship', 0, 1),
 (30938, 7816, 'Disciplines of engagement include fasting, solitude, and silence', 0, 2),
 (30939, 7816, 'Disciplines of abstinence include fasting, solitude, and sabbath rest', 1, 3),
-(30940, 7816, 'Disciplines of engagement include simplicity and abstaining from food', 0, 4),
+(30940, 7816, 'Disciplines of engagement include simplicity and abstaining from food', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (30941, 7817, 'Covenant', 1, 1),
 (30942, 7817, 'Scroll', 0, 2),
 (30943, 7817, 'Prophecy', 0, 3),
@@ -10791,8 +10772,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31017, 7836, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (31018, 7836, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (31019, 7836, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
-(31020, 7836, 'Scripture and the creeds are independent authorities that need not be reconciled with one another.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31020, 7836, 'Scripture and the creeds are independent authorities that need not be reconciled with one another.', 0, 4),
 (31021, 7837, 'Covenant', 1, 1),
 (31022, 7837, 'Scroll', 0, 2),
 (31023, 7837, 'Prophecy', 0, 3),
@@ -10812,7 +10792,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31037, 7841, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (31038, 7841, 'Sacred authority reserved for those in high office', 0, 2),
 (31039, 7841, 'Public teaching delivered from a position of honor', 0, 3),
-(31040, 7841, 'The management of a religious institution\'s finances', 0, 4),
+(31040, 7841, 'The management of a religious institution\'s finances', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31041, 7842, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (31042, 7842, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (31043, 7842, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -10892,8 +10873,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31117, 7861, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (31118, 7861, 'Sacred authority reserved for those in high office', 0, 2),
 (31119, 7861, 'Public teaching delivered from a position of honor', 0, 3),
-(31120, 7861, 'The management of a religious institution\'s finances', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31120, 7861, 'The management of a religious institution\'s finances', 0, 4),
 (31121, 7862, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (31122, 7862, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (31123, 7862, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -10913,7 +10893,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31137, 7866, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (31138, 7866, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (31139, 7866, 'A mystical experience granted only to the spiritually mature', 0, 3),
-(31140, 7866, 'A formal creed recited during corporate worship', 0, 4),
+(31140, 7866, 'A formal creed recited during corporate worship', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31141, 7867, 'Covenant', 1, 1),
 (31142, 7867, 'Scroll', 0, 2),
 (31143, 7867, 'Prophecy', 0, 3),
@@ -10993,8 +10974,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31217, 7886, 'Intuition, popularity, tradition, and law', 0, 1),
 (31218, 7886, 'Scripture, tradition, reason, and experience', 1, 2),
 (31219, 7886, 'Emotion, consensus, custom, and precedent', 0, 3),
-(31220, 7886, 'Scripture alone, apart from any other consideration', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31220, 7886, 'Scripture alone, apart from any other consideration', 0, 4),
 (31221, 7887, 'Covenant', 1, 1),
 (31222, 7887, 'Scroll', 0, 2),
 (31223, 7887, 'Prophecy', 0, 3),
@@ -11014,7 +10994,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31237, 7891, 'The candidate\'s character and manner of life', 1, 1),
 (31238, 7891, 'The candidate\'s eloquence in public speaking', 0, 2),
 (31239, 7891, 'The candidate\'s level of formal education', 0, 3),
-(31240, 7891, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(31240, 7891, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31241, 7892, 'The pastor is an under-shepherd who serves a flock that ultimately belongs to God and gives account to the Chief Shepherd', 1, 1),
 (31242, 7892, 'The pastor owns the flock and bears sole responsibility for its eternal destiny', 0, 2),
 (31243, 7892, 'The pastor is merely a religiously motivated social worker with no distinct theological role', 0, 3),
@@ -11094,8 +11075,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31317, 7911, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (31318, 7911, 'Sacred authority reserved for those in high office', 0, 2),
 (31319, 7911, 'Public teaching delivered from a position of honor', 0, 3),
-(31320, 7911, 'The management of a religious institution\'s finances', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31320, 7911, 'The management of a religious institution\'s finances', 0, 4),
 (31321, 7912, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (31322, 7912, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (31323, 7912, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -11115,7 +11095,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31337, 7916, 'Given who God is and what God has done, how then should we live?', 1, 1),
 (31338, 7916, 'Which philosophical school produced the most rules for daily conduct?', 0, 2),
 (31339, 7916, 'How can believers earn God\'s favour through moral achievement?', 0, 3),
-(31340, 7916, 'Which cultural customs of the ancient world remain socially acceptable today?', 0, 4),
+(31340, 7916, 'Which cultural customs of the ancient world remain socially acceptable today?', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31341, 7917, 'Covenant', 1, 1),
 (31342, 7917, 'Scroll', 0, 2),
 (31343, 7917, 'Prophecy', 0, 3),
@@ -11195,8 +11176,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31417, 7936, 'A reasoned defense such as one might present in a legal setting', 1, 1),
 (31418, 7936, 'An expression of regret or an admission of wrongdoing', 0, 2),
 (31419, 7936, 'A mystical experience granted only to the spiritually mature', 0, 3),
-(31420, 7936, 'A formal creed recited during corporate worship', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31420, 7936, 'A formal creed recited during corporate worship', 0, 4),
 (31421, 7937, 'Covenant', 1, 1),
 (31422, 7937, 'Scroll', 0, 2),
 (31423, 7937, 'Prophecy', 0, 3),
@@ -11216,7 +11196,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31437, 7941, 'The candidate\'s character and manner of life', 1, 1),
 (31438, 7941, 'The candidate\'s eloquence in public speaking', 0, 2),
 (31439, 7941, 'The candidate\'s level of formal education', 0, 3),
-(31440, 7941, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
+(31440, 7941, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31441, 7942, 'Genesis 12:1-3', 1, 1),
 (31442, 7942, 'Exodus 20:1-17', 0, 2),
 (31443, 7942, 'Deuteronomy 6:4-5', 0, 3),
@@ -11296,8 +11277,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31517, 7961, 'That they are outdated practices unsuitable for modern learners', 0, 1),
 (31518, 7961, 'That they should be practiced only in private and never in community', 0, 2),
 (31519, 7961, 'That only clergy and monastics are equipped to practice them safely', 0, 3),
-(31520, 7961, 'That they can harden into legalism if treated as ends or as ways to earn God\'s favor', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31520, 7961, 'That they can harden into legalism if treated as ends or as ways to earn God\'s favor', 1, 4),
 (31521, 7962, 'They appointed seven trustworthy men to oversee the matter so they could continue in prayer and the ministry of the Word', 1, 1),
 (31522, 7962, 'They abandoned preaching entirely in order to manage the distribution themselves', 0, 2),
 (31523, 7962, 'They dismissed the complaint as an unspiritual distraction from ministry', 0, 3),
@@ -11317,7 +11297,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31537, 7966, 'When the counsellor finds the person\'s story unusually interesting.', 0, 1),
 (31538, 7966, 'When another church member casually asks how the counselling is going.', 0, 2),
 (31539, 7966, 'When the counsellor wishes to illustrate a point in a sermon.', 0, 3),
-(31540, 7966, 'When there is a serious risk of harm to the person or to others, or the law requires disclosure.', 1, 4),
+(31540, 7966, 'When there is a serious risk of harm to the person or to others, or the law requires disclosure.', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31541, 7967, 'Covenant', 1, 1),
 (31542, 7967, 'Scroll', 0, 2),
 (31543, 7967, 'Prophecy', 0, 3),
@@ -11397,8 +11378,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31617, 7986, 'The use of the local mother tongue in worship services.', 0, 1),
 (31618, 7986, 'The translation of Scripture into indigenous languages.', 0, 2),
 (31619, 7986, 'Syncretism, the blending of the gospel with incompatible beliefs that compromise the claims of Christ.', 1, 3),
-(31620, 7986, 'The sending of missionaries from the Global South to the West.', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31620, 7986, 'The sending of missionaries from the Global South to the West.', 0, 4),
 (31621, 7987, 'Covenant', 1, 1),
 (31622, 7987, 'Scroll', 0, 2),
 (31623, 7987, 'Prophecy', 0, 3),
@@ -11418,7 +11398,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31637, 7991, 'That they are outdated practices unsuitable for modern learners', 0, 1),
 (31638, 7991, 'That they should be practiced only in private and never in community', 0, 2),
 (31639, 7991, 'That only clergy and monastics are equipped to practice them safely', 0, 3),
-(31640, 7991, 'That they can harden into legalism if treated as ends or as ways to earn God\'s favor', 1, 4),
+(31640, 7991, 'That they can harden into legalism if treated as ends or as ways to earn God\'s favor', 1, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31641, 7992, 'The majority of the world\'s Christians now live in the Global South rather than in Europe and North America.', 1, 1),
 (31642, 7992, 'Christianity has become numerically strongest in Western Europe due to a secular revival.', 0, 2),
 (31643, 7992, 'The total number of Christians worldwide has declined sharply since 1900.', 0, 3),
@@ -11498,8 +11479,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31717, 8011, 'The candidate\'s character and manner of life', 1, 1),
 (31718, 8011, 'The candidate\'s eloquence in public speaking', 0, 2),
 (31719, 8011, 'The candidate\'s level of formal education', 0, 3),
-(31720, 8011, 'The candidate\'s ability to grow the congregation numerically', 0, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31720, 8011, 'The candidate\'s ability to grow the congregation numerically', 0, 4),
 (31721, 8012, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (31722, 8012, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (31723, 8012, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
@@ -11519,7 +11499,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31737, 8016, 'As an honourable act of love and prudence, ideally with the pastoral relationship continuing alongside professional care.', 1, 1),
 (31738, 8016, 'As a last resort that signals the counsellor\'s spiritual failure.', 0, 2),
 (31739, 8016, 'As a complete handover after which the counsellor should end all contact.', 0, 3),
-(31740, 8016, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4),
+(31740, 8016, 'As something to be delayed as long as possible to demonstrate faith.', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31741, 8017, 'Covenant', 1, 1),
 (31742, 8017, 'Scroll', 0, 2),
 (31743, 8017, 'Prophecy', 0, 3),
@@ -11599,8 +11580,7 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31817, 8036, 'By conceding that all major religions ultimately teach the same essential truths', 0, 1),
 (31818, 8036, 'By avoiding the topic entirely to prevent giving offense to others', 0, 2),
 (31819, 8036, 'By insisting on the claim aggressively so that its seriousness is unmistakable', 0, 3),
-(31820, 8036, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4);
-INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
+(31820, 8036, 'By maintaining humility of attitude while retaining honesty about the content of truth', 1, 4),
 (31821, 8037, 'Covenant', 1, 1),
 (31822, 8037, 'Scroll', 0, 2),
 (31823, 8037, 'Prophecy', 0, 3),
@@ -11620,7 +11600,8 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31837, 8041, 'Humble service, as of a household servant attending to others\' needs', 1, 1),
 (31838, 8041, 'Sacred authority reserved for those in high office', 0, 2),
 (31839, 8041, 'Public teaching delivered from a position of honor', 0, 3),
-(31840, 8041, 'The management of a religious institution\'s finances', 0, 4),
+(31840, 8041, 'The management of a religious institution\'s finances', 0, 4);
+INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_order`) VALUES
 (31841, 8042, 'Being conformed to the image of Christ, expressed in Christlike love', 1, 1),
 (31842, 8042, 'Achieving a permanent state of emotional serenity and inner calm', 0, 2),
 (31843, 8042, 'Mastering the maximum number of spiritual disciplines', 0, 3),
@@ -11680,7 +11661,27 @@ INSERT INTO `quiz_options` (`id`, `question_id`, `text`, `is_correct`, `sort_ord
 (31897, 8056, 'Scripture functions as the norming norm, while the creeds are a normed norm authoritative because they are faithful to Scripture.', 1, 1),
 (31898, 8056, 'The creeds hold equal authority with Scripture, since both were inspired by the Holy Spirit in the same manner.', 0, 2),
 (31899, 8056, 'The creeds supersede Scripture, providing the final interpretive authority for all later doctrine.', 0, 3),
-(31900, 8056, 'Scripture and the creeds are independent authorities that need not be reconciled with one another.', 0, 4);
+(31900, 8056, 'Scripture and the creeds are independent authorities that need not be reconciled with one another.', 0, 4),
+(31901, 8058, 'Covenant', 1, 1),
+(31902, 8058, 'Scroll', 0, 2),
+(31903, 8058, 'Prophecy', 0, 3),
+(31904, 8058, 'Commandment', 0, 4),
+(31905, 8059, 'A single emperor decreed the entire contents of the Bible at one council in the second century.', 0, 1),
+(31906, 8059, 'The Church largely received and acknowledged writings already functioning with authority, using criteria such as apostolic origin and use in worship.', 1, 2),
+(31907, 8059, 'Each local congregation independently chose whatever books it preferred, with no shared criteria at all.', 0, 3),
+(31908, 8059, 'The Apostle Paul fixed the complete canon before any Gospel had been written.', 0, 4),
+(31909, 8060, 'God dictated every word while the human authors served merely as passive stenographers.', 0, 1),
+(31910, 8060, 'The biblical books are inspiring human reflections with no genuine divine authorship.', 0, 2),
+(31911, 8060, 'The Holy Spirit guided fully engaged human authors so that what they freely wrote is also truly the Word of God.', 1, 3),
+(31912, 8060, 'Only the words spoken directly by Jesus are inspired, while the rest is ordinary history.', 0, 4),
+(31913, 8061, 'Rhyme scheme', 0, 1),
+(31914, 8061, 'Meter', 0, 2),
+(31915, 8061, 'Alliteration', 0, 3),
+(31916, 8061, 'Parallelism', 1, 4),
+(31917, 8062, 'Exegesis draws meaning out of the text, while eisegesis reads one\'s own ideas into the text.', 1, 1),
+(31918, 8062, 'Exegesis applies only to the Old Testament, while eisegesis applies only to the New Testament.', 0, 2),
+(31919, 8062, 'Exegesis is performed by scholars, while eisegesis is performed only by pastors.', 0, 3),
+(31920, 8062, 'Exegesis concerns poetry, while eisegesis concerns narrative.', 0, 4);
 
 CREATE TABLE `assignments` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -11898,6 +11899,18 @@ INSERT INTO `assignments` (`id`, `course_id`, `title`, `instructions`, `due_date
 (322, 22, 'A Theology and Self-Assessment of Ministry', 'In 900-1200 words, articulate your own working definition of Christian ministry, grounding it in at least four Scripture passages studied in this module and explaining how ministry both belongs to the whole people of God and is served by recognized leaders. Then apply the module honestly to yourself: identify which of the four core practices (word, worship, care, mission) you are most drawn to, which of the three perils (pride, burnout, hypocrisy) poses the greatest risk to you, and one concrete safeguard you will adopt. Engage at least one point where Christian traditions differ, treating it irenically and fairly.', 1789157818060, 100, 1, '2026-07-03 20:16:58', '2026-07-03 20:16:58', 266, NULL, 5, 'essay'),
 (323, 22, 'Designing a Personal Rule of Life', 'Drawing on all three Parts of this module, compose a 900–1200 word personal rule of life that names your intended goal of formation, selects a sustainable rhythm of at least one discipline of engagement and one of abstinence, and identifies a specific community and relationship of mutual discipleship in which you will pursue it. Explain the theological rationale for each choice, citing at least three passages of Scripture and interacting with at least one concept from the module (for example, grace and effort, the means of grace, or vocation). Conclude by addressing how your plan guards against both passive quietism and legalistic striving.', 1790367418061, 100, 1, '2026-07-03 20:16:58', '2026-07-03 20:16:58', 267, NULL, 6, 'essay');
 
+CREATE TABLE `content_revisions` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `entity_type` varchar(255) NOT NULL,
+  `entity_id` int NOT NULL,
+  `course_id` int NULL,
+  `action` varchar(255) NOT NULL,
+  `snapshot_json` text NOT NULL,
+  `actor_user_id` int NULL,
+  `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE IF NOT EXISTS `knex_migrations` (`id` int unsigned NOT NULL AUTO_INCREMENT, `name` varchar(255), `batch` int, `migration_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `knex_migrations_lock` (`index` int unsigned NOT NULL AUTO_INCREMENT, `is_locked` int, PRIMARY KEY (`index`));
@@ -11940,7 +11953,8 @@ INSERT INTO `knex_migrations` (`name`, `batch`, `migration_time`) VALUES
 ('20260701000032_open_day_image.js', 1, NOW()),
 ('20260702000032_shared_modules.js', 1, NOW()),
 ('20260702000032_streaming.js', 1, NOW()),
-('20260702000033_seed_courses.js', 1, NOW());
+('20260702000033_seed_courses.js', 1, NOW()),
+('20260704000034_content_revisions.js', 1, NOW());
 UPDATE `knex_migrations_lock` SET `is_locked` = 0;
 
 SET FOREIGN_KEY_CHECKS=1;

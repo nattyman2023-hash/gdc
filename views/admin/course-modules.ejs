@@ -191,6 +191,9 @@
       <button onclick="document.getElementById('edit-module-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white">
         <span class="material-symbols-outlined text-sm">edit</span> Edit module
       </button>
+      <a href="/admin/revisions?entity_type=module&entity_id=<%= mod.id %>&return=/admin/courses/<%= course.id %>/modules" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white" title="Version history">
+        <span class="material-symbols-outlined text-sm">history</span> History
+      </a>
       <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
         <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
       </button>
@@ -388,6 +391,9 @@
           <button onclick="document.getElementById('materials-<%= lesson.id %>').classList.toggle('hidden')" class="p-1 hover:text-blue-600 rounded">
             <span class="material-symbols-outlined text-sm">attachment</span>
           </button>
+          <a href="/admin/revisions?entity_type=lesson&entity_id=<%= lesson.id %>&return=/admin/courses/<%= course.id %>/modules" class="p-1 hover:text-primary rounded inline-block" title="Version history">
+            <span class="material-symbols-outlined text-sm">history</span>
+          </a>
           <form method="POST" action="/admin/lessons/<%= lesson.id %>/delete" class="inline" onsubmit="return confirm('Delete this lesson?');">
             <button type="submit" class="p-1 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
           </form>
@@ -508,6 +514,7 @@
             </div>
             <div class="flex items-center gap-2">
               <a href="/admin/quizzes/<%= qz.id %>/edit?return=/admin/courses/<%= course.id %>/modules" class="p-1 text-on-surface-variant hover:text-primary rounded" title="Edit quiz"><span class="material-symbols-outlined text-sm">edit</span></a>
+              <a href="/admin/revisions?entity_type=quiz&entity_id=<%= qz.id %>&return=/admin/courses/<%= course.id %>/modules" class="p-1 text-on-surface-variant hover:text-primary rounded inline-block" title="Version history"><span class="material-symbols-outlined text-sm">history</span></a>
               <form method="POST" action="/admin/quizzes/<%= qz.id %>/delete" class="inline" onsubmit="return confirm('Delete this quiz?');"><button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
             </div>
           </div>

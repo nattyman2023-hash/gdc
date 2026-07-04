@@ -16,6 +16,20 @@ const googleCalendar = require('../lib/googleCalendar');
 const attendance = require('../lib/attendance');
 const calendar = require('../lib/calendar');
 const profiles = require('../lib/profiles');
+const { snapshot } = require('../lib/revisions');
+
+// Full quiz snapshot (row + nested questions/options) for version history —
+// quizzes are always rebuilt wholesale on save, so a snapshot needs the
+// entire nested shape to be restorable.
+async function snapshotQuiz(quizId) {
+  const quiz = await knex('quizzes').where({ id: quizId }).first();
+  if (!quiz) return null;
+  const questions = await knex('quiz_questions').where({ quiz_id: quizId }).orderBy('sort_order');
+  for (const q of questions) {
+    q.options = await knex('quiz_options').where({ question_id: q.id }).orderBy('sort_order');
+  }
+  return { quiz, questions };
+}
 
 const router = express.Router();
 
@@ -2481,6 +2495,10 @@ router.get('/quizzes/:id/edit', async (req, res, next) => {
 
 router.post('/quizzes/:id', async (req, res, next) => {
   try {
+    const before = await snapshotQuiz(req.params.id);
+    if (before) {
+      await snapshot({ entityType: 'quiz', entityId: Number(req.params.id), courseId: before.quiz.course_id, action: 'update', actorId: req.session.user.id, data: before });
+    }
     await knex('quizzes').where({ id: req.params.id }).update({
       ...examScopeFields(req.body),
       title: req.body.title,
@@ -2519,6 +2537,10 @@ router.post('/quizzes/:id', async (req, res, next) => {
 
 router.post('/quizzes/:id/delete', async (req, res, next) => {
   try {
+    const before = await snapshotQuiz(req.params.id);
+    if (before) {
+      await snapshot({ entityType: 'quiz', entityId: Number(req.params.id), courseId: before.quiz.course_id, action: 'delete', actorId: req.session.user.id, data: before });
+    }
     await knex('quiz_answers').del().whereIn('attempt_id', knex('quiz_attempts').where({ quiz_id: req.params.id }).pluck('id'));
     await knex('quiz_answers').del().whereIn('attempt_id', knex('quiz_attempts').where({ quiz_id: req.params.id }).pluck('id'));
     await knex('quiz_attempts').del().where({ quiz_id: req.params.id });
@@ -2804,6 +2826,8 @@ router.post('/modules/:id', async (req, res, next) => {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
 
+    await snapshot({ entityType: 'module', entityId: mod.id, courseId: mod.course_id, action: 'update', actorId: req.session.user.id, data: mod });
+
     await knex('modules').where({ id: mod.id }).update({
       title: req.body.title,
       summary: req.body.summary || null,
@@ -2825,6 +2849,7 @@ router.post('/modules/:id/delete', async (req, res, next) => {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
     const courseId = mod.course_id;
+    await snapshot({ entityType: 'module', entityId: mod.id, courseId: mod.course_id, action: 'delete', actorId: req.session.user.id, data: mod });
     await knex('modules').where({ id: mod.id }).del();
     req.flash('success', 'Module deleted.');
     res.redirect(`/admin/courses/${courseId}/modules`);
@@ -2916,6 +2941,8 @@ router.post('/lessons/:id', async (req, res, next) => {
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
     const mod = await knex('modules').where({ id: lesson.module_id }).first();
 
+    await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod && mod.course_id, action: 'update', actorId: req.session.user.id, data: lesson });
+
     await knex('lessons').where({ id: lesson.id }).update({
       title: req.body.title,
       type: req.body.type || 'reading',
@@ -2942,6 +2969,7 @@ router.post('/lessons/:id/delete', async (req, res, next) => {
     const lesson = await knex('lessons').where({ id: req.params.id }).first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
     const mod = await knex('modules').where({ id: lesson.module_id }).first();
+    await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod && mod.course_id, action: 'delete', actorId: req.session.user.id, data: lesson });
     await knex('lessons').where({ id: lesson.id }).del();
     req.flash('success', 'Lesson deleted.');
     res.redirect(`/admin/courses/${mod.course_id}/modules`);
@@ -2972,11 +3000,91 @@ router.post('/assignments/:id/delete', async (req, res, next) => {
   try {
     const a = await knex('assignments').where({ id: req.params.id }).first();
     if (a) {
+      await snapshot({ entityType: 'assignment', entityId: a.id, courseId: a.course_id, action: 'delete', actorId: req.session.user.id, data: a });
       await knex('assignment_submissions').where({ assignment_id: a.id }).del();
       await knex('assignments').where({ id: a.id }).del();
       req.flash('success', 'Assignment deleted.');
     }
     res.redirect(req.get('referer') || '/admin/courses');
+  } catch (err) { next(err); }
+});
+
+// ─── Version history ─────────────────────────────────────────
+const REVISION_TABLES = { module: 'modules', lesson: 'lessons', assignment: 'assignments' };
+
+router.get('/revisions', async (req, res, next) => {
+  try {
+    const { entity_type, entity_id } = req.query;
+    if (!entity_type || !entity_id || !['module', 'lesson', 'quiz', 'assignment'].includes(entity_type)) {
+      return res.status(400).render('errors/404', { pageTitle: 'Invalid request', layout: 'layouts/admin' });
+    }
+    const revisions = await knex('content_revisions')
+      .where({ entity_type, entity_id: Number(entity_id) })
+      .orderBy('created_at', 'desc');
+    const actorIds = [...new Set(revisions.map((r) => r.actor_user_id).filter(Boolean))];
+    const actors = actorIds.length ? await knex('users').whereIn('id', actorIds).select('id', 'first_name', 'last_name') : [];
+    const actorById = {};
+    actors.forEach((a) => { actorById[a.id] = `${a.first_name} ${a.last_name}`; });
+    revisions.forEach((r) => {
+      r.actorName = actorById[r.actor_user_id] || 'Unknown';
+      r.parsed = JSON.parse(r.snapshot_json);
+    });
+    const returnTo = req.query.return && req.query.return.startsWith('/admin/') ? req.query.return : '/admin/courses';
+    res.render('admin/revisions', {
+      pageTitle: 'Version History | GDCU',
+      adminActive: 'lms-courses',
+      entityType: entity_type,
+      entityId: Number(entity_id),
+      revisions,
+      returnTo,
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/revisions/:id/restore', async (req, res, next) => {
+  try {
+    const rev = await knex('content_revisions').where({ id: req.params.id }).first();
+    const back = (req.body.return_to && req.body.return_to.startsWith('/admin/')) ? req.body.return_to : (req.get('referer') || '/admin/courses');
+    if (!rev) { req.flash('error', 'Revision not found.'); return res.redirect(back); }
+    const data = JSON.parse(rev.snapshot_json);
+
+    if (rev.entity_type === 'quiz') {
+      const existing = await knex('quizzes').where({ id: rev.entity_id }).first();
+      const { id: _oldQuizId, ...quizFields } = data.quiz;
+      let quizId;
+      if (existing) {
+        await knex('quizzes').where({ id: existing.id }).update(quizFields);
+        quizId = existing.id;
+        const oldQ = await knex('quiz_questions').where({ quiz_id: quizId }).pluck('id');
+        if (oldQ.length) await knex('quiz_options').whereIn('question_id', oldQ).del();
+        await knex('quiz_questions').where({ quiz_id: quizId }).del();
+      } else {
+        const [insertedId] = await knex('quizzes').insert(quizFields);
+        quizId = insertedId;
+      }
+      for (const q of data.questions || []) {
+        const { id: _oldQid, options, ...qFields } = q;
+        const [newQid] = await knex('quiz_questions').insert({ ...qFields, quiz_id: quizId });
+        for (const o of options || []) {
+          const { id: _oldOid, question_id: _oldQuestionId, ...oFields } = o;
+          await knex('quiz_options').insert({ ...oFields, question_id: newQid });
+        }
+      }
+    } else {
+      const table = REVISION_TABLES[rev.entity_type];
+      if (!table) { req.flash('error', 'Unknown entity type.'); return res.redirect(back); }
+      const { id: _oldId, ...fields } = data;
+      const existing = await knex(table).where({ id: rev.entity_id }).first();
+      if (existing) {
+        await knex(table).where({ id: rev.entity_id }).update(fields);
+      } else {
+        await knex(table).insert(fields);
+      }
+    }
+
+    await snapshot({ entityType: rev.entity_type, entityId: rev.entity_id, courseId: rev.course_id, action: 'restore', actorId: req.session.user.id, data });
+    req.flash('success', 'Restored the selected version.');
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
