@@ -30,6 +30,9 @@
       <a href="/admin/courses/<%= course.id %>/edit" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm">
         <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span> Edit Course
       </a>
+      <a href="/admin/course-library?for_course=<%= course.id %>" class="px-4 py-2 border border-outline-variant rounded font-medium hover:bg-surface-container-lowest text-sm">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">library_books</span> Attach existing module
+      </a>
       <button onclick="document.getElementById('add-module-form').classList.toggle('hidden')" class="bg-primary text-on-primary px-4 py-2 rounded font-bold hover:opacity-90 text-sm">
         <span class="material-symbols-outlined text-sm align-middle mr-1">add</span> Add Module
       </button>
@@ -289,6 +292,13 @@
       <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
         <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
       </button>
+      <% if (mod.isShared) { %>
+      <form method="POST" action="/admin/courses/<%= course.id %>/modules/detach/<%= mod.shared_module_id %>" class="inline" onsubmit="return confirm('Remove this module from this course? It stays intact for the other ' + (mod.sharedCourseCount - 1) + ' course(s) using it.');">
+        <button type="submit" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white text-on-surface-variant" title="Remove from this course only — the shared module and other courses are untouched">
+          <span class="material-symbols-outlined text-sm">link_off</span> Remove from course
+        </button>
+      </form>
+      <% } %>
       <% var delMsg = mod.isShared ? ('This module is shared by ' + mod.sharedCourseCount + ' courses. Deleting it removes it everywhere, not just from this course. Continue?') : 'Delete this module and all its lessons?'; %>
       <form method="POST" action="/admin/modules/<%= mod.id %>/delete" class="inline" onsubmit="return confirm('<%= delMsg %>');">
         <button type="submit" class="p-1.5 text-on-surface-variant hover:text-red-600 rounded" title="Delete module"><span class="material-symbols-outlined text-base">delete</span></button>

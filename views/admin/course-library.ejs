@@ -1,0 +1,72 @@
+<a href="<%= forCourse ? ('/admin/courses/' + forCourse.id + '/modules') : '/admin/courses' %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= forCourse ? forCourse.title : 'All Courses' %></a>
+
+<div class="max-w-5xl mx-auto">
+  <div class="mb-6">
+    <h1 class="font-headline text-headline-lg text-primary">Module Library</h1>
+    <p class="text-on-surface-variant mt-1">
+      <% if (forCourse) { %>Browse existing modules and attach one to <strong><%= forCourse.title %></strong> instead of building it from scratch.
+      <% } else { %>Every reusable module across the catalogue — open a course's builder and use "Attach existing module" to add one here.<% } %>
+    </p>
+  </div>
+
+  <% if (flash.success && flash.success.length) { %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6"><p class="text-green-800"><%= flash.success[0] %></p></div>
+  <% } %>
+  <% if (flash.error && flash.error.length) { %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6"><p class="text-red-800"><%= flash.error[0] %></p></div>
+  <% } %>
+
+  <form method="GET" action="/admin/course-library" class="flex flex-wrap gap-2 mb-5">
+    <% if (forCourse) { %><input type="hidden" name="for_course" value="<%= forCourse.id %>"><% } %>
+    <input type="text" name="q" value="<%= filters.q %>" placeholder="Search title or code…" class="px-3 py-2 border rounded text-sm flex-1 min-w-[200px]">
+    <select name="category" class="px-3 py-2 border rounded text-sm">
+      <option value="">All categories</option>
+      <% categories.forEach(function(c){ %><option value="<%= c %>" <%= filters.category===c?'selected':'' %>><%= c %></option><% }) %>
+    </select>
+    <select name="year_level" class="px-3 py-2 border rounded text-sm">
+      <option value="">All years</option>
+      <option value="1" <%= filters.year_level==='1'?'selected':'' %>>Year 1</option>
+      <option value="2" <%= filters.year_level==='2'?'selected':'' %>>Year 2</option>
+      <option value="3" <%= filters.year_level==='3'?'selected':'' %>>Year 3</option>
+      <option value="4" <%= filters.year_level==='4'?'selected':'' %>>Year 4</option>
+    </select>
+    <button class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Search</button>
+  </form>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <% sharedModules.forEach(function(sm){ %>
+    <div class="bg-white border border-outline-variant rounded-lg p-4">
+      <div class="flex items-start justify-between gap-2">
+        <div class="min-w-0">
+          <p class="text-xs text-on-surface-variant font-mono"><%= sm.code %></p>
+          <h3 class="font-semibold text-primary truncate"><%= sm.title %></h3>
+        </div>
+        <% if (!sm.published) { %><span class="shrink-0 text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded">Draft</span><% } %>
+      </div>
+      <div class="flex flex-wrap gap-3 text-xs text-on-surface-variant mt-2">
+        <span>Year <%= sm.year_level %></span>
+        <span><%= sm.lessonCount %> lesson<%= sm.lessonCount===1?'':'s' %></span>
+        <span>Used by <%= sm.courseCount %> course<%= sm.courseCount===1?'':'s' %></span>
+      </div>
+      <% if (forCourse) { %>
+        <div class="mt-3">
+          <% if (sm.alreadyAttached) { %>
+            <span class="inline-flex items-center gap-1 text-xs text-secondary font-bold"><span class="material-symbols-outlined text-sm">check_circle</span> Already attached</span>
+          <% } else { %>
+            <form method="POST" action="/admin/courses/<%= forCourse.id %>/modules/attach">
+              <input type="hidden" name="shared_module_id" value="<%= sm.id %>">
+              <input type="hidden" name="stay" value="1">
+              <button type="submit" class="w-full bg-primary text-on-primary px-3 py-1.5 rounded text-sm font-bold hover:opacity-90">+ Attach to this course</button>
+            </form>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+    <% }) %>
+    <% if (!sharedModules.length) { %>
+    <div class="sm:col-span-2 bg-white border border-outline-variant rounded-lg p-8 text-center text-on-surface-variant">
+      No modules match your search.
+    </div>
+    <% } %>
+  </div>
+</div>

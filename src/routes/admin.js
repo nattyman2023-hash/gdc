@@ -2963,6 +2963,68 @@ router.post('/modules/:id/duplicate', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ─── Reusable module library ──────────────────────────────────
+// Browse/search every shared module, and (when opened with ?for_course=)
+// attach one to a course without re-authoring it from scratch.
+router.get('/course-library', async (req, res, next) => {
+  try {
+    const { q, category, year_level, for_course } = req.query;
+    const query = knex('shared_modules').orderBy('code');
+    if (q) query.where((b) => b.whereILike('title', `%${q}%`).orWhereILike('code', `%${q}%`));
+    if (category) query.where({ category });
+    if (year_level) query.where({ year_level: Number(year_level) });
+    const sharedModules = await query;
+
+    const categories = await knex('shared_modules').distinct('category').whereNotNull('category').pluck('category');
+    const forCourse = for_course ? await knex('courses').where({ id: for_course }).first() : null;
+    const attachedIds = forCourse
+      ? new Set(await knex('course_shared_modules').where({ course_id: forCourse.id }).pluck('shared_module_id'))
+      : new Set();
+    for (const sm of sharedModules) {
+      sm.courseCount = Number((await knex('course_shared_modules').where({ shared_module_id: sm.id }).count({ c: '*' }).first()).c);
+      sm.lessonCount = Number((await knex('lessons').whereIn('module_id', knex('modules').where({ shared_module_id: sm.id }).select('id')).count({ c: '*' }).first()).c);
+      sm.alreadyAttached = attachedIds.has(sm.id);
+    }
+
+    res.render('admin/course-library', {
+      pageTitle: 'Module Library | GDCU',
+      adminActive: 'lms-courses',
+      sharedModules,
+      categories,
+      forCourse,
+      filters: { q: q || '', category: category || '', year_level: year_level || '' },
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/courses/:id/modules/attach', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.redirect('/admin/courses');
+    const sharedModuleId = Number(req.body.shared_module_id);
+    const back = `/admin/course-library?for_course=${course.id}`;
+    if (!sharedModuleId) { req.flash('error', 'Choose a module to attach.'); return res.redirect(back); }
+    const existing = await knex('course_shared_modules').where({ course_id: course.id, shared_module_id: sharedModuleId }).first();
+    if (existing) { req.flash('error', 'That module is already attached to this course.'); return res.redirect(back); }
+    const maxSort = await knex('course_shared_modules').where({ course_id: course.id }).max('sort_order as m').first();
+    await knex('course_shared_modules').insert({ course_id: course.id, shared_module_id: sharedModuleId, sort_order: (maxSort.m || 0) + 1 });
+    const sm = await knex('shared_modules').where({ id: sharedModuleId }).first();
+    req.flash('success', `"${sm.title}" attached to ${course.title}.`);
+    res.redirect(req.body.stay === '1' ? back : `/admin/courses/${course.id}/modules`);
+  } catch (err) { next(err); }
+});
+
+// Remove a shared module from just this course — the shared module itself
+// and every other course using it are untouched. Distinct from "Delete
+// module", which destroys the underlying content everywhere it's used.
+router.post('/courses/:id/modules/detach/:sharedModuleId', async (req, res, next) => {
+  try {
+    await knex('course_shared_modules').where({ course_id: req.params.id, shared_module_id: req.params.sharedModuleId }).del();
+    req.flash('success', 'Module removed from this course. It has not been deleted — other courses using it are unaffected.');
+    res.redirect(`/admin/courses/${req.params.id}/modules`);
+  } catch (err) { next(err); }
+});
+
 // Bulk publish/unpublish modules on a course. No bulk delete here — a
 // module can be a shared template used by many other courses (see the
 // single-module delete route's confirm text), so deleting several at once
