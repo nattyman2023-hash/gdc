@@ -2557,6 +2557,30 @@ router.post('/quizzes/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+router.post('/quizzes/:id/duplicate', async (req, res, next) => {
+  try {
+    const source = await snapshotQuiz(req.params.id);
+    if (!source) return res.status(404).render('errors/404', { pageTitle: 'Quiz not found', layout: 'layouts/admin' });
+    const { quiz, questions } = source;
+    let newId;
+    await knex.transaction(async (trx) => {
+      const { id: _oldId, ...quizFields } = quiz;
+      [newId] = await trx('quizzes').insert({ ...quizFields, title: `${quiz.title} (Copy)`, published: false });
+      for (const q of questions) {
+        const { id: _oldQid, options, ...qFields } = q;
+        const [newQid] = await trx('quiz_questions').insert({ ...qFields, quiz_id: newId });
+        for (const o of options) {
+          const { id: _oldOid, question_id: _oldQuestionId, ...oFields } = o;
+          await trx('quiz_options').insert({ ...oFields, question_id: newQid });
+        }
+      }
+    });
+    await snapshot({ entityType: 'quiz', entityId: newId, courseId: quiz.course_id, action: 'create', actorId: req.session.user.id, data: { quiz: { ...quiz, id: newId }, questions } });
+    req.flash('success', 'Quiz duplicated as a draft.');
+    res.redirect(req.body.return_to && req.body.return_to.startsWith('/admin/') ? req.body.return_to : (req.get('referer') || '/admin/quizzes'));
+  } catch (err) { next(err); }
+});
+
 // ─── Final Exams (course / year / programme) ────────────────
 router.get('/exams', async (req, res, next) => {
   try {
@@ -2861,6 +2885,84 @@ router.post('/modules/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// Duplicate a module for the course whose builder page the request came
+// from (req.body.course_id — a module can be reached from any of several
+// courses if it's shared, so the URL alone doesn't say which one).
+//
+// A shared module needs an explicit choice, since "duplicate" is ambiguous
+// for something already reused by other courses:
+//   mode=fork       (default) — an independent copy for THIS course only;
+//                     the original shared module and every other course
+//                     using it are untouched.
+//   mode=new_shared — a brand new reusable module (its own shared_modules
+//                     row), attached only to this course for now, but
+//                     discoverable for other courses like any other one.
+// A plain dedicated module has no such ambiguity — it's always forked.
+router.post('/modules/:id/duplicate', async (req, res, next) => {
+  try {
+    const mod = await knex('modules').where({ id: req.params.id }).first();
+    if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const courseId = Number(req.body.course_id) || mod.course_id;
+    const mode = mod.shared_module_id && req.body.mode === 'new_shared' ? 'new_shared' : 'fork';
+
+    let newModuleId;
+    await knex.transaction(async (trx) => {
+      if (mode === 'new_shared') {
+        const sm = await trx('shared_modules').where({ id: mod.shared_module_id }).first();
+        const { id: _smId, created_at: _c, updated_at: _u, ...smFields } = sm;
+        const [newSmId] = await trx('shared_modules').insert({ ...smFields, code: `${sm.code}-COPY-${Date.now()}`, title: `${sm.title} (Copy)`, published: false });
+        const { id: _modId, ...modFields } = mod;
+        [newModuleId] = await trx('modules').insert({ ...modFields, course_id: courseId, shared_module_id: newSmId, title: `${mod.title} (Copy)`, published: false });
+        const maxSort = await trx('course_shared_modules').where({ course_id: courseId }).max('sort_order as m').first();
+        await trx('course_shared_modules').insert({ course_id: courseId, shared_module_id: newSmId, sort_order: (maxSort.m || 0) + 1 });
+      } else {
+        const { id: _modId, ...modFields } = mod;
+        [newModuleId] = await trx('modules').insert({ ...modFields, course_id: courseId, shared_module_id: null, title: `${mod.title} (Copy)`, published: false });
+      }
+
+      const lessons = await trx('lessons').where({ module_id: mod.id }).orderBy('sort_order');
+      for (const l of lessons) {
+        const { id: oldLid, ...lFields } = l;
+        const [newLid] = await trx('lessons').insert({ ...lFields, module_id: newModuleId });
+        const materials = await trx('lesson_materials').where({ lesson_id: oldLid });
+        for (const m of materials) {
+          const { id: _mid, ...mFields } = m;
+          await trx('lesson_materials').insert({ ...mFields, lesson_id: newLid });
+        }
+      }
+
+      // This course's own quiz copy for the module, if any, plus its
+      // questions/options — quizzes are per-course, never shared.
+      const quizzes = await trx('quizzes').where({ module_id: mod.id, course_id: courseId });
+      for (const q of quizzes) {
+        const { id: oldQid, ...qFields } = q;
+        const [newQid] = await trx('quizzes').insert({ ...qFields, module_id: newModuleId, title: `${q.title} (Copy)`, published: false });
+        const questions = await trx('quiz_questions').where({ quiz_id: oldQid }).orderBy('sort_order');
+        for (const qq of questions) {
+          const { id: oldQqId, ...qqFields } = qq;
+          const [newQqId] = await trx('quiz_questions').insert({ ...qqFields, quiz_id: newQid });
+          const opts = await trx('quiz_options').where({ question_id: oldQqId }).orderBy('sort_order');
+          for (const o of opts) {
+            const { id: _oid, ...oFields } = o;
+            await trx('quiz_options').insert({ ...oFields, question_id: newQqId });
+          }
+        }
+      }
+
+      // This course's own assignments tied to the module.
+      const asgs = await trx('assignments').where({ module_id: mod.id, course_id: courseId });
+      for (const a of asgs) {
+        const { id: _aid, created_at: _ac, updated_at: _au, ...aFields } = a;
+        await trx('assignments').insert({ ...aFields, module_id: newModuleId, title: `${a.title} (Copy)`, published: false });
+      }
+    });
+
+    await snapshot({ entityType: 'module', entityId: newModuleId, courseId, action: 'create', actorId: req.session.user.id, data: { ...mod, id: newModuleId } });
+    req.flash('success', mode === 'new_shared' ? 'Module duplicated as a new reusable module (draft).' : 'Module duplicated for this course (draft).');
+    res.redirect(`/admin/courses/${courseId}/modules`);
+  } catch (err) { next(err); }
+});
+
 // Bulk publish/unpublish modules on a course. No bulk delete here — a
 // module can be a shared template used by many other courses (see the
 // single-module delete route's confirm text), so deleting several at once
@@ -3006,6 +3108,30 @@ router.post('/lessons/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+router.post('/lessons/:id/duplicate', async (req, res, next) => {
+  try {
+    const lesson = await knex('lessons').where({ id: req.params.id }).first();
+    if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
+    const mod = await knex('modules').where({ id: lesson.module_id }).first();
+    const maxSort = await knex('lessons').where({ module_id: lesson.module_id }).max('sort_order as m').first();
+    const { id: _oldId, ...fields } = lesson;
+    const [newId] = await knex('lessons').insert({
+      ...fields,
+      title: `${lesson.title} (Copy)`,
+      sort_order: (maxSort.m || 0) + 1,
+      published: false, // review before it goes live, same as any new content
+    });
+    const materials = await knex('lesson_materials').where({ lesson_id: lesson.id });
+    for (const m of materials) {
+      const { id: _mOldId, ...mFields } = m;
+      await knex('lesson_materials').insert({ ...mFields, lesson_id: newId });
+    }
+    await snapshot({ entityType: 'lesson', entityId: newId, courseId: mod && mod.course_id, action: 'create', actorId: req.session.user.id, data: { ...fields, id: newId } });
+    req.flash('success', 'Lesson duplicated as a draft.');
+    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+  } catch (err) { next(err); }
+});
+
 // Bulk publish/unpublish/delete lessons within one module. Scoped to
 // module_id so a tampered request can't touch lessons elsewhere.
 router.post('/modules/:id/lessons/bulk', async (req, res, next) => {
@@ -3088,6 +3214,24 @@ router.post('/assignments/:id/delete', async (req, res, next) => {
       req.flash('success', 'Assignment deleted.');
     }
     res.redirect(req.get('referer') || '/admin/courses');
+  } catch (err) { next(err); }
+});
+
+router.post('/assignments/:id/duplicate', async (req, res, next) => {
+  try {
+    const a = await knex('assignments').where({ id: req.params.id }).first();
+    if (!a) return res.status(404).render('errors/404', { pageTitle: 'Assignment not found', layout: 'layouts/admin' });
+    const maxSort = await knex('assignments').where({ course_id: a.course_id }).max('sort_order as m').first();
+    const { id: _oldId, created_at: _c, updated_at: _u, ...fields } = a;
+    const [newId] = await knex('assignments').insert({
+      ...fields,
+      title: `${a.title} (Copy)`,
+      sort_order: (maxSort.m || 0) + 1,
+      published: false,
+    });
+    await snapshot({ entityType: 'assignment', entityId: newId, courseId: a.course_id, action: 'create', actorId: req.session.user.id, data: { ...fields, id: newId } });
+    req.flash('success', 'Assignment duplicated as a draft.');
+    res.redirect(`/admin/courses/${a.course_id}/modules`);
   } catch (err) { next(err); }
 });
 
