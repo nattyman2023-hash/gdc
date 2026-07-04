@@ -1,3 +1,17 @@
+<%
+  // Safe date -> <input> value conversion. Some legacy due_date values were
+  // stored as raw millisecond timestamps rather than date strings; a bare
+  // numeric string round-tripped through MySQL fails Date parsing (numbers
+  // parse as epoch ms, but the equivalent string does not), which crashed
+  // this page with "Invalid time value". Never let a bad stored value break
+  // the whole form — just leave the field blank.
+  function toDateInputValue(v, len) {
+    if (!v) return '';
+    var d = v instanceof Date ? v : new Date(v);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().slice(0, len);
+  }
+%>
 <a href="/admin/courses" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All Courses</a>
 
 <div class="max-w-5xl mx-auto">
@@ -150,12 +164,12 @@
           <form method="POST" action="/admin/assignments/<%= a.id %>" class="space-y-2 bg-white border border-blue-200 rounded p-3">
             <div class="grid grid-cols-2 gap-2">
               <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" value="<%= a.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
-              <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= a.due_date ? new Date(a.due_date).toISOString().slice(0,10) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= toDateInputValue(a.due_date, 10) %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
             </div>
             <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= a.instructions || '' %></textarea></div>
             <div class="grid grid-cols-2 gap-2 items-end">
               <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="<%= a.max_points %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
-              <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= a.available_from ? new Date(a.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= toDateInputValue(a.available_from, 16) %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
             </div>
             <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" <%= a.published ? 'checked' : '' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
             <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Save</button></div>
@@ -244,7 +258,7 @@
           </div>
           <div>
             <label class="block text-xs font-medium mb-1">Release Date <span class="font-normal text-on-surface-variant">(hides the module until this date, even if published)</span></label>
-            <input type="datetime-local" name="release_date" value="<%= mod.release_date ? new Date(mod.release_date).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm">
+            <input type="datetime-local" name="release_date" value="<%= toDateInputValue(mod.release_date, 16) %>" class="w-full px-2 py-1.5 border rounded text-sm">
           </div>
         </div>
         <label class="flex items-center gap-2">
@@ -494,7 +508,7 @@
           <div class="grid grid-cols-2 gap-2 items-end">
             <div>
               <label class="block text-xs font-medium mb-1">Available from <span class="font-normal text-on-surface-variant">(hides until this date)</span></label>
-              <input type="datetime-local" name="available_from" value="<%= lesson.available_from ? new Date(lesson.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1 border rounded text-sm">
+              <input type="datetime-local" name="available_from" value="<%= toDateInputValue(lesson.available_from, 16) %>" class="w-full px-2 py-1 border rounded text-sm">
             </div>
             <label class="flex items-center gap-2 pb-1.5">
               <input type="checkbox" name="published" value="1" <%= lesson.published ? 'checked' : '' %> class="w-4 h-4">
@@ -616,12 +630,12 @@
               <form method="POST" action="/admin/assignments/<%= a.id %>" class="space-y-2 bg-surface-container-lowest border border-outline-variant rounded p-3">
                 <div class="grid grid-cols-2 gap-2">
                   <div><label class="block text-xs font-medium mb-1">Title *</label><input name="title" value="<%= a.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
-                  <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= a.due_date ? new Date(a.due_date).toISOString().slice(0,10) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                  <div><label class="block text-xs font-medium mb-1">Due date</label><input type="date" name="due_date" value="<%= toDateInputValue(a.due_date, 10) %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
                 </div>
                 <div><label class="block text-xs font-medium mb-1">Instructions</label><textarea name="instructions" data-rich rows="2" class="w-full px-2 py-1.5 border rounded text-sm"><%= a.instructions || '' %></textarea></div>
                 <div class="grid grid-cols-2 gap-2 items-end">
                   <div><label class="block text-xs font-medium mb-1">Max points</label><input type="number" name="max_points" value="<%= a.max_points %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
-                  <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= a.available_from ? new Date(a.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+                  <div><label class="block text-xs font-medium mb-1">Available from</label><input type="datetime-local" name="available_from" value="<%= toDateInputValue(a.available_from, 16) %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
                 </div>
                 <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" <%= a.published ? 'checked' : '' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
                 <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-assignment-<%= a.id %>').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-xs font-bold">Save</button></div>

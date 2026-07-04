@@ -1,4 +1,12 @@
 <%
+  // Never let a malformed stored date value crash this page — see the same
+  // guard in views/admin/course-modules.ejs for why.
+  function toDateInputValue(v, len) {
+    if (!v) return '';
+    var d = v instanceof Date ? v : new Date(v);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().slice(0, len);
+  }
   var locked = (typeof lockedCourseId !== 'undefined' && lockedCourseId) ? lockedCourseId : null;
   var modId = (typeof moduleId !== 'undefined' && moduleId) ? moduleId : (quiz.module_id || '');
   var backTo = (typeof returnTo !== 'undefined' && returnTo) ? returnTo : '/admin/quizzes';
@@ -138,7 +146,7 @@
       <div class="grid grid-cols-2 gap-4 mt-4 items-end">
         <div>
           <label class="block text-sm font-medium mb-2">Available from <span class="font-normal text-on-surface-variant">(hides until this date)</span></label>
-          <input type="datetime-local" name="available_from" value="<%= quiz.available_from ? new Date(quiz.available_from).toISOString().slice(0,16) : '' %>" class="w-full px-3 py-2 border rounded">
+          <input type="datetime-local" name="available_from" value="<%= toDateInputValue(quiz.available_from, 16) %>" class="w-full px-3 py-2 border rounded">
         </div>
         <label class="flex items-center gap-2 pb-2">
           <input type="checkbox" name="published" value="1" <%= isNew || quiz.published !== false ? 'checked' : '' %> class="w-4 h-4">
