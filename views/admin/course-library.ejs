@@ -1,12 +1,17 @@
 <a href="<%= forCourse ? ('/admin/courses/' + forCourse.id + '/modules') : '/admin/courses' %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= forCourse ? forCourse.title : 'All Courses' %></a>
 
 <div class="max-w-5xl mx-auto">
-  <div class="mb-6">
-    <h1 class="font-headline text-headline-lg text-primary">Module Library</h1>
-    <p class="text-on-surface-variant mt-1">
-      <% if (forCourse) { %>Browse existing modules and attach one to <strong><%= forCourse.title %></strong> instead of building it from scratch.
-      <% } else { %>Every reusable module across the catalogue — open a course's builder and use "Attach existing module" to add one here.<% } %>
-    </p>
+  <div class="mb-6 flex items-start justify-between gap-4">
+    <div>
+      <h1 class="font-headline text-headline-lg text-primary">Module Library</h1>
+      <p class="text-on-surface-variant mt-1">
+        <% if (forCourse) { %>Browse existing modules and attach one to <strong><%= forCourse.title %></strong> instead of building it from scratch.
+        <% } else { %>Reusable modules shared across courses — build a common module once here, then attach it to any course.<% } %>
+      </p>
+    </div>
+    <a href="/admin/course-library/new<% if (forCourse) { %>?for_course=<%= forCourse.id %><% } %>" class="shrink-0 bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm whitespace-nowrap">
+      <span class="material-symbols-outlined text-sm align-middle">add</span> New Shared Module
+    </a>
   </div>
 
   <% if (flash.success && flash.success.length) { %>

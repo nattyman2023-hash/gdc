@@ -82,12 +82,14 @@
   function initUploaders(root) {
     (root || document).querySelectorAll('[data-upload-target]').forEach(function (b) {
       if (b.dataset.upInit) return; b.dataset.upInit = '1';
-      var fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
+      var kind = b.getAttribute('data-upload-kind') === 'video' ? 'video' : 'image';
+      var accept = kind === 'video' ? 'video/*,.mp4,.webm,.ogg' : 'image/*';
+      var fi = document.createElement('input'); fi.type = 'file'; fi.accept = accept; fi.style.display = 'none';
       b.parentNode.insertBefore(fi, b.nextSibling);
       b.addEventListener('click', function (e) { e.preventDefault(); fi.click(); });
       fi.addEventListener('change', function () {
         if (!fi.files || !fi.files[0]) return;
-        var fd = new FormData(); fd.append('image', fi.files[0]);
+        var fd = new FormData(); fd.append('file', fi.files[0]);
         var orig = b.innerHTML; b.innerHTML = 'Uploading…'; b.disabled = true;
         fetch(UPLOAD_URL, { method: 'POST', body: fd, headers: { 'X-Requested-With': 'fetch' } })
           .then(function (r) { return r.json(); })

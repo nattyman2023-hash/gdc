@@ -17,6 +17,7 @@ const attendance = require('../lib/attendance');
 const calendar = require('../lib/calendar');
 const profiles = require('../lib/profiles');
 const { snapshot } = require('../lib/revisions');
+const { getCourseStructure } = require('../lib/lms');
 
 // Full quiz snapshot (row + nested questions/options) for version history —
 // quizzes are always rebuilt wholesale on save, so a snapshot needs the
@@ -44,8 +45,8 @@ const upload = multer({
       cb(null, `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`);
     },
   }),
-  limits: { fileSize: 6 * 1024 * 1024 }, // 6 MB
-  fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype)),
+  limits: { fileSize: 25 * 1024 * 1024 }, // 25 MB so lesson videos can be uploaded directly
+  fileFilter: (req, file, cb) => cb(null, /^(image|video)\//.test(file.mimetype)),
 });
 
 router.use(requireRole('staff', 'admin'));
@@ -1859,12 +1860,14 @@ router.post('/invoices/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// Upload an image; returns { url }. Used by the rich editor and image fields.
+// Upload a file (image or video) and return a public URL for use in LMS content.
 router.post('/upload', (req, res) => {
-  upload.single('image')(req, res, (err) => {
+  upload.any()(req, res, (err) => {
     if (err) return res.status(400).json({ error: err.message || 'Upload failed' });
-    if (!req.file) return res.status(400).json({ error: 'Please choose an image file.' });
-    res.json({ url: `/uploads/${req.file.filename}` });
+    const uploadedFile = req.files && req.files[0];
+    if (!uploadedFile) return res.status(400).json({ error: 'Please choose a file to upload.' });
+    const isVideo = /^video\//.test(uploadedFile.mimetype);
+    res.json({ url: `/uploads/${uploadedFile.filename}`, type: isVideo ? 'video' : 'image' });
   });
 });
 
@@ -3153,6 +3156,213 @@ router.get('/course-library', async (req, res, next) => {
       forCourse,
       filters: { q: q || '', category: category || '', year_level: year_level || '' },
     });
+  } catch (err) { next(err); }
+});
+
+// ─── Shared module library: create / edit / delete ──────────
+// A shared module is a reusable template (e.g. CORE-101) that many courses
+// can attach without re-authoring it. This makes it easy to share common
+// modules across courses and programmes, saving time.
+
+router.get('/course-library/new', async (req, res, next) => {
+  try {
+    const categories = await knex('shared_modules').distinct('category').whereNotNull('category').pluck('category');
+    res.render('admin/shared-module-form', {
+      pageTitle: 'New Shared Module | GDCU',
+      adminActive: 'course-library',
+      sm: { year_level: 1, published: true },
+      categories,
+      isNew: true,
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/course-library', async (req, res, next) => {
+  try {
+    if (!req.body.title || !req.body.code) {
+      req.flash('error', 'Module code and title are required.');
+      return res.redirect('/admin/course-library/new');
+    }
+    // Ensure the code is unique.
+    const existing = await knex('shared_modules').where({ code: req.body.code }).first();
+    if (existing) {
+      req.flash('error', `A module with code "${req.body.code}" already exists. Choose a different code.`);
+      return res.redirect('/admin/course-library/new');
+    }
+    const [smIdRaw] = await knex('shared_modules').insert({
+      code: req.body.code,
+      title: req.body.title,
+      description: req.body.description || null,
+      summary: req.body.summary || null,
+      year_level: req.body.year_level ? Number(req.body.year_level) : 1,
+      category: req.body.category || null,
+      featured_image: req.body.featured_image || null,
+      published: req.body.published === '1' || req.body.published === 'on',
+    });
+    const smId = Array.isArray(smIdRaw) ? smIdRaw[0] : smIdRaw;
+    // Create the template module row that lessons will hang off.
+    await knex('modules').insert({
+      course_id: null, // shared modules don't belong to one course
+      shared_module_id: smId,
+      title: req.body.title,
+      summary: req.body.summary || null,
+      sort_order: 0,
+      published: req.body.published === '1' || req.body.published === 'on',
+    });
+    req.flash('success', `Shared module "${req.body.title}" created. Add lessons to it, then attach it to any course.`);
+    res.redirect(`/admin/course-library/${smId}`);
+  } catch (err) { next(err); }
+});
+
+router.get('/course-library/:id', async (req, res, next) => {
+  try {
+    const sm = await knex('shared_modules').where({ id: req.params.id }).first();
+    if (!sm) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const mod = await knex('modules').where({ shared_module_id: sm.id }).first();
+    const lessons = mod ? await knex('lessons').where({ module_id: mod.id }).orderBy('sort_order') : [];
+    for (const l of lessons) {
+      l.materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
+    }
+    const quizzes = mod ? await knex('quizzes').where({ module_id: mod.id }).orderBy('sort_order') : [];
+    for (const q of quizzes) {
+      q.questionCount = Number((await knex('quiz_questions').where({ quiz_id: q.id }).count({ c: '*' }).first()).c);
+    }
+    // Which courses use this module?
+    const courses = await knex('course_shared_modules')
+      .join('courses', 'course_shared_modules.course_id', 'courses.id')
+      .where('course_shared_modules.shared_module_id', sm.id)
+      .orderBy('courses.title')
+      .select('courses.id', 'courses.title', 'courses.code');
+    res.render('admin/shared-module-detail', {
+      pageTitle: `${sm.title} | Module Library`,
+      adminActive: 'course-library',
+      sm, mod, lessons, quizzes, courses,
+    });
+  } catch (err) { next(err); }
+});
+
+router.get('/course-library/:id/edit', async (req, res, next) => {
+  try {
+    const sm = await knex('shared_modules').where({ id: req.params.id }).first();
+    if (!sm) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const categories = await knex('shared_modules').distinct('category').whereNotNull('category').pluck('category');
+    res.render('admin/shared-module-form', {
+      pageTitle: 'Edit Shared Module | GDCU',
+      adminActive: 'course-library',
+      sm,
+      categories,
+      isNew: false,
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/course-library/:id', async (req, res, next) => {
+  try {
+    const sm = await knex('shared_modules').where({ id: req.params.id }).first();
+    if (!sm) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    // If the code changed, ensure it stays unique.
+    if (req.body.code && req.body.code !== sm.code) {
+      const clash = await knex('shared_modules').where({ code: req.body.code }).whereNot('id', sm.id).first();
+      if (clash) {
+        req.flash('error', `Code "${req.body.code}" is already used by another module.`);
+        return res.redirect(`/admin/course-library/${sm.id}/edit`);
+      }
+    }
+    await knex('shared_modules').where({ id: sm.id }).update({
+      code: req.body.code || sm.code,
+      title: req.body.title || sm.title,
+      description: req.body.description || null,
+      summary: req.body.summary || null,
+      year_level: req.body.year_level ? Number(req.body.year_level) : sm.year_level,
+      category: req.body.category || null,
+      featured_image: req.body.featured_image || null,
+      published: req.body.published === '1' || req.body.published === 'on',
+      updated_at: knex.fn.now(),
+    });
+    // Keep the template module row's title in sync.
+    const mod = await knex('modules').where({ shared_module_id: sm.id }).first();
+    if (mod) {
+      await knex('modules').where({ id: mod.id }).update({
+        title: req.body.title || sm.title,
+        summary: req.body.summary || null,
+        published: req.body.published === '1' || req.body.published === 'on',
+      });
+    }
+    req.flash('success', 'Shared module updated.');
+    res.redirect(`/admin/course-library/${sm.id}`);
+  } catch (err) { next(err); }
+});
+
+router.post('/course-library/:id/delete', async (req, res, next) => {
+  try {
+    const sm = await knex('shared_modules').where({ id: req.params.id }).first();
+    if (!sm) return res.redirect('/admin/course-library');
+    const courseCount = Number((await knex('course_shared_modules').where({ shared_module_id: sm.id }).count({ c: '*' }).first()).c);
+    if (courseCount > 0) {
+      req.flash('error', `This module is attached to ${courseCount} course(s). Detach it from all courses before deleting.`);
+      return res.redirect(`/admin/course-library/${sm.id}`);
+    }
+    // Delete the template module + its lessons/materials.
+    const mod = await knex('modules').where({ shared_module_id: sm.id }).first();
+    if (mod) {
+      const lessons = await knex('lessons').where({ module_id: mod.id }).pluck('id');
+      if (lessons.length) await knex('lesson_materials').whereIn('lesson_id', lessons).del();
+      await knex('lessons').where({ module_id: mod.id }).del();
+      await knex('modules').where({ id: mod.id }).del();
+    }
+    await knex('shared_modules').where({ id: sm.id }).del();
+    req.flash('success', 'Shared module deleted.');
+    res.redirect('/admin/course-library');
+  } catch (err) { next(err); }
+});
+
+// Add a lesson to a shared module (from the library detail page).
+router.post('/course-library/:id/lessons', async (req, res, next) => {
+  try {
+    const sm = await knex('shared_modules').where({ id: req.params.id }).first();
+    if (!sm) return res.redirect('/admin/course-library');
+    const mod = await knex('modules').where({ shared_module_id: sm.id }).first();
+    if (!mod) return res.redirect(`/admin/course-library/${sm.id}`);
+    const maxSort = await knex('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
+    await knex('lessons').insert({
+      module_id: mod.id,
+      title: req.body.title,
+      type: req.body.type || 'reading',
+      content: req.body.content || null,
+      video_url: req.body.video_url || null,
+      duration_min: req.body.duration_min || 15,
+      sort_order: (maxSort.m || 0) + 1,
+      block_no: req.body.block_no ? Number(req.body.block_no) : null,
+      block_title: req.body.block_title || null,
+    });
+    req.flash('success', 'Lesson added to shared module.');
+    res.redirect(`/admin/course-library/${sm.id}`);
+  } catch (err) { next(err); }
+});
+
+router.post('/course-library/:id/lessons/:lessonId', async (req, res, next) => {
+  try {
+    const lesson = await knex('lessons').where({ id: req.params.lessonId }).first();
+    if (!lesson) return res.redirect(`/admin/course-library/${req.params.id}`);
+    await knex('lessons').where({ id: lesson.id }).update({
+      title: req.body.title,
+      type: req.body.type || 'reading',
+      content: req.body.content || null,
+      video_url: req.body.video_url || null,
+      duration_min: req.body.duration_min || 15,
+      published: req.body.published === '1' || req.body.published === 'on',
+    });
+    req.flash('success', 'Lesson updated.');
+    res.redirect(`/admin/course-library/${req.params.id}`);
+  } catch (err) { next(err); }
+});
+
+router.post('/course-library/:id/lessons/:lessonId/delete', async (req, res, next) => {
+  try {
+    await knex('lesson_materials').where({ lesson_id: req.params.lessonId }).del();
+    await knex('lessons').where({ id: req.params.lessonId }).del();
+    req.flash('success', 'Lesson deleted.');
+    res.redirect(`/admin/course-library/${req.params.id}`);
   } catch (err) { next(err); }
 });
 

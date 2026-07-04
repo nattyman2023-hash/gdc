@@ -1,0 +1,12 @@
+<% if (typeof isPreview !== 'undefined' && isPreview) { %>
+<div class="bg-amber-500 text-white px-4 py-2 flex items-center justify-between gap-3 text-sm sticky top-0 z-50 shadow-md">
+  <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-base">visibility</span>
+    <span class="font-bold">Preview mode</span>
+    <span class="hidden sm:inline opacity-90">— this is exactly what a student sees. Progress, notes and comments are not saved.</span>
+  </div>
+  <a href="<%= typeof previewBackUrl !== 'undefined' && previewBackUrl ? previewBackUrl : '/admin/courses' %>" class="inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 px-3 py-1 rounded font-bold text-xs whitespace-nowrap">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Back to builder
+  </a>
+</div>
+<% } %>
