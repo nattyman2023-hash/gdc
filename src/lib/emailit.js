@@ -5,8 +5,29 @@
  */
 const API_BASE = 'https://api.emailit.com/v2';
 
-const apiKey = process.env.EMAILIT_API_KEY;
-const isConfigured = Boolean(apiKey);
+// Lazy-load the DB (avoids circular require at module init time).
+let _knex;
+function db() { if (!_knex) _knex = require('../config/db'); return _knex; }
+
+/** Read a setting: DB value first, then .env, otherwise undefined. */
+async function getSetting(key) {
+  try {
+    const row = await db()('settings').where({ key }).first();
+    if (row && row.value) return row.value;
+  } catch (_) { /* table may not exist yet */ }
+  return process.env[key] || undefined;
+}
+
+let apiKey = null;
+let isConfigured = false;
+
+/** Refresh in-memory keys from the DB (called on first use + after a few minutes). */
+async function refreshKeys() {
+  if (apiKey && isConfigured) return; // already loaded
+  const key = await getSetting('EMAILIT_API_KEY');
+  apiKey = key || null;
+  isConfigured = Boolean(apiKey);
+}
 
 async function request(path, body) {
   const res = await fetch(`${API_BASE}${path}`, {

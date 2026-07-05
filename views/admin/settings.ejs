@@ -1,0 +1,72 @@
+<%- include('../partials/head', { pageTitle: 'Settings & Integrations | GDCU', adminActive: 'settings' }) %>
+
+<div class="max-w-4xl mx-auto">
+  <div class="mb-6">
+    <h1 class="font-headline text-headline-lg text-primary">Settings & Integrations</h1>
+    <p class="text-on-surface-variant mt-1">Manage API keys for email, payments, and video conferencing. Changes take effect after the next server restart.</p>
+  </div>
+
+  <%- include('../partials/flash') %>
+
+  <form method="POST" action="/admin/settings" class="space-y-6">
+    <% groups.forEach(function(group){ %>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="px-6 py-4 border-b border-outline-variant <% if(group==='Email'){ %>bg-indigo-50<% }else if(group==='Payments'){ %>bg-emerald-50<% }else{ %>bg-amber-50<% } %>">
+        <div class="flex items-center gap-2">
+          <% if(group==='Email'){ %>
+            <span class="material-symbols-outlined text-indigo-600">mail</span>
+          <% }else if(group==='Payments'){ %>
+            <span class="material-symbols-outlined text-emerald-600">payments</span>
+          <% }else{ %>
+            <span class="material-symbols-outlined text-amber-600">videocam</span>
+          <% } %>
+          <h2 class="font-bold text-primary"><%= group %></h2>
+          <span class="text-xs text-on-surface-variant ml-2"><%= rows.filter(function(r){return r.group===group;}).length %> settings</span>
+        </div>
+      </div>
+      <div class="px-6 py-4 divide-y divide-outline-variant">
+        <% rows.filter(function(r){return r.group===group;}).forEach(function(row){ %>
+        <div class="py-3 first:pt-0 last:pb-0">
+          <label class="flex items-center justify-between gap-4" for="<%= row.key %>">
+            <div class="min-w-0 flex-1">
+              <span class="block text-sm font-medium text-primary"><%= row.label %></span>
+              <span class="block text-xs text-on-surface-variant font-mono"><%= row.key %></span>
+            </div>
+            <div class="flex items-center gap-2 flex-1 max-w-md">
+              <% if (row.sensitive) { %>
+              <div class="relative flex-1">
+                <input type="password" name="<%= row.key %>" id="<%= row.key %>" value="<%= row.value %>" class="w-full px-3 py-2 border rounded text-sm font-mono pr-10" placeholder="••••••••" autocomplete="off">
+                <button type="button" onclick="var inp=document.getElementById('<%= row.key %>');inp.type=inp.type==='password'?'text':'password';" class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary" title="Show/hide">
+                  <span class="material-symbols-outlined text-base">visibility</span>
+                </button>
+              </div>
+              <% } else { %>
+              <input type="text" name="<%= row.key %>" id="<%= row.key %>" value="<%= row.value %>" class="flex-1 px-3 py-2 border rounded text-sm font-mono" placeholder="(not set)">
+              <% } %>
+              <% if (row.fromEnv) { %>
+                <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-1 rounded shrink-0" title="Coming from .env file — no DB value set yet">.env</span>
+              <% } %>
+            </div>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% }) %>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
+      <span class="material-symbols-outlined text-amber-600">warning</span>
+      <div>
+        <p class="font-bold text-sm text-amber-900">Important</p>
+        <p class="text-xs text-amber-800">Sensitive keys (marked as passwords) are stored in the database. Clear a field to revert to the <code>.env</code> value. A server restart is required for changes to take effect.</p>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3">
+      <a href="/admin" class="px-4 py-2 border border-outline-variant rounded font-medium text-sm hover:bg-surface-container-lowest">Cancel</a>
+      <button type="submit" class="bg-primary text-on-primary px-6 py-2 rounded font-bold text-sm hover:opacity-90">Save all settings</button>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/foot', { pageTitle: 'Settings & Integrations | GDCU' }) %>

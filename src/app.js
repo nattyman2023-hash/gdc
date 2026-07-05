@@ -147,6 +147,7 @@ app.use('/faculty', require('./routes/faculty'));
 app.use('/notifications', require('./routes/notifications'));
 app.use('/admin/content', require('./routes/adminContent'));
 app.use('/admin/users', require('./routes/adminUsers'));
+app.use('/admin/settings', require('./routes/adminSettings'));
 app.use('/admin', require('./routes/admin'));
 app.use('/webhooks/stripe', require('./routes/stripeWebhook'));
 app.use('/chat', require('./routes/chat'));
