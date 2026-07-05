@@ -10,6 +10,7 @@ const knex = require('../config/db');
 const { makeReference } = require('../lib/helpers');
 const { stripe, isConfigured } = require('../lib/stripe');
 const { notifyRoles, email } = require('../lib/notify');
+const emailit = require('../lib/emailit');
 
 const router = express.Router();
 
@@ -124,6 +125,7 @@ router.post('/apply', formLimiter, applyValidators, async (req, res, next) => {
       bodyHtml: `<p>Dear ${req.body.first_name},</p><p>We have received your application <strong>${reference}</strong> and our admissions team will be in touch shortly.</p><p>You can reply to this email if you have any questions.</p>`,
       relatedType: 'application', relatedId: applicationId,
     });
+    emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['applicant'] }).catch(() => {});
 
     // If Stripe is configured, send the applicant to Checkout for the fee.
     if (isConfigured) {
@@ -224,6 +226,7 @@ router.post('/request-info', formLimiter, leadValidators, async (req, res, next)
       source: 'request_info',
       status: 'new',
     });
+    emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['lead'] }).catch(() => {});
     req.flash('success', 'Thank you! We have received your enquiry and will be in touch soon.');
     return res.redirect(req.get('referer') || '/');
   } catch (err) {

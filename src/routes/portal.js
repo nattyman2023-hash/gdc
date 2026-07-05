@@ -659,7 +659,7 @@ router.get('/certificates/:reference', async (req, res, next) => {
 router.get('/billing', async (req, res, next) => {
   try {
     const userId = req.session.user.id;
-    const invoices = await knex('invoices').where({ user_id: userId }).orderBy('due_date');
+    const invoices = await knex('invoices').where({ user_id: userId }).whereNot('status', 'draft').orderBy('due_date');
     const today = new Date().toISOString().slice(0, 10);
     let outstanding = 0;
     for (const inv of invoices) {
@@ -687,6 +687,10 @@ router.post('/invoices/:id/pay', async (req, res, next) => {
     if (!invoice) return res.status(404).render('errors/404', { pageTitle: 'Invoice not found', layout: 'layouts/portal' });
     if (invoice.status === 'paid') {
       req.flash('info', 'This invoice is already paid.');
+      return res.redirect('/portal/billing');
+    }
+    if (invoice.status === 'draft' || invoice.status === 'void') {
+      req.flash('error', 'This invoice is not available for payment.');
       return res.redirect('/portal/billing');
     }
 

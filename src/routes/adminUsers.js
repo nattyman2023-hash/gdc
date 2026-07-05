@@ -11,6 +11,8 @@ const knex = require('../config/db');
 const { requireRole } = require('../middleware/auth');
 const attendance = require('../lib/attendance');
 const profiles = require('../lib/profiles');
+const { email: sendEmail } = require('../lib/notify');
+const emailit = require('../lib/emailit');
 
 const router = express.Router();
 
@@ -151,6 +153,16 @@ router.post(
         role: req.body.role,
         status: req.body.status === 'inactive' ? 'inactive' : 'active',
       });
+      sendEmail({
+        to: req.body.email,
+        toName: `${req.body.first_name} ${req.body.last_name}`,
+        subject: 'Your GDCU account is ready',
+        heading: 'Welcome to GDCU',
+        bodyHtml: `<p>Dear ${req.body.first_name},</p><p>An account has been created for you at Global Diaspora Christian University as <strong>${req.body.role}</strong>.</p><p>Your temporary password is <strong>${req.body.password}</strong> (please change it after signing in).</p><p><a href="${process.env.APP_URL || ''}/login" style="color:#b8861b">Sign in to your account</a></p>`,
+      });
+      if (req.body.role === 'student') {
+        emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['student'] }).catch(() => {});
+      }
       req.flash('success', `${req.body.role} account created for ${req.body.email}.`);
       res.redirect('/admin/users');
     } catch (err) { next(err); }
@@ -235,6 +247,15 @@ router.post('/:id/password', async (req, res, next) => {
     }
     const hash = await bcrypt.hash(password, 12);
     await knex('users').where({ id: req.params.id }).update({ password_hash: hash, updated_at: knex.fn.now() });
+    sendEmail({
+      to: target.email,
+      toName: `${target.first_name} ${target.last_name}`,
+      subject: 'Your GDCU password was changed',
+      heading: 'Password changed',
+      bodyHtml: `<p>Dear ${target.first_name},</p><p>Your GDCU account password was just changed by an administrator. If you did not expect this, please contact us immediately.</p>`,
+      relatedType: 'user',
+      relatedId: target.id,
+    });
     req.flash('success', 'Password reset.');
     res.redirect(`/admin/users/${req.params.id}/edit`);
   } catch (err) { next(err); }

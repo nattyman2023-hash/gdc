@@ -58,8 +58,11 @@
         <td class="px-4 py-3 font-bold text-primary"><%= formatMoney(i.amount, i.currency) %></td>
         <td class="px-4 py-3"><%- include('_badge', { status: i.status }) %></td>
         <td class="px-4 py-3 text-right whitespace-nowrap">
-          <% if (i.status !== 'paid') { %>
-          <form action="/admin/invoices/<%= i.id %>/pay" method="post" class="inline"><button class="text-secondary font-bold text-xs">Mark paid</button></form>
+          <a href="/admin/invoices/<%= i.id %>/preview" class="text-primary font-bold text-xs">Preview</a>
+          <% if (i.status === 'draft') { %>
+          <form action="/admin/invoices/<%= i.id %>/send" method="post" class="inline"><button class="text-secondary font-bold text-xs ml-2">Send</button></form>
+          <% } else if (i.status !== 'paid' && i.status !== 'void') { %>
+          <form action="/admin/invoices/<%= i.id %>/pay" method="post" class="inline"><button class="text-secondary font-bold text-xs ml-2">Mark paid</button></form>
           <% } %>
           <a href="/admin/invoices/<%= i.id %>/edit" class="text-primary font-bold text-xs ml-2">Edit</a>
           <form action="/admin/invoices/<%= i.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this invoice?');"><button class="text-error font-bold text-xs ml-2">Delete</button></form>

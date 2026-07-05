@@ -6,6 +6,7 @@ const { body, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
 
 const knex = require('../config/db');
+const emailit = require('../lib/emailit');
 
 const router = express.Router();
 
@@ -70,6 +71,7 @@ router.post(
       if (!existing) {
         await knex('newsletter_subscribers').insert({ email: req.body.email });
       }
+      emailit.upsertContact({ email: req.body.email, tags: ['newsletter'] }).catch(() => {});
       req.flash('success', 'You are subscribed. Thank you!');
       return res.redirect(req.get('referer') || '/');
     } catch (err) {

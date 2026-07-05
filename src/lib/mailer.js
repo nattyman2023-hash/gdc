@@ -1,9 +1,12 @@
 /**
  * Transactional email. Records every message in `email_log`.
- * Sends via SMTP (nodemailer) when configured; otherwise logs only (dev-safe).
- * nodemailer is loaded lazily so it's optional — the app runs without it.
+ * Sends via the Emailit API when EMAILIT_API_KEY is set; otherwise falls back
+ * to generic SMTP (nodemailer, e.g. Emailit's own SMTP relay or any other
+ * provider); otherwise logs only (dev-safe). nodemailer is loaded lazily so
+ * it's optional — the app runs without it.
  */
 const knex = require('../config/db');
+const emailit = require('./emailit');
 
 let transporter = null;
 let triedInit = false;
@@ -35,24 +38,32 @@ function getTransport() {
  */
 async function sendMail({ to, toName, subject, html, template, relatedType, relatedId }) {
   if (!to) return { status: 'failed' };
-  const t = getTransport();
   const base = {
     to_email: to, to_name: toName || null, subject,
     body: html || null, template: template || null,
     related_type: relatedType || null, related_id: relatedId || null,
   };
+  const from = process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
+  const recipient = toName ? `"${toName}" <${to}>` : to;
 
+  if (emailit.isConfigured) {
+    try {
+      await emailit.sendEmail({ from, to: recipient, subject, html });
+      await knex('email_log').insert({ ...base, status: 'sent' });
+      return { status: 'sent' };
+    } catch (err) {
+      await knex('email_log').insert({ ...base, status: 'failed', error: String(err.message).slice(0, 250) });
+      return { status: 'failed' };
+    }
+  }
+
+  const t = getTransport();
   if (!t) {
     await knex('email_log').insert({ ...base, status: 'logged' });
     return { status: 'logged' };
   }
   try {
-    await t.sendMail({
-      from: process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>',
-      to: toName ? `"${toName}" <${to}>` : to,
-      subject,
-      html,
-    });
+    await t.sendMail({ from, to: recipient, subject, html });
     await knex('email_log').insert({ ...base, status: 'sent' });
     return { status: 'sent' };
   } catch (err) {

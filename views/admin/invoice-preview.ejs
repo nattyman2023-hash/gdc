@@ -1,0 +1,75 @@
+<div class="max-w-3xl mx-auto">
+  <div class="flex items-center justify-between mb-4 print:hidden">
+    <a href="/admin/finance" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> Back to finance</a>
+    <div class="flex gap-2">
+      <button onclick="window.print()" class="px-4 py-2 rounded font-bold border border-outline text-on-surface-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-base">print</span> Print</button>
+      <a href="/admin/invoices/<%= invoice.id %>/edit" class="px-4 py-2 rounded font-bold border border-outline text-on-surface-variant text-sm">Edit</a>
+    </div>
+  </div>
+
+  <% if (invoice.status !== 'paid' && invoice.status !== 'void') { %>
+  <div class="bg-secondary-container text-on-secondary-container rounded-lg p-4 mb-4 flex items-center justify-between gap-4 print:hidden">
+    <p class="text-sm"><strong>This is a preview.</strong> <%= invoice.status === 'draft' ? "The student can't see this invoice until you send it." : 'Already sent — you can resend it as a reminder.' %></p>
+    <form action="/admin/invoices/<%= invoice.id %>/send" method="post">
+      <button class="bg-primary text-on-primary px-5 py-2 rounded font-bold text-sm whitespace-nowrap"><%= invoice.status === 'draft' ? 'Send invoice' : 'Resend invoice' %></button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- The invoice document, styled as the student would see it -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 print:border-0 print:shadow-none">
+    <div class="flex items-start justify-between border-b border-outline-variant pb-6 mb-6">
+      <div>
+        <p class="font-headline text-headline-sm font-bold text-primary">Global Diaspora Christian University</p>
+        <p class="text-on-surface-variant text-sm mt-1">Educate · Equip · Empower · Impact the World</p>
+      </div>
+      <div class="text-right">
+        <p class="font-headline text-headline-md text-primary">Invoice</p>
+        <p class="font-mono text-sm text-on-surface-variant"><%= invoice.reference %></p>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 mb-8">
+      <div>
+        <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Billed to</p>
+        <p class="font-bold text-primary"><%= student ? (student.first_name + ' ' + student.last_name) : 'Unknown student' %></p>
+        <p class="text-on-surface-variant text-sm"><%= student ? student.email : '' %></p>
+        <% if (program) { %><p class="text-on-surface-variant text-sm mt-1"><%= program.title %></p><% } %>
+      </div>
+      <div class="sm:text-right">
+        <p class="font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Status</p>
+        <%- include('_badge', { status: invoice.status }) %>
+        <p class="font-tagline text-label-sm text-on-surface-variant uppercase mt-3 mb-1">Due date</p>
+        <p class="text-on-surface"><%= invoice.due_date ? formatDate(invoice.due_date) : 'On receipt' %></p>
+      </div>
+    </div>
+
+    <table class="w-full text-left text-sm mb-8">
+      <thead class="border-b-2 border-outline-variant font-tagline text-label-sm uppercase text-on-surface-variant">
+        <tr><th class="pb-2">Description</th><th class="pb-2 text-right">Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-outline-variant/40">
+          <td class="py-4 text-on-surface"><%= invoice.description %><% if (invoice.installment_no) { %> <span class="text-on-surface-variant">(instalment <%= invoice.installment_no %> of <%= invoice.installment_total %>)</span><% } %></td>
+          <td class="py-4 text-right font-bold text-primary"><%= formatMoney(invoice.amount, invoice.currency) %></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr><td class="pt-4 text-right font-bold text-primary">Total due</td><td class="pt-4 text-right font-display text-headline-sm text-primary"><%= formatMoney(invoice.amount, invoice.currency) %></td></tr>
+      </tfoot>
+    </table>
+
+    <% if (invoice.status === 'paid') { %>
+      <p class="text-secondary font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span> Paid <% if (invoice.paid_at) { %>on <%= formatDate(invoice.paid_at) %><% } %></p>
+    <% } else if (invoice.status === 'void') { %>
+      <p class="text-on-surface-variant">This invoice has been voided.</p>
+    <% } else { %>
+      <div class="bg-surface-container-high rounded-lg p-4 text-center print:hidden">
+        <p class="text-on-surface-variant text-sm mb-2">This is what the student sees in their billing portal:</p>
+        <span class="inline-block bg-secondary text-on-secondary px-6 py-2 rounded font-bold text-sm opacity-90">Pay now</span>
+      </div>
+    <% } %>
+
+    <p class="text-xs text-on-surface-variant mt-8 pt-6 border-t border-outline-variant/40">Questions about this invoice? Contact the finance office at finance@gdcu.edu.</p>
+  </div>
+</div>

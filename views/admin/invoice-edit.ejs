@@ -1,5 +1,8 @@
 <a href="/admin/finance" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Back to finance</a>
-<h1 class="font-headline text-headline-md text-primary mb-6">Edit Invoice <span class="font-mono text-base text-on-surface-variant"><%= invoice.reference %></span></h1>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-headline text-headline-md text-primary">Edit Invoice <span class="font-mono text-base text-on-surface-variant"><%= invoice.reference %></span></h1>
+  <a href="/admin/invoices/<%= invoice.id %>/preview" class="px-4 py-2 rounded font-bold border border-outline text-on-surface-variant text-sm">Preview</a>
+</div>
 
 <form action="/admin/invoices/<%= invoice.id %>" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 max-w-2xl space-y-5">
   <p class="text-sm text-on-surface-variant">Student: <strong class="text-primary"><%= student ? (student.first_name+' '+student.last_name) : 'Unknown' %></strong></p>
@@ -16,7 +19,11 @@
   <div class="flex flex-wrap gap-3 pt-2 border-t border-outline-variant/40">
     <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold">Save changes</button>
     <a href="/admin/finance" class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Cancel</a>
+    <% if (invoice.status === 'draft') { %>
+    <button form="send-invoice-form" class="bg-secondary text-on-secondary px-6 py-2 rounded font-bold">Send invoice</button>
+    <% } %>
     <form action="/admin/invoices/<%= invoice.id %>/void" method="post" class="inline" onsubmit="return confirm('Void this invoice?');"><button class="px-6 py-2 rounded font-bold border border-outline text-on-surface-variant">Void</button></form>
     <form action="/admin/invoices/<%= invoice.id %>/delete" method="post" class="inline ml-auto" onsubmit="return confirm('Permanently delete this invoice?');"><button class="px-6 py-2 rounded font-bold text-error border border-error/40">Delete</button></form>
   </div>
 </form>
+<% if (invoice.status === 'draft') { %><form id="send-invoice-form" action="/admin/invoices/<%= invoice.id %>/send" method="post"></form><% } %>

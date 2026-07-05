@@ -4,60 +4,67 @@ This guide walks you through configuring transactional email and Stripe payments
 
 ---
 
-## 1. Email (SMTP via Nodemailer)
+## 1. Email (Emailit API, with generic SMTP fallback)
 
-The platform sends transactional emails (application confirmations, interview invites, invoice notifications, support ticket replies, announcements) via SMTP. Without configuration, emails are logged to the Email Outbox (`/admin/emails`) but not actually sent.
+The platform sends transactional emails (application confirmations, interview invites, invoice notifications, support ticket replies, announcements, password resets) via the [Emailit](https://emailit.com) API. Without any configuration, emails are logged to the Email Outbox (`/admin/emails`) but not actually sent.
 
-### Step 1: Install nodemailer
+### Step 1: Create an Emailit account and API key
 
-```bash
-npm install nodemailer
-```
+1. Sign up at <https://app.emailit.com>
+2. Verify your sending domain (`gdcu.edu` or `gdc.university`) by adding the SPF, DKIM and DMARC DNS records Emailit gives you — critical for deliverability, without it emails land in spam.
+3. Go to **Workspace → API Keys** and create a key.
 
-### Step 2: Choose an SMTP provider
-
-| Provider | Free tier | Notes |
-|----------|-----------|-------|
-| **Brevo (Sendinblue)** | 300 emails/day | Recommended — generous free tier, good deliverability |
-| **Mailgun** | 5,000 emails/month (3 months) | Reliable, good API |
-| **SendGrid** | 100 emails/day | Popular, easy setup |
-| **Amazon SES** | 62,000 emails/month (if on EC2) | Cheapest at scale |
-| **Gmail SMTP** | 500 emails/day | Only for testing — not for production |
-
-### Step 3: Configure `.env`
-
-Add these keys to your `.env` file:
+### Step 2: Configure `.env`
 
 ```env
-SMTP_HOST=smtp-relay.brevo.com
-SMTP_PORT=587
-SMTP_USER=your-api-key
-SMTP_PASSWORD=your-api-key
 MAIL_FROM="Global Diaspora Christian University <admissions@gdcu.edu>"
+EMAILIT_API_KEY=your-emailit-api-key
 ```
 
-> **Note:** For Brevo, the SMTP user and password are both your API key (not your login email). Generate an SMTP key in the Brevo dashboard.
+That's it — no extra npm packages needed, the API client uses Node's built-in `fetch`.
 
-### Step 4: Verify your sending domain
+### Step 3 (optional): Marketing audience sync
 
-Whatever provider you choose, verify your sending domain (`gdcu.edu` or `gdc.university`) by adding the SPF, DKIM, and DMARC DNS records they provide. This is critical for email deliverability — without it, your emails will land in spam.
+If you also want to build a newsletter/marketing list in Emailit, create an **Audience** in the Emailit dashboard, copy its ID, and set:
 
-### Step 5: Test
+```env
+EMAILIT_AUDIENCE_ID=your-audience-id
+```
+
+When set, new leads, applicants and enrolled students are automatically upserted into that audience so staff can send campaigns from the Emailit dashboard without any manual list-building.
+
+### Step 4: Test
 
 1. Restart the server: `npm run dev`
 2. Go to **Admin → Operations → Email Outbox** (`/admin/emails`)
-3. You should see `SMTP configured: true`
-4. Trigger a test email by:
+3. Trigger a test email by:
    - Creating a test application and accepting it (sends a welcome email)
+   - Using **Forgot password** on the login page
    - Or replying to a support ticket
-5. Check the Email Outbox — the status should change from `logged` to `sent`
+4. Check the Email Outbox — the status should change from `logged` to `sent`
+
+### Alternative: generic SMTP (no Emailit account)
+
+If `EMAILIT_API_KEY` is not set, the platform falls back to plain SMTP via `nodemailer` — this works with Emailit's own SMTP relay or any other provider (Brevo, Mailgun, SendGrid, Amazon SES, etc):
+
+```env
+SMTP_HOST=smtp.emailit.com
+SMTP_PORT=587
+SMTP_USER=your-smtp-credential-user
+SMTP_PASSWORD=your-smtp-credential-password
+```
+
+> For Emailit SMTP, create an SMTP-type credential in the dashboard (not your login email/password).
 
 ### Email lifecycle events already wired:
 
 - ✅ New application → staff notification + applicant confirmation
-- ✅ Application accepted → student welcome email
+- ✅ Application accepted → student welcome email (with account login details)
+- ✅ Forgot password → reset link email; password changed → confirmation email
+- ✅ New staff/faculty/admin account created → welcome email with login details
+- ✅ Admin resets a user's password → confirmation email to that user
 - ✅ Interview booked → staff notification
-- ✅ Invoice created → student notification
+- ✅ Invoice sent (admin clicks "Send") → student email with amount, due date and a Pay Now link
 - ✅ Support ticket created/replied → both directions
 - ✅ Announcements → enrolled/all students
 - ✅ Assignment graded → student notification

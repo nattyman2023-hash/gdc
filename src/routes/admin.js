@@ -18,6 +18,7 @@ const calendar = require('../lib/calendar');
 const profiles = require('../lib/profiles');
 const { snapshot } = require('../lib/revisions');
 const { getCourseStructure } = require('../lib/lms');
+const emailit = require('../lib/emailit');
 
 // Full quiz snapshot (row + nested questions/options) for version history —
 // quizzes are always rebuilt wholesale on save, so a snapshot needs the
@@ -784,6 +785,7 @@ router.post('/applications/:id/status', async (req, res, next) => {
         bodyHtml: `<p>Dear ${application.first_name},</p><p>We are delighted to offer you a place. Your student account is ready — sign in to your portal to begin.</p>${tempPassword ? `<p>Your temporary password is <strong>${tempPassword}</strong> (please change it after signing in).</p>` : ''}<p><a href="${process.env.APP_URL || ''}/login" style="color:#b8861b">Sign in to your portal</a></p>`,
         relatedType: 'application', relatedId: application.id,
       });
+      emailit.upsertContact({ email: application.email, firstName: application.first_name, lastName: application.last_name, tags: ['student'] }).catch(() => {});
     } else {
       req.flash('success', `Application status updated to "${status}".`);
       if (application.student_user_id) {
@@ -969,7 +971,7 @@ router.post(
         req.flash('error', 'Please provide a student, description and a valid amount.');
         return res.redirect('/admin/finance');
       }
-      await knex('invoices').insert({
+      const [invId] = await knex('invoices').insert({
         reference: makeReference('INV'),
         user_id: req.body.user_id,
         program_id: req.body.program_id || null,
@@ -977,12 +979,12 @@ router.post(
         amount: Number(req.body.amount),
         currency: req.body.currency || 'GBP',
         due_date: req.body.due_date || null,
-        status: 'sent',
+        status: 'draft',
         created_by: req.session.user.id,
       });
-      notifyUser(req.body.user_id, { type: 'payment', title: 'New invoice', body: `${req.body.description.trim()} — please review your billing.`, link: '/portal/billing' });
-      req.flash('success', 'Invoice created.');
-      res.redirect('/admin/finance');
+      const invoiceId = Array.isArray(invId) ? invId[0] : invId;
+      req.flash('success', 'Invoice created as a draft. Preview it, then send it to the student when ready.');
+      res.redirect(`/admin/invoices/${invoiceId}/preview`);
     } catch (err) {
       next(err);
     }
@@ -1820,7 +1822,57 @@ router.post('/messages/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// ─── Invoice edit / void / delete ────────────────────────────
+// ─── Invoice preview / send / edit / void / delete ───────────
+router.get('/invoices/:id/preview', async (req, res, next) => {
+  try {
+    const invoice = await knex('invoices').where({ id: req.params.id }).first();
+    if (!invoice) return res.status(404).render('errors/404', { pageTitle: 'Not found', layout: 'layouts/admin' });
+    const student = await knex('users').where({ id: invoice.user_id }).first();
+    const program = invoice.program_id ? await knex('programs').where({ id: invoice.program_id }).first() : null;
+    res.render('admin/invoice-preview', {
+      pageTitle: `Invoice ${invoice.reference} | GDCU CRM`,
+      adminActive: 'finance',
+      invoice, student, program,
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/invoices/:id/send', async (req, res, next) => {
+  try {
+    const invoice = await knex('invoices').where({ id: req.params.id }).first();
+    if (!invoice) return res.status(404).render('errors/404', { pageTitle: 'Not found', layout: 'layouts/admin' });
+    const student = await knex('users').where({ id: invoice.user_id }).first();
+    if (!student) {
+      req.flash('error', 'This invoice has no student on file.');
+      return res.redirect(`/admin/invoices/${invoice.id}/preview`);
+    }
+
+    if (invoice.status === 'draft') {
+      await knex('invoices').where({ id: invoice.id }).update({ status: 'sent', updated_at: knex.fn.now() });
+    }
+
+    notifyUser(student.id, { type: 'payment', title: 'New invoice', body: `${invoice.description} — please review your billing.`, link: '/portal/billing' });
+    email({
+      to: student.email, toName: `${student.first_name} ${student.last_name}`,
+      subject: `Invoice ${invoice.reference} from GDCU`,
+      heading: 'You have a new invoice',
+      bodyHtml: `<p>Dear ${student.first_name},</p><p>An invoice has been raised on your GDCU account:</p>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0">
+          <tr><td style="padding:6px 0;color:#74777e">Reference</td><td style="padding:6px 0;text-align:right;font-family:monospace">${invoice.reference}</td></tr>
+          <tr><td style="padding:6px 0;color:#74777e">Description</td><td style="padding:6px 0;text-align:right">${invoice.description}</td></tr>
+          ${invoice.due_date ? `<tr><td style="padding:6px 0;color:#74777e">Due date</td><td style="padding:6px 0;text-align:right">${formatDateTime(invoice.due_date)}</td></tr>` : ''}
+          <tr><td style="padding:10px 0;font-weight:bold;border-top:1px solid #e5e2dc">Amount due</td><td style="padding:10px 0;text-align:right;font-weight:bold;border-top:1px solid #e5e2dc">${invoice.currency} ${Number(invoice.amount).toFixed(2)}</td></tr>
+        </table>
+        <p><a href="${process.env.APP_URL || ''}/portal/billing" style="background:#071d3a;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block">Pay Now</a></p>`,
+      relatedType: 'invoice', relatedId: invoice.id,
+    });
+    logActivity('student', student.id, req.session.user, 'Invoice sent', invoice.reference);
+
+    req.flash('success', `Invoice ${invoice.reference} sent to ${student.email}.`);
+    res.redirect(req.get('referer') && req.get('referer').includes('/preview') ? `/admin/invoices/${invoice.id}/preview` : '/admin/finance');
+  } catch (err) { next(err); }
+});
+
 router.get('/invoices/:id/edit', async (req, res, next) => {
   try {
     const invoice = await knex('invoices').where({ id: req.params.id }).first();
