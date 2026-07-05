@@ -330,6 +330,9 @@
           <input type="hidden" name="course_id" value="<%= course.id %>"><input type="hidden" name="mode" value="fork">
           <button type="submit" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white"><span class="material-symbols-outlined text-sm">content_copy</span> Duplicate</button>
         </form>
+        <button onclick="document.getElementById('promote-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white" title="Share this module with other courses & programmes via the Module Library">
+          <span class="material-symbols-outlined text-sm">library_add</span> Share to Library
+        </button>
       <% } %>
       <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
         <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
@@ -402,6 +405,26 @@
         </div>
       </form>
     </div>
+
+    <!-- Promote to Library (share this module with other courses/programmes) -->
+    <% if (!mod.isShared) { %>
+    <div id="promote-<%= mod.id %>" class="hidden px-6 py-4 border-b border-outline-variant bg-indigo-50">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-indigo-600">library_add</span>
+        <div>
+          <h4 class="font-bold text-primary text-sm">Share "<%= mod.title %>" to the Module Library</h4>
+          <p class="text-xs text-on-surface-variant">This makes the module available in the library so other courses and programmes can attach it. The module's lessons stay intact — editing them here changes them for every course using this module.</p>
+        </div>
+      </div>
+      <form method="POST" action="/admin/modules/<%= mod.id %>/promote" class="flex items-end gap-3">
+        <div class="flex-1">
+          <label class="block text-xs font-medium mb-1">Module Code <span class="text-on-surface-variant font-normal">(a short unique identifier for the library)</span></label>
+          <input type="text" name="code" required placeholder="e.g. CORE-101" class="w-full px-3 py-2 border rounded text-sm font-mono" value="MOD-<%= mod.id %>">
+        </div>
+        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-indigo-700">Promote to Library</button>
+      </form>
+    </div>
+    <% } %>
 
     <!-- Add Lesson (block) — streamlined: name it, pick its parts, optionally add a quiz -->
     <% var nextBlk = (Math.max(0, ...mod.lessons.map(function(l){ return Number(l.block_no)||0; }), 0) + 1); %>

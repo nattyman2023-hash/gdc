@@ -2888,6 +2888,67 @@ router.post('/modules/:id/delete', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// Promote a course-specific module to the shared module library so other
+// courses/programmes can attach it. This:
+//  1. Creates a shared_modules row (the library entry).
+//  2. Links the existing module row via shared_module_id (so its lessons
+//     become the shared content — no duplication).
+//  3. Creates a course_shared_modules junction for the current course so
+//     it keeps using the module.
+//  4. Sets the module's course_id to NULL (it now belongs to the library,
+//     not one specific course).
+// The module's lessons, quizzes, and assignments are untouched — they
+// hang off the module row and are now shared by every course that attaches
+// this shared module.
+router.post('/modules/:id/promote', async (req, res, next) => {
+  try {
+    const mod = await knex('modules').where({ id: req.params.id }).first();
+    if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    if (mod.shared_module_id) {
+      req.flash('error', 'This module is already in the library.');
+      return res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    }
+    const courseId = mod.course_id;
+    if (!courseId) {
+      req.flash('error', 'This module has no course to promote from.');
+      return res.redirect('/admin/courses');
+    }
+
+    // 1. Create the shared_modules library entry
+    const code = req.body.code || ('MOD-' + mod.id);
+    const existingCode = await knex('shared_modules').where({ code }).first();
+    if (existingCode) {
+      req.flash('error', `Code "${code}" is already used in the library. Choose a different code.`);
+      return res.redirect(`/admin/courses/${courseId}/modules`);
+    }
+    const [smId] = await knex('shared_modules').insert({
+      code,
+      title: mod.title,
+      description: mod.summary || mod.title,
+      summary: mod.summary || null,
+      year_level: mod.year_level || 1,
+      published: mod.published !== false,
+    });
+
+    // 2. Link the module to the shared_modules entry and detach from its course
+    await knex('modules').where({ id: mod.id }).update({
+      shared_module_id: smId,
+      course_id: null,
+    });
+
+    // 3. Create the junction so this course keeps using it
+    const maxSort = await knex('course_shared_modules').where({ course_id: courseId }).max('sort_order as m').first();
+    await knex('course_shared_modules').insert({
+      course_id: courseId,
+      shared_module_id: smId,
+      sort_order: (maxSort.m || 0) + 1,
+    });
+
+    req.flash('success', `"${mod.title}" promoted to the Module Library. Other courses and programmes can now attach it.`);
+    res.redirect(`/admin/courses/${courseId}/modules`);
+  } catch (err) { next(err); }
+});
+
 // Duplicate a module for the course whose builder page the request came
 // from (req.body.course_id — a module can be reached from any of several
 // courses if it's shared, so the URL alone doesn't say which one).
