@@ -1,0 +1,36 @@
+name: Deploy to Hostinger
+
+# Auto-deploys to Hostinger whenever code is pushed to master.
+# Hostinger does NOT watch GitHub on its own — this workflow SSHes in,
+# pulls the latest code, installs deps, migrates, and restarts PM2.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT || 65000 }}
+          script: |
+            set -e
+            cd ${{ secrets.HOSTINGER_APP_DIR || '~/gdcu' }}
+            echo "=== Pulling latest code from GitHub ==="
+            git fetch origin
+            git reset --hard origin/master
+            echo "=== Installing production dependencies ==="
+            npm install --omit=dev
+            echo "=== Running database migrations ==="
+            NODE_ENV=production npm run migrate
+            echo "=== Restarting PM2 application ==="
+            pm2 startOrRestart ecosystem.config.js --env production
+            pm2 save
+            echo "=== Deployment complete ==="

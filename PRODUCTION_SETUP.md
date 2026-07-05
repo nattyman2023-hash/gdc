@@ -159,7 +159,7 @@ node -v
 
 ```bash
 # Update application
-git pull origin main
+git pull origin master
 npm install --production
 npm run migrate
 pm2 restart gdcu
