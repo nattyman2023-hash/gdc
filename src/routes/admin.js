@@ -2776,6 +2776,8 @@ router.get('/courses/:id/modules', async (req, res, next) => {
       a.submissionCount = Number((await knex('assignment_submissions').where({ assignment_id: a.id }).count({ c: '*' }).first()).c);
     }
 
+    // All courses, for the "shared across courses" module-creation mode.
+    const allCourses = await knex('courses').orderBy('title').select('id', 'title', 'code');
     res.render('admin/course-modules', {
       pageTitle: `Modules — ${course.title} | GDCU`,
       adminActive: 'lms-courses',
@@ -2784,6 +2786,7 @@ router.get('/courses/:id/modules', async (req, res, next) => {
       allQuizzes,
       finalExam,
       assignments,
+      allCourses,
     });
   } catch (err) { next(err); }
 });
@@ -2834,6 +2837,63 @@ router.post('/courses/:id/modules', async (req, res, next) => {
     const course = await knex('courses').where({ id: req.params.id }).first();
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
 
+    // ── Shared module mode ──────────────────────────────────
+    // Creates a shared_modules entry + template module row, then attaches
+    // it to every selected course (including this one) via the
+    // course_shared_modules junction — so one module can be assigned to
+    // multiple courses in a single step.
+    if (req.body.shared === '1') {
+      const code = (req.body.code || '').trim();
+      if (!code) {
+        req.flash('error', 'A module code is required for a shared module.');
+        return res.redirect(`/admin/courses/${course.id}/modules`);
+      }
+      const existingCode = await knex('shared_modules').where({ code }).first();
+      if (existingCode) {
+        req.flash('error', `Code "${code}" is already used in the library. Choose a different code.`);
+        return res.redirect(`/admin/courses/${course.id}/modules`);
+      }
+
+      // Resolve the selected course IDs (always include the current course).
+      let courseIds = req.body.course_ids || [];
+      if (!Array.isArray(courseIds)) courseIds = [courseIds];
+      courseIds = courseIds.map(Number).filter(Boolean);
+      if (!courseIds.includes(course.id)) courseIds.push(course.id);
+
+      // 1. Create the shared_modules library entry.
+      const [smId] = await knex('shared_modules').insert({
+        code,
+        title: req.body.title,
+        description: req.body.summary || req.body.title,
+        summary: req.body.summary || null,
+        year_level: req.body.year_level ? Number(req.body.year_level) : 1,
+        category: req.body.category || null,
+        published: true,
+      });
+      // 2. Create the template module row (lessons hang off this).
+      await knex('modules').insert({
+        course_id: null,
+        shared_module_id: smId,
+        title: req.body.title,
+        summary: req.body.summary || null,
+        sort_order: 0,
+        published: true,
+      });
+      // 3. Attach to every selected course.
+      for (const cid of courseIds) {
+        const maxSort = await knex('course_shared_modules').where({ course_id: cid }).max('sort_order as m').first();
+        await knex('course_shared_modules').insert({
+          course_id: cid,
+          shared_module_id: smId,
+          sort_order: (maxSort.m || 0) + 1,
+        });
+      }
+
+      req.flash('success', `Shared module "${req.body.title}" created and attached to ${courseIds.length} course(s).`);
+      return res.redirect(`/admin/courses/${course.id}/modules`);
+    }
+
+    // ── Dedicated module mode (default — just this course) ──
     const maxSort = await knex('modules').where({ course_id: course.id }).max({ m: 'sort_order' }).first();
     await knex('modules').insert({
       course_id: course.id,
