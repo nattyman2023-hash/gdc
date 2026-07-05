@@ -3294,10 +3294,14 @@ router.get('/course-library/:id', async (req, res, next) => {
       .where('course_shared_modules.shared_module_id', sm.id)
       .orderBy('courses.title')
       .select('courses.id', 'courses.title', 'courses.code');
+    // Courses this module is NOT yet attached to (for the attach form).
+    const attachedIds = new Set(courses.map((c) => c.id));
+    const allCourses = await knex('courses').orderBy('title').select('id', 'title', 'code');
+    const availableCourses = allCourses.filter((c) => !attachedIds.has(c.id));
     res.render('admin/shared-module-detail', {
       pageTitle: `${sm.title} | Module Library`,
       adminActive: 'course-library',
-      sm, mod, lessons, quizzes, courses,
+      sm, mod, lessons, quizzes, courses, availableCourses,
     });
   } catch (err) { next(err); }
 });
@@ -3410,7 +3414,14 @@ router.post('/course-library/:id/lessons/:lessonId', async (req, res, next) => {
       type: req.body.type || 'reading',
       content: req.body.content || null,
       video_url: req.body.video_url || null,
+      image_url: req.body.image_url || null,
+      live_provider: req.body.live_provider || null,
+      live_join_url: req.body.live_join_url || null,
+      live_embed_url: req.body.live_embed_url || null,
+      live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
+      block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),
+      block_title: req.body.block_title !== undefined && req.body.block_title !== '' ? req.body.block_title : lesson.block_title,
       published: req.body.published === '1' || req.body.published === 'on',
     });
     req.flash('success', 'Lesson updated.');
@@ -3423,6 +3434,32 @@ router.post('/course-library/:id/lessons/:lessonId/delete', async (req, res, nex
     await knex('lesson_materials').where({ lesson_id: req.params.lessonId }).del();
     await knex('lessons').where({ id: req.params.lessonId }).del();
     req.flash('success', 'Lesson deleted.');
+    res.redirect(`/admin/course-library/${req.params.id}`);
+  } catch (err) { next(err); }
+});
+
+// Add a material to a shared module's lesson (from the library detail page).
+router.post('/course-library/:id/lessons/:lessonId/materials', async (req, res, next) => {
+  try {
+    if (req.body.label && req.body.url) {
+      const lesson = await knex('lessons').where({ id: req.params.lessonId }).first();
+      if (!lesson) return res.redirect(`/admin/course-library/${req.params.id}`);
+      const max = await knex('lesson_materials').where({ lesson_id: lesson.id }).max({ m: 'sort_order' }).first();
+      await knex('lesson_materials').insert({
+        lesson_id: lesson.id, label: req.body.label, url: req.body.url,
+        type: req.body.type || 'link', sort_order: (Number(max.m) || 0) + 1,
+      });
+      req.flash('success', 'Material added.');
+    }
+    res.redirect(`/admin/course-library/${req.params.id}`);
+  } catch (err) { next(err); }
+});
+
+// Remove a material from a shared module's lesson.
+router.post('/course-library/:id/materials/:materialId/delete', async (req, res, next) => {
+  try {
+    await knex('lesson_materials').where({ id: req.params.materialId }).del();
+    req.flash('success', 'Material removed.');
     res.redirect(`/admin/course-library/${req.params.id}`);
   } catch (err) { next(err); }
 });

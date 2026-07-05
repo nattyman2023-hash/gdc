@@ -41,46 +41,102 @@
       <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons" class="space-y-3">
         <div class="grid grid-cols-3 gap-3">
           <div class="col-span-2"><label class="block text-xs font-medium mb-1">Title *</label><input name="title" required class="w-full px-2 py-1.5 border rounded text-sm" placeholder="Lesson title"></div>
-          <div><label class="block text-xs font-medium mb-1">Type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm"><option value="reading">Reading</option><option value="video">Video</option><option value="audio">Audio</option><option value="discussion">Discussion</option></select></div>
+          <div><label class="block text-xs font-medium mb-1">Type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm"><option value="reading">Reading</option><option value="video">Video</option><option value="audio">Audio</option><option value="live">Live</option><option value="discussion">Discussion</option></select></div>
         </div>
         <div><label class="block text-xs font-medium mb-1">Content</label><textarea name="content" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm"></textarea></div>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <div><label class="block text-xs font-medium mb-1">Video URL</label><input type="url" name="video_url" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="https://youtu.be/…"></div>
           <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="15" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div><label class="block text-xs font-medium mb-1">Lesson (block) #</label><input type="number" name="block_no" min="1" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="optional"></div>
         </div>
+        <div><label class="block text-xs font-medium mb-1">Block title <span class="text-on-surface-variant font-normal">(groups parts into a Lesson)</span></label><input name="block_title" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="e.g. What Is the Bible?"></div>
         <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-lesson').classList.add('hidden')" class="px-3 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-3 py-1 bg-primary text-on-primary rounded text-xs font-bold">Add Lesson</button></div>
       </form>
     </div>
     <% if (lessons.length) { %>
     <div class="divide-y divide-outline-variant/40">
       <% lessons.forEach(function(l){ %>
-      <div class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest">
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-on-surface-variant w-6"><%= lessons.indexOf(l)+1 %>.</span>
-          <span class="text-sm font-medium"><%= l.title %></span>
-          <span class="px-1.5 py-0.5 rounded text-xs <%= l.type==='video'?'bg-red-100 text-red-700':'bg-blue-100 text-blue-700' %>"><%= l.type %></span>
-          <% if (!l.published) { %><span class="text-xs bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded">Draft</span><% } %>
-          <span class="text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <button onclick="document.getElementById('edit-lesson-<%= l.id %>').classList.toggle('hidden')" class="p-1 hover:text-primary rounded"><span class="material-symbols-outlined text-sm">edit</span></button>
-          <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons/<%= l.id %>/delete" onsubmit="return confirm('Delete this lesson?');" class="inline"><button type="submit" class="p-1 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
-        </div>
-      </div>
-      <div id="edit-lesson-<%= l.id %>" class="hidden px-6 py-3 bg-gray-50 border-b">
-        <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons/<%= l.id %>" class="space-y-2">
-          <div class="grid grid-cols-3 gap-2">
-            <div class="col-span-2"><label class="block text-xs font-medium mb-1">Title</label><input name="title" value="<%= l.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
-            <div><label class="block text-xs font-medium mb-1">Type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm"><option value="reading" <%= l.type==='reading'?'selected':'' %>>Reading</option><option value="video" <%= l.type==='video'?'selected':'' %>>Video</option><option value="audio" <%= l.type==='audio'?'selected':'' %>>Audio</option></select></div>
+      <div class="px-6 py-3">
+        <div class="flex items-center justify-between hover:bg-surface-container-lowest -mx-6 px-6 py-1">
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-on-surface-variant w-6"><%= lessons.indexOf(l)+1 %>.</span>
+            <span class="text-sm font-medium"><%= l.title %></span>
+            <span class="px-1.5 py-0.5 rounded text-xs <%= l.type==='video'?'bg-red-100 text-red-700':l.type==='live'?'bg-purple-100 text-purple-700':l.type==='audio'?'bg-indigo-100 text-indigo-700':'bg-blue-100 text-blue-700' %>"><%= l.type %></span>
+            <% if (l.block_no) { %><span class="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded">Lesson <%= l.block_no %></span><% } %>
+            <% if (!l.published) { %><span class="text-xs bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded">Draft</span><% } %>
+            <span class="text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
+            <% if (l.materials && l.materials.length) { %><span class="text-xs text-on-surface-variant">· <%= l.materials.length %> material<%= l.materials.length===1?'':'s' %></span><% } %>
           </div>
-          <div><label class="block text-xs font-medium mb-1">Content</label><textarea name="content" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm"><%= l.content || '' %></textarea></div>
-          <div class="grid grid-cols-3 gap-2">
-            <div><label class="block text-xs font-medium mb-1">Video URL</label><input type="url" name="video_url" value="<%= l.video_url || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
-            <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="<%= l.duration_min || 15 %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
-            <div><label class="flex items-center gap-2 pt-5"><input type="checkbox" name="published" value="1" <%= l.published?'checked':'' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label></div>
+          <div class="flex items-center gap-1">
+            <button onclick="document.getElementById('edit-lesson-<%= l.id %>').classList.toggle('hidden')" class="p-1 hover:text-primary rounded"><span class="material-symbols-outlined text-sm">edit</span></button>
+            <button onclick="document.getElementById('materials-<%= l.id %>').classList.toggle('hidden')" class="p-1 hover:text-blue-600 rounded" title="Materials"><span class="material-symbols-outlined text-sm">attachment</span></button>
+            <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons/<%= l.id %>/delete" onsubmit="return confirm('Delete this lesson?');" class="inline"><button type="submit" class="p-1 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button></form>
           </div>
-          <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-lesson-<%= l.id %>').classList.add('hidden')" class="px-2 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-2 py-1 bg-primary text-on-primary rounded text-xs font-bold">Save</button></div>
-        </form>
+        </div>
+        <!-- Edit Lesson Form -->
+        <div id="edit-lesson-<%= l.id %>" class="hidden mt-2">
+          <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons/<%= l.id %>" class="space-y-2 bg-surface-container-lowest border border-outline-variant rounded p-3">
+            <div class="grid grid-cols-3 gap-2">
+              <div class="col-span-2"><label class="block text-xs font-medium mb-1">Title</label><input name="title" value="<%= l.title %>" required class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm">
+                <% ['reading','video','live','audio','discussion'].forEach(function(t){ %><option value="<%= t %>" <%= l.type===t?'selected':'' %>><%= t.charAt(0).toUpperCase()+t.slice(1) %></option><% }) %>
+              </select></div>
+            </div>
+            <div><label class="block text-xs font-medium mb-1">Content</label><textarea name="content" data-rich rows="3" class="w-full px-2 py-1.5 border rounded text-sm"><%= l.content || '' %></textarea></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div><label class="block text-xs font-medium mb-1">Lesson image URL</label><input type="url" name="image_url" id="sm-lesson-img-<%= l.id %>" value="<%= l.image_url || '' %>" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="https://… or upload →">
+                <button type="button" data-upload-target="#sm-lesson-img-<%= l.id %>" class="mt-1 inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1 hover:bg-white"><span class="material-symbols-outlined text-sm">upload</span> Upload</button>
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Video URL</label><input type="url" name="video_url" value="<%= l.video_url || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div><label class="block text-xs font-medium mb-1">Live provider</label><select name="live_provider" class="w-full px-2 py-1.5 border rounded text-sm">
+                <option value="" <%= !l.live_provider ? 'selected' : '' %>>None</option>
+                <option value="zoom" <%= l.live_provider === 'zoom' ? 'selected' : '' %>>Zoom</option>
+                <option value="onestream" <%= l.live_provider === 'onestream' ? 'selected' : '' %>>OneStream</option>
+              </select></div>
+              <div><label class="block text-xs font-medium mb-1">Live join URL</label><input type="url" name="live_join_url" value="<%= l.live_join_url || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Live embed URL</label><input type="url" name="live_embed_url" value="<%= l.live_embed_url || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+              <div><label class="block text-xs font-medium mb-1">Live passcode</label><input name="live_passcode" value="<%= l.live_passcode || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="<%= l.duration_min || 15 %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Lesson (block) #</label><input type="number" name="block_no" min="1" value="<%= l.block_no || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Block title</label><input name="block_title" value="<%= l.block_title || '' %>" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+            </div>
+            <label class="flex items-center gap-2"><input type="checkbox" name="published" value="1" <%= l.published?'checked':'' %> class="w-4 h-4"><span class="text-xs font-medium">Published</span></label>
+            <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('edit-lesson-<%= l.id %>').classList.add('hidden')" class="px-2 py-1 border rounded text-xs">Cancel</button><button type="submit" class="px-2 py-1 bg-primary text-on-primary rounded text-xs font-bold">Save</button></div>
+          </form>
+        </div>
+        <!-- Materials -->
+        <div id="materials-<%= l.id %>" class="hidden mt-2 bg-amber-50 border border-amber-200 rounded p-3">
+          <p class="text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wide">Materials</p>
+          <% if (l.materials && l.materials.length) { %>
+            <div class="space-y-1.5 mb-3">
+              <% l.materials.forEach(function(mat){ %>
+              <div class="flex items-center justify-between text-sm">
+                <a href="<%= mat.url %>" target="_blank" class="text-secondary font-medium inline-flex items-center gap-1 hover:underline">
+                  <span class="material-symbols-outlined text-sm">attachment</span> <%= mat.label %>
+                  <span class="text-on-surface-variant font-normal text-xs">(<%= mat.type %>)</span>
+                </a>
+                <form method="POST" action="/admin/course-library/<%= sm.id %>/materials/<%= mat.id %>/delete" class="inline" onsubmit="return confirm('Remove this material?');">
+                  <button type="submit" class="p-0.5 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
+                </form>
+              </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p class="text-xs text-on-surface-variant mb-3">No materials attached.</p>
+          <% } %>
+          <form method="POST" action="/admin/course-library/<%= sm.id %>/lessons/<%= l.id %>/materials" class="grid grid-cols-12 gap-2 items-end">
+            <input name="label" required placeholder="Label" class="col-span-3 px-2 py-1 border rounded text-xs">
+            <input name="url" required placeholder="URL (https://…)" class="col-span-5 px-2 py-1 border rounded text-xs">
+            <select name="type" class="col-span-2 px-2 py-1 border rounded text-xs">
+              <option value="link">Link</option><option value="pdf">PDF</option><option value="slides">Slides</option><option value="video">Video</option>
+            </select>
+            <button type="submit" class="col-span-2 bg-amber-500 text-white px-2 py-1 rounded text-xs font-bold hover:bg-amber-600">Add</button>
+          </form>
+        </div>
       </div>
       <% }) %>
     </div>
@@ -89,23 +145,81 @@
     <% } %>
   </div>
 
-  <!-- Courses using this module -->
+  <!-- Quizzes attached to this shared module's template -->
+  <% if (quizzes && quizzes.length) { %>
+  <div class="bg-white rounded-lg shadow mb-6">
+    <div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+      <h2 class="font-semibold text-primary">Quizzes (<%= quizzes.length %>)</h2>
+      <span class="text-xs text-on-surface-variant">Quizzes are created per-course from the course builder.</span>
+    </div>
+    <div class="divide-y divide-outline-variant/40">
+      <% quizzes.forEach(function(qz){ %>
+      <div class="px-6 py-3 flex items-center justify-between">
+        <div>
+          <span class="font-medium text-primary text-sm"><%= qz.title %></span>
+          <span class="text-xs text-on-surface-variant ml-2"><%= qz.questionCount %> question<%= qz.questionCount===1?'':'s' %> · pass <%= qz.pass_mark %>%<%= qz.time_limit_min ? (' · ' + qz.time_limit_min + ' min') : '' %></span>
+          <% if (qz.questionCount === 0) { %><span class="text-[10px] text-red-600 font-bold ml-1">⚠ no questions yet</span><% } %>
+          <% if (!qz.published) { %><span class="text-[10px] bg-gray-200 text-gray-800 font-bold px-1.5 py-0.5 rounded ml-1">Draft</span><% } %>
+        </div>
+        <span class="text-xs text-on-surface-variant">Edit from a course's builder</span>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Courses using this module + attach form -->
   <div class="bg-white rounded-lg shadow">
-    <div class="px-6 py-4 border-b border-outline-variant">
+    <div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
       <h2 class="font-semibold text-primary">Courses using this module (<%= courses.length %>)</h2>
+      <% if (availableCourses && availableCourses.length) { %>
+      <button onclick="document.getElementById('attach-form').classList.toggle('hidden')" class="bg-primary text-on-primary px-3 py-1.5 rounded text-sm font-bold">+ Attach to a course</button>
+      <% } %>
+    </div>
+    <div id="attach-form" class="hidden px-6 py-4 border-b border-outline-variant bg-blue-50">
+      <form id="attach-course-form" method="POST" action="" class="flex items-end gap-3">
+        <div class="flex-1">
+          <label class="block text-xs font-medium mb-1">Choose a course to attach this module to</label>
+          <select id="attach-course-select" class="w-full px-3 py-2 border rounded text-sm">
+            <% availableCourses.forEach(function(c){ %>
+            <option value="<%= c.id %>"><%= c.title %><% if (c.code) { %> (<%= c.code %>)<% } %></option>
+            <% }) %>
+          </select>
+        </div>
+        <input type="hidden" name="shared_module_id" value="<%= sm.id %>">
+        <input type="hidden" name="stay" value="1">
+        <button type="submit" class="bg-primary text-on-primary px-4 py-2 rounded font-bold text-sm">Attach</button>
+      </form>
+      <script>
+        (function () {
+          var sel = document.getElementById('attach-course-select');
+          var form = document.getElementById('attach-course-form');
+          if (!sel || !form) return;
+          function syncAction() {
+            form.action = '/admin/courses/' + sel.value + '/modules/attach';
+          }
+          sel.addEventListener('change', syncAction);
+          syncAction();
+        })();
+      </script>
     </div>
     <% if (courses.length) { %>
     <div class="divide-y divide-outline-variant/40">
       <% courses.forEach(function(c){ %>
-      <a href="/admin/courses/<%= c.id %>/modules" class="flex items-center gap-3 px-6 py-3 hover:bg-surface-container-lowest">
-        <span class="material-symbols-outlined text-secondary text-lg">school</span>
-        <span class="text-sm font-medium"><%= c.title %></span>
-        <% if (c.code) { %><span class="text-xs text-on-surface-variant font-mono"><%= c.code %></span><% } %>
-      </a>
+      <div class="flex items-center gap-3 px-6 py-3 hover:bg-surface-container-lowest">
+        <a href="/admin/courses/<%= c.id %>/modules" class="flex items-center gap-3 flex-1 min-w-0">
+          <span class="material-symbols-outlined text-secondary text-lg">school</span>
+          <span class="text-sm font-medium truncate"><%= c.title %></span>
+          <% if (c.code) { %><span class="text-xs text-on-surface-variant font-mono"><%= c.code %></span><% } %>
+        </a>
+        <form method="POST" action="/admin/courses/<%= c.id %>/modules/detach/<%= sm.id %>" onsubmit="return confirm('Remove this module from this course? It stays intact for the other <%= courses.length - 1 %> course(s) using it.');" class="inline">
+          <button type="submit" class="p-1 text-on-surface-variant hover:text-red-600 rounded" title="Remove from this course only"><span class="material-symbols-outlined text-sm">link_off</span></button>
+        </form>
+      </div>
       <% }) %>
     </div>
     <% } else { %>
-    <div class="px-6 py-8 text-center text-on-surface-variant text-sm">Not attached to any course yet. Open a course's builder and use "Attach existing module" to add it.</div>
+    <div class="px-6 py-8 text-center text-on-surface-variant text-sm">Not attached to any course yet. Use "Attach to a course" above, or open a course's builder and use "Attach existing module".</div>
     <% } %>
   </div>
 </div>
