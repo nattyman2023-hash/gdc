@@ -9,8 +9,8 @@ exports.seed = async function (knex) {
     const existing = await knex('courses').where({ program_id: p.id }).first();
     if (existing) continue;
 
-    const slug = `${p.slug}-intro`;
-    const title = `${p.title} — Introductory Course`;
+    const slug = `${p.slug}-foundations`;
+    const title = `${p.title} — Foundations`;
 
     const [cid] = await knex('courses').insert({
       slug,
@@ -18,8 +18,8 @@ exports.seed = async function (knex) {
       instructor_id: null,
       code: null,
       title,
-      summary: `A short introductory course for the ${p.title} programme.`,
-      description: `This short course introduces key themes and learning outcomes for the ${p.title} programme.`,
+      summary: `A foundational course for the ${p.title} programme.`,
+      description: `This course introduces key themes and learning outcomes for the ${p.title} programme.`,
       credits: 5,
       icon: 'school',
       published: true,
