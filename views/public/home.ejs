@@ -14,7 +14,7 @@
     </div>
     <!-- Trust / social proof -->
     <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-12 text-on-primary-container">
-      <% [['public','Learners in 50+ nations'],['payments','Genuinely affordable'],['menu_book','Christ-centred faculty'],['verified','Accreditation in progress']].forEach(function(b){ %>
+      <% [['public','Learners in 20+ nations'],['payments','Genuinely affordable'],['menu_book','Christ-centred faculty'],['verified','Accreditation in progress']].forEach(function(b){ %>
       <span class="inline-flex items-center gap-2 font-tagline text-label-sm uppercase tracking-wider"><span class="material-symbols-outlined text-secondary-fixed text-lg" style="font-variation-settings:'FILL' 1;"><%= b[0] %></span> <%= b[1] %></span>
       <% }) %>
     </div>
@@ -214,9 +214,9 @@
     <p class="font-tagline text-tagline text-secondary-fixed mb-6 uppercase">Connect &amp; Grow</p>
     <h2 class="font-display text-display-lg-mobile md:text-display-lg mb-8">Join Our Global Spiritual Community</h2>
     <p class="font-body text-body-lg text-on-primary-container mb-12 max-w-2xl mx-auto">Beyond the classroom, GDCU is a family. We connect believers across continents to pray, serve, and impact their local communities through the power of unified faith.</p>
-    <div class="flex flex-wrap justify-center gap-8">
-      <% [['50+','Countries Represented'],['12k+','Active Alumni'],['100%','Mission Driven']].forEach(function(s, i){ %>
-        <% if (i>0){ %><div class="w-px h-16 bg-outline-variant/30 hidden md:block"></div><% } %>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+      <% [['20','Countries Represented'],['400','Students'],['100%','Mission Driven']].forEach(function(s, i){ %>
+        <% if (i>0){ %><div class="w-16 sm:w-px h-px sm:h-16 bg-outline-variant/30"></div><% } %>
         <div class="text-center">
           <p class="font-display text-display-lg-mobile md:text-display-lg text-secondary-fixed mb-1"><%= s[0] %></p>
           <p class="font-tagline text-tagline uppercase"><%= s[1] %></p>

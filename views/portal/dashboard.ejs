@@ -14,7 +14,7 @@
 <% } %>
 
 <!-- Stats -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
   <%
     const active = enrollments.filter(e=>e.status==='active').length;
     const done = enrollments.filter(e=>e.status==='completed').length;
