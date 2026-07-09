@@ -70,14 +70,22 @@ async function request(path, body) {
     },
     body: JSON.stringify(body),
   });
-  const data = await res.json().catch(() => ({}));
+  const raw = await res.text();
+  let data = {};
+  try { data = raw ? JSON.parse(raw) : {}; } catch (_) { /* not JSON */ }
+
   if (!res.ok) {
+    // Don't guess at Emailit's error field names — surface whatever came
+    // back verbatim so the real reason is visible instead of a bare status.
     const detail =
       data.details ||
       (Array.isArray(data.validation_errors) ? data.validation_errors.join('; ') : null) ||
       data.error ||
-      data.message;
-    throw new Error(detail ? `Emailit: ${detail}` : `Emailit API error (${res.status})`);
+      data.message ||
+      (Object.keys(data).length ? JSON.stringify(data) : raw);
+    // eslint-disable-next-line no-console
+    console.error(`emailit: ${res.status} response body:`, raw);
+    throw new Error(detail ? `Emailit (${res.status}): ${String(detail).slice(0, 300)}` : `Emailit API error (${res.status})`);
   }
   return data;
 }
