@@ -9,7 +9,13 @@
  * restart); once configured, it's re-checked at most every CACHE_TTL_MS so a
  * key rotation is picked up soon without hitting the DB on every send.
  */
-const API_BASE = 'https://api.emailit.com/v2';
+// v1 is what's actually confirmed working (a sibling project's PHP
+// integration sends successfully via v1); v2 returned "Domain not verified"
+// on this account despite the domain showing Verified in the dashboard, so
+// email sending stays on v1. Audiences/contacts (marketing sync) is a
+// v2-only feature, so that alone still uses v2.
+const API_BASE_V1 = 'https://api.emailit.com/v1';
+const API_BASE_V2 = 'https://api.emailit.com/v2';
 const CACHE_TTL_MS = 30 * 1000;
 
 let _knex;
@@ -61,8 +67,8 @@ function getFromEmail() { return cache.fromEmail; }
 // Warm the cache at boot (fire-and-forget) so the first real request is fast.
 refresh().catch(() => {});
 
-async function request(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
+async function request(base, path, body) {
+  const res = await fetch(`${base}${path}`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${cache.apiKey}`,
@@ -94,14 +100,16 @@ async function request(path, body) {
 async function sendEmail({ from, to, subject, html, text, replyTo }) {
   const ok = await ensureConfigured();
   if (!ok) throw new Error('Emailit is not configured — set EMAILIT_API_KEY in Admin → Settings or .env');
-  return request('/emails', {
+  // Keep this payload minimal — matching the proven-working shape exactly
+  // (plain "to" address, no tracking object) rather than the fuller v2
+  // payload the docs described, which triggered a domain-verification 422.
+  return request(API_BASE_V1, '/emails', {
     from: from || cache.fromEmail,
     to,
     subject,
     html,
-    text,
+    text: text || undefined,
     reply_to: replyTo || undefined,
-    tracking: { loads: true, clicks: true },
   });
 }
 
@@ -113,7 +121,7 @@ async function sendEmail({ from, to, subject, html, text, replyTo }) {
 async function upsertContact({ email, firstName, lastName, tags }) {
   const ok = await ensureConfigured();
   if (!ok || !cache.audienceId || !email) return null;
-  return request(`/audiences/${cache.audienceId}/contacts`, {
+  return request(API_BASE_V2, `/audiences/${cache.audienceId}/contacts`, {
     email,
     first_name: firstName || undefined,
     last_name: lastName || undefined,

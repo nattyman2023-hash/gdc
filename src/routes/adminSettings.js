@@ -77,7 +77,7 @@ router.post('/', async (req, res, next) => {
         await knex('settings').insert({ key: f.key, value: val, label: f.label, group: f.group, sensitive: f.sensitive });
       }
     }
-    req.flash('success', 'Settings saved. Restart the server for changes to take effect.');
+    req.flash('success', 'Settings saved.');
     res.redirect('/admin/settings');
   } catch (err) { next(err); }
 });

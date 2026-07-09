@@ -54,7 +54,9 @@ async function sendMail({ to, toName, subject, html, template, relatedType, rela
   // no request to Emailit was ever attempted.
   if (await emailit.ensureConfigured()) {
     try {
-      await emailit.sendEmail({ from, to: recipient, subject, html });
+      // Emailit's "to" is a plain address, not the "Name <email>" form
+      // nodemailer/SMTP accepts — send the raw address here.
+      await emailit.sendEmail({ from, to, subject, html });
       await knex('email_log').insert({ ...base, status: 'sent' });
       return { status: 'sent' };
     } catch (err) {
