@@ -1,0 +1,32 @@
+<!-- Admin footer scripts -->
+<div id="admin-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+
+<!-- Quick-view drawer -->
+<div id="drawer" class="fixed inset-0 z-[60] hidden">
+  <div data-drawer-close class="absolute inset-0 bg-black/40"></div>
+  <div id="drawer-panel" class="absolute top-0 right-0 h-full w-full max-w-xl bg-surface-container-low shadow-2xl translate-x-full transition-transform duration-250 overflow-y-auto">
+    <div id="drawer-body"></div>
+  </div>
+</div>
+
+<script src="/js/drawer.js?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>"></script>
+<script src="/js/bulk.js?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>"></script>
+<script src="/js/course-builder-dnd.js?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>"></script>
+<script src="/js/async-list.js?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>"></script>
+<script src="/js/rich-editor.js?v=<%= typeof assetVersion !== 'undefined' ? assetVersion : '1' %>"></script>
+<style>
+  .re-btn{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 6px;border-radius:4px;color:#3f4b5b;font-size:14px}
+  .re-btn:hover{background:#e7e3d9}
+  .re-editor [contenteditable]:focus{outline:none}
+</style>
+<script>
+  (function(){
+    var btn=document.getElementById('admin-menu-btn'), sb=document.getElementById('admin-sidebar'), ov=document.getElementById('admin-overlay');
+    function open(){sb.classList.remove('-translate-x-full');ov.classList.remove('hidden');}
+    function close(){sb.classList.add('-translate-x-full');ov.classList.add('hidden');}
+    if(btn) btn.addEventListener('click',open);
+    if(ov) ov.addEventListener('click',close);
+  })();
+</script>
+</body>
+</html>
