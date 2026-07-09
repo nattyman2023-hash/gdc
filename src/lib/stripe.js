@@ -1,33 +1,50 @@
 /**
- * Stripe client. Returns null when no key is configured so the app still runs
- * locally without Stripe (the application is recorded; payment is skipped).
- * Reads the secret key from the DB settings table first, then falls back to .env.
+ * Stripe client. Reads the secret key from the DB `settings` table first,
+ * then falls back to .env. Returns { stripe: null, isConfigured: false } when
+ * no key is configured so the app still runs locally without Stripe.
+ *
+ * Config is cached but self-heals: if not yet configured, every call
+ * re-checks the DB (so saving a key in Admin → Settings works without a
+ * restart); once configured, it's re-checked at most every CACHE_TTL_MS.
+ *
+ * Call sites must `await getStripe()` at the point of use rather than
+ * destructuring `{ stripe, isConfigured }` at module-load time — destructuring
+ * a plain exported value freezes it at whatever it was when the module was
+ * first required, which is always before this file's async DB lookup can
+ * possibly resolve, so it would always read as "not configured".
  */
-const knex = require('../config/db');
+const CACHE_TTL_MS = 30 * 1000;
 
-let stripe = null;
-let isConfigured = false;
+let cache = { client: null, loadedAt: 0 };
 
-/** Read Stripe secret key: DB value first, then .env. */
-async function initStripe() {
-  if (stripe) return stripe;
-  let key = process.env.STRIPE_SECRET_KEY;
-
-  // DB override (silently skip if settings table doesn't exist yet).
+async function refresh() {
+  let key = process.env.STRIPE_SECRET_KEY || null;
   try {
+    const knex = require('../config/db');
     const row = await knex('settings').where({ key: 'STRIPE_SECRET_KEY' }).first();
     if (row && row.value) key = row.value;
-  } catch (_) { /* table may not exist */ }
-
-  // eslint-disable-next-line global-require
-  if (key && !key.includes('xxx')) {
-    stripe = require('stripe')(key);
-    isConfigured = true;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('stripe: could not read settings table, using .env only:', err.message);
   }
-  return stripe;
+
+  if (key && !key.includes('xxx')) {
+    // eslint-disable-next-line global-require
+    cache = { client: require('stripe')(key), loadedAt: Date.now() };
+  } else {
+    cache = { client: null, loadedAt: Date.now() };
+  }
+  return cache;
 }
 
-// Init on load, but don't block (it's async but fast).
-initStripe().catch(() => {});
+// Warm the cache at boot (fire-and-forget) so the first real request is fast.
+refresh().catch(() => {});
 
-module.exports = { stripe, isConfigured };
+/** Ensure config is loaded and fresh; returns { stripe, isConfigured }. */
+async function getStripe() {
+  const stale = Date.now() - cache.loadedAt > CACHE_TTL_MS;
+  if (!cache.client || stale) await refresh();
+  return { stripe: cache.client, isConfigured: Boolean(cache.client) };
+}
+
+module.exports = { getStripe };

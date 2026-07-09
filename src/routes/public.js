@@ -5,7 +5,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const knex = require('../config/db');
 const { makeReference } = require('../lib/helpers');
-const { stripe, isConfigured } = require('../lib/stripe');
+const { getStripe } = require('../lib/stripe');
 const { notifyRoles, notifyUser, email } = require('../lib/notify');
 const googleCalendar = require('../lib/googleCalendar');
 const { buildIcs } = require('../lib/ics');
@@ -373,6 +373,7 @@ router.post('/sponsor/:token/pledge', async (req, res, next) => {
       req.flash('error', 'Please enter your name and a valid amount.');
       return res.redirect(`/sponsor/${sponsorship.token}`);
     }
+    const { stripe, isConfigured } = await getStripe();
     const [idRaw] = await knex('sponsorship_contributions').insert({
       sponsorship_id: sponsorship.id,
       sponsor_name: req.body.sponsor_name,

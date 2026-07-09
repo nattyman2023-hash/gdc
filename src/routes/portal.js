@@ -8,7 +8,7 @@ const knex = require('../config/db');
 const { requireAuth } = require('../middleware/auth');
 const { recalcProgress, getCourseStructure, isLessonAvailable, isQuizAvailable, completeLessonWithDrip, getModuleEssayStatus, submitEssay, getBlockedCurriculum } = require('../lib/lms');
 const { makeReference } = require('../lib/helpers');
-const { stripe, isConfigured } = require('../lib/stripe');
+const { getStripe } = require('../lib/stripe');
 const { notifyRoles } = require('../lib/notify');
 
 const router = express.Router();
@@ -667,6 +667,7 @@ router.get('/billing', async (req, res, next) => {
       inv.is_overdue = inv.status !== 'paid' && inv.status !== 'void' && inv.due_date && String(inv.due_date).slice(0, 10) < today;
       if (inv.status === 'sent' || inv.status === 'overdue') outstanding += Number(inv.amount);
     }
+    const { isConfigured } = await getStripe();
     res.render('portal/billing', {
       pageTitle: 'Billing & Payments | GDCU',
       portalActive: 'billing',
@@ -694,6 +695,7 @@ router.post('/invoices/:id/pay', async (req, res, next) => {
       return res.redirect('/portal/billing');
     }
 
+    const { stripe, isConfigured } = await getStripe();
     if (isConfigured) {
       const currency = (invoice.currency || 'GBP').toLowerCase();
       const checkout = await stripe.checkout.sessions.create({

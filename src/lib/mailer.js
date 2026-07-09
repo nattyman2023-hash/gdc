@@ -46,7 +46,13 @@ async function sendMail({ to, toName, subject, html, template, relatedType, rela
   const from = emailit.getFromEmail();
   const recipient = toName ? `"${toName}" <${to}>` : to;
 
-  if (emailit.isConfigured()) {
+  // Must await this — it's what actually loads/refreshes the API key from
+  // the DB settings table. Checking emailit.isConfigured() alone here was
+  // the bug: it read a synchronous flag that the async DB lookup hadn't
+  // necessarily set yet, so Emailit was silently skipped and every email
+  // fell straight through to the (also unconfigured) SMTP/log fallback —
+  // no request to Emailit was ever attempted.
+  if (await emailit.ensureConfigured()) {
     try {
       await emailit.sendEmail({ from, to: recipient, subject, html });
       await knex('email_log').insert({ ...base, status: 'sent' });

@@ -3,7 +3,7 @@
 <div class="max-w-4xl mx-auto">
   <div class="mb-6">
     <h1 class="font-headline text-headline-lg text-primary">Settings & Integrations</h1>
-    <p class="text-on-surface-variant mt-1">Manage API keys for email, payments, and video conferencing. Changes take effect after the next server restart.</p>
+    <p class="text-on-surface-variant mt-1">Manage API keys for email, payments, and video conferencing. Emailit and Stripe keys are picked up automatically within about 30 seconds of saving — no restart needed.</p>
   </div>
 
   <%- include('../partials/flash') %>
@@ -58,7 +58,7 @@
       <span class="material-symbols-outlined text-amber-600">warning</span>
       <div>
         <p class="font-bold text-sm text-amber-900">Important</p>
-        <p class="text-xs text-amber-800">Sensitive keys (marked as passwords) are stored in the database. Clear a field to revert to the <code>.env</code> value. A server restart is required for changes to take effect.</p>
+        <p class="text-xs text-amber-800">Sensitive keys (marked as passwords) are stored in the database. Clear a field to revert to the <code>.env</code> value.</p>
       </div>
     </div>
 
@@ -67,6 +67,14 @@
       <button type="submit" class="bg-primary text-on-primary px-6 py-2 rounded font-bold text-sm hover:opacity-90">Save all settings</button>
     </div>
   </form>
+
+  <div class="mt-6 bg-white rounded-lg shadow p-6 flex items-center justify-between gap-4">
+    <div>
+      <p class="font-bold text-primary text-sm">Send a test email</p>
+      <p class="text-xs text-on-surface-variant mt-1">Sends a real email to your own address (<%= currentUserEmail %>) through the exact code path production emails use — the fastest way to confirm Emailit/SMTP is actually working.</p>
+    </div>
+    <form action="/admin/settings/test-email" method="post"><button class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold text-sm whitespace-nowrap">Send test email</button></form>
+  </div>
 </div>
 
 <%- include('../partials/foot', { pageTitle: 'Settings & Integrations | GDCU' }) %>

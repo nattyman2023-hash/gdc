@@ -8,7 +8,7 @@ const rateLimit = require('express-rate-limit');
 
 const knex = require('../config/db');
 const { makeReference } = require('../lib/helpers');
-const { stripe, isConfigured } = require('../lib/stripe');
+const { getStripe } = require('../lib/stripe');
 const { notifyRoles, email } = require('../lib/notify');
 const emailit = require('../lib/emailit');
 
@@ -128,6 +128,7 @@ router.post('/apply', formLimiter, applyValidators, async (req, res, next) => {
     emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['applicant'] }).catch(() => {});
 
     // If Stripe is configured, send the applicant to Checkout for the fee.
+    const { stripe, isConfigured } = await getStripe();
     if (isConfigured) {
       const amount = Number(process.env.APPLICATION_FEE_AMOUNT || 5000);
       const currency = (process.env.APPLICATION_FEE_CURRENCY || 'gbp').toLowerCase();

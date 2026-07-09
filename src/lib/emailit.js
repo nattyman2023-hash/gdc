@@ -1,73 +1,71 @@
 /**
  * Emailit API client (https://emailit.com) — transactional sending + marketing
  * contact sync. Uses native fetch (Node 18+), so no extra dependency is needed.
- * 
- * Configuration priority:
- * 1. process.env.EMAILIT_API_KEY (synchronous, no race condition)
- * 2. Database settings table (async fallback)
+ *
+ * Configuration priority: DB `settings` table, then process.env.
+ *
+ * Config is cached in memory but self-heals: if not yet configured, every
+ * call re-checks the DB (so saving a key in Admin → Settings works without a
+ * restart); once configured, it's re-checked at most every CACHE_TTL_MS so a
+ * key rotation is picked up soon without hitting the DB on every send.
  */
 const API_BASE = 'https://api.emailit.com/v2';
+const CACHE_TTL_MS = 30 * 1000;
 
-// Lazy-load the DB (avoids circular require at module init time).
 let _knex;
 function db() { if (!_knex) _knex = require('../config/db'); return _knex; }
 
-/** Read a setting from DB: DB value first, then .env, otherwise undefined. */
-async function getSetting(key) {
+let cache = { apiKey: null, fromEmail: null, audienceId: null, loadedAt: 0 };
+
+async function refresh() {
+  let apiKey = process.env.EMAILIT_API_KEY || null;
+  let fromEmail = process.env.EMAILIT_FROM_EMAIL || process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
+  let audienceId = process.env.EMAILIT_AUDIENCE_ID || null;
+
   try {
-    const row = await db()('settings').where({ key }).first();
-    if (row && row.value) return row.value;
-  } catch (_) { /* table may not exist yet */ }
-  return process.env[key] || undefined;
+    const rows = await db()('settings').whereIn('key', ['EMAILIT_API_KEY', 'EMAILIT_FROM_EMAIL', 'EMAILIT_AUDIENCE_ID']);
+    const byKey = {};
+    rows.forEach((r) => { if (r.value) byKey[r.key] = r.value; });
+    if (byKey.EMAILIT_API_KEY) apiKey = byKey.EMAILIT_API_KEY;
+    if (byKey.EMAILIT_FROM_EMAIL) fromEmail = byKey.EMAILIT_FROM_EMAIL;
+    if (byKey.EMAILIT_AUDIENCE_ID) audienceId = byKey.EMAILIT_AUDIENCE_ID;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('emailit: could not read settings table, using .env only:', err.message);
+  }
+
+  cache = {
+    apiKey: apiKey && !apiKey.includes('xxx') ? apiKey : null,
+    fromEmail,
+    audienceId,
+    loadedAt: Date.now(),
+  };
+  return cache;
 }
 
-// Synchronous check - uses env var directly (no race condition)
-let apiKey = process.env.EMAILIT_API_KEY || null;
-let fromEmail = process.env.EMAILIT_FROM_EMAIL || process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
-let _isConfigured = Boolean(apiKey && !apiKey.includes('xxx'));
-
-// Promise for async initialization - resolves when config is ready
-let _initPromise = null;
-
-/** Check if Emailit is configured (synchronous, no race condition). */
-function isConfigured() { return _isConfigured; }
-
-/** Get the configured from email address. */
-function getFromEmail() { return fromEmail; }
-
-/** Initialize from DB (async, waits for completion). */
-async function initFromDB() {
-  if (_initPromise) return _initPromise; // Already initializing
-  if (_isConfigured) return Promise.resolve(); // Already configured from env
-  
-  _initPromise = (async () => {
-    const key = await getSetting('EMAILIT_API_KEY');
-    const from = await getSetting('EMAILIT_FROM_EMAIL');
-    if (key && !key.includes('xxx')) {
-      apiKey = key;
-      fromEmail = from || fromEmail;
-      _isConfigured = true;
-    }
-  })().catch(() => {});
-  
-  return _initPromise;
-}
-
-/** Ensure config is loaded before sending (call this before sendEmail). */
+/**
+ * Ensure config is loaded and fresh. MUST be awaited before every send —
+ * this is what actually decides whether Emailit is used.
+ */
 async function ensureConfigured() {
-  if (_isConfigured) return true;
-  await initFromDB();
-  return _isConfigured;
+  const stale = Date.now() - cache.loadedAt > CACHE_TTL_MS;
+  if (!cache.apiKey || stale) await refresh();
+  return Boolean(cache.apiKey);
 }
 
-// Auto-init from DB on module load (fire-and-forget so it doesn't block app startup).
-initFromDB().catch(() => {});
+/** Best-effort synchronous read of the last known state (for display only — not a send gate). */
+function isConfigured() { return Boolean(cache.apiKey); }
+
+function getFromEmail() { return cache.fromEmail; }
+
+// Warm the cache at boot (fire-and-forget) so the first real request is fast.
+refresh().catch(() => {});
 
 async function request(path, body) {
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${cache.apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
@@ -77,17 +75,12 @@ async function request(path, body) {
   return data;
 }
 
-/** Send a transactional email via the Emailit API. Waits for config if needed. */
+/** Send a transactional email via the Emailit API. Loads/refreshes config first. */
 async function sendEmail({ from, to, subject, html, text, replyTo }) {
-  // Ensure config is loaded before sending
-  await ensureConfigured();
-  
-  if (!_isConfigured) {
-    throw new Error('Emailit not configured - no API key found');
-  }
-  
+  const ok = await ensureConfigured();
+  if (!ok) throw new Error('Emailit is not configured — set EMAILIT_API_KEY in Admin → Settings or .env');
   return request('/emails', {
-    from: from || fromEmail,
+    from: from || cache.fromEmail,
     to,
     subject,
     html,
@@ -99,13 +92,13 @@ async function sendEmail({ from, to, subject, html, text, replyTo }) {
 
 /**
  * Upsert a contact into an Emailit audience for email marketing (newsletters,
- * campaigns). Requires EMAILIT_AUDIENCE_ID; a no-op otherwise. Callers should
+ * campaigns). Requires an audience ID; a no-op otherwise. Callers should
  * treat this as fire-and-forget — never let a sync failure break the caller.
  */
 async function upsertContact({ email, firstName, lastName, tags }) {
-  const audienceId = process.env.EMAILIT_AUDIENCE_ID;
-  if (!await ensureConfigured() || !audienceId || !email) return null;
-  return request(`/audiences/${audienceId}/contacts`, {
+  const ok = await ensureConfigured();
+  if (!ok || !cache.audienceId || !email) return null;
+  return request(`/audiences/${cache.audienceId}/contacts`, {
     email,
     first_name: firstName || undefined,
     last_name: lastName || undefined,
@@ -113,4 +106,4 @@ async function upsertContact({ email, firstName, lastName, tags }) {
   });
 }
 
-module.exports = { isConfigured, getFromEmail, ensureConfigured, sendEmail, upsertContact };
+module.exports = { isConfigured, ensureConfigured, getFromEmail, sendEmail, upsertContact };

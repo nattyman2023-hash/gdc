@@ -5,11 +5,12 @@
  */
 const express = require('express');
 const knex = require('../config/db');
-const { stripe, isConfigured } = require('../lib/stripe');
+const { getStripe } = require('../lib/stripe');
 
 const router = express.Router();
 
 router.post('/', async (req, res) => {
+  const { stripe, isConfigured } = await getStripe();
   if (!isConfigured) return res.status(200).json({ received: true, skipped: 'stripe not configured' });
 
   const secret = process.env.STRIPE_WEBHOOK_SECRET;

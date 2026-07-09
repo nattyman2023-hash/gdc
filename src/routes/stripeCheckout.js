@@ -9,7 +9,7 @@
 const express = require('express');
 const knex = require('../config/db');
 const { requireRole } = require('../middleware/auth');
-const { stripe, isConfigured } = require('../lib/stripe');
+const { getStripe } = require('../lib/stripe');
 const emailTemplates = require('../lib/emailTemplates');
 const { sendMail, emailLayout } = require('../lib/mailer');
 
@@ -23,6 +23,7 @@ const router = express.Router();
 router.post('/pay/create-checkout-session', requireRole('student', 'staff', 'admin'), async (req, res, next) => {
   try {
     const { application_id, amount, description } = req.body;
+    const { stripe, isConfigured } = await getStripe();
 
     if (!isConfigured || !stripe) {
       // Stripe not configured — record pending payment and redirect to success

@@ -7,6 +7,8 @@
 const express = require('express');
 const knex = require('../config/db');
 const { requireRole } = require('../middleware/auth');
+const { sendMail } = require('../lib/mailer');
+const emailit = require('../lib/emailit');
 
 const router = express.Router();
 
@@ -52,7 +54,10 @@ async function loadSettings() {
 router.get('/', async (req, res, next) => {
   try {
     const { rows, groups } = await loadSettings();
-    res.render('admin/settings', { pageTitle: 'Settings & Integrations | GDCU', adminActive: 'settings', rows, groups });
+    res.render('admin/settings', {
+      pageTitle: 'Settings & Integrations | GDCU', adminActive: 'settings', rows, groups,
+      currentUserEmail: req.session.user.email,
+    });
   } catch (err) { next(err); }
 });
 
@@ -73,6 +78,31 @@ router.post('/', async (req, res, next) => {
       }
     }
     req.flash('success', 'Settings saved. Restart the server for changes to take effect.');
+    res.redirect('/admin/settings');
+  } catch (err) { next(err); }
+});
+
+// Send a real test email through the exact same code path production emails
+// use, so it actually proves whether Emailit/SMTP is reachable — rather than
+// just checking whether a key string is saved.
+router.post('/test-email', async (req, res, next) => {
+  try {
+    const to = req.session.user.email;
+    const result = await sendMail({
+      to,
+      toName: req.session.user.name,
+      subject: 'GDCU test email',
+      html: '<p>This is a test email from <strong>Admin → Settings</strong> to confirm your email provider is working.</p>',
+    });
+
+    if (result.status === 'sent') {
+      req.flash('success', `Test email sent to ${to} via ${emailit.isConfigured() ? 'Emailit' : 'SMTP'}. Check your inbox.`);
+    } else if (result.status === 'logged') {
+      req.flash('error', 'No email provider is configured — the test email was only logged to the Email Outbox, not sent. Enter an Emailit API key (or SMTP settings) below, save, then try again.');
+    } else {
+      const last = await knex('email_log').where({ to_email: to }).orderBy('id', 'desc').first();
+      req.flash('error', `Test email failed to send${last && last.error ? `: ${last.error}` : '.'}`);
+    }
     res.redirect('/admin/settings');
   } catch (err) { next(err); }
 });
