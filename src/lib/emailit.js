@@ -71,7 +71,14 @@ async function request(path, body) {
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || `Emailit API error (${res.status})`);
+  if (!res.ok) {
+    const detail =
+      data.details ||
+      (Array.isArray(data.validation_errors) ? data.validation_errors.join('; ') : null) ||
+      data.error ||
+      data.message;
+    throw new Error(detail ? `Emailit: ${detail}` : `Emailit API error (${res.status})`);
+  }
   return data;
 }
 
