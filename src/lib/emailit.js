@@ -29,6 +29,9 @@ async function refreshKeys() {
   isConfigured = Boolean(apiKey);
 }
 
+// Auto-init on module load (fire-and-forget so it doesn't block app startup).
+refreshKeys().catch(() => {});
+
 async function request(path, body) {
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
