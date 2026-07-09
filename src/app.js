@@ -166,6 +166,7 @@ app.use('/chat', require('./routes/chat'));
 app.use('/cohorts', require('./routes/cohorts'));
 app.use('/', require('./routes/stripeCheckout'));
 app.use('/admin/faculty', require('./routes/adminFaculty'));
+app.use('/admin/preview', require('./routes/adminPreview'));
 app.use('/', require('./routes/publicPages'));
 
 // ─── 404 ─────────────────────────────────────────────────────
