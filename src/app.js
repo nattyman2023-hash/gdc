@@ -16,6 +16,7 @@ const rateLimit = require('express-rate-limit');
 
 const knex = require('./config/db');
 const locals = require('./middleware/locals');
+const { permissionLocals } = require('./middleware/auth');
 const { formatMoney, formatMinor, formatDate, formatDateTime, truncate, imageFor, videoEmbed } = require('./lib/helpers');
 
 const maintenance = require('./middleware/maintenance');
@@ -114,6 +115,7 @@ app.use(
 );
 app.use(flash());
 app.use(locals);
+app.use(permissionLocals);
 
 // ─── Response cache (production only) ────────────────────────
 // Must come AFTER session/locals — its "skip if logged in" check reads
@@ -152,6 +154,9 @@ app.use('/admin', require('./routes/admin'));
 app.use('/webhooks/stripe', require('./routes/stripeWebhook'));
 app.use('/chat', require('./routes/chat'));
 app.use('/cohorts', require('./routes/cohorts'));
+app.use('/', require('./routes/stripeCheckout'));
+app.use('/admin/faculty', require('./routes/adminFaculty'));
+app.use('/', require('./routes/publicPages'));
 
 // ─── 404 ─────────────────────────────────────────────────────
 app.use((req, res) => {
