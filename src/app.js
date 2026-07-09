@@ -84,7 +84,7 @@ app.use((req, res, next) => {
 
 // ─── Health check (Hostinger monitoring) ─────────────────────
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString(), commit: app.locals.deployedCommit, bootedAt: app.locals.bootedAt });
 });
 
 // ─── Stripe webhook (needs the RAW body, so mount BEFORE json parser) ──
@@ -136,6 +136,16 @@ app.locals.videoEmbed = videoEmbed;
 // Cache-busting token for static assets (changes each boot/deploy) so updated
 // JS/CSS is always picked up instead of a stale 7-day-cached copy.
 app.locals.assetVersion = process.env.ASSET_VERSION || String(Date.now());
+
+// Which commit is actually running — shown on Admin → Settings so "did my
+// deploy actually go out" is never a guessing game again.
+try {
+  // eslint-disable-next-line global-require
+  app.locals.deployedCommit = require('child_process').execSync('git rev-parse --short HEAD').toString().trim();
+} catch (_) {
+  app.locals.deployedCommit = 'unknown';
+}
+app.locals.bootedAt = new Date().toISOString();
 
 // ─── Routes ──────────────────────────────────────────────────
 app.use('/', require('./routes/public'));
