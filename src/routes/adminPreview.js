@@ -46,7 +46,7 @@ router.get('/courses/:slug', async (req, res, next) => {
 
     res.render('portal/course', {
       pageTitle: `[PREVIEW] ${course.title} | GDCU Admin`,
-      layout: false,
+      layout: 'layouts/portal',
       portalActive: 'courses',
       course,
       enrollment: { progress_pct: 0, status: 'active' },
@@ -90,7 +90,7 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
 
     res.render('portal/lesson', {
       pageTitle: `[PREVIEW] ${lesson.title} | GDCU Admin`,
-      layout: false,
+      layout: 'layouts/portal',
       portalActive: 'courses',
       course,
       enrollment: { progress_pct: 0, status: 'active', id: 0 },
