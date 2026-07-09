@@ -43,10 +43,10 @@ async function sendMail({ to, toName, subject, html, template, relatedType, rela
     body: html || null, template: template || null,
     related_type: relatedType || null, related_id: relatedId || null,
   };
-  const from = process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
+  const from = emailit.getFromEmail();
   const recipient = toName ? `"${toName}" <${to}>` : to;
 
-  if (emailit.isConfigured) {
+  if (emailit.isConfigured()) {
     try {
       await emailit.sendEmail({ from, to: recipient, subject, html });
       await knex('email_log').insert({ ...base, status: 'sent' });

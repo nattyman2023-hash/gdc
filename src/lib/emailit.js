@@ -1,7 +1,10 @@
 /**
  * Emailit API client (https://emailit.com) — transactional sending + marketing
  * contact sync. Uses native fetch (Node 18+), so no extra dependency is needed.
- * No-op (isConfigured=false) when EMAILIT_API_KEY is not set.
+ * 
+ * Configuration priority:
+ * 1. process.env.EMAILIT_API_KEY (synchronous, no race condition)
+ * 2. Database settings table (async fallback)
  */
 const API_BASE = 'https://api.emailit.com/v2';
 
@@ -9,7 +12,7 @@ const API_BASE = 'https://api.emailit.com/v2';
 let _knex;
 function db() { if (!_knex) _knex = require('../config/db'); return _knex; }
 
-/** Read a setting: DB value first, then .env, otherwise undefined. */
+/** Read a setting from DB: DB value first, then .env, otherwise undefined. */
 async function getSetting(key) {
   try {
     const row = await db()('settings').where({ key }).first();
@@ -18,19 +21,31 @@ async function getSetting(key) {
   return process.env[key] || undefined;
 }
 
-let apiKey = null;
-let isConfigured = false;
+// Synchronous check - uses env var directly (no race condition)
+let apiKey = process.env.EMAILIT_API_KEY || null;
+let fromEmail = process.env.EMAILIT_FROM_EMAIL || process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
+let _isConfigured = Boolean(apiKey && !apiKey.includes('xxx'));
 
-/** Refresh in-memory keys from the DB (called on first use + after a few minutes). */
-async function refreshKeys() {
-  if (apiKey && isConfigured) return; // already loaded
+/** Check if Emailit is configured (synchronous, no race condition). */
+function isConfigured() { return _isConfigured; }
+
+/** Get the configured from email address. */
+function getFromEmail() { return fromEmail; }
+
+/** Initialize from DB (async, fire-and-forget for fallback). */
+async function initFromDB() {
+  if (_isConfigured) return; // Already configured from env
   const key = await getSetting('EMAILIT_API_KEY');
-  apiKey = key || null;
-  isConfigured = Boolean(apiKey);
+  const from = await getSetting('EMAILIT_FROM_EMAIL');
+  if (key && !key.includes('xxx')) {
+    apiKey = key;
+    fromEmail = from || fromEmail;
+    _isConfigured = true;
+  }
 }
 
-// Auto-init on module load (fire-and-forget so it doesn't block app startup).
-refreshKeys().catch(() => {});
+// Auto-init from DB on module load (fire-and-forget so it doesn't block app startup).
+initFromDB().catch(() => {});
 
 async function request(path, body) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -49,7 +64,7 @@ async function request(path, body) {
 /** Send a transactional email via the Emailit API. */
 async function sendEmail({ from, to, subject, html, text, replyTo }) {
   return request('/emails', {
-    from,
+    from: from || fromEmail,
     to,
     subject,
     html,
@@ -66,7 +81,7 @@ async function sendEmail({ from, to, subject, html, text, replyTo }) {
  */
 async function upsertContact({ email, firstName, lastName, tags }) {
   const audienceId = process.env.EMAILIT_AUDIENCE_ID;
-  if (!isConfigured || !audienceId || !email) return null;
+  if (!isConfigured() || !audienceId || !email) return null;
   return request(`/audiences/${audienceId}/contacts`, {
     email,
     first_name: firstName || undefined,
@@ -75,4 +90,4 @@ async function upsertContact({ email, firstName, lastName, tags }) {
   });
 }
 
-module.exports = { isConfigured, sendEmail, upsertContact };
+module.exports = { isConfigured, getFromEmail, sendEmail, upsertContact };
