@@ -26,22 +26,38 @@ let apiKey = process.env.EMAILIT_API_KEY || null;
 let fromEmail = process.env.EMAILIT_FROM_EMAIL || process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
 let _isConfigured = Boolean(apiKey && !apiKey.includes('xxx'));
 
+// Promise for async initialization - resolves when config is ready
+let _initPromise = null;
+
 /** Check if Emailit is configured (synchronous, no race condition). */
 function isConfigured() { return _isConfigured; }
 
 /** Get the configured from email address. */
 function getFromEmail() { return fromEmail; }
 
-/** Initialize from DB (async, fire-and-forget for fallback). */
+/** Initialize from DB (async, waits for completion). */
 async function initFromDB() {
-  if (_isConfigured) return; // Already configured from env
-  const key = await getSetting('EMAILIT_API_KEY');
-  const from = await getSetting('EMAILIT_FROM_EMAIL');
-  if (key && !key.includes('xxx')) {
-    apiKey = key;
-    fromEmail = from || fromEmail;
-    _isConfigured = true;
-  }
+  if (_initPromise) return _initPromise; // Already initializing
+  if (_isConfigured) return Promise.resolve(); // Already configured from env
+  
+  _initPromise = (async () => {
+    const key = await getSetting('EMAILIT_API_KEY');
+    const from = await getSetting('EMAILIT_FROM_EMAIL');
+    if (key && !key.includes('xxx')) {
+      apiKey = key;
+      fromEmail = from || fromEmail;
+      _isConfigured = true;
+    }
+  })().catch(() => {});
+  
+  return _initPromise;
+}
+
+/** Ensure config is loaded before sending (call this before sendEmail). */
+async function ensureConfigured() {
+  if (_isConfigured) return true;
+  await initFromDB();
+  return _isConfigured;
 }
 
 // Auto-init from DB on module load (fire-and-forget so it doesn't block app startup).
@@ -61,8 +77,15 @@ async function request(path, body) {
   return data;
 }
 
-/** Send a transactional email via the Emailit API. */
+/** Send a transactional email via the Emailit API. Waits for config if needed. */
 async function sendEmail({ from, to, subject, html, text, replyTo }) {
+  // Ensure config is loaded before sending
+  await ensureConfigured();
+  
+  if (!_isConfigured) {
+    throw new Error('Emailit not configured - no API key found');
+  }
+  
   return request('/emails', {
     from: from || fromEmail,
     to,
@@ -81,7 +104,7 @@ async function sendEmail({ from, to, subject, html, text, replyTo }) {
  */
 async function upsertContact({ email, firstName, lastName, tags }) {
   const audienceId = process.env.EMAILIT_AUDIENCE_ID;
-  if (!isConfigured() || !audienceId || !email) return null;
+  if (!await ensureConfigured() || !audienceId || !email) return null;
   return request(`/audiences/${audienceId}/contacts`, {
     email,
     first_name: firstName || undefined,
@@ -90,4 +113,4 @@ async function upsertContact({ email, firstName, lastName, tags }) {
   });
 }
 
-module.exports = { isConfigured, getFromEmail, sendEmail, upsertContact };
+module.exports = { isConfigured, getFromEmail, ensureConfigured, sendEmail, upsertContact };
