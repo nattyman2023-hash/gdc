@@ -234,10 +234,20 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
 
+    // A lesson can live in a dedicated module (modules.course_id) OR in a
+    // shared-module template (modules.shared_module_id → course_shared_modules).
+    const sharedModuleIds = await knex('course_shared_modules')
+      .where({ course_id: course.id })
+      .pluck('shared_module_id');
     const lesson = await knex('lessons')
       .join('modules', 'lessons.module_id', 'modules.id')
       .where('lessons.id', req.params.lessonId)
-      .andWhere('modules.course_id', course.id)
+      .andWhere(function () {
+        this.where('modules.course_id', course.id)
+          .orWhere(function () {
+            this.whereNull('modules.course_id').whereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
+          });
+      })
       .select('lessons.*', 'modules.title as module_title')
       .first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/portal' });
@@ -298,10 +308,18 @@ router.post('/courses/:slug/lessons/:lessonId/complete', async (req, res, next) 
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
 
+    const sharedModuleIds = await knex('course_shared_modules')
+      .where({ course_id: course.id })
+      .pluck('shared_module_id');
     const lesson = await knex('lessons')
       .join('modules', 'lessons.module_id', 'modules.id')
       .where('lessons.id', req.params.lessonId)
-      .andWhere('modules.course_id', course.id)
+      .andWhere(function () {
+        this.where('modules.course_id', course.id)
+          .orWhere(function () {
+            this.whereNull('modules.course_id').whereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
+          });
+      })
       .select('lessons.id')
       .first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/portal' });
