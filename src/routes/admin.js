@@ -3591,34 +3591,6 @@ router.post('/course-library/:id/materials/:materialId/delete', async (req, res,
   } catch (err) { next(err); }
 });
 
-router.post('/courses/:id/modules/attach', async (req, res, next) => {
-  try {
-    const course = await knex('courses').where({ id: req.params.id }).first();
-    if (!course) return res.redirect('/admin/courses');
-    const sharedModuleId = Number(req.body.shared_module_id);
-    const back = `/admin/course-library?for_course=${course.id}`;
-    if (!sharedModuleId) { req.flash('error', 'Choose a module to attach.'); return res.redirect(back); }
-    const existing = await knex('course_shared_modules').where({ course_id: course.id, shared_module_id: sharedModuleId }).first();
-    if (existing) { req.flash('error', 'That module is already attached to this course.'); return res.redirect(back); }
-    const maxSort = await knex('course_shared_modules').where({ course_id: course.id }).max('sort_order as m').first();
-    await knex('course_shared_modules').insert({ course_id: course.id, shared_module_id: sharedModuleId, sort_order: (maxSort.m || 0) + 1 });
-    const sm = await knex('shared_modules').where({ id: sharedModuleId }).first();
-    req.flash('success', `"${sm.title}" attached to ${course.title}.`);
-    res.redirect(req.body.stay === '1' ? back : `/admin/courses/${course.id}/modules`);
-  } catch (err) { next(err); }
-});
-
-// Remove a shared module from just this course — the shared module itself
-// and every other course using it are untouched. Distinct from "Delete
-// module", which destroys the underlying content everywhere it's used.
-router.post('/courses/:id/modules/detach/:sharedModuleId', async (req, res, next) => {
-  try {
-    await knex('course_shared_modules').where({ course_id: req.params.id, shared_module_id: req.params.sharedModuleId }).del();
-    req.flash('success', 'Module removed from this course. It has not been deleted — other courses using it are unaffected.');
-    res.redirect(`/admin/courses/${req.params.id}/modules`);
-  } catch (err) { next(err); }
-});
-
 // Drag-and-drop module reordering (AJAX). A shared-module course orders via
 // course_shared_modules.sort_order (per-course position — modules.sort_order
 // itself is shared across every course using that template and must not be
@@ -4107,17 +4079,17 @@ router.post('/essays/:id/grade', async (req, res, next) => {
 
 // ─── Shared Module Attach / Detach ──────────────────────
 
-/** POST /admin/courses/:courseId/modules/attach — Attach shared module to a course */
-router.post('/courses/:courseId/modules/attach', async (req, res, next) => {
+/** POST /admin/courses/:id/modules/attach — Attach shared module to a course */
+router.post('/courses/:id/modules/attach', async (req, res, next) => {
   try {
-    const course = await knex('courses').where({ id: req.params.courseId }).first();
+    const course = await knex('courses').where({ id: req.params.id }).first();
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
 
     const sharedModuleId = parseInt(req.body.shared_module_id, 10);
     const sm = await knex('shared_modules').where({ id: sharedModuleId }).first();
     if (!sm) {
       req.flash('error', 'Module not found.');
-      return res.redirect(`/admin/courses/${course.id}/modules`);
+      return res.redirect(`/admin/courses/${req.params.id}/modules`);
     }
 
     // Check if already attached
@@ -4205,15 +4177,15 @@ router.post('/courses/:courseId/modules/attach', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-/** POST /admin/courses/:courseId/modules/detach/:smId — Detach shared module from a course */
-router.post('/courses/:courseId/modules/detach/:smId', async (req, res, next) => {
+/** POST /admin/courses/:id/modules/detach/:smId — Detach shared module from a course */
+router.post('/courses/:id/modules/detach/:smId', async (req, res, next) => {
   try {
     await knex('course_shared_modules')
-      .where({ course_id: req.params.courseId, shared_module_id: req.params.smId })
+      .where({ course_id: req.params.id, shared_module_id: req.params.smId })
       .del();
 
     const clonedModule = await knex('modules')
-      .where({ course_id: req.params.courseId, shared_module_id: req.params.smId })
+      .where({ course_id: req.params.id, shared_module_id: req.params.smId })
       .first();
     if (clonedModule) {
       const lessons = await knex('lessons').where({ module_id: clonedModule.id }).pluck('id');
@@ -4226,7 +4198,7 @@ router.post('/courses/:courseId/modules/detach/:smId', async (req, res, next) =>
     }
 
     req.flash('success', 'Module detached from this course.');
-    res.redirect(`/admin/courses/${req.params.courseId}/modules`);
+    res.redirect(`/admin/courses/${req.params.id}/modules`);
   } catch (err) { next(err); }
 });
 
