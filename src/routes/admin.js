@@ -2666,11 +2666,14 @@ router.get('/courses', async (req, res, next) => {
   try {
     const courses = await knex('courses').orderBy('sort_order');
     for (const c of courses) {
-      // Modules can be attached directly (legacy course_id) or via the shared-
-      // module system (course_shared_modules); count whichever this course uses.
+      // Modules can be attached directly (legacy course_id) AND via the shared-
+      // module system (course_shared_modules) at the same time — e.g. a shared
+      // foundational library plus the course's own specialised modules. Count
+      // both (excluding shared-template rows from the legacy count so a course
+      // that owns a shared template isn't double-counted).
       const shared = Number((await knex('course_shared_modules').where({ course_id: c.id }).count({ c: '*' }).first()).c);
-      const legacy = Number((await knex('modules').where({ course_id: c.id }).count({ c: '*' }).first()).c);
-      c.moduleCount = shared > 0 ? shared : legacy;
+      const legacy = Number((await knex('modules').where({ course_id: c.id }).whereNull('shared_module_id').count({ c: '*' }).first()).c);
+      c.moduleCount = shared + legacy;
       c.enrollmentCount = (await knex('enrollments').where({ course_id: c.id }).count({ c: '*' }).first()).c;
       const lvl = COURSE_LEVELS[String(c.category || '').toLowerCase()];
       c.levelKey = lvl ? String(c.category).toLowerCase() : 'other';
@@ -2779,19 +2782,21 @@ router.get('/courses/:id/modules', async (req, res, next) => {
 
     // Modules reach a course one of two ways: legacy dedicated (modules.course_id)
     // or the shared-module system (course_shared_modules junction, pointing at a
-    // template row in `modules` that many courses reuse). Show both, in the
-    // course's assigned order, so shared-system courses aren't shown as empty.
+    // template row in `modules` that many courses reuse) — AND a course can use
+    // BOTH at once (e.g. a shared foundational library plus its own specialised
+    // modules). Show both, shared first in the course's assigned order, then
+    // dedicated ones, so neither is silently hidden.
     const sharedLinks = await knex('course_shared_modules').where({ course_id: course.id }).orderBy('sort_order');
     const sharedModuleIds = sharedLinks.map((l) => l.shared_module_id);
-    let modules;
+    let sharedModules = [];
     if (sharedModuleIds.length) {
       const tmplModules = await knex('modules').whereIn('shared_module_id', sharedModuleIds);
       const bySmId = {};
       tmplModules.forEach((m) => { bySmId[m.shared_module_id] = m; });
-      modules = sharedLinks.map((l) => bySmId[l.shared_module_id]).filter(Boolean).map((m) => ({ ...m, isShared: true }));
-    } else {
-      modules = (await knex('modules').where({ course_id: course.id }).orderBy('sort_order')).map((m) => ({ ...m, isShared: false }));
+      sharedModules = sharedLinks.map((l) => bySmId[l.shared_module_id]).filter(Boolean).map((m) => ({ ...m, isShared: true }));
     }
+    const dedicatedModules = (await knex('modules').where({ course_id: course.id }).whereNull('shared_module_id').orderBy('sort_order')).map((m) => ({ ...m, isShared: false }));
+    const modules = [...sharedModules, ...dedicatedModules];
 
     for (const m of modules) {
       m.lessons = await knex('lessons').where({ module_id: m.id }).orderBy('sort_order');
@@ -2850,7 +2855,17 @@ router.get('/courses/:id/preview', async (req, res, next) => {
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
     const instructor = course.instructor_id ? await knex('users').where({ id: course.instructor_id }).first() : null;
     const program = course.program_id ? await knex('programs').where({ id: course.program_id }).first() : null;
-    const modules = await knex('modules').where({ course_id: course.id }).orderBy('sort_order');
+    // Same shared+dedicated merge as the builder page — a course can have
+    // both a shared module library and its own specialised modules.
+    const sharedModuleIds = await knex('course_shared_modules').where({ course_id: course.id }).orderBy('sort_order').pluck('shared_module_id');
+    let sharedModules = [];
+    if (sharedModuleIds.length > 0) {
+      sharedModules = await knex('modules')
+        .whereIn('shared_module_id', sharedModuleIds)
+        .orderByRaw('(SELECT sort_order FROM course_shared_modules WHERE course_shared_modules.shared_module_id = modules.shared_module_id AND course_shared_modules.course_id = ?) ASC', [course.id]);
+    }
+    const dedicatedModules = await knex('modules').where({ course_id: course.id }).whereNull('shared_module_id').orderBy('sort_order');
+    const modules = [...sharedModules, ...dedicatedModules];
     let lessonCount = 0;
     let totalMinutes = 0;
     for (const m of modules) {
