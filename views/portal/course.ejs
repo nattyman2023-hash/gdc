@@ -1,4 +1,5 @@
 <%- include('../partials/preview-banner') %>
+<% var previewBase = typeof isPreview !== 'undefined' ? '/admin/preview' : '/portal'; %>
 <a href="<%= typeof isPreview !== 'undefined' ? '/admin/courses' : '/portal' %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= typeof isPreview !== 'undefined' ? 'Admin' : 'Dashboard' %></a>
 
 <div class="bg-primary text-on-primary rounded-lg p-6 lg:p-8 mb-6">
@@ -17,7 +18,7 @@
   <div class="lg:col-span-2 space-y-5">
     <% if (typeof continueTo !== 'undefined' && continueTo) { %>
       <% if (continueTo.ready) { %>
-      <a href="/portal/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="block bg-primary text-on-primary rounded-lg p-5 hover:shadow-lg transition-shadow">
+      <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= continueTo.lessonId %>" class="block bg-primary text-on-primary rounded-lg p-5 hover:shadow-lg transition-shadow">
         <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-wider">Continue where you left off</p>
         <p class="font-headline text-headline-sm mt-1">Lesson <%= continueTo.blockNo %> — <%= continueTo.blockTitle %></p>
         <p class="text-on-primary-container text-sm mt-1"><%= continueTo.moduleTitle %></p>
@@ -127,7 +128,7 @@
               <% blk.lessons.forEach(function(l){ %>
               <li>
                 <% if (blk.open || blk.complete) { %>
-                <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 text-sm py-1 hover:text-secondary">
+                <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 text-sm py-1 hover:text-secondary">
                   <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>"><%= l.completed ? 'check_circle' : (l.type==='video' ? 'play_circle' : 'article') %></span>
                   <span class="<%= l.completed ? 'text-on-surface-variant' : 'text-primary' %>"><%= partLabel(l) %></span>
                   <span class="ml-auto text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
@@ -170,7 +171,7 @@
           <ul class="divide-y divide-outline-variant/40">
             <% m.lessons.forEach(function(l){ %>
             <li>
-              <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low">
+              <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low">
                 <span class="material-symbols-outlined <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : (l.type==='video'||l.type==='live' ? 'play_circle' : 'article') %></span>
                 <span class="flex-1 <%= l.completed ? 'text-on-surface-variant line-through' : 'text-primary font-medium' %>"><%= l.title %></span>
                 <span class="text-xs text-on-surface-variant"><%= l.duration_min %> min</span>
@@ -192,7 +193,11 @@
           <p class="text-on-surface-variant text-sm"><%= q.description %> · Pass mark <%= q.pass_mark %>%</p>
           <% if (q.best) { %><p class="text-sm mt-1 <%= q.best.passed ? 'text-secondary' : 'text-error' %>">Best score: <%= q.best.score %>% <%= q.best.passed ? '(passed)' : '(not yet passed)' %></p><% } %>
         </div>
+        <% if (previewBase === '/portal') { %>
         <a href="/portal/quizzes/<%= q.id %>" class="bg-primary text-on-primary px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= q.best ? 'Retake' : 'Start' %></a>
+        <% } else { %>
+        <span title="Quiz preview isn't available yet — check the questions from Quizzes in the admin nav" class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded font-bold shrink-0 cursor-not-allowed"><%= q.best ? 'Retake' : 'Start' %></span>
+        <% } %>
       </div>
       <% }) %>
       <% } %>
@@ -208,8 +213,10 @@
         <% if (finalExam.best) { %><p class="text-sm mt-1 <%= finalExamPassed ? 'text-secondary' : 'text-error' %>">Best score: <%= finalExam.best.score %>% <%= finalExamPassed ? '(passed)' : '(not yet passed)' %></p><% } %>
         <% if (!finalExamUnlocked) { %><p class="text-sm mt-1 text-on-surface-variant"><span class="material-symbols-outlined text-sm align-middle">lock</span> Complete all lessons to unlock</p><% } %>
       </div>
-      <% if (finalExamUnlocked) { %>
+      <% if (finalExamUnlocked && previewBase === '/portal') { %>
         <a href="/portal/quizzes/<%= finalExam.id %>" class="bg-secondary text-on-secondary px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= finalExamPassed ? 'Retake' : 'Start exam' %></a>
+      <% } else if (finalExamUnlocked) { %>
+        <span title="Exam preview isn't available yet — check the questions from Final Exams in the admin nav" class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded font-bold shrink-0 cursor-not-allowed"><%= finalExamPassed ? 'Retake' : 'Start exam' %></span>
       <% } else { %>
         <button disabled class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded font-bold shrink-0 cursor-not-allowed">Locked</button>
       <% } %>
@@ -227,7 +234,11 @@
           <% } else if (sub) { %>· <span class="text-secondary">Submitted</span><% } %>
         </p>
       </div>
+      <% if (previewBase === '/portal') { %>
       <a href="/portal/assignments/<%= asg.id %>" class="<%= sub ? 'border border-outline text-primary' : 'bg-primary text-on-primary' %> px-5 py-2 rounded font-bold shrink-0 hover:opacity-90"><%= sub ? 'View' : 'Submit' %></a>
+      <% } else { %>
+      <span title="Assignment preview isn't available yet" class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded font-bold shrink-0 cursor-not-allowed"><%= sub ? 'View' : 'Submit' %></span>
+      <% } %>
     </div>
     <% }) %>
     <% } %>

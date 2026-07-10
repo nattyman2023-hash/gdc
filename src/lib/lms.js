@@ -58,17 +58,24 @@ async function getCourseStructure(courseId, enrollmentId = null) {
     .orderBy('sort_order')
     .pluck('shared_module_id');
 
-  let modules;
+  let sharedModules = [];
   if (sharedModuleIds.length > 0) {
-    // Course uses shared module system
-    modules = await knex('modules')
+    sharedModules = await knex('modules')
       .whereIn('shared_module_id', sharedModuleIds)
       .andWhere('published', true)
       .orderByRaw('(SELECT sort_order FROM course_shared_modules WHERE course_shared_modules.shared_module_id = modules.shared_module_id AND course_shared_modules.course_id = ?) ASC', [courseId]);
-  } else {
-    // Legacy: direct course_id relationship
-    modules = await knex('modules').where({ course_id: courseId, published: true }).orderBy('sort_order');
   }
+
+  // Dedicated/programme-specific modules attached directly to this course
+  // (a course can have shared modules AND its own specialised modules —
+  // e.g. shared foundational modules plus programme-specific ones layered
+  // on top). These are appended after the shared curriculum.
+  const dedicatedModules = await knex('modules')
+    .where({ course_id: courseId, published: true })
+    .whereNull('shared_module_id')
+    .orderBy('sort_order');
+
+  const modules = [...sharedModules, ...dedicatedModules];
 
   const lessons = await knex('lessons')
     .whereIn('module_id', modules.map((m) => m.id))

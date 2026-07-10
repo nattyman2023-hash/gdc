@@ -1,5 +1,6 @@
 <%- include('../partials/preview-banner') %>
-<a href="<%= typeof isPreview !== 'undefined' ? `/admin/preview/courses/${course.slug}` : `/portal/courses/${course.slug}` %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
+<% var previewBase = typeof isPreview !== 'undefined' ? '/admin/preview' : '/portal'; %>
+<a href="<%= previewBase %>/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= course.title %></a>
 
 <div class="grid lg:grid-cols-4 gap-6">
   <!-- Lesson index -->
@@ -35,7 +36,7 @@
                 <span class="material-symbols-outlined text-sm text-on-surface-variant transition-transform group-open/blk:rotate-180">expand_more</span>
               </summary>
               <% ls.forEach(function(l){ %>
-              <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 pl-10 pr-3 py-1.5 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
+              <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 pl-10 pr-3 py-1.5 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
                 <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : 'radio_button_unchecked' %></span>
                 <span class="flex-1 truncate"><%= partLabel(l) %></span>
               </a>
@@ -44,7 +45,7 @@
             <% }) %>
           <% } else { %>
             <% m.lessons.forEach(function(l){ %>
-            <a href="/portal/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 px-4 py-2 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
+            <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= l.id %>" class="flex items-center gap-2 px-4 py-2 text-sm <%= l.id===lesson.id ? 'bg-surface-container-high text-primary font-bold border-l-4 border-secondary' : 'text-on-surface-variant hover:bg-surface-container-low' %>">
               <span class="material-symbols-outlined text-base <%= l.completed ? 'text-secondary' : 'text-outline' %>" style="<%= l.completed ? "font-variation-settings:'FILL' 1;" : '' %>"><%= l.completed ? 'check_circle' : 'radio_button_unchecked' %></span>
               <span class="flex-1 truncate"><%= l.title %></span>
             </a>
@@ -121,11 +122,11 @@
           </div>
           <div class="flex items-center gap-3">
             <% if (next) { %>
-              <a href="/portal/courses/<%= course.slug %>/lessons/<%= next.id %>" class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all inline-flex items-center gap-1">
+              <a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= next.id %>" class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all inline-flex items-center gap-1">
                 Next lesson <span class="material-symbols-outlined text-base">arrow_forward</span>
               </a>
             <% } else { %>
-              <a href="/portal/courses/<%= course.slug %>" class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all inline-flex items-center gap-1">
+              <a href="<%= previewBase %>/courses/<%= course.slug %>" class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all inline-flex items-center gap-1">
                 Back to course <span class="material-symbols-outlined text-base">arrow_forward</span>
               </a>
             <% } %>
@@ -137,10 +138,13 @@
       <!-- Actions -->
       <div class="flex flex-wrap items-center justify-between gap-4 mt-6 pt-4 border-t border-outline-variant/50">
         <div>
-          <% if (prev) { %><a href="/portal/courses/<%= course.slug %>/lessons/<%= prev.id %>" class="inline-flex items-center gap-1 text-primary font-bold"><span class="material-symbols-outlined">chevron_left</span> Previous</a><% } %>
+          <% if (prev) { %><a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= prev.id %>" class="inline-flex items-center gap-1 text-primary font-bold"><span class="material-symbols-outlined">chevron_left</span> Previous</a><% } %>
         </div>
         <div class="flex items-center gap-3">
-          <% if (!completed) { %>
+          <% if (previewBase !== '/portal') { %>
+            <span class="inline-flex items-center gap-1 text-on-surface-variant text-sm" title="Progress tracking isn't part of preview mode"><span class="material-symbols-outlined text-base">visibility</span> Preview only</span>
+            <% if (next) { %><a href="<%= previewBase %>/courses/<%= course.slug %>/lessons/<%= next.id %>" class="inline-flex items-center gap-1 bg-primary text-on-primary px-4 py-2 rounded-lg font-bold">Next <span class="material-symbols-outlined">chevron_right</span></a><% } %>
+          <% } else if (!completed) { %>
             <form action="/portal/courses/<%= course.slug %>/lessons/<%= lesson.id %>/complete" method="post" id="complete-form">
               <% if (next) { %><input type="hidden" name="next" value="/portal/courses/<%= course.slug %>/lessons/<%= next.id %>" /><% } %>
               <button class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all inline-flex items-center gap-1" id="complete-btn">
@@ -182,6 +186,7 @@
       <% } %>
     </div>
 
+    <% if (previewBase === '/portal') { %>
     <!-- Course Notes (private) -->
     <div id="notes" class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 lg:p-8 mt-6">
       <h2 class="font-headline text-headline-sm text-primary mb-3"><span class="material-symbols-outlined align-middle text-secondary">edit_note</span> My Notes <span class="font-tagline text-label-sm text-on-surface-variant uppercase">(private)</span></h2>
@@ -211,5 +216,10 @@
         <% }) %>
       </div>
     </div>
+    <% } else { %>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 mt-6 text-center text-on-surface-variant text-sm">
+      <span class="material-symbols-outlined align-middle text-base">visibility</span> Notes and discussion are student-only features and aren't shown in preview mode.
+    </div>
+    <% } %>
   </div>
 </div>
