@@ -4105,5 +4105,130 @@ router.post('/essays/:id/grade', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ─── Shared Module Attach / Detach ──────────────────────
+
+/** POST /admin/courses/:courseId/modules/attach — Attach shared module to a course */
+router.post('/courses/:courseId/modules/attach', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.courseId }).first();
+    if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
+
+    const sharedModuleId = parseInt(req.body.shared_module_id, 10);
+    const sm = await knex('shared_modules').where({ id: sharedModuleId }).first();
+    if (!sm) {
+      req.flash('error', 'Module not found.');
+      return res.redirect(`/admin/courses/${course.id}/modules`);
+    }
+
+    // Check if already attached
+    const existing = await knex('course_shared_modules')
+      .where({ course_id: course.id, shared_module_id: sharedModuleId })
+      .first();
+    if (existing) {
+      req.flash('info', `"${sm.title}" is already attached to this course.`);
+    } else {
+      // Clone the template module for this course
+      const templateModule = await knex('modules').where({ shared_module_id: sm.id }).first();
+      let moduleId;
+      if (templateModule) {
+        const { id: _tid, created_at: _c, updated_at: _u, ...modData } = templateModule;
+        [moduleId] = await knex('modules').insert({
+          ...modData,
+          course_id: course.id,
+        });
+
+        // Clone lessons
+        const templateLessons = await knex('lessons').where({ module_id: templateModule.id }).orderBy('sort_order');
+        for (const l of templateLessons) {
+          const { id: _lid, ...lessonData } = l;
+          const [newLessonId] = await knex('lessons').insert({
+            ...lessonData,
+            module_id: moduleId,
+          });
+
+          // Clone materials
+          const materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
+          for (const mat of materials) {
+            const { id: _mid, ...matData } = mat;
+            await knex('lesson_materials').insert({
+              ...matData,
+              lesson_id: newLessonId,
+            });
+          }
+        }
+
+        // Clone quizzes
+        const templateQuizzes = await knex('quizzes').where({ module_id: templateModule.id });
+        for (const q of templateQuizzes) {
+          const { id: _qid, ...quizData } = q;
+          const [newQuizId] = await knex('quizzes').insert({
+            ...quizData,
+            course_id: course.id,
+            module_id: moduleId,
+          });
+
+          const questions = await knex('quiz_questions').where({ quiz_id: q.id }).orderBy('sort_order');
+          for (const qq of questions) {
+            const { id: _qqid, ...qqData } = qq;
+            const [newQqId] = await knex('quiz_questions').insert({
+              ...qqData,
+              quiz_id: newQuizId,
+            });
+            const options = await knex('quiz_options').where({ question_id: qq.id }).orderBy('sort_order');
+            for (const opt of options) {
+              const { id: _oid, ...optData } = opt;
+              await knex('quiz_options').insert({
+                ...optData,
+                question_id: newQqId,
+              });
+            }
+          }
+        }
+      }
+
+      // Create junction
+      const maxSort = await knex('course_shared_modules').where({ course_id: course.id }).max('sort_order as m').first();
+      await knex('course_shared_modules').insert({
+        course_id: course.id,
+        shared_module_id: sharedModuleId,
+        sort_order: (maxSort.m || 0) + 1,
+      });
+
+      req.flash('success', `"${sm.title}" has been attached to this course with all its lessons, materials, and quizzes.`);
+    }
+
+    if (req.body.stay === '1') {
+      res.redirect(`/admin/course-library?for_course=${course.id}`);
+    } else {
+      res.redirect(`/admin/courses/${course.id}/modules`);
+    }
+  } catch (err) { next(err); }
+});
+
+/** POST /admin/courses/:courseId/modules/detach/:smId — Detach shared module from a course */
+router.post('/courses/:courseId/modules/detach/:smId', async (req, res, next) => {
+  try {
+    await knex('course_shared_modules')
+      .where({ course_id: req.params.courseId, shared_module_id: req.params.smId })
+      .del();
+
+    const clonedModule = await knex('modules')
+      .where({ course_id: req.params.courseId, shared_module_id: req.params.smId })
+      .first();
+    if (clonedModule) {
+      const lessons = await knex('lessons').where({ module_id: clonedModule.id }).pluck('id');
+      if (lessons.length) {
+        await knex('lesson_materials').whereIn('lesson_id', lessons).del();
+        await knex('lessons').whereIn('id', lessons).del();
+      }
+      await knex('quizzes').where({ module_id: clonedModule.id }).del();
+      await knex('modules').where({ id: clonedModule.id }).del();
+    }
+
+    req.flash('success', 'Module detached from this course.');
+    res.redirect(`/admin/courses/${req.params.courseId}/modules`);
+  } catch (err) { next(err); }
+});
+
 module.exports = router;
 
