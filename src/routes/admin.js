@@ -4099,44 +4099,28 @@ router.post('/courses/:id/modules/attach', async (req, res, next) => {
     if (existing) {
       req.flash('info', `"${sm.title}" is already attached to this course.`);
     } else {
-      // Clone the template module for this course
+      // Do NOT clone the module/lessons/materials — the entire point of a
+      // shared module is that every course reads the same template `modules`
+      // row (via shared_module_id), so editing it once updates it everywhere.
+      // Cloning here used to create a second `modules` row with the same
+      // shared_module_id, breaking that single-source model and making the
+      // course-modules queries elsewhere (which key template rows by
+      // shared_module_id) pick whichever row happened to come back last.
       const templateModule = await knex('modules').where({ shared_module_id: sm.id }).first();
-      let moduleId;
+
+      // Quizzes ARE meant to be one copy per course (each course's students
+      // need their own quiz_attempts scope), matching how shared-module
+      // quizzes are queried everywhere else — `where({ module_id, course_id })`.
+      // Clone the existing quiz set (from any course already using this
+      // module) onto the new course, still pointing at the one template module.
       if (templateModule) {
-        const { id: _tid, created_at: _c, updated_at: _u, ...modData } = templateModule;
-        [moduleId] = await knex('modules').insert({
-          ...modData,
-          course_id: course.id,
-        });
-
-        // Clone lessons
-        const templateLessons = await knex('lessons').where({ module_id: templateModule.id }).orderBy('sort_order');
-        for (const l of templateLessons) {
-          const { id: _lid, ...lessonData } = l;
-          const [newLessonId] = await knex('lessons').insert({
-            ...lessonData,
-            module_id: moduleId,
-          });
-
-          // Clone materials
-          const materials = await knex('lesson_materials').where({ lesson_id: l.id }).orderBy('sort_order');
-          for (const mat of materials) {
-            const { id: _mid, ...matData } = mat;
-            await knex('lesson_materials').insert({
-              ...matData,
-              lesson_id: newLessonId,
-            });
-          }
-        }
-
-        // Clone quizzes
         const templateQuizzes = await knex('quizzes').where({ module_id: templateModule.id });
         for (const q of templateQuizzes) {
-          const { id: _qid, ...quizData } = q;
+          const { id: _qid, course_id: _cid, ...quizData } = q;
           const [newQuizId] = await knex('quizzes').insert({
             ...quizData,
             course_id: course.id,
-            module_id: moduleId,
+            module_id: templateModule.id,
           });
 
           const questions = await knex('quiz_questions').where({ quiz_id: q.id }).orderBy('sort_order');
@@ -4166,7 +4150,7 @@ router.post('/courses/:id/modules/attach', async (req, res, next) => {
         sort_order: (maxSort.m || 0) + 1,
       });
 
-      req.flash('success', `"${sm.title}" has been attached to this course with all its lessons, materials, and quizzes.`);
+      req.flash('success', `"${sm.title}" has been attached to this course. Its lessons stay shared with every other course using it — edit them once from the Module Library and every course sees the update.`);
     }
 
     if (req.body.stay === '1') {
@@ -4184,6 +4168,27 @@ router.post('/courses/:id/modules/detach/:smId', async (req, res, next) => {
       .where({ course_id: req.params.id, shared_module_id: req.params.smId })
       .del();
 
+    // Clean up this course's own quiz copies for the shared module (lessons/
+    // materials are never per-course for a shared module — nothing to delete
+    // there; the template `modules` row and its content stay untouched for
+    // every other course still using it).
+    const templateModule = await knex('modules')
+      .where({ shared_module_id: req.params.smId })
+      .first();
+    if (templateModule) {
+      const courseQuizzes = await knex('quizzes')
+        .where({ module_id: templateModule.id, course_id: req.params.id })
+        .pluck('id');
+      if (courseQuizzes.length) {
+        const questionIds = await knex('quiz_questions').whereIn('quiz_id', courseQuizzes).pluck('id');
+        if (questionIds.length) await knex('quiz_options').whereIn('question_id', questionIds).del();
+        await knex('quiz_questions').whereIn('quiz_id', courseQuizzes).del();
+        await knex('quizzes').whereIn('id', courseQuizzes).del();
+      }
+    }
+
+    // Legacy cleanup: older attach clones (pre-fix) left behind a per-course
+    // `modules` row sharing this shared_module_id — remove it if present.
     const clonedModule = await knex('modules')
       .where({ course_id: req.params.id, shared_module_id: req.params.smId })
       .first();
