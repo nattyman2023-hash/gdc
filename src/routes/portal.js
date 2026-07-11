@@ -243,10 +243,12 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
       .join('modules', 'lessons.module_id', 'modules.id')
       .where('lessons.id', req.params.lessonId)
       .andWhere(function () {
+        // Dedicated module owned by this course, OR a shared-module template
+        // assigned to this course — a shared template's own modules.course_id
+        // points at whichever course first created it, not the viewer's
+        // course, so that must NOT be part of this match.
         this.where('modules.course_id', course.id)
-          .orWhere(function () {
-            this.whereNull('modules.course_id').whereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
-          });
+          .orWhereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
       })
       .select('lessons.*', 'modules.title as module_title')
       .first();
@@ -316,9 +318,7 @@ router.post('/courses/:slug/lessons/:lessonId/complete', async (req, res, next) 
       .where('lessons.id', req.params.lessonId)
       .andWhere(function () {
         this.where('modules.course_id', course.id)
-          .orWhere(function () {
-            this.whereNull('modules.course_id').whereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
-          });
+          .orWhereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
       })
       .select('lessons.id')
       .first();
