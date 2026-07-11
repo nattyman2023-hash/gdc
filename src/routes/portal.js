@@ -77,6 +77,32 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// ─── My Courses (enrolled only) ──────────────────────────────
+router.get('/courses', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const enrollments = await knex('enrollments')
+      .join('courses', 'enrollments.course_id', 'courses.id')
+      .where('enrollments.user_id', userId)
+      .select(
+        'enrollments.*',
+        'courses.title as course_title',
+        'courses.slug as course_slug',
+        'courses.code as course_code',
+        'courses.icon as course_icon',
+        'courses.featured_image'
+      )
+      .orderBy('enrollments.enrolled_at', 'desc');
+    res.render('portal/my-courses', {
+      pageTitle: 'My Courses | GDCU',
+      portalActive: 'my-courses',
+      enrollments,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ─── Catalog (browse + enroll) ───────────────────────────────
 router.get('/catalog', async (req, res, next) => {
   try {
@@ -209,7 +235,7 @@ router.get('/courses/:slug', async (req, res, next) => {
 
     res.render('portal/course', {
       pageTitle: `${course.title} | GDCU`,
-      portalActive: 'courses',
+      portalActive: 'my-courses',
       course,
       enrollment,
       structure,
@@ -271,7 +297,7 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
     if (!availability.available && !(progress && progress.completed)) {
       return res.render('portal/lesson-locked', {
         pageTitle: 'Lesson Locked | GDCU',
-        portalActive: 'courses',
+        portalActive: 'my-courses',
         course,
         enrollment,
         lesson,
@@ -286,7 +312,7 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
 
     res.render('portal/lesson', {
       pageTitle: `${lesson.title} | GDCU`,
-      portalActive: 'courses',
+      portalActive: 'my-courses',
       course,
       enrollment,
       lesson,
@@ -387,7 +413,7 @@ router.get('/assignments/:id', async (req, res, next) => {
     const enrollment = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
     if (!enrollment) { req.flash('info', 'Enrol in the course to access this assignment.'); return res.redirect('/portal/catalog'); }
     const submission = await knex('assignment_submissions').where({ assignment_id: assignment.id, user_id: userId }).first();
-    res.render('portal/assignment', { pageTitle: `${assignment.title} | GDCU`, portalActive: 'courses', assignment, course, submission });
+    res.render('portal/assignment', { pageTitle: `${assignment.title} | GDCU`, portalActive: 'my-courses', assignment, course, submission });
   } catch (err) { next(err); }
 });
 
@@ -491,7 +517,7 @@ router.get('/quizzes/:id', async (req, res, next) => {
 
     res.render('portal/quiz', {
       pageTitle: `${quiz.title} | GDCU`,
-      portalActive: 'courses',
+      portalActive: 'my-courses',
       quiz,
       course: access.course,
       backUrl: access.backUrl,
@@ -580,7 +606,7 @@ router.get('/attempts/:id', async (req, res, next) => {
 
     res.render('portal/quiz-result', {
       pageTitle: `Quiz Result | GDCU`,
-      portalActive: 'courses',
+      portalActive: 'my-courses',
       attempt,
       quiz,
       course,

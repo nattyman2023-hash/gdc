@@ -9,7 +9,7 @@
   <aside id="portal-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-primary text-on-primary flex-col -translate-x-full lg:translate-x-0 transition-transform flex">
     <div class="px-6 py-5 border-b border-on-primary-fixed-variant/30">
       <a href="/portal" class="flex items-center gap-3">
-        <img src="/img/gdcu-logo.png" alt="GDCU" class="h-10 w-auto object-contain">
+        <img src="/img/gdcu-logo.png" alt="GDCU" class="h-10 w-10 rounded-full object-cover bg-white">
         <span class="font-headline text-headline-sm font-bold leading-tight">GDCU<br/><span class="font-tagline text-label-sm text-secondary-fixed uppercase">Student Portal</span></span>
       </a>
     </div>
@@ -17,11 +17,12 @@
       <% const groups = [
         ['', [['dashboard','/portal','Dashboard','dashboard']]],
         ['Learning', [
-          ['courses','/portal/catalog','Course Catalogue','menu_book'],
+          ['my-courses','/portal/courses','My Courses','school'],
           ['library','/portal/library','Library','local_library'],
           ['performance','/portal/performance','My Performance','analytics'],
           ['exams','/portal/exams','Final Exams','workspace_premium'],
-          ['transcript','/portal/transcript','Transcript','receipt_long']
+          ['transcript','/portal/transcript','Transcript','receipt_long'],
+          ['catalog','/portal/catalog','Course Catalogue','menu_book']
         ]],
         ['Community', [
           ['chat','/portal/chat','Chat','chat'],

@@ -1,0 +1,45 @@
+<div class="flex justify-between items-center mb-6">
+  <div>
+    <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Learning</p>
+    <h1 class="font-headline text-headline-md text-primary">My Courses</h1>
+  </div>
+  <a href="/portal/catalog" class="inline-flex items-center gap-1 text-secondary font-bold text-sm"><span class="material-symbols-outlined text-base">add</span> Browse catalogue</a>
+</div>
+
+<% if (!enrollments.length) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-10 text-center text-on-surface-variant">
+    <span class="material-symbols-outlined text-4xl mb-2 block">menu_book</span>
+    You are not enrolled in any courses yet.
+    <a href="/portal/catalog" class="text-secondary font-bold block mt-2">Browse the catalogue →</a>
+  </div>
+<% } else { %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <% enrollments.forEach(function(e){ %>
+    <a href="/portal/courses/<%= e.course_slug %>" class="group block bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:border-secondary hover:shadow-md transition-all">
+      <div class="relative h-32 bg-primary-container overflow-hidden">
+        <img src="<%= e.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='/img/generated/gdcu-online-learning.webp'" loading="lazy" decoding="async" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+        <span class="absolute bottom-3 left-3 bg-primary text-on-primary text-xs font-bold px-2.5 py-1 rounded inline-flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm"><%= e.course_icon || 'menu_book' %></span>
+          <%= e.course_code || 'Course' %>
+        </span>
+        <% if (e.status==='completed') { %>
+        <span class="absolute top-3 right-3 font-tagline text-[10px] bg-secondary text-on-secondary px-2 py-1 uppercase rounded">✓ Done</span>
+        <% } %>
+      </div>
+      <div class="p-4">
+        <h3 class="font-headline text-headline-sm text-primary group-hover:text-secondary transition-colors"><%= e.course_title %></h3>
+        <div class="mt-3">
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-on-surface-variant">Progress</span>
+            <span class="font-bold text-primary"><%= e.progress_pct %>%</span>
+          </div>
+          <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+            <div class="h-full bg-secondary rounded-full transition-all" style="width: <%= e.progress_pct %>%"></div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <% }) %>
+  </div>
+<% } %>
