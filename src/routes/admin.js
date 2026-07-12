@@ -2729,7 +2729,7 @@ router.get('/courses/create', async (req, res, next) => {
     res.render('admin/course-form', {
       pageTitle: 'Create Course | GDCU',
       adminActive: 'lms-courses',
-      course: { drip_feed_enabled: false, drip_feed_interval_hours: 4, published: true, credits: 15, sort_order: 0 },
+      course: { drip_feed_enabled: true, drip_feed_interval_hours: 4, published: true, credits: 15, sort_order: 0 },
       programs,
       instructors,
       isNew: true,
