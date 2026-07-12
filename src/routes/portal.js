@@ -10,6 +10,7 @@ const { recalcProgress, getCourseStructure, isLessonAvailable, isQuizAvailable, 
 const { makeReference } = require('../lib/helpers');
 const { getStripe } = require('../lib/stripe');
 const { notifyRoles } = require('../lib/notify');
+const programmes = require('../lib/programmes');
 
 const router = express.Router();
 
@@ -109,6 +110,20 @@ router.get('/catalog', async (req, res, next) => {
     const userId = req.session.user.id;
     const courses = await knex('courses').where({ published: true }).orderBy('sort_order');
     const enrolledIds = await knex('enrollments').where({ user_id: userId }).pluck('course_id');
+
+    // Which non-enrolled courses need an application rather than instant
+    // enrolment (bachelor/master/doctor, unless already qualified), and which
+    // enrolled courses are still awaiting a first tuition payment.
+    const applyOnlyIds = [];
+    const unpaidIds = [];
+    for (const c of courses) {
+      if (enrolledIds.includes(c.id)) {
+        if (!(await programmes.hasPaidTuition(userId, c.program_id))) unpaidIds.push(c.id);
+      } else if (programmes.requiresApplication(c.category) && !(await programmes.hasQualifyingLevel(userId, c.category))) {
+        applyOnlyIds.push(c.id);
+      }
+    }
+
     // List/card view toggle, remembered per session (defaults to cards).
     if (req.query.view === 'grid' || req.query.view === 'list') req.session.catalogView = req.query.view;
     const view = req.session.catalogView || 'grid';
@@ -117,6 +132,8 @@ router.get('/catalog', async (req, res, next) => {
       portalActive: 'catalog',
       courses,
       enrolledIds,
+      applyOnlyIds,
+      unpaidIds,
       view,
     });
   } catch (err) {
@@ -132,8 +149,17 @@ router.post('/courses/:id/enroll', async (req, res, next) => {
 
     const existing = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
     if (!existing) {
+      // Bachelor/Master/Doctorate programmes require an application (+ fee +
+      // acceptance) unless this student already holds a qualifying enrollment
+      // at or below that level, proving they've already cleared entry
+      // requirements for it.
+      if (programmes.requiresApplication(course.category) && !(await programmes.hasQualifyingLevel(userId, course.category))) {
+        req.flash('info', 'This programme requires an application. Please apply to enrol.');
+        return res.redirect(`/admissions/apply?program=${course.program_id || ''}`);
+      }
       await knex('enrollments').insert({ user_id: userId, course_id: course.id, status: 'active', progress_pct: 0 });
-      req.flash('success', `You are enrolled in ${course.title}.`);
+      await programmes.ensureTuitionInvoice(course.program_id, userId, null);
+      req.flash('success', `You are enrolled in ${course.title}. Visit Billing & Payments to pay your tuition and unlock your course content.`);
     } else {
       req.flash('info', `You are already enrolled in ${course.title}.`);
     }
@@ -152,6 +178,13 @@ router.get('/courses/:slug', async (req, res, next) => {
     if (!enrollment) {
       req.flash('info', 'Enrol in this course to access its content.');
       return res.redirect('/portal/catalog');
+    }
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      return res.render('portal/payment-required', {
+        pageTitle: `${course.title} | GDCU`,
+        portalActive: 'my-courses',
+        course,
+      });
     }
 
     const structure = await getCourseStructure(course.id, enrollment.id);
@@ -259,6 +292,13 @@ router.get('/courses/:slug/lessons/:lessonId', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      return res.render('portal/payment-required', {
+        pageTitle: `${course.title} | GDCU`,
+        portalActive: 'my-courses',
+        course,
+      });
+    }
 
     // A lesson can live in a dedicated module (modules.course_id) OR in a
     // shared-module template (modules.shared_module_id → course_shared_modules).

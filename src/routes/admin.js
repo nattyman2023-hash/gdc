@@ -19,6 +19,7 @@ const profiles = require('../lib/profiles');
 const { snapshot } = require('../lib/revisions');
 const { getCourseStructure } = require('../lib/lms');
 const emailit = require('../lib/emailit');
+const programmes = require('../lib/programmes');
 
 // Full quiz snapshot (row + nested questions/options) for version history —
 // quizzes are always rebuilt wholesale on save, so a snapshot needs the
@@ -786,6 +787,19 @@ router.post('/applications/:id/status', async (req, res, next) => {
         relatedType: 'application', relatedId: application.id,
       });
       emailit.upsertContact({ email: application.email, firstName: application.first_name, lastName: application.last_name, tags: ['student'] }).catch(() => {});
+
+      // Acceptance is the admissions decision for this programme — enrol the
+      // student into its course(s) now (a programme can have more than one)
+      // and raise their tuition invoice, rather than leaving them to
+      // self-enrol separately with no record of what they were accepted into.
+      if (application.program_id) {
+        const programCourses = await knex('courses').where({ program_id: application.program_id, published: true });
+        for (const c of programCourses) {
+          const already = await knex('enrollments').where({ user_id: user.id, course_id: c.id }).first();
+          if (!already) await knex('enrollments').insert({ user_id: user.id, course_id: c.id, status: 'active', progress_pct: 0 });
+        }
+        await programmes.ensureTuitionInvoice(application.program_id, user.id, req.session.user.id);
+      }
     } else {
       req.flash('success', `Application status updated to "${status}".`);
       if (application.student_user_id) {
