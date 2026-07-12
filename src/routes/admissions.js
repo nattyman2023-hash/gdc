@@ -8,9 +8,8 @@ const rateLimit = require('express-rate-limit');
 
 const knex = require('../config/db');
 const { makeReference } = require('../lib/helpers');
-const { getStripe } = require('../lib/stripe');
-const { notifyRoles, email } = require('../lib/notify');
 const emailit = require('../lib/emailit');
+const { afterApplicationSubmitted } = require('../lib/admissionsFlow');
 
 const router = express.Router();
 
@@ -111,67 +110,12 @@ router.post('/apply', formLimiter, applyValidators, async (req, res, next) => {
     const [appId] = await knex('applications').insert(record);
 
     const applicationId = Array.isArray(appId) ? appId[0] : appId;
-
-    // Notify admissions staff and email the applicant a confirmation.
-    notifyRoles(['admin', 'staff'], {
-      type: 'application', title: 'New application received',
-      body: `${req.body.first_name} ${req.body.last_name} — ${reference}`,
-      link: `/admin/applications/${applicationId}`,
+    return await afterApplicationSubmitted({
+      application: { id: applicationId, reference, first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email },
+      successUrl: `${process.env.APP_URL}/admissions/apply/success`,
+      cancelUrl: `${process.env.APP_URL}/admissions/apply/cancelled`,
+      req, res,
     });
-    email({
-      to: req.body.email, toName: `${req.body.first_name} ${req.body.last_name}`,
-      subject: `We've received your application (${reference})`,
-      heading: 'Thank you for applying to GDCU',
-      bodyHtml: `<p>Dear ${req.body.first_name},</p><p>We have received your application <strong>${reference}</strong> and our admissions team will be in touch shortly.</p><p>You can reply to this email if you have any questions.</p>`,
-      relatedType: 'application', relatedId: applicationId,
-    });
-    emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['applicant'] }).catch(() => {});
-
-    // If Stripe is configured, send the applicant to Checkout for the fee.
-    const { stripe, isConfigured } = await getStripe();
-    if (isConfigured) {
-      const amount = Number(process.env.APPLICATION_FEE_AMOUNT || 5000);
-      const currency = (process.env.APPLICATION_FEE_CURRENCY || 'gbp').toLowerCase();
-
-      const checkout = await stripe.checkout.sessions.create({
-        mode: 'payment',
-        customer_email: req.body.email,
-        line_items: [
-          {
-            price_data: {
-              currency,
-              product_data: {
-                name: 'GDCU Application Fee',
-                description: `Application ${reference}`,
-              },
-              unit_amount: amount,
-            },
-            quantity: 1,
-          },
-        ],
-        metadata: { kind: 'application_fee', application_id: String(applicationId), reference },
-        success_url: `${process.env.APP_URL}/admissions/apply/success?ref=${reference}&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.APP_URL}/admissions/apply/cancelled?ref=${reference}`,
-      });
-
-      await knex('application_fees').insert({
-        application_id: applicationId,
-        amount,
-        currency,
-        provider: 'stripe',
-        stripe_session_id: checkout.id,
-        status: 'pending',
-      });
-
-      return res.redirect(303, checkout.url);
-    }
-
-    // No Stripe configured (e.g. local dev) — record and confirm directly.
-    req.flash(
-      'success',
-      `Your application (ref ${reference}) has been received. Our admissions team will be in touch shortly.`
-    );
-    return res.redirect(`/admissions/apply/success?ref=${reference}`);
   } catch (err) {
     next(err);
   }

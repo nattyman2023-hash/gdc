@@ -1,0 +1,125 @@
+<div class="mb-6">
+  <a href="/portal/catalog" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-3"><span class="material-symbols-outlined text-base">arrow_back</span> Course Catalogue</a>
+  <p class="font-tagline text-label-sm text-secondary uppercase tracking-widest">Application</p>
+  <h1 class="font-headline text-headline-md text-primary">Apply for <%= program.title %></h1>
+  <p class="text-on-surface-variant mt-1">This programme requires an application. A non-refundable application fee is payable on submission. We've filled in what we already know about you — just fill in the rest.</p>
+</div>
+
+<% function v(k){ return (form && form[k] != null && form[k] !== '') ? form[k] : ((profile && profile[k] != null) ? profile[k] : ''); } %>
+<% function err(k){ return errors && errors[k]; } %>
+<% if (Object.keys(errors).length) { %>
+  <div class="bg-error-container border-l-4 border-error text-on-error-container px-4 py-3 mb-6 rounded">Please complete the highlighted fields below.</div>
+<% } %>
+
+<form action="/portal/apply" method="post" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-10 space-y-10 shadow-sm max-w-3xl">
+  <input type="hidden" name="program_id" value="<%= program.id %>" />
+
+  <!-- Already known -->
+  <fieldset class="space-y-3">
+    <legend class="font-headline text-headline-sm text-primary">Applying as</legend>
+    <div class="bg-surface-container-high rounded-lg p-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold"><%= user.first_name.charAt(0) %></div>
+      <div>
+        <p class="font-bold text-primary"><%= user.first_name %> <%= user.last_name %></p>
+        <p class="text-on-surface-variant text-sm"><%= user.email %></p>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- Personal details -->
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+    <legend class="font-headline text-headline-sm text-primary">Personal details</legend>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div>
+        <label class="field-label">Date of birth *</label>
+        <input type="date" name="date_of_birth" value="<%= v('date_of_birth') ? String(v('date_of_birth')).slice(0,10) : '' %>" class="field <%= err('date_of_birth') ? 'field-error' : '' %>" />
+        <% if (err('date_of_birth')) { %><p class="field-msg"><%= err('date_of_birth') %></p><% } %>
+      </div>
+      <div>
+        <label class="field-label">Nationality *</label>
+        <input name="nationality" value="<%= v('nationality') %>" class="field <%= err('nationality') ? 'field-error' : '' %>" />
+        <% if (err('nationality')) { %><p class="field-msg"><%= err('nationality') %></p><% } %>
+      </div>
+      <div>
+        <label class="field-label">Country of residence *</label>
+        <input name="country" value="<%= v('country') %>" class="field <%= err('country') ? 'field-error' : '' %>" />
+        <% if (err('country')) { %><p class="field-msg"><%= err('country') %></p><% } %>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label class="field-label">Phone *</label>
+        <input name="phone" value="<%= v('phone') %>" placeholder="Include country code" class="field <%= err('phone') ? 'field-error' : '' %>" />
+        <% if (err('phone')) { %><p class="field-msg"><%= err('phone') %></p><% } %>
+      </div>
+      <div><label class="field-label">Address</label><input name="address_line1" value="<%= v('address_line1') || v('address') %>" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <!-- Education history -->
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+    <legend class="font-headline text-headline-sm text-primary">Education history</legend>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label class="field-label">Highest qualification *</label>
+        <input name="prev_qualification" value="<%= v('prev_qualification') %>" placeholder="e.g. Bachelor of Arts, Diploma" class="field <%= err('prev_qualification') ? 'field-error' : '' %>" />
+        <% if (err('prev_qualification')) { %><p class="field-msg"><%= err('prev_qualification') %></p><% } %>
+      </div>
+      <div><label class="field-label">Institution</label><input name="prev_institution" value="<%= v('prev_institution') %>" class="field" /></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div><label class="field-label">Grade / classification</label><input name="prev_grade" value="<%= v('prev_grade') %>" class="field" /></div>
+      <div><label class="field-label">Year completed</label><input name="prev_year" value="<%= v('prev_year') %>" placeholder="e.g. 2021" class="field" /></div>
+    </div>
+  </fieldset>
+
+  <!-- Personal statement -->
+  <fieldset class="space-y-3 border-t border-outline-variant/40 pt-8">
+    <legend class="font-headline text-headline-sm text-primary">Personal statement</legend>
+    <p class="text-on-surface-variant text-sm">Tell us about your calling, your goals, and why you want to study <%= program.title %> at GDCU.</p>
+    <textarea name="statement" rows="7" class="field <%= err('statement') ? 'field-error' : '' %>"><%= v('statement') %></textarea>
+    <% if (err('statement')) { %><p class="field-msg"><%= err('statement') %></p><% } %>
+  </fieldset>
+
+  <!-- References -->
+  <fieldset class="space-y-5 border-t border-outline-variant/40 pt-8">
+    <legend class="font-headline text-headline-sm text-primary">References</legend>
+    <p class="text-on-surface-variant text-sm -mt-2">Provide at least one referee (e.g. a pastor, employer or academic tutor).</p>
+    <div class="rounded-lg border border-outline-variant/60 p-4 space-y-4">
+      <p class="font-tagline text-label-sm text-secondary uppercase">Referee 1 (required)</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div>
+          <label class="field-label">Full name *</label>
+          <input name="ref1_name" value="<%= v('ref1_name') %>" class="field <%= err('ref1_name') ? 'field-error' : '' %>" />
+          <% if (err('ref1_name')) { %><p class="field-msg"><%= err('ref1_name') %></p><% } %>
+        </div>
+        <div>
+          <label class="field-label">Email *</label>
+          <input type="email" name="ref1_email" value="<%= v('ref1_email') %>" class="field <%= err('ref1_email') ? 'field-error' : '' %>" />
+          <% if (err('ref1_email')) { %><p class="field-msg"><%= err('ref1_email') %></p><% } %>
+        </div>
+        <div><label class="field-label">Relationship</label><input name="ref1_relationship" value="<%= v('ref1_relationship') %>" placeholder="e.g. Pastor" class="field" /></div>
+      </div>
+    </div>
+    <div class="rounded-lg border border-outline-variant/60 p-4 space-y-4">
+      <p class="font-tagline text-label-sm text-on-surface-variant uppercase">Referee 2 (optional)</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div><label class="field-label">Full name</label><input name="ref2_name" value="<%= v('ref2_name') %>" class="field" /></div>
+        <div><label class="field-label">Email</label><input type="email" name="ref2_email" value="<%= v('ref2_email') %>" class="field" /></div>
+        <div><label class="field-label">Relationship</label><input name="ref2_relationship" value="<%= v('ref2_relationship') %>" class="field" /></div>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- Finishing up -->
+  <fieldset class="space-y-4 border-t border-outline-variant/40 pt-8">
+    <label class="flex items-start gap-3"><input type="checkbox" name="sponsorship_interest" class="mt-1 rounded text-secondary" /> <span class="text-sm text-on-surface-variant">I would like information about scholarships, bursaries or diaspora sponsorship.</span></label>
+    <label class="flex items-start gap-3"><input type="checkbox" name="consent" class="mt-1 rounded text-secondary" /> <span class="text-sm text-on-surface-variant">I confirm the information provided is true and complete, and I agree to the <a href="/terms" target="_blank" class="text-secondary font-bold">terms</a> and <a href="/privacy" target="_blank" class="text-secondary font-bold">privacy policy</a>. *</span></label>
+    <% if (err('consent')) { %><p class="field-msg"><%= err('consent') %></p><% } %>
+  </fieldset>
+
+  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-outline-variant/40 pt-6">
+    <p class="text-on-surface-variant text-sm">Fields marked * are required.</p>
+    <button class="bg-primary text-on-primary px-10 py-3 rounded font-bold hover:opacity-90 active:scale-95 transition-all w-full sm:w-auto">Submit Application</button>
+  </div>
+</form>

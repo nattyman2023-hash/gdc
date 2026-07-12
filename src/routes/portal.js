@@ -11,6 +11,8 @@ const { makeReference } = require('../lib/helpers');
 const { getStripe } = require('../lib/stripe');
 const { notifyRoles } = require('../lib/notify');
 const programmes = require('../lib/programmes');
+const profiles = require('../lib/profiles');
+const { afterApplicationSubmitted } = require('../lib/admissionsFlow');
 
 const router = express.Router();
 
@@ -155,7 +157,7 @@ router.post('/courses/:id/enroll', async (req, res, next) => {
       // requirements for it.
       if (programmes.requiresApplication(course.category) && !(await programmes.hasQualifyingLevel(userId, course.category))) {
         req.flash('info', 'This programme requires an application. Please apply to enrol.');
-        return res.redirect(`/admissions/apply?program=${course.program_id || ''}`);
+        return res.redirect(`/portal/apply?program=${course.program_id || ''}`);
       }
       await knex('enrollments').insert({ user_id: userId, course_id: course.id, status: 'active', progress_pct: 0 });
       await programmes.ensureTuitionInvoice(course.program_id, userId, null);
@@ -164,6 +166,126 @@ router.post('/courses/:id/enroll', async (req, res, next) => {
       req.flash('info', `You are already enrolled in ${course.title}.`);
     }
     res.redirect(`/portal/courses/${course.slug}`);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─── In-portal application (Bachelor/Master/Doctorate self-registration) ──
+// Same applications table and admissions review pipeline as the public Apply
+// Now form, just entered from inside the portal by an already-logged-in
+// student — so name/email are never re-asked, and known profile details are
+// pre-filled (still editable) rather than starting from a blank form.
+const applyValidators = [
+  body('phone').trim().notEmpty().withMessage('A contact phone number is required.'),
+  body('date_of_birth').trim().notEmpty().withMessage('Date of birth is required.'),
+  body('country').trim().notEmpty().withMessage('Country of residence is required.'),
+  body('nationality').trim().notEmpty().withMessage('Nationality is required.'),
+  body('prev_qualification').trim().notEmpty().withMessage('Please tell us your highest qualification.'),
+  body('statement').trim().isLength({ min: 50 }).withMessage('Please write a personal statement (at least 50 characters).'),
+  body('ref1_name').trim().notEmpty().withMessage('At least one referee is required.'),
+  body('ref1_email').trim().isEmail().withMessage('A valid referee email is required.'),
+  body('consent').notEmpty().withMessage('Please confirm the declaration to proceed.'),
+];
+// Fields copied straight from the form into the applications row (mirrors
+// admissions.js's APPLICATION_FIELDS, minus what's handled specially below).
+const APPLY_EXTRA_FIELDS = [
+  'nationality', 'title', 'middle_name', 'preferred_name', 'gender',
+  'address_line1', 'address_line2', 'city', 'region', 'postal_code',
+  'prev_institution', 'prev_grade', 'prev_year', 'english_proficiency',
+  'employment_status', 'occupation', 'employer', 'church_involvement',
+  'ref1_name', 'ref1_email', 'ref1_relationship', 'ref2_name', 'ref2_email', 'ref2_relationship',
+  'how_heard',
+];
+
+router.get('/apply', async (req, res, next) => {
+  try {
+    const programId = Number(req.query.program) || null;
+    const program = programId ? await knex('programs').where({ id: programId, published: true }).first() : null;
+    if (!program) {
+      req.flash('error', 'Please choose a programme to apply for from the catalogue.');
+      return res.redirect('/portal/catalog');
+    }
+    const userId = req.session.user.id;
+    const existingApplication = await knex('applications')
+      .where({ student_user_id: userId, program_id: programId })
+      .whereNotIn('status', ['declined', 'withdrawn'])
+      .first();
+    if (existingApplication) {
+      req.flash('info', `You already have an application for this programme (status: ${existingApplication.status.replace('_', ' ')}).`);
+      return res.redirect('/portal/catalog');
+    }
+    const user = await knex('users').where({ id: userId }).first();
+    const profile = await profiles.getProfile('student', userId);
+    res.render('portal/apply', {
+      pageTitle: `Apply — ${program.title} | GDCU`,
+      portalActive: 'catalog',
+      program,
+      user,
+      profile,
+      form: {},
+      errors: {},
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/apply', applyValidators, async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const programId = Number(req.body.program_id) || null;
+    const program = programId ? await knex('programs').where({ id: programId, published: true }).first() : null;
+    const user = await knex('users').where({ id: userId }).first();
+    if (!program || !user) {
+      req.flash('error', 'Something went wrong — please try again from the catalogue.');
+      return res.redirect('/portal/catalog');
+    }
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      const errors = {};
+      for (const e of result.array()) errors[e.path] = e.msg;
+      const profile = await profiles.getProfile('student', userId);
+      return res.status(422).render('portal/apply', {
+        pageTitle: `Apply — ${program.title} | GDCU`,
+        portalActive: 'catalog',
+        program,
+        user,
+        profile,
+        form: req.body,
+        errors,
+      });
+    }
+
+    const reference = makeReference();
+    const record = {
+      reference,
+      program_id: program.id,
+      student_user_id: userId,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      phone: req.body.phone,
+      country: req.body.country,
+      date_of_birth: req.body.date_of_birth || null,
+      prior_education: req.body.prev_qualification || null,
+      statement: req.body.statement || null,
+      sponsorship_interest: req.body.sponsorship_interest === 'on',
+      status: 'new',
+      payment_status: 'unpaid',
+    };
+    for (const f of APPLY_EXTRA_FIELDS) record[f] = (req.body[f] || '').trim() || null;
+    const [appId] = await knex('applications').insert(record);
+    const applicationId = Array.isArray(appId) ? appId[0] : appId;
+
+    return await afterApplicationSubmitted({
+      application: { id: applicationId, reference, first_name: user.first_name, last_name: user.last_name, email: user.email },
+      successUrl: `${process.env.APP_URL || ''}/portal/catalog`,
+      cancelUrl: `${process.env.APP_URL || ''}/portal/catalog`,
+      req, res,
+      tags: ['applicant', 'student'],
+    });
   } catch (err) {
     next(err);
   }

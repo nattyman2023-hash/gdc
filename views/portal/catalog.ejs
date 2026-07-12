@@ -29,7 +29,7 @@
         <% } else if (enrolled) { %>
           <a href="/portal/courses/<%= c.slug %>" class="text-center bg-surface-container-high text-primary px-5 py-2 rounded font-bold border border-outline-variant hover:border-secondary">Go to course</a>
         <% } else if (applyOnly) { %>
-          <a href="/admissions/apply?program=<%= c.program_id || '' %>" class="text-center bg-secondary text-on-secondary px-5 py-2 rounded font-bold hover:opacity-90">Apply to enrol</a>
+          <a href="/portal/apply?program=<%= c.program_id || '' %>" class="text-center bg-secondary text-on-secondary px-5 py-2 rounded font-bold hover:opacity-90">Apply to enrol</a>
         <% } else { %>
           <form action="/portal/courses/<%= c.id %>/enroll" method="post"><button class="w-full bg-primary text-on-primary px-5 py-2 rounded font-bold hover:opacity-90">Enrol</button></form>
         <% } %>
@@ -58,7 +58,7 @@
     <% if (enrolled) { %>
       <a href="/portal/courses/<%= c.slug %>" class="group block"><%- inner %></a>
     <% } else if (applyOnly) { %>
-      <a href="/admissions/apply?program=<%= c.program_id || '' %>" class="group block"><%- inner %></a>
+      <a href="/portal/apply?program=<%= c.program_id || '' %>" class="group block"><%- inner %></a>
     <% } else { %>
       <form action="/portal/courses/<%= c.id %>/enroll" method="post"><button type="submit" class="group block w-full text-left"><%- inner %></button></form>
     <% } %>

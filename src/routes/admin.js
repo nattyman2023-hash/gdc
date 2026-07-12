@@ -754,39 +754,50 @@ router.post('/applications/:id/status', async (req, res, next) => {
 
     const update = { status, updated_at: knex.fn.now() };
 
-    if (status === 'accepted' && !application.student_user_id) {
-      let user = await knex('users').where({ email: application.email }).first();
+    if (status === 'accepted') {
+      // The application may already be linked to a student account — e.g.
+      // it was submitted from inside the portal by an already-logged-in
+      // student applying to a second programme. Only create/find + welcome
+      // a NEW account when it isn't linked yet; either way, enrolment +
+      // invoicing below always runs on acceptance.
+      let user = application.student_user_id ? await knex('users').where({ id: application.student_user_id }).first() : null;
       let tempPassword = null;
       if (!user) {
-        tempPassword = Math.random().toString(36).slice(2, 10) + 'A1!';
-        const hash = await bcrypt.hash(tempPassword, 12);
-        const [uidRaw] = await knex('users').insert({
-          first_name: application.first_name,
-          last_name: application.last_name,
-          email: application.email,
-          password_hash: hash,
-          role: 'student',
-          status: 'active',
+        user = await knex('users').where({ email: application.email }).first();
+        if (!user) {
+          tempPassword = Math.random().toString(36).slice(2, 10) + 'A1!';
+          const hash = await bcrypt.hash(tempPassword, 12);
+          const [uidRaw] = await knex('users').insert({
+            first_name: application.first_name,
+            last_name: application.last_name,
+            email: application.email,
+            password_hash: hash,
+            role: 'student',
+            status: 'active',
+          });
+          const uid = Array.isArray(uidRaw) ? uidRaw[0] : uidRaw;
+          user = { id: uid };
+        }
+        update.student_user_id = user.id;
+        if (tempPassword) {
+          req.flash('success', `Application accepted. Student account created for ${application.email}. Temporary password: ${tempPassword}`);
+        } else {
+          req.flash('success', `Application accepted and linked to existing account for ${application.email}.`);
+        }
+        // Welcome the new/linked student in-app and by email.
+        notifyUser(user.id, { type: 'success', title: 'Welcome to GDCU!', body: 'Your application was accepted. Explore your student portal.', link: '/portal' });
+        email({
+          to: application.email, toName: `${application.first_name} ${application.last_name}`,
+          subject: 'Congratulations — your GDCU application is accepted',
+          heading: 'Welcome to Global Diaspora Christian University',
+          bodyHtml: `<p>Dear ${application.first_name},</p><p>We are delighted to offer you a place. Your student account is ready — sign in to your portal to begin.</p>${tempPassword ? `<p>Your temporary password is <strong>${tempPassword}</strong> (please change it after signing in).</p>` : ''}<p><a href="${process.env.APP_URL || ''}/login" style="color:#b8861b">Sign in to your portal</a></p>`,
+          relatedType: 'application', relatedId: application.id,
         });
-        const uid = Array.isArray(uidRaw) ? uidRaw[0] : uidRaw;
-        user = { id: uid };
-      }
-      update.student_user_id = user.id;
-      if (tempPassword) {
-        req.flash('success', `Application accepted. Student account created for ${application.email}. Temporary password: ${tempPassword}`);
+        emailit.upsertContact({ email: application.email, firstName: application.first_name, lastName: application.last_name, tags: ['student'] }).catch(() => {});
       } else {
-        req.flash('success', `Application accepted and linked to existing account for ${application.email}.`);
+        req.flash('success', `Application accepted for ${application.email}.`);
+        notifyUser(user.id, { type: 'success', title: 'Application accepted!', body: 'Your application was accepted — you now have access to your new course.', link: '/portal/courses' });
       }
-      // Welcome the new/linked student in-app and by email.
-      notifyUser(user.id, { type: 'success', title: 'Welcome to GDCU!', body: 'Your application was accepted. Explore your student portal.', link: '/portal' });
-      email({
-        to: application.email, toName: `${application.first_name} ${application.last_name}`,
-        subject: 'Congratulations — your GDCU application is accepted',
-        heading: 'Welcome to Global Diaspora Christian University',
-        bodyHtml: `<p>Dear ${application.first_name},</p><p>We are delighted to offer you a place. Your student account is ready — sign in to your portal to begin.</p>${tempPassword ? `<p>Your temporary password is <strong>${tempPassword}</strong> (please change it after signing in).</p>` : ''}<p><a href="${process.env.APP_URL || ''}/login" style="color:#b8861b">Sign in to your portal</a></p>`,
-        relatedType: 'application', relatedId: application.id,
-      });
-      emailit.upsertContact({ email: application.email, firstName: application.first_name, lastName: application.last_name, tags: ['student'] }).catch(() => {});
 
       // Acceptance is the admissions decision for this programme — enrol the
       // student into its course(s) now (a programme can have more than one)
