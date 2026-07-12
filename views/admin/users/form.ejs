@@ -45,6 +45,16 @@
       <input name="password" required minlength="8" class="w-full px-3 py-2 rounded border <%= errors.password ? 'border-error' : 'border-outline' %> outline-none focus:border-primary" />
       <% if (errors.password) { %><p class="text-error text-sm mt-1"><%= errors.password %></p><% } else { %><p class="text-xs text-on-surface-variant mt-1">At least 8 characters. Share it securely; the user should change it after first login.</p><% } %>
     </div>
+    <% if (typeof courses !== 'undefined' && courses.length) { %>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Enrol in a course (students only, optional)</label>
+      <select name="enroll_course_id" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary">
+        <option value="">— None —</option>
+        <% courses.forEach(function(c){ %><option value="<%= c.id %>"><%= c.title %></option><% }) %>
+      </select>
+      <p class="text-xs text-on-surface-variant mt-1">If chosen, this new student is enrolled immediately and a tuition invoice is raised on their account.</p>
+    </div>
+    <% } %>
     <% } %>
     <div class="flex gap-3 pt-2 border-t border-outline-variant/40">
       <button class="bg-primary text-on-primary px-6 py-2 rounded font-bold"><%= isNew ? 'Create user' : 'Save changes' %></button>

@@ -13,6 +13,7 @@ const attendance = require('../lib/attendance');
 const profiles = require('../lib/profiles');
 const { email: sendEmail } = require('../lib/notify');
 const emailit = require('../lib/emailit');
+const programmes = require('../lib/programmes');
 
 const router = express.Router();
 
@@ -100,17 +101,21 @@ router.get('/:id/drawer', async (req, res, next) => {
 });
 
 // New form (optionally pre-select a role via ?role=faculty)
-router.get('/new', (req, res) => {
-  const allowed = assignableRoles(req.session.user);
-  const role = allowed.includes(req.query.role) ? req.query.role : 'faculty';
-  res.render('admin/users/form', {
-    pageTitle: 'New User | GDCU CRM',
-    adminActive: 'users',
-    user: { role, status: 'active' },
-    roles: allowed,
-    isNew: true,
-    errors: {},
-  });
+router.get('/new', async (req, res, next) => {
+  try {
+    const allowed = assignableRoles(req.session.user);
+    const role = allowed.includes(req.query.role) ? req.query.role : 'faculty';
+    const courses = await knex('courses').where({ published: true }).orderBy('title').select('id', 'title');
+    res.render('admin/users/form', {
+      pageTitle: 'New User | GDCU CRM',
+      adminActive: 'users',
+      user: { role, status: 'active' },
+      roles: allowed,
+      courses,
+      isNew: true,
+      errors: {},
+    });
+  } catch (err) { next(err); }
 });
 
 // Create
@@ -145,7 +150,7 @@ router.post(
       if (existing) return renderForm({ email: 'A user with that email already exists.' });
 
       const hash = await bcrypt.hash(req.body.password, 12);
-      await knex('users').insert({
+      const [newIdRaw] = await knex('users').insert({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
@@ -153,6 +158,7 @@ router.post(
         role: req.body.role,
         status: req.body.status === 'inactive' ? 'inactive' : 'active',
       });
+      const newId = Array.isArray(newIdRaw) ? newIdRaw[0] : newIdRaw;
       sendEmail({
         to: req.body.email,
         toName: `${req.body.first_name} ${req.body.last_name}`,
@@ -160,10 +166,22 @@ router.post(
         heading: 'Welcome to GDCU',
         bodyHtml: `<p>Dear ${req.body.first_name},</p><p>An account has been created for you at Global Diaspora Christian University as <strong>${req.body.role}</strong>.</p><p>Your temporary password is <strong>${req.body.password}</strong> (please change it after signing in).</p><p><a href="${process.env.APP_URL || ''}/login" style="color:#b8861b">Sign in to your account</a></p>`,
       });
+      let flashMsg = `${req.body.role} account created for ${req.body.email}.`;
       if (req.body.role === 'student') {
         emailit.upsertContact({ email: req.body.email, firstName: req.body.first_name, lastName: req.body.last_name, tags: ['student'] }).catch(() => {});
+        // Optional one-step enrolment — an admin's informed decision, so this
+        // bypasses the application requirement students self-enrolling would
+        // otherwise hit for Bachelor/Master/Doctorate courses.
+        if (req.body.enroll_course_id) {
+          const course = await knex('courses').where({ id: req.body.enroll_course_id, published: true }).first();
+          if (course) {
+            await knex('enrollments').insert({ user_id: newId, course_id: course.id, status: 'active', progress_pct: 0 });
+            await programmes.ensureTuitionInvoice(course.program_id, newId, req.session.user.id);
+            flashMsg += ` Enrolled in ${course.title}, with a tuition invoice raised.`;
+          }
+        }
       }
-      req.flash('success', `${req.body.role} account created for ${req.body.email}.`);
+      req.flash('success', flashMsg);
       res.redirect('/admin/users');
     } catch (err) { next(err); }
   }

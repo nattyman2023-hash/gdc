@@ -764,6 +764,26 @@ router.get('/billing', async (req, res, next) => {
   }
 });
 
+// View a single invoice (before deciding to pay)
+router.get('/invoices/:id', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const invoice = await knex('invoices').where({ id: req.params.id, user_id: userId }).first();
+    if (!invoice) return res.status(404).render('errors/404', { pageTitle: 'Invoice not found', layout: 'layouts/portal' });
+    const today = new Date().toISOString().slice(0, 10);
+    invoice.is_overdue = invoice.status !== 'paid' && invoice.status !== 'void' && invoice.due_date && String(invoice.due_date).slice(0, 10) < today;
+    const program = invoice.program_id ? await knex('programs').where({ id: invoice.program_id }).first() : null;
+    res.render('portal/invoice-view', {
+      pageTitle: `Invoice ${invoice.reference} | GDCU`,
+      portalActive: 'billing',
+      invoice,
+      program,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Pay a single invoice
 router.post('/invoices/:id/pay', async (req, res, next) => {
   try {

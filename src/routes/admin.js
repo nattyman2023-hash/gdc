@@ -913,8 +913,9 @@ router.post('/students/:id/enroll', async (req, res, next) => {
     const existing = await knex('enrollments').where({ user_id: student.id, course_id: course.id }).first();
     if (existing) { req.flash('info', 'Already enrolled in that course.'); return res.redirect(`/admin/students/${student.id}`); }
     await knex('enrollments').insert({ user_id: student.id, course_id: course.id, status: 'active', progress_pct: 0 });
+    await programmes.ensureTuitionInvoice(course.program_id, student.id, req.session.user.id);
     notifyUser(student.id, { type: 'success', title: 'Enrolled in a new course', body: course.title, link: `/portal/courses/${course.slug}` });
-    req.flash('success', `Enrolled in ${course.title}.`);
+    req.flash('success', `Enrolled in ${course.title}. A tuition invoice has been raised on their account if one didn't already exist.`);
     res.redirect(`/admin/students/${student.id}`);
   } catch (err) { next(err); }
 });

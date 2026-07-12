@@ -30,18 +30,19 @@
       <% if (!invoices.length) { %><tr><td colspan="6" class="px-4 py-6 text-center text-on-surface-variant">You have no invoices.</td></tr><% } %>
       <% invoices.forEach(function(i){ %>
       <tr class="border-t border-outline-variant/30">
-        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><%= i.reference %></td>
+        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant"><a href="/portal/invoices/<%= i.id %>" class="hover:text-secondary hover:underline"><%= i.reference %></a></td>
         <td class="px-4 py-3 text-primary"><%= i.description %></td>
         <td class="px-4 py-3 hidden sm:table-cell text-on-surface-variant <%= i.is_overdue ? 'text-error font-bold' : '' %>"><%= formatDate(i.due_date) %><% if (i.is_overdue) { %> (overdue)<% } %></td>
         <td class="px-4 py-3 font-bold text-primary"><%= formatMoney(i.amount, i.currency) %></td>
         <td class="px-4 py-3"><%- include('../admin/_badge', { status: i.is_overdue ? 'overdue' : i.status }) %></td>
-        <td class="px-4 py-3 text-right">
+        <td class="px-4 py-3 text-right whitespace-nowrap">
+          <a href="/portal/invoices/<%= i.id %>" class="text-primary font-bold text-xs mr-2">View</a>
           <% if (i.status === 'paid') { %>
             <span class="text-secondary font-bold text-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">check_circle</span> Paid</span>
           <% } else if (i.status === 'void') { %>
             <span class="text-on-surface-variant text-xs">—</span>
           <% } else { %>
-            <form action="/portal/invoices/<%= i.id %>/pay" method="post"><button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-xs hover:opacity-90">Pay now</button></form>
+            <form action="/portal/invoices/<%= i.id %>/pay" method="post" class="inline"><button class="bg-secondary text-on-secondary px-4 py-1.5 rounded font-bold text-xs hover:opacity-90">Pay now</button></form>
           <% } %>
         </td>
       </tr>
