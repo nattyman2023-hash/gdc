@@ -1,0 +1,76 @@
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <p class="font-tagline text-label-sm text-on-surface-variant uppercase tracking-widest">Course forums</p>
+    <h1 class="font-headline text-headline-md text-primary"><%= course.title %></h1>
+  </div>
+  <a href="/admin/courses/<%= course.id %>/modules" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm"><span class="material-symbols-outlined text-base">arrow_back</span> Back to course</a>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 mb-6">
+  <h2 class="font-headline text-headline-sm text-primary mb-4">Add a forum</h2>
+  <form action="/admin/courses/<%= course.id %>/forums" method="post" class="grid md:grid-cols-12 gap-4 items-end">
+    <div class="md:col-span-4">
+      <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Title</label>
+      <input type="text" name="title" required maxlength="120" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="e.g. General Discussion">
+    </div>
+    <div class="md:col-span-5">
+      <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Description</label>
+      <input type="text" name="description" maxlength="255" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Optional short description">
+    </div>
+    <div class="md:col-span-2 flex items-center gap-2">
+      <input type="checkbox" name="published" id="published" checked class="w-4 h-4 accent-primary">
+      <label for="published" class="text-sm text-on-surface-variant">Published</label>
+    </div>
+    <div class="md:col-span-1">
+      <button class="w-full bg-primary text-on-primary px-4 py-2 rounded font-bold hover:opacity-90">Add</button>
+    </div>
+  </form>
+</div>
+
+<% if (forums.length === 0) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center">
+    <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3">forum</span>
+    <p class="text-on-surface-variant">No forums yet. Add one above so students can start discussing.</p>
+  </div>
+<% } else { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="bg-surface-container-high border-b border-outline-variant text-xs font-tagline uppercase text-on-surface-variant tracking-wider">
+        <tr>
+          <th class="px-5 py-3">Forum</th>
+          <th class="px-5 py-3 text-center">Topics</th>
+          <th class="px-5 py-3 text-center">Order</th>
+          <th class="px-5 py-3 text-center">Status</th>
+          <th class="px-5 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-outline-variant/40">
+        <% forums.forEach(function(f){ %>
+          <tr>
+            <form action="/admin/courses/<%= course.id %>/forums/<%= f.id %>" method="post" class="contents">
+              <td class="px-5 py-4">
+                <input type="text" name="title" value="<%= f.title %>" required maxlength="120" class="w-full px-2 py-1 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm">
+                <input type="text" name="description" value="<%= f.description || '' %>" maxlength="255" class="w-full mt-2 px-2 py-1 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary text-xs text-on-surface-variant" placeholder="Description">
+              </td>
+              <td class="px-5 py-4 text-center text-sm text-on-surface-variant"><%= f.topicCount %></td>
+              <td class="px-5 py-4 text-center">
+                <input type="number" name="sort_order" value="<%= f.sort_order %>" class="w-16 px-2 py-1 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm text-center">
+              </td>
+              <td class="px-5 py-4 text-center">
+                <input type="checkbox" name="published" <%= f.published ? 'checked' : '' %> class="w-4 h-4 accent-primary">
+              </td>
+              <td class="px-5 py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <button class="bg-secondary text-on-secondary px-3 py-1.5 rounded text-sm font-bold hover:opacity-90">Save</button>
+                  <form action="/admin/courses/<%= course.id %>/forums/<%= f.id %>/delete" method="post" class="inline" onsubmit="return confirm('Delete this forum and all its topics?');">
+                    <button class="text-error px-2 py-1.5 rounded text-sm hover:bg-error/10">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </form>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

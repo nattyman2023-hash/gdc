@@ -1,0 +1,83 @@
+<%- include('../partials/preview-banner') %>
+<a href="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> <%= forum.title %></a>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 lg:p-6 mb-6">
+  <div class="flex items-start justify-between gap-4 mb-4">
+    <div class="flex-1">
+      <div class="flex items-center gap-2 mb-2">
+        <% if (topic.pinned) { %><span class="inline-flex items-center gap-1 text-xs bg-secondary/10 text-secondary px-2 py-0.5 rounded font-bold"><span class="material-symbols-outlined text-sm">push_pin</span> Pinned</span><% } %>
+        <% if (topic.locked) { %><span class="inline-flex items-center gap-1 text-xs bg-on-surface-variant/10 text-on-surface-variant px-2 py-0.5 rounded font-bold"><span class="material-symbols-outlined text-sm">lock</span> Locked</span><% } %>
+      </div>
+      <h1 class="font-headline text-headline-md text-primary"><%= topic.title %></h1>
+      <p class="text-sm text-on-surface-variant mt-1">
+        Started by <span class="font-medium text-primary"><%= topic.first_name %> <%= topic.last_name %></span>
+        · <%= new Date(topic.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+        · <%= topic.views %> view<%= topic.views === 1 ? '' : 's' %>
+      </p>
+    </div>
+    <form action="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics/<%= topic.id %>/subscribe" method="post">
+      <button class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-surface-container-low transition-colors <%= subscribed ? 'text-secondary border-secondary/50 bg-secondary/5' : 'text-on-surface-variant' %>">
+        <span class="material-symbols-outlined text-sm"><%= subscribed ? 'notifications_active' : 'notifications' %></span>
+        <%= subscribed ? 'Subscribed' : 'Subscribe' %>
+      </button>
+    </form>
+  </div>
+
+  <% if (isStaff) { %>
+    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-outline-variant/40">
+      <form action="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics/<%= topic.id %>/moderate" method="post" class="inline">
+        <input type="hidden" name="action" value="pin">
+        <button class="inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2.5 py-1 hover:bg-surface-container-low transition-colors <%= topic.pinned ? 'text-secondary' : 'text-on-surface-variant' %>">
+          <span class="material-symbols-outlined text-sm">push_pin</span> <%= topic.pinned ? 'Unpin' : 'Pin' %>
+        </button>
+      </form>
+      <form action="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics/<%= topic.id %>/moderate" method="post" class="inline">
+        <input type="hidden" name="action" value="lock">
+        <button class="inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2.5 py-1 hover:bg-surface-container-low transition-colors <%= topic.locked ? 'text-secondary' : 'text-on-surface-variant' %>">
+          <span class="material-symbols-outlined text-sm"><%= topic.locked ? 'lock_open' : 'lock' %></span> <%= topic.locked ? 'Unlock' : 'Lock' %>
+        </button>
+      </form>
+    </div>
+  <% } %>
+
+  <div class="prose prose-sm max-w-none text-on-surface">
+    <p class="whitespace-pre-wrap"><%= topic.body %></p>
+  </div>
+</div>
+
+<% if (replies.length > 0) { %>
+  <h2 class="font-headline text-headline-sm text-primary mb-4"><%= replies.length %> repl<%= replies.length === 1 ? 'y' : 'ies' %></h2>
+  <div class="space-y-4 mb-8">
+    <% replies.forEach(function(r){ %>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5" id="reply-<%= r.id %>">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-sm"><%= r.first_name.charAt(0) %></div>
+          <div>
+            <p class="font-bold text-primary text-sm"><%= r.first_name %> <%= r.last_name %></p>
+            <p class="text-xs text-on-surface-variant"><%= new Date(r.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+          </div>
+        </div>
+        <div class="prose prose-sm max-w-none text-on-surface">
+          <p class="whitespace-pre-wrap"><%= r.body %></p>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<% if (!topic.locked) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+    <h2 class="font-headline text-headline-sm text-primary mb-4">Post a reply</h2>
+    <form action="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics/<%= topic.id %>/replies" method="post" class="space-y-4">
+      <div>
+        <textarea name="body" rows="4" required maxlength="5000" class="w-full px-3 py-2.5 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Write your reply..."></textarea>
+      </div>
+      <button class="bg-primary text-on-primary px-5 py-2.5 rounded font-bold hover:opacity-90 active:scale-95 transition-all">Post reply</button>
+    </form>
+  </div>
+<% } else { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 text-center">
+    <span class="material-symbols-outlined text-2xl text-on-surface-variant mb-2">lock</span>
+    <p class="text-on-surface-variant text-sm">This topic is locked. No new replies can be posted.</p>
+  </div>
+<% } %>

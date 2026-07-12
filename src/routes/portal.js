@@ -9,10 +9,11 @@ const { requireAuth } = require('../middleware/auth');
 const { recalcProgress, getCourseStructure, isLessonAvailable, isQuizAvailable, completeLessonWithDrip, getModuleEssayStatus, submitEssay, getBlockedCurriculum } = require('../lib/lms');
 const { makeReference } = require('../lib/helpers');
 const { getStripe } = require('../lib/stripe');
-const { notifyRoles } = require('../lib/notify');
+const { notifyUser, notifyRoles } = require('../lib/notify');
 const programmes = require('../lib/programmes');
 const profiles = require('../lib/profiles');
 const { afterApplicationSubmitted } = require('../lib/admissionsFlow');
+const achievements = require('../lib/achievements');
 
 const router = express.Router();
 
@@ -67,6 +68,11 @@ router.get('/', async (req, res, next) => {
       .first();
     const outstanding = Number(outRow.s || 0);
 
+    // Check streak milestones on dashboard view (fire-and-forget)
+    achievements.checkStreakMilestones(userId).catch(() => {});
+
+    const streak = await achievements.getCurrentStreak(userId);
+
     res.render('portal/dashboard', {
       pageTitle: 'Student Workspace | GDCU',
       portalActive: 'dashboard',
@@ -74,6 +80,7 @@ router.get('/', async (req, res, next) => {
       announcements,
       certificates,
       outstanding,
+      streak,
     });
   } catch (err) {
     next(err);
@@ -522,6 +529,15 @@ router.post('/courses/:slug/lessons/:lessonId/complete', async (req, res, next) 
     }
 
     req.flash('success', result.message);
+
+    // Check achievement milestones
+    achievements.checkLessonMilestones(userId).catch(() => {});
+    // Check if course was just completed
+    const updated = await knex('enrollments').where({ id: enrollment.id }).first();
+    if (updated.status === 'completed') {
+      achievements.checkCourseMilestones(userId).catch(() => {});
+    }
+
     const redirectTo = req.body.next && req.body.next.startsWith('/') ? req.body.next : `/portal/courses/${course.slug}`;
     res.redirect(redirectTo);
   } catch (err) {
@@ -734,10 +750,15 @@ router.post('/quizzes/:id/submit', async (req, res, next) => {
     const passed = score >= quiz.pass_mark;
     await knex('quiz_attempts').where({ id: attemptId }).update({ score, passed, submitted_at: knex.fn.now() });
 
+    // Check achievement milestones for quiz
+    const attempt = { score, passed };
+    achievements.checkQuizMilestones(userId, attempt).catch(() => {});
+
     // Passing a course final exam completes the enrolment (certificate becomes claimable).
     if (passed && quiz.is_final_exam && quiz.exam_scope === 'course' && quiz.course_id) {
       await knex('enrollments').where({ user_id: userId, course_id: quiz.course_id })
         .update({ status: 'completed', completed_at: knex.fn.now() });
+      achievements.checkCourseMilestones(userId).catch(() => {});
     }
 
     res.redirect(`/portal/attempts/${attemptId}`);
@@ -1313,8 +1334,9 @@ router.get('/profile', async (req, res, next) => {
     const user = await knex('users').where({ id: req.session.user.id }).first();
     const edit = req.query.edit === '1';
 
-    // Get achievements
-    const achievements = await knex('achievements').where({ user_id: user.id }).orderBy('awarded_at', 'desc').limit(20);
+    // Get achievements (new badge-based system)
+    const badges = await achievements.getUserAchievements(user.id);
+    const streak = await achievements.getCurrentStreak(user.id);
 
     // Get cohorts
     const cohorts = await knex('cohorts')
@@ -1323,7 +1345,7 @@ router.get('/profile', async (req, res, next) => {
       .select('cohorts.*')
       .orderBy('cohorts.year', 'desc');
 
-    res.render('portal/profile', { pageTitle: 'My Profile | GDCU', portalActive: 'profile', user, edit, achievements, cohorts });
+    res.render('portal/profile', { pageTitle: 'My Profile | GDCU', portalActive: 'profile', user, edit, achievements: badges, cohorts, streak });
   } catch (err) {
     next(err);
   }
@@ -1462,6 +1484,250 @@ router.post('/profile/change-password', [
   } catch (err) {
     next(err);
   }
+});
+
+// ─── Course discussion forums ────────────────────────────────
+
+// List forums for a course the student is enrolled in.
+router.get('/courses/:slug/forums', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const forums = await knex('course_forums')
+      .where({ course_id: course.id, published: true })
+      .orderBy('sort_order');
+
+    // Count topics and latest activity per forum
+    for (const f of forums) {
+      f.topicCount = Number((await knex('forum_topics').where({ forum_id: f.id }).count({ c: '*' }).first()).c);
+      f.replyCount = Number((await knex('forum_replies').whereIn('topic_id', knex('forum_topics').where({ forum_id: f.id }).select('id')).count({ c: '*' }).first()).c);
+      const latest = await knex('forum_topics')
+        .where({ forum_id: f.id })
+        .orderBy('updated_at', 'desc')
+        .first();
+      f.latestTopic = latest || null;
+    }
+
+    res.render('portal/forums', {
+      pageTitle: `Forums — ${course.title} | GDCU`,
+      portalActive: 'courses',
+      course,
+      forums,
+    });
+  } catch (err) { next(err); }
+});
+
+// List topics in a forum.
+router.get('/courses/:slug/forums/:forumId', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.status(404).render('errors/404', { pageTitle: 'Forum not found', layout: 'layouts/portal' });
+
+    let topics = await knex('forum_topics')
+      .where({ forum_id: forum.id })
+      .join('users', 'forum_topics.user_id', 'users.id')
+      .select('forum_topics.*', 'users.first_name', 'users.last_name')
+      .orderBy('pinned', 'desc')
+      .orderBy('updated_at', 'desc');
+
+    // Annotate with reply count, last reply, and unread state
+    const viewed = await knex('forum_topic_views').where({ user_id: userId }).pluck('topic_id');
+    const viewedSet = new Set(viewed);
+    for (const t of topics) {
+      t.replyCount = Number((await knex('forum_replies').where({ topic_id: t.id }).count({ c: '*' }).first()).c);
+      const lastReply = await knex('forum_replies')
+        .where({ topic_id: t.id })
+        .orderBy('created_at', 'desc')
+        .first();
+      t.lastActivity = lastReply ? lastReply.created_at : t.created_at;
+      t.unread = !viewedSet.has(t.id);
+    }
+
+    res.render('portal/forum-topics', {
+      pageTitle: `${forum.title} — ${course.title} | GDCU`,
+      portalActive: 'courses',
+      course,
+      forum,
+      topics,
+    });
+  } catch (err) { next(err); }
+});
+
+// View a topic and its replies.
+router.get('/courses/:slug/forums/:forumId/topics/:topicId', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.status(404).render('errors/404', { pageTitle: 'Forum not found', layout: 'layouts/portal' });
+
+    const topic = await knex('forum_topics')
+      .where({ 'forum_topics.id': req.params.topicId, forum_id: forum.id })
+      .join('users', 'forum_topics.user_id', 'users.id')
+      .select('forum_topics.*', 'users.first_name', 'users.last_name')
+      .first();
+    if (!topic) return res.status(404).render('errors/404', { pageTitle: 'Topic not found', layout: 'layouts/portal' });
+
+    // Increment view count
+    await knex('forum_topics').where({ id: topic.id }).increment('views', 1);
+
+    const replies = await knex('forum_replies')
+      .where({ topic_id: topic.id })
+      .join('users', 'forum_replies.user_id', 'users.id')
+      .select('forum_replies.*', 'users.first_name', 'users.last_name')
+      .orderBy('created_at', 'asc');
+
+    // Mark as viewed by this user
+    await knex('forum_topic_views')
+      .insert({ topic_id: topic.id, user_id: userId, viewed_at: knex.fn.now() })
+      .onConflict(['topic_id', 'user_id'])
+      .merge({ viewed_at: knex.fn.now() });
+
+    const subscribed = !!(await knex('forum_subscriptions').where({ topic_id: topic.id, user_id: userId }).first());
+
+    res.render('portal/forum-topic', {
+      pageTitle: `${topic.title} — ${course.title} | GDCU`,
+      portalActive: 'courses',
+      course,
+      forum,
+      topic,
+      replies,
+      subscribed,
+      isStaff: ['faculty', 'staff', 'admin'].includes(req.session.user.role),
+    });
+  } catch (err) { next(err); }
+});
+
+// Create a new topic.
+router.post('/courses/:slug/forums/:forumId/topics', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.redirect(`/portal/courses/${course.slug}`);
+    if (forum.locked) { req.flash('error', 'This forum is locked.'); return res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}`); }
+
+    const title = (req.body.title || '').trim();
+    const body = (req.body.body || '').trim();
+    if (!title || !body) {
+      req.flash('error', 'Title and message are required.');
+      return res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}`);
+    }
+
+    const [topicIdRaw] = await knex('forum_topics').insert({
+      forum_id: forum.id,
+      user_id: userId,
+      title,
+      body,
+    });
+    const topicId = Array.isArray(topicIdRaw) ? topicIdRaw[0] : topicIdRaw;
+
+    // Auto-subscribe the author
+    await knex('forum_subscriptions').insert({ topic_id: topicId, user_id: userId }).onConflict(['topic_id', 'user_id']).ignore();
+
+    // Check forum achievement milestones
+    achievements.checkForumFirstTopic(userId).catch(() => {});
+
+    req.flash('success', 'Topic posted.');
+    res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}/topics/${topicId}`);
+  } catch (err) { next(err); }
+});
+
+// Reply to a topic.
+router.post('/courses/:slug/forums/:forumId/topics/:topicId/replies', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.redirect(`/portal/courses/${course.slug}`);
+
+    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: forum.id }).first();
+    if (!topic) return res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}`);
+    if (topic.locked) { req.flash('error', 'This topic is locked.'); return res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}/topics/${topic.id}`); }
+
+    const body = (req.body.body || '').trim();
+    if (!body) {
+      req.flash('error', 'Please write a reply.');
+      return res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}/topics/${topic.id}`);
+    }
+
+    await knex('forum_replies').insert({ topic_id: topic.id, user_id: userId, body });
+
+    // Notify subscribers (excluding the author)
+    const subs = await knex('forum_subscriptions').where({ topic_id: topic.id }).whereNot('user_id', userId).pluck('user_id');
+    for (const subUserId of subs) {
+      notifyUser(subUserId, {
+        type: 'message',
+        title: 'New reply in forum',
+        body: `Someone replied to "${topic.title}" in ${course.title}`,
+        link: `/portal/courses/${course.slug}/forums/${forum.id}/topics/${topic.id}`,
+      });
+    }
+
+    // Auto-subscribe the replier
+    await knex('forum_subscriptions').insert({ topic_id: topic.id, user_id: userId }).onConflict(['topic_id', 'user_id']).ignore();
+
+    // Check forum reply milestones
+    achievements.checkForumReplies(userId).catch(() => {});
+
+    req.flash('success', 'Reply posted.');
+    res.redirect(`/portal/courses/${course.slug}/forums/${forum.id}/topics/${topic.id}`);
+  } catch (err) { next(err); }
+});
+
+// Subscribe / unsubscribe from a topic.
+router.post('/courses/:slug/forums/:forumId/topics/:topicId/subscribe', async (req, res, next) => {
+  try {
+    const userId = req.session.user.id;
+    const { course, enrollment } = await findEnrollment(userId, req.params.slug);
+    if (!course || !enrollment) return res.redirect('/portal/catalog');
+
+    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: req.params.forumId }).first();
+    if (!topic) return res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}`);
+
+    const existing = await knex('forum_subscriptions').where({ topic_id: topic.id, user_id: userId }).first();
+    if (existing) {
+      await knex('forum_subscriptions').where({ id: existing.id }).del();
+      req.flash('info', 'Unsubscribed from topic.');
+    } else {
+      await knex('forum_subscriptions').insert({ topic_id: topic.id, user_id: userId });
+      req.flash('success', 'Subscribed to topic.');
+    }
+    res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}/topics/${topic.id}`);
+  } catch (err) { next(err); }
+});
+
+// Staff/faculty: pin/unpin or lock/unlock a topic.
+router.post('/courses/:slug/forums/:forumId/topics/:topicId/moderate', async (req, res, next) => {
+  try {
+    if (!['faculty', 'staff', 'admin'].includes(req.session.user.role)) {
+      return res.status(403).render('errors/404', { pageTitle: 'Not authorised', layout: 'layouts/portal' });
+    }
+    const { course } = await findEnrollment(req.session.user.id, req.params.slug);
+    if (!course) return res.redirect('/portal/catalog');
+
+    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: req.params.forumId }).first();
+    if (!topic) return res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}`);
+
+    const update = {};
+    if (req.body.action === 'pin') update.pinned = !topic.pinned;
+    if (req.body.action === 'lock') update.locked = !topic.locked;
+    if (Object.keys(update).length) await knex('forum_topics').where({ id: topic.id }).update(update);
+
+    res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}/topics/${topic.id}`);
+  } catch (err) { next(err); }
 });
 
 // ─── Essay submission ────────────────────────────────────────

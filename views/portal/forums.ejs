@@ -1,0 +1,40 @@
+<%- include('../partials/preview-banner') %>
+<a href="/portal/courses/<%= course.slug %>" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Back to course</a>
+
+<div class="bg-primary text-on-primary rounded-lg p-6 lg:p-8 mb-6">
+  <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest">Discussion</p>
+  <h1 class="font-headline text-headline-md mb-2"><%= course.title %> — Forums</h1>
+  <p class="text-on-primary-container max-w-2xl">Connect with fellow students, ask questions, and discuss course topics.</p>
+</div>
+
+<% if (forums.length === 0) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center">
+    <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3">forum</span>
+    <p class="text-on-surface-variant">No discussion forums have been set up for this course yet.</p>
+  </div>
+<% } else { %>
+  <div class="grid gap-4">
+    <% forums.forEach(function(f){ %>
+      <a href="/portal/courses/<%= course.slug %>/forums/<%= f.id %>" class="block bg-surface-container-lowest border border-outline-variant rounded-lg p-5 hover:shadow-md hover:border-secondary/50 transition-all">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1">
+            <h2 class="font-headline text-headline-sm text-primary mb-1"><%= f.title %></h2>
+            <% if (f.description) { %><p class="text-sm text-on-surface-variant mb-3"><%= f.description %></p><% } %>
+            <p class="text-xs text-on-surface-variant">
+              <%= f.topicCount %> topic<%= f.topicCount === 1 ? '' : 's' %>
+              · <%= f.replyCount %> repl<%= f.replyCount === 1 ? 'y' : 'ies' %>
+            </p>
+          </div>
+          <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+        </div>
+        <% if (f.latestTopic) { %>
+          <div class="mt-4 pt-4 border-t border-outline-variant/40">
+            <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Latest activity</p>
+            <p class="text-sm font-medium text-primary"><%= f.latestTopic.title %></p>
+            <p class="text-xs text-on-surface-variant"><%= new Date(f.latestTopic.updated_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></p>
+          </div>
+        <% } %>
+      </a>
+    <% }) %>
+  </div>
+<% } %>

@@ -1,0 +1,55 @@
+<%- include('../partials/preview-banner') %>
+<a href="/portal/courses/<%= course.slug %>/forums" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> All forums</a>
+
+<div class="bg-primary text-on-primary rounded-lg p-6 lg:p-8 mb-6">
+  <p class="font-tagline text-label-sm text-secondary-fixed uppercase tracking-widest"><%= course.title %></p>
+  <h1 class="font-headline text-headline-md mb-2"><%= forum.title %></h1>
+  <% if (forum.description) { %><p class="text-on-primary-container max-w-2xl"><%= forum.description %></p><% } %>
+</div>
+
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5 mb-6">
+  <h2 class="font-headline text-headline-sm text-primary mb-4">Start a new topic</h2>
+  <form action="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics" method="post" class="space-y-4">
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Topic title</label>
+      <input type="text" name="title" required maxlength="200" class="w-full px-3 py-2.5 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="e.g. Help understanding Lesson 3">
+    </div>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant mb-1 uppercase">Message</label>
+      <textarea name="body" rows="4" required maxlength="5000" class="w-full px-3 py-2.5 rounded border border-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Write your question or discussion starter..."></textarea>
+    </div>
+    <button class="bg-primary text-on-primary px-5 py-2.5 rounded font-bold hover:opacity-90 active:scale-95 transition-all">Post topic</button>
+  </form>
+</div>
+
+<% if (topics.length === 0) { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 text-center">
+    <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3">chat_bubble</span>
+    <p class="text-on-surface-variant">No topics yet. Be the first to start a discussion!</p>
+  </div>
+<% } else { %>
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+    <div class="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-container-high border-b border-outline-variant text-xs font-tagline uppercase text-on-surface-variant tracking-wider">
+      <div class="col-span-7">Topic</div>
+      <div class="col-span-2 text-center">Replies</div>
+      <div class="col-span-3 text-right">Last activity</div>
+    </div>
+    <% topics.forEach(function(t){ %>
+      <a href="/portal/courses/<%= course.slug %>/forums/<%= forum.id %>/topics/<%= t.id %>" class="grid grid-cols-12 gap-4 px-5 py-4 border-b border-outline-variant/40 hover:bg-surface-container-low transition-colors items-center">
+        <div class="col-span-7">
+          <div class="flex items-center gap-2">
+            <% if (t.pinned) { %><span class="material-symbols-outlined text-secondary text-sm" title="Pinned">push_pin</span><% } %>
+            <% if (t.locked) { %><span class="material-symbols-outlined text-on-surface-variant text-sm" title="Locked">lock</span><% } %>
+            <% if (t.unread) { %><span class="w-2 h-2 rounded-full bg-secondary" title="Unread"></span><% } %>
+            <span class="font-medium text-primary <%= t.unread ? 'font-bold' : '' %>"><%= t.title %></span>
+          </div>
+          <p class="text-xs text-on-surface-variant mt-1">Started by <%= t.first_name %> <%= t.last_name %> · <%= new Date(t.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
+        </div>
+        <div class="col-span-2 text-center text-sm text-on-surface-variant"><%= t.replyCount %></div>
+        <div class="col-span-3 text-right text-xs text-on-surface-variant">
+          <%= new Date(t.lastActivity).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } %>

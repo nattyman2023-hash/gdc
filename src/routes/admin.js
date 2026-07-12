@@ -4233,5 +4233,77 @@ router.post('/courses/:id/modules/detach/:smId', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// ─── Course discussion forum management ─────────────────────
+
+// List forums for a course
+router.get('/courses/:id/forums', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
+    const forums = await knex('course_forums').where({ course_id: course.id }).orderBy('sort_order');
+    for (const f of forums) {
+      f.topicCount = Number((await knex('forum_topics').where({ forum_id: f.id }).count({ c: '*' }).first()).c);
+    }
+    res.render('admin/course-forums', {
+      pageTitle: `Forums — ${course.title} | GDCU`,
+      adminActive: 'lms-courses',
+      course,
+      forums,
+    });
+  } catch (err) { next(err); }
+});
+
+// Create a forum
+router.post('/courses/:id/forums', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.redirect('/admin/courses');
+    const title = (req.body.title || '').trim();
+    if (!title) { req.flash('error', 'Forum title is required.'); return res.redirect(`/admin/courses/${course.id}/forums`); }
+    const maxSort = await knex('course_forums').where({ course_id: course.id }).max('sort_order as m').first();
+    await knex('course_forums').insert({
+      course_id: course.id,
+      title,
+      description: (req.body.description || '').trim() || null,
+      sort_order: (maxSort.m || 0) + 1,
+      published: req.body.published === 'on',
+    });
+    req.flash('success', 'Forum created.');
+    res.redirect(`/admin/courses/${course.id}/forums`);
+  } catch (err) { next(err); }
+});
+
+// Update a forum
+router.post('/courses/:id/forums/:forumId', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.redirect('/admin/courses');
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id }).first();
+    if (!forum) return res.redirect(`/admin/courses/${course.id}/forums`);
+    const title = (req.body.title || '').trim();
+    if (!title) { req.flash('error', 'Forum title is required.'); return res.redirect(`/admin/courses/${course.id}/forums`); }
+    await knex('course_forums').where({ id: forum.id }).update({
+      title,
+      description: (req.body.description || '').trim() || null,
+      sort_order: Number(req.body.sort_order) || forum.sort_order,
+      published: req.body.published === 'on',
+      updated_at: knex.fn.now(),
+    });
+    req.flash('success', 'Forum updated.');
+    res.redirect(`/admin/courses/${course.id}/forums`);
+  } catch (err) { next(err); }
+});
+
+// Delete a forum (and all its topics/replies via CASCADE)
+router.post('/courses/:id/forums/:forumId/delete', async (req, res, next) => {
+  try {
+    const course = await knex('courses').where({ id: req.params.id }).first();
+    if (!course) return res.redirect('/admin/courses');
+    await knex('course_forums').where({ id: req.params.forumId, course_id: course.id }).del();
+    req.flash('success', 'Forum deleted.');
+    res.redirect(`/admin/courses/${course.id}/forums`);
+  } catch (err) { next(err); }
+});
+
 module.exports = router;
 
