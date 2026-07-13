@@ -43,6 +43,42 @@ function moduleReturnPath(courseId, mod) {
   return '/admin/courses';
 }
 
+// Resolve the lesson block that a newly-created part belongs to. The older
+// data model stores a lesson and each of its parts as rows in `lessons`, tied
+// together by block_no/block_title. Keeping this in one helper prevents the
+// course builder and shared-module builder from behaving differently.
+async function resolveLessonPartGroup(trx, moduleId, { parentLessonId, blockNo, blockTitle } = {}) {
+  let parent = null;
+  if (parentLessonId) {
+    parent = await trx('lessons').where({ id: parentLessonId, module_id: moduleId }).first();
+    if (!parent) throw new Error('The lesson selected for this part no longer exists.');
+  }
+
+  let resolvedBlockNo = Number(blockNo) || null;
+  let resolvedBlockTitle = blockTitle ? String(blockTitle).trim() : null;
+  if (!parent) return { blockNo: resolvedBlockNo, blockTitle: resolvedBlockTitle };
+
+  if (parent.block_no) {
+    resolvedBlockNo = Number(parent.block_no);
+    resolvedBlockTitle = parent.block_title || parent.title;
+    if (!parent.block_title) {
+      await trx('lessons')
+        .where({ module_id: moduleId, block_no: resolvedBlockNo })
+        .update({ block_title: resolvedBlockTitle });
+    }
+  } else {
+    const maxBlock = await trx('lessons').where({ module_id: moduleId }).max({ m: 'block_no' }).first();
+    resolvedBlockNo = (Number(maxBlock.m) || 0) + 1;
+    resolvedBlockTitle = parent.title;
+    await trx('lessons').where({ id: parent.id, module_id: moduleId }).update({
+      block_no: resolvedBlockNo,
+      block_title: resolvedBlockTitle,
+    });
+  }
+
+  return { blockNo: resolvedBlockNo, blockTitle: resolvedBlockTitle };
+}
+
 // ─── Image uploads (media library) ──────────────────────────
 const uploadDir = path.join(__dirname, '..', '..', 'public', 'uploads');
 fs.mkdirSync(uploadDir, { recursive: true });
@@ -3665,19 +3701,44 @@ router.post('/course-library/:id/lessons', async (req, res, next) => {
     if (!sm) return res.redirect('/admin/course-library');
     const mod = await knex('modules').where({ shared_module_id: sm.id }).first();
     if (!mod) return res.redirect(`/admin/course-library/${sm.id}`);
-    const maxSort = await knex('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
-    await knex('lessons').insert({
-      module_id: mod.id,
-      title: req.body.title,
-      type: req.body.type || 'reading',
-      content: req.body.content || null,
-      video_url: req.body.video_url || null,
-      duration_min: req.body.duration_min || 15,
-      sort_order: (maxSort.m || 0) + 1,
-      block_no: req.body.block_no ? Number(req.body.block_no) : null,
-      block_title: req.body.block_title || null,
+    const title = String(req.body.title || '').trim();
+    if (!title) {
+      req.flash('error', 'A lesson part title is required.');
+      return res.redirect(`/admin/course-library/${sm.id}`);
+    }
+    const parentLessonId = Number(req.body.parent_lesson_id) || null;
+    if (parentLessonId) {
+      const parentExists = await knex('lessons').where({ id: parentLessonId, module_id: mod.id }).first();
+      if (!parentExists) {
+        req.flash('error', 'The lesson selected for this part no longer exists.');
+        return res.redirect(`/admin/course-library/${sm.id}`);
+      }
+    }
+    await knex.transaction(async (trx) => {
+      const maxSort = await trx('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
+      const group = await resolveLessonPartGroup(trx, mod.id, {
+        parentLessonId,
+        blockNo: req.body.block_no,
+        blockTitle: req.body.block_title,
+      });
+      await trx('lessons').insert({
+        module_id: mod.id,
+        title,
+        type: req.body.type || 'reading',
+        content: req.body.content || null,
+        video_url: req.body.video_url || null,
+        image_url: req.body.image_url || null,
+        live_provider: req.body.live_provider || null,
+        live_join_url: req.body.live_join_url || null,
+        live_embed_url: req.body.live_embed_url || null,
+        live_passcode: req.body.live_passcode || null,
+        duration_min: req.body.duration_min || 15,
+        sort_order: (Number(maxSort.m) || 0) + 1,
+        block_no: group.blockNo,
+        block_title: group.blockTitle,
+      });
     });
-    req.flash('success', 'Lesson added to shared module.');
+    req.flash('success', parentLessonId ? 'Part added to shared lesson.' : 'Lesson part added to shared module.');
     res.redirect(`/admin/course-library/${sm.id}`);
   } catch (err) { next(err); }
 });
@@ -3686,6 +3747,12 @@ router.post('/course-library/:id/lessons/:lessonId', async (req, res, next) => {
   try {
     const lesson = await knex('lessons').where({ id: req.params.lessonId }).first();
     if (!lesson) return res.redirect(`/admin/course-library/${req.params.id}`);
+    const nextBlockNo = req.body.block_no !== undefined
+      ? (req.body.block_no ? Number(req.body.block_no) : null)
+      : (lesson.block_no || null);
+    const nextBlockTitle = nextBlockNo
+      ? (String(req.body.block_title || '').trim() || lesson.block_title || null)
+      : null;
     await knex('lessons').where({ id: lesson.id }).update({
       title: req.body.title,
       type: req.body.type || 'reading',
@@ -3697,10 +3764,13 @@ router.post('/course-library/:id/lessons/:lessonId', async (req, res, next) => {
       live_embed_url: req.body.live_embed_url || null,
       live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
-      block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),
-      block_title: req.body.block_title !== undefined && req.body.block_title !== '' ? req.body.block_title : lesson.block_title,
+      block_no: nextBlockNo,
+      block_title: nextBlockTitle,
       published: req.body.published === '1' || req.body.published === 'on',
     });
+    if (nextBlockNo && nextBlockTitle) {
+      await knex('lessons').where({ module_id: lesson.module_id, block_no: nextBlockNo }).update({ block_title: nextBlockTitle });
+    }
     req.flash('success', 'Lesson updated.');
     res.redirect(`/admin/course-library/${req.params.id}`);
   } catch (err) { next(err); }
@@ -3913,32 +3983,12 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
       }
     }
     await knex.transaction(async (trx) => {
-      let parent = null;
-      if (parentLessonId) {
-        parent = await trx('lessons').where({ id: parentLessonId, module_id: mod.id }).first();
-        if (!parent) throw new Error('The lesson selected for this part no longer exists.');
-      }
-
       const maxSort = await trx('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
-      let blockNo = req.body.block_no ? Number(req.body.block_no) : null;
-      let blockTitle = req.body.block_title ? String(req.body.block_title).trim() : null;
-
-      if (parent) {
-        if (parent.block_no) {
-          blockNo = Number(parent.block_no);
-          blockTitle = parent.block_title || parent.title;
-          if (!parent.block_title) {
-            await trx('lessons')
-              .where({ module_id: mod.id, block_no: blockNo })
-              .update({ block_title: blockTitle });
-          }
-        } else {
-          const maxBlock = await trx('lessons').where({ module_id: mod.id }).max({ m: 'block_no' }).first();
-          blockNo = (Number(maxBlock.m) || 0) + 1;
-          blockTitle = parent.title;
-          await trx('lessons').where({ id: parent.id, module_id: mod.id }).update({ block_no: blockNo, block_title: blockTitle });
-        }
-      }
+      const group = await resolveLessonPartGroup(trx, mod.id, {
+        parentLessonId,
+        blockNo: req.body.block_no,
+        blockTitle: req.body.block_title,
+      });
 
       await trx('lessons').insert({
         module_id: mod.id,
@@ -3953,12 +4003,12 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
         live_passcode: req.body.live_passcode || null,
         duration_min: req.body.duration_min || 15,
         sort_order: req.body.sort_order ? Number(req.body.sort_order) : (Number(maxSort.m) || 0) + 1,
-        block_no: blockNo,
-        block_title: blockTitle,
+        block_no: group.blockNo,
+        block_title: group.blockTitle,
       });
     });
 
-    req.flash('success', 'Lesson added.');
+    req.flash('success', parentLessonId ? 'Part added to lesson.' : 'Lesson part added.');
     res.redirect(back);
   } catch (err) { next(err); }
 });
@@ -3975,6 +4025,13 @@ router.post('/lessons/:id', async (req, res, next) => {
       return res.redirect(back);
     }
 
+    const nextBlockNo = req.body.block_no !== undefined
+      ? (req.body.block_no ? Number(req.body.block_no) : null)
+      : (lesson.block_no || null);
+    const nextBlockTitle = nextBlockNo
+      ? (String(req.body.block_title || '').trim() || lesson.block_title || null)
+      : null;
+
     await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod && mod.course_id, action: 'update', actorId: req.session.user.id, data: lesson });
 
     await knex('lessons').where({ id: lesson.id }).update({
@@ -3989,11 +4046,14 @@ router.post('/lessons/:id', async (req, res, next) => {
       live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
       sort_order: req.body.sort_order !== undefined && req.body.sort_order !== '' ? Number(req.body.sort_order) : lesson.sort_order,
-      block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),
-      block_title: req.body.block_title !== undefined && req.body.block_title !== '' ? req.body.block_title : lesson.block_title,
+      block_no: nextBlockNo,
+      block_title: nextBlockTitle,
       published: req.body.published === '1' || req.body.published === 'on',
       available_from: req.body.available_from || null,
     });
+    if (nextBlockNo && nextBlockTitle) {
+      await knex('lessons').where({ module_id: lesson.module_id, block_no: nextBlockNo }).update({ block_title: nextBlockTitle });
+    }
 
     req.flash('success', 'Lesson updated.');
     res.redirect(back);

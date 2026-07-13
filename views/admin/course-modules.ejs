@@ -426,6 +426,11 @@
       <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
         <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
       </button>
+      <% if (mod.lessons.length) { %>
+      <button type="button" onclick="document.getElementById('add-part-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 border border-blue-300 text-blue-700 bg-white rounded text-sm font-bold hover:bg-blue-50">
+        <span class="material-symbols-outlined text-sm">playlist_add</span> Add a part
+      </button>
+      <% } %>
       <% if (mod.isShared) { %>
       <form method="POST" action="/admin/courses/<%= course.id %>/modules/detach/<%= mod.shared_module_id %>" class="inline" onsubmit="return confirm('Remove this module from this course? It stays intact for the other ' + (mod.sharedCourseCount - 1) + ' course(s) using it.');">
         <button type="submit" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white text-on-surface-variant" title="Remove from this course only — the shared module and other courses are untouched">
@@ -521,6 +526,7 @@
 
     <!-- Add Lesson (block) — streamlined: name it, pick its parts, optionally add a quiz -->
     <% var nextBlk = (Math.max(0, ...mod.lessons.map(function(l){ return Number(l.block_no)||0; }), 0) + 1); %>
+    <% var partTargets = []; var seenPartTargets = {}; mod.lessons.forEach(function(l){ var targetKey = l.block_no ? ('block-' + l.block_no) : ('lesson-' + l.id); if (!seenPartTargets[targetKey]) { seenPartTargets[targetKey] = true; partTargets.push({ parentId: l.id, blockNo: l.block_no, title: l.block_title || l.title }); } }); %>
     <div id="add-lesson-<%= mod.id %>" class="hidden px-6 py-5 border-b border-outline-variant bg-blue-50">
       <div class="flex items-center gap-2 mb-3">
         <span class="bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold text-sm"><%= nextBlk %></span>
@@ -603,6 +609,34 @@
         </div>
       </form>
     </div>
+
+    <!-- Persistent part editor: choose an existing lesson, then add a new
+         reading/video/audio/etc. part to it. This remains available after a
+         refresh and also works for legacy lessons without block metadata. -->
+    <% if (partTargets.length) { %>
+    <div id="add-part-<%= mod.id %>" class="hidden px-6 py-5 border-b border-outline-variant bg-blue-50">
+      <div class="flex items-start gap-2 mb-3">
+        <span class="material-symbols-outlined text-blue-600">playlist_add</span>
+        <div><h4 class="font-bold text-primary text-sm">Add content to an existing lesson</h4><p class="text-xs text-on-surface-variant">Choose the lesson below. The new item becomes another part of that lesson and is saved at the end of its module.</p></div>
+      </div>
+      <form method="POST" action="/admin/modules/<%= mod.id %>/lessons" class="space-y-3">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="course_id" value="<%= course.id %>">
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-2"><label class="block text-xs font-medium mb-1">Lesson</label><select name="parent_lesson_id" required class="w-full px-2 py-1.5 border rounded text-sm"><% partTargets.forEach(function(target){ %><option value="<%= target.parentId %>"><%= target.blockNo ? ('Lesson ' + target.blockNo + ' — ' + target.title) : (target.title + ' (existing lesson)') %></option><% }) %></select></div>
+          <div><label class="block text-xs font-medium mb-1">Part type</label><select name="type" class="w-full px-2 py-1.5 border rounded text-sm"><option value="reading">Reading</option><option value="video">Video</option><option value="audio">Audio</option><option value="live">Live session</option><option value="assignment">Assignment</option><option value="discussion">Discussion</option></select></div>
+        </div>
+        <div><label class="block text-xs font-medium mb-1">Part title *</label><input type="text" name="title" required placeholder="e.g. Read: Leadership in Practice" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        <div><label class="block text-xs font-medium mb-1">Content</label><textarea name="content" data-rich rows="4" class="w-full px-2 py-1.5 border rounded text-sm" placeholder="Write the reading or instructions for this part…"></textarea></div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="block text-xs font-medium mb-1">Video URL</label><input type="url" name="video_url" placeholder="https://…" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div><label class="block text-xs font-medium mb-1">Live join URL</label><input type="url" name="live_join_url" placeholder="https://zoom.us/…" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+          <div><label class="block text-xs font-medium mb-1">Duration (minutes)</label><input type="number" name="duration_min" min="0" value="15" class="w-full px-2 py-1.5 border rounded text-sm"></div>
+        </div>
+        <div class="flex justify-end gap-2"><button type="button" onclick="document.getElementById('add-part-<%= mod.id %>').classList.add('hidden')" class="px-3 py-1.5 border rounded text-xs">Cancel</button><button type="submit" class="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-bold">Add part to lesson</button></div>
+      </form>
+    </div>
+    <% } %>
 
     <!-- Bulk actions for this module's lessons -->
     <% if (mod.lessons.length) { %>
@@ -691,8 +725,8 @@
           <a href="/admin/lessons/<%= lesson.id %>/preview" target="_blank" class="p-1 hover:text-secondary rounded" title="Preview as a student">
             <span class="material-symbols-outlined text-sm">visibility</span>
           </a>
-          <button onclick="document.getElementById('edit-lesson-<%= lesson.id %>').classList.toggle('hidden')" class="p-1 hover:text-primary rounded">
-            <span class="material-symbols-outlined text-sm">edit</span>
+          <button type="button" onclick="document.getElementById('edit-lesson-<%= lesson.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-1.5 py-1 hover:text-primary rounded" title="Edit this lesson part">
+            <span class="material-symbols-outlined text-sm">edit</span><span class="hidden lg:inline">Edit part</span>
           </button>
           <button onclick="document.getElementById('materials-<%= lesson.id %>').classList.toggle('hidden')" class="p-1 hover:text-blue-600 rounded">
             <span class="material-symbols-outlined text-sm">attachment</span>
@@ -745,6 +779,7 @@
         <form method="POST" action="/admin/lessons/<%= lesson.id %>" class="space-y-2">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <input type="hidden" name="course_id" value="<%= course.id %>">
+          <p class="text-xs text-on-surface-variant bg-blue-50 border border-blue-100 rounded px-2 py-1.5">Edit this part below. To add another reading, video, or activity to the same lesson, use <strong>Add a part</strong> at the top of this module.</p>
           <div class="grid grid-cols-3 gap-2">
             <div class="col-span-2">
               <label class="block text-xs font-medium mb-1">Title</label>
