@@ -99,10 +99,19 @@
         <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width: <%= e.progress_pct %>%"></div></div>
         <div class="flex justify-between items-center mt-1">
           <p class="text-xs text-on-surface-variant"><%= e.progress_pct %>% complete</p>
-          <form action="/admin/students/<%= student.id %>/unenroll" method="post" onsubmit="return confirm('Remove this student from ' + <%- JSON.stringify(e.course_title) %> + '? This does not refund any invoice already raised.');">
-            <input type="hidden" name="course_id" value="<%= e.course_id %>" />
-            <button class="text-error text-xs font-bold hover:underline">Remove</button>
-          </form>
+          <div class="flex items-center gap-3">
+            <% if (!e.payment_waived && ['active', 'completed'].includes(e.status)) { %>
+            <form action="/admin/students/<%= student.id %>/enroll" method="post" onsubmit="return confirm('Grant this student access to ' + <%- JSON.stringify(e.course_title) %> + ' without payment? The invoice will remain on their account.');">
+              <input type="hidden" name="course_id" value="<%= e.course_id %>" />
+              <input type="hidden" name="payment_waived" value="1" />
+              <button class="text-secondary text-xs font-bold hover:underline">Grant access without payment</button>
+            </form>
+            <% } %>
+            <form action="/admin/students/<%= student.id %>/unenroll" method="post" onsubmit="return confirm('Remove this student from ' + <%- JSON.stringify(e.course_title) %> + '? This does not refund any invoice already raised.');">
+              <input type="hidden" name="course_id" value="<%= e.course_id %>" />
+              <button class="text-error text-xs font-bold hover:underline">Remove</button>
+            </form>
+          </div>
         </div>
       </div>
       <% }) %>
