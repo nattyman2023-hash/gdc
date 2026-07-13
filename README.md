@@ -46,7 +46,7 @@ A working back-office at **`/admin`** (staff/admin only):
 - **Finance** — collected/outstanding/overdue totals, an invoices table, **raise a new invoice**, and **mark invoices paid** (supports tuition instalments).
 - **Messages** — contact-form inbox with reply + handled toggle.
 
-> Staff login: **staff@gdcu.edu** / **Staff!2026** · Admin: **admin@gdcu.edu** / **ChangeMe!2026**
+> Staff login: **staff@gdcu.edu** / **Staff!2026** · Admin: **admin@gdc.university** / **ChangeMe!2026**
 
 The three products share one database, so data flows end-to-end: a website enquiry → CRM lead → application → **accepted creates an LMS student** → tuition invoices in Finance.
 
@@ -242,7 +242,7 @@ npm run dev                 # start with auto-reload  ->  http://localhost:3000
 
 Local dev uses **SQLite** (`DB_CLIENT=sqlite`) — no database server needed. The file lives at `./data/gdcu.sqlite`.
 
-Default admin login (created by the seed): **admin@gdcu.edu** / **ChangeMe!2026**
+Default admin login (created by the seed): **admin@gdc.university** / **ChangeMe!2026**
 Override with `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` env vars. **Change this in production.**
 
 ---

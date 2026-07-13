@@ -222,7 +222,7 @@ await knex('users').where({ id: userId }).update({...})
 NODE_ENV=production
 PORT=3000
 DATABASE_URL=mysql://user:pass@host/db
-SEED_ADMIN_EMAIL=admin@gdcu.edu
+SEED_ADMIN_EMAIL=admin@gdc.university
 SEED_ADMIN_PASSWORD=<strong-password>
 SEED_STUDENT_PASSWORD=<strong-password>
 ```
