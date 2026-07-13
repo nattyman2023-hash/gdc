@@ -9,7 +9,7 @@ const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 
 const knex = require('../config/db');
-const { requireRole } = require('../middleware/auth');
+const { requireRole, requirePermission } = require('../middleware/auth');
 const { makeReference, pageInfo, slugify, formatDateTime } = require('../lib/helpers');
 const { notifyUser, notifyRoles, email, logActivity } = require('../lib/notify');
 const googleCalendar = require('../lib/googleCalendar');
@@ -52,6 +52,15 @@ const upload = multer({
 });
 
 router.use(requireRole('staff', 'admin'));
+router.use((req, res, next) => {
+  if (/^\/(?:invoices|students\/[^/]+\/invoices)(?:\/|$)/.test(req.path)) {
+    return requirePermission('manage_payments')(req, res, next);
+  }
+  if (/^\/(?:courses|course-library|modules|lessons|assignments|quizzes|materials|upload)(?:\/|$)/.test(req.path)) {
+    return requirePermission('manage_content')(req, res, next);
+  }
+  return next();
+});
 router.use((req, res, next) => {
   res.locals.layout = 'layouts/admin';
   res.locals.adminActive = '';
@@ -933,8 +942,56 @@ router.post('/students/:id/enroll', async (req, res, next) => {
 
 router.post('/students/:id/unenroll', async (req, res, next) => {
   try {
-    await knex('enrollments').where({ user_id: req.params.id, course_id: req.body.course_id }).del();
-    req.flash('success', 'Enrolment removed.');
+    const enrollment = await knex('enrollments').where({ user_id: req.params.id, course_id: req.body.course_id }).first();
+    if (!enrollment) { req.flash('error', 'Enrollment not found.'); return res.redirect(`/admin/students/${req.params.id}`); }
+    await knex('enrollments').where({ id: enrollment.id }).del();
+    req.flash('success', 'Enrolment removed successfully.');
+    res.redirect(`/admin/students/${req.params.id}`);
+  } catch (err) { next(err); }
+});
+
+// Create a manual invoice for a student directly from their detail page
+router.post('/students/:id/invoices', async (req, res, next) => {
+  try {
+    const student = await knex('users').where({ id: req.params.id, role: 'student' }).first();
+    if (!student) { req.flash('error', 'Student not found.'); return res.redirect('/admin/students'); }
+    const description = (req.body.description || '').trim();
+    const amount = Number(req.body.amount);
+    if (!description || amount <= 0) {
+      req.flash('error', 'Description and a valid amount are required.');
+      return res.redirect(`/admin/students/${student.id}`);
+    }
+    const [invIdRaw] = await knex('invoices').insert({
+      reference: makeReference('INV'),
+      user_id: student.id,
+      program_id: req.body.program_id || null,
+      description,
+      amount,
+      currency: req.body.currency || 'GBP',
+      due_date: req.body.due_date || null,
+      status: 'sent',
+      created_by: req.session.user.id,
+    });
+    const invId = Array.isArray(invIdRaw) ? invIdRaw[0] : invIdRaw;
+    notifyUser(student.id, { type: 'payment', title: 'New invoice', body: description, link: '/portal/billing' });
+    req.flash('success', `Invoice ${makeReference('INV')} created and sent to ${student.first_name}.`);
+    res.redirect(`/admin/students/${student.id}`);
+  } catch (err) { next(err); }
+});
+
+// Mark an invoice as paid directly from the student detail page
+router.post('/students/:id/invoices/:invoiceId/pay', async (req, res, next) => {
+  try {
+    const invoice = await knex('invoices').where({ id: req.params.invoiceId, user_id: req.params.id }).first();
+    if (!invoice) { req.flash('error', 'Invoice not found.'); return res.redirect(`/admin/students/${req.params.id}`); }
+    await knex('invoices').where({ id: invoice.id }).update({
+      status: 'paid',
+      payment_method: req.body.payment_method || 'manual',
+      paid_at: knex.fn.now(),
+      updated_at: knex.fn.now(),
+    });
+    notifyUser(req.params.id, { type: 'success', title: 'Invoice paid', body: `Your invoice ${invoice.reference} has been marked as paid. You can now access your courses.`, link: '/portal/courses' });
+    req.flash('success', `Invoice ${invoice.reference} marked as paid. Student can now access their courses.`);
     res.redirect(`/admin/students/${req.params.id}`);
   } catch (err) { next(err); }
 });
@@ -4128,10 +4185,6 @@ router.post('/courses/:id/modules/attach', async (req, res, next) => {
       // Do NOT clone the module/lessons/materials — the entire point of a
       // shared module is that every course reads the same template `modules`
       // row (via shared_module_id), so editing it once updates it everywhere.
-      // Cloning here used to create a second `modules` row with the same
-      // shared_module_id, breaking that single-source model and making the
-      // course-modules queries elsewhere (which key template rows by
-      // shared_module_id) pick whichever row happened to come back last.
       const templateModule = await knex('modules').where({ shared_module_id: sm.id }).first();
 
       // Quizzes ARE meant to be one copy per course (each course's students
@@ -4139,30 +4192,49 @@ router.post('/courses/:id/modules/attach', async (req, res, next) => {
       // quizzes are queried everywhere else — `where({ module_id, course_id })`.
       // Clone the existing quiz set (from any course already using this
       // module) onto the new course, still pointing at the one template module.
+      // Idempotent: skip quizzes that already exist for this course+module.
       if (templateModule) {
-        const templateQuizzes = await knex('quizzes').where({ module_id: templateModule.id });
-        for (const q of templateQuizzes) {
-          const { id: _qid, course_id: _cid, ...quizData } = q;
-          const [newQuizId] = await knex('quizzes').insert({
-            ...quizData,
-            course_id: course.id,
-            module_id: templateModule.id,
-          });
-
-          const questions = await knex('quiz_questions').where({ quiz_id: q.id }).orderBy('sort_order');
-          for (const qq of questions) {
-            const { id: _qqid, ...qqData } = qq;
-            const [newQqId] = await knex('quiz_questions').insert({
-              ...qqData,
-              quiz_id: newQuizId,
-            });
-            const options = await knex('quiz_options').where({ question_id: qq.id }).orderBy('sort_order');
-            for (const opt of options) {
-              const { id: _oid, ...optData } = opt;
-              await knex('quiz_options').insert({
-                ...optData,
-                question_id: newQqId,
+        // Only clone from the FIRST course that has quizzes for this module
+        // (the "template" quiz set). Don't re-clone from every course.
+        const existingCourseQuizzes = await knex('quizzes')
+          .where({ module_id: templateModule.id, course_id: course.id });
+        if (existingCourseQuizzes.length === 0) {
+          // Find any course that already has quiz copies for this module
+          const sourceQuizzes = await knex('quizzes')
+            .where({ module_id: templateModule.id })
+            .whereNotNull('course_id')
+            .orderBy('id')
+            .first();
+          if (sourceQuizzes) {
+            const sourceCourseId = sourceQuizzes.course_id;
+            const templateQuizzes = await knex('quizzes')
+              .where({ module_id: templateModule.id, course_id: sourceCourseId });
+            for (const q of templateQuizzes) {
+              const { id: _qid, course_id: _cid, ...quizData } = q;
+              const [newQuizIdRaw] = await knex('quizzes').insert({
+                ...quizData,
+                course_id: course.id,
+                module_id: templateModule.id,
               });
+              const newQuizId = Array.isArray(newQuizIdRaw) ? newQuizIdRaw[0] : newQuizIdRaw;
+
+              const questions = await knex('quiz_questions').where({ quiz_id: q.id }).orderBy('sort_order');
+              for (const qq of questions) {
+                const { id: _qqid, ...qqData } = qq;
+                const [newQqIdRaw] = await knex('quiz_questions').insert({
+                  ...qqData,
+                  quiz_id: newQuizId,
+                });
+                const newQqId = Array.isArray(newQqIdRaw) ? newQqIdRaw[0] : newQqIdRaw;
+                const options = await knex('quiz_options').where({ question_id: qq.id }).orderBy('sort_order');
+                for (const opt of options) {
+                  const { id: _oid, ...optData } = opt;
+                  await knex('quiz_options').insert({
+                    ...optData,
+                    question_id: newQqId,
+                  });
+                }
+              }
             }
           }
         }

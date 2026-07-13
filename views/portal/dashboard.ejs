@@ -3,6 +3,22 @@
   <h1 class="font-headline text-headline-md text-primary">Welcome back, <%= currentUser.name.split(' ')[0] %></h1>
 </div>
 
+<% if (typeof recentAchievements !== 'undefined' && recentAchievements.length) { %>
+<div class="mt-6 bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="font-headline text-headline-sm text-primary">Recent achievements</h2>
+    <a href="/portal/profile" class="text-secondary font-bold text-sm">View all</a>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    <% recentAchievements.forEach(function(badge){ %>
+    <div class="inline-flex items-center gap-2 rounded-full bg-secondary-fixed px-3 py-2 text-sm text-on-secondary-fixed">
+      <span class="material-symbols-outlined text-base"> <%= badge.icon || 'emoji_events' %></span><span class="font-bold"><%= badge.name %></span>
+    </div>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+
 <% if (typeof outstanding !== 'undefined' && outstanding > 0) { %>
 <a href="/portal/billing" class="flex items-center justify-between gap-3 bg-secondary-fixed border border-secondary rounded-lg p-4 mb-6 hover:opacity-95">
   <div class="flex items-center gap-3">

@@ -15,6 +15,11 @@ const knex = require('./config/db');
 
 const PORT = process.env.PORT || 3000;
 
+// Bind early for hosting platforms, but never advertise readiness until the
+// database schema has been migrated successfully.
+app.locals.migrationsReady = false;
+app.locals.startupError = null;
+
 const server = app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`✓ GDCU listening on ${PORT}`);
@@ -31,6 +36,9 @@ const server = app.listen(PORT, () => {
 async function ensureAdminUser() {
   const existing = await knex('users').where({ role: 'admin' }).first();
   if (existing) return;
+  if (process.env.NODE_ENV === 'production' && (!process.env.SEED_ADMIN_EMAIL || !process.env.SEED_ADMIN_PASSWORD)) {
+    throw new Error('SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD are required when creating the first production admin.');
+  }
   const bcrypt = require('bcryptjs');
   const email = process.env.SEED_ADMIN_EMAIL || 'admin@gdc.university';
   const password = process.env.SEED_ADMIN_PASSWORD || 'ChangeMe!2026';
@@ -50,19 +58,22 @@ async function ensureAdminUser() {
 async function runStartupTasks() {
   try {
     // Clear any stale migration lock left by a previously interrupted boot,
-    // then apply pending migrations. Errors here are logged but do not take
-    // the server down — it keeps serving pages that don't need the new schema.
+    // then apply pending migrations. Serving against a partial schema is unsafe.
     try {
       await knex.migrate.forceFreeMigrationsLock();
     } catch (e) {
       // No lock table yet (fresh database) — nothing to free.
     }
     await knex.migrate.latest();
+    app.locals.migrationsReady = true;
     // eslint-disable-next-line no-console
     console.log('✓ Database migrations are up to date');
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error('Migration error (continuing to serve):', err);
+    app.locals.startupError = err.message;
+    console.error('Migration error (application will not become ready):', err);
+    server.close(() => process.exit(1));
+    return;
   }
 
   // Independent of migrations: ensure an admin exists so the panel is reachable.

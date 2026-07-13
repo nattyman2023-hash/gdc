@@ -25,7 +25,7 @@ function requireAuth(req, res, next) {
 /** Restrict by role name(s) — basic role gate. */
 function requireRole(...roles) {
   return (req, res, next) => {
-    if (req.session && req.session.user && roles.includes(req.session.user.role)) {
+    if (req.session && req.session.user && (roles.includes(req.session.user.role) || req.session.user.role === 'superadmin')) {
       return next();
     }
     if (!req.session || !req.session.user) {

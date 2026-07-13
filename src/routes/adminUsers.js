@@ -17,7 +17,7 @@ const programmes = require('../lib/programmes');
 
 const router = express.Router();
 
-router.use(requireRole('staff', 'admin'));
+router.use(requireRole('admin'));
 router.use((req, res, next) => {
   res.locals.layout = 'layouts/admin';
   res.locals.adminActive = 'users';

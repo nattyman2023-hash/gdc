@@ -14,6 +14,7 @@
     "seed": "knex seed:run",
     "db:reset": "knex migrate:rollback --all && knex migrate:latest && knex seed:run",
     "setup": "node scripts/setup.js",
+    "test": "node scripts/verify.js",
     "build:css": "tailwindcss -i ./src/styles/input.css -o ./public/css/app.css --minify"
   },
   "engines": {

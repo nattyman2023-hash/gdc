@@ -13,6 +13,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 const rateLimit = require('express-rate-limit');
+const csrf = require('csurf');
 
 const knex = require('./config/db');
 const locals = require('./middleware/locals');
@@ -84,7 +85,15 @@ app.use((req, res, next) => {
 
 // ─── Health check (Hostinger monitoring) ─────────────────────
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString(), commit: app.locals.deployedCommit, bootedAt: app.locals.bootedAt });
+  const ready = app.locals.migrationsReady !== false;
+  res.status(ready ? 200 : 503).json({
+    status: ready ? 'ok' : 'starting',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    commit: app.locals.deployedCommit,
+    bootedAt: app.locals.bootedAt,
+    error: app.locals.startupError || undefined,
+  });
 });
 
 // ─── Stripe webhook (needs the RAW body, so mount BEFORE json parser) ──
@@ -98,6 +107,9 @@ app.use(express.static(path.join(__dirname, '..', 'public'), {
 }));
 
 // ─── Sessions & flash ────────────────────────────────────────
+if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+  throw new Error('SESSION_SECRET must be configured in production.');
+}
 app.use(
   session({
     store: new ConnectSessionKnexStore({ knex, tablename: 'sessions', createtable: false, cleanupInterval: 900000 }),
@@ -116,6 +128,18 @@ app.use(
 app.use(flash());
 app.use(locals);
 app.use(permissionLocals);
+
+// Protect all browser state-changing requests. Stripe signs its own webhook
+// payload, so that endpoint is deliberately excluded from CSRF/session checks.
+const csrfProtection = csrf();
+app.use((req, res, next) => {
+  if (req.path.startsWith('/webhooks/stripe')) return next();
+  return csrfProtection(req, res, next);
+});
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken ? req.csrfToken() : '';
+  next();
+});
 
 // ─── Response cache (production only) ────────────────────────
 // Must come AFTER session/locals — its "skip if logged in" check reads
@@ -191,4 +215,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-

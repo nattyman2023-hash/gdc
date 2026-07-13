@@ -29,6 +29,7 @@
   </div>
 
   <form id="quiz-form" action="/portal/quizzes/<%= quiz.id %>/submit" method="post">
+    <input type="hidden" name="attempt_id" value="<%= attempt ? attempt.id : '' %>" />
     <input type="hidden" name="timed_out" id="timed-out-field" value="0" />
 
     <% questions.forEach(function(q, qi){ %>
@@ -45,7 +46,7 @@
       <div class="space-y-2 ml-9">
         <% q.options.forEach(function(o){ %>
         <label class="flex items-center gap-3 px-4 py-3 rounded-lg border border-outline-variant hover:border-secondary cursor-pointer has-[:checked]:border-secondary has-[:checked]:bg-secondary-fixed/20 transition-all">
-          <input type="radio" name="q_<%= q.id %>" value="<%= o.id %>" class="text-secondary focus:ring-secondary" data-qid="<%= q.id %>" />
+          <input type="<%= q.type === 'multiple' ? 'checkbox' : 'radio' %>" name="q_<%= q.id %>" value="<%= o.id %>" class="text-secondary focus:ring-secondary" data-qid="<%= q.id %>" />
           <span class="text-on-surface"><%= o.text %></span>
         </label>
         <% }) %>
@@ -83,7 +84,7 @@
 <script>
 (function() {
   const questions = document.querySelectorAll('.question-card');
-  const radioMap = {};
+  const answerMap = {};
   const flags = {};
   let answeredSet = {};
   const STORAGE_KEY = 'quiz_answers_<%= quiz.id %>';
@@ -115,16 +116,21 @@
     updateTimer();
   }
 
-  function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: radioMap, flags, updatedAt: Date.now() })); updateProgress(); }
+  function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: answerMap, flags, updatedAt: Date.now() })); updateProgress(); }
 
   function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
     try {
       const data = JSON.parse(saved);
-      if (data.answers) Object.assign(radioMap, data.answers);
-      if (data.flags) Object.assign(flags, data.flags);
-      Object.entries(radioMap).forEach(([qId, val]) => { const r = document.querySelector(`input[name="q_${qId}"][value="${val}"]`); if (r) r.checked = true; });
+       if (data.answers) Object.assign(answerMap, data.answers);
+       if (data.flags) Object.assign(flags, data.flags);
+       Object.entries(answerMap).forEach(([qId, val]) => {
+         (Array.isArray(val) ? val : [val]).forEach(function (id) {
+           const input = document.querySelector(`input[name="q_${qId}"][value="${id}"]`);
+           if (input) input.checked = true;
+         });
+       });
       Object.entries(flags).forEach(([qId, f]) => { if (f) applyFlag(parseInt(qId)); });
     } catch(e) {}
     updateProgress();
@@ -134,7 +140,7 @@
   window.toggleFlag = function(qId) { flags[qId] = !flags[qId]; applyFlag(qId); saveState(); };
 
   function applyFlag(qId) {
-    const btn = document.querySelector(`.flag-btn[onlick*="toggleFlag(${qId})"]`);
+     const btn = document.querySelector(`.flag-btn[onclick*="toggleFlag(${qId})"]`);
     const dot = document.querySelector(`.q-nav-dot[data-qid="${qId}"]`);
     if (flags[qId]) {
       if (btn) btn.classList.add('text-amber-500'), btn.classList.remove('text-outline');
@@ -146,9 +152,9 @@
   }
 
   function updateProgress() {
-    const allRadios = document.querySelectorAll('input[type="radio"][name^="q_"]');
-    const answered = new Set();
-    allRadios.forEach(r => { if (r.checked) answered.add(r.name); });
+     const allAnswers = document.querySelectorAll('input[name^="q_"]');
+     const answered = new Set();
+     allAnswers.forEach(input => { if (input.checked) answered.add(input.name); });
     answeredSet = answered;
     const total = <%= questions.length %>;
     const count = answered.size;
@@ -158,25 +164,32 @@
     document.getElementById('answered-info').classList.remove('hidden');
     document.querySelectorAll('.q-nav-dot').forEach(dot => {
       const qId = parseInt(dot.dataset.qid);
-      if (radioMap[qId]) { dot.classList.add('bg-secondary', 'text-on-secondary', 'border-secondary'); dot.classList.remove('bg-surface-container-low', 'text-on-surface-variant', 'border-outline-variant'); }
+       const value = answerMap[qId];
+       if (value && (!Array.isArray(value) || value.length)) { dot.classList.add('bg-secondary', 'text-on-secondary', 'border-secondary'); dot.classList.remove('bg-surface-container-low', 'text-on-surface-variant', 'border-outline-variant'); }
       else { dot.classList.remove('bg-secondary', 'text-on-secondary', 'border-secondary'); dot.classList.add('bg-surface-container-low', 'text-on-surface-variant', 'border-outline-variant'); }
       if (flags[qId]) applyFlag(qId);
     });
   }
 
-  document.querySelectorAll('input[type="radio"]').forEach(radio => {
-    radio.addEventListener('change', function() { if (this.checked) { radioMap[this.dataset.qid] = this.value; saveState(); } });
+   document.querySelectorAll('input[name^="q_"]').forEach(input => {
+     input.addEventListener('change', function() {
+       const inputs = document.querySelectorAll(`input[name="q_${this.dataset.qid}"]`);
+       answerMap[this.dataset.qid] = this.type === 'checkbox'
+         ? Array.from(inputs).filter(function (i) { return i.checked; }).map(function (i) { return i.value; })
+         : (this.checked ? this.value : '');
+       saveState();
+     });
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=dots.length-1;i>=0;i--) { const qid = parseInt(dots[i].dataset.qid); if (!radioMap[qid]) { scrollToQ(qid); break; } } }
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=0;i<dots.length;i++) { const qid = parseInt(dots[i].dataset.qid); if (!radioMap[qid]) { scrollToQ(qid); break; } } }
+     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=dots.length-1;i>=0;i--) { const qid = parseInt(dots[i].dataset.qid); if (!answerMap[qid] || (Array.isArray(answerMap[qid]) && !answerMap[qid].length)) { scrollToQ(qid); break; } } }
+     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); const dots = document.querySelectorAll('.q-nav-dot'); for (let i=0;i<dots.length;i++) { const qid = parseInt(dots[i].dataset.qid); if (!answerMap[qid] || (Array.isArray(answerMap[qid]) && !answerMap[qid].length)) { scrollToQ(qid); break; } } }
   });
 
-  window.addEventListener('beforeunload', function(e) { const u = <%= questions.length %> - Object.keys(radioMap).length; if (u > 0) { e.preventDefault(); e.returnValue = 'You have unanswered questions.'; } });
+   window.addEventListener('beforeunload', function(e) { const u = <%= questions.length %> - Object.keys(answerMap).filter(function (key) { return answerMap[key] && (!Array.isArray(answerMap[key]) || answerMap[key].length); }).length; if (u > 0) { e.preventDefault(); e.returnValue = 'You have unanswered questions.'; } });
 
   document.getElementById('quiz-form').addEventListener('submit', function(e) {
-    const u = <%= questions.length %> - Object.keys(radioMap).length;
+     const u = <%= questions.length %> - Object.keys(answerMap).filter(function (key) { return answerMap[key] && (!Array.isArray(answerMap[key]) || answerMap[key].length); }).length;
     if (u > 0 && !document.getElementById('timed-out-field').value && !confirm('You have ' + u + ' unanswered question(s). Submit anyway?')) { e.preventDefault(); return; }
     localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(TIMER_KEY); localStorage.removeItem('quiz_remaining_<%= quiz.id %>');
   });

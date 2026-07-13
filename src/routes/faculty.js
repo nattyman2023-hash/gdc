@@ -194,13 +194,20 @@ router.post('/office-hours', async (req, res, next) => {
       req.flash('error', 'Please choose a start time.');
       return res.redirect('/faculty/office-hours');
     }
+    const capacity = Number(req.body.capacity || 1);
+    const startsAt = new Date(req.body.starts_at);
+    const endsAt = req.body.ends_at ? new Date(req.body.ends_at) : null;
+    if (!Number.isInteger(capacity) || capacity < 1 || Number.isNaN(startsAt.getTime()) || (endsAt && (Number.isNaN(endsAt.getTime()) || endsAt <= startsAt))) {
+      req.flash('error', 'Please provide valid office-hour times and capacity.');
+      return res.redirect('/faculty/office-hours');
+    }
     await knex('office_hour_slots').insert({
       faculty_id: req.session.user.id,
       starts_at: req.body.starts_at.replace('T', ' ') + ':00',
       ends_at: req.body.ends_at ? req.body.ends_at.replace('T', ' ') + ':00' : null,
       mode: req.body.mode || 'online',
       join_url: req.body.join_url || null,
-      capacity: req.body.capacity ? Number(req.body.capacity) : 1,
+      capacity,
       topic: req.body.topic || null,
     });
     req.flash('success', 'Office-hour slot added.');
@@ -232,12 +239,18 @@ router.post('/courses/:slug/assignments', async (req, res, next) => {
     if (req.session.user.role !== 'admin' && course.instructor_id !== req.session.user.id) {
       return res.status(403).render('errors/403', { pageTitle: 'Access denied', layout: 'layouts/faculty' });
     }
+    const maxPoints = Number(req.body.max_points || 100);
+    const dueDate = req.body.due_date ? new Date(req.body.due_date) : null;
+    if (!req.body.title || !req.body.title.trim() || !Number.isFinite(maxPoints) || maxPoints <= 0 || (dueDate && Number.isNaN(dueDate.getTime()))) {
+      req.flash('error', 'Please provide a title, valid points, and a valid due date.');
+      return res.redirect(`/faculty/courses/${course.slug}`);
+    }
     await knex('assignments').insert({
       course_id: course.id,
-      title: req.body.title || 'New assignment',
+      title: req.body.title.trim(),
       instructions: req.body.instructions || null,
       due_date: req.body.due_date || null,
-      max_points: req.body.max_points ? Number(req.body.max_points) : 100,
+      max_points: maxPoints,
       created_at: knex.fn.now(), updated_at: knex.fn.now(),
     });
     req.flash('success', 'Assignment created.');
@@ -268,8 +281,13 @@ router.post('/submissions/:sid/grade', async (req, res, next) => {
     const course = await knex('courses').where({ id: assignment.course_id }).first();
     const owns = req.session.user.role === 'admin' || (course && course.instructor_id === req.session.user.id);
     if (!owns) return res.status(403).render('errors/403', { pageTitle: 'Access denied', layout: 'layouts/faculty' });
+    const grade = req.body.grade === '' || req.body.grade === undefined ? null : Number(req.body.grade);
+    if (grade !== null && (!Number.isFinite(grade) || grade < 0 || grade > Number(assignment.max_points))) {
+      req.flash('error', `Grade must be between 0 and ${assignment.max_points}.`);
+      return res.redirect(`/faculty/assignments/${assignment.id}`);
+    }
     await knex('assignment_submissions').where({ id: submission.id }).update({
-      grade: req.body.grade !== '' ? Number(req.body.grade) : null,
+      grade,
       feedback: req.body.feedback || null,
       status: 'graded', graded_at: knex.fn.now(),
     });
@@ -306,11 +324,16 @@ router.post('/courses/:slug/quizzes', async (req, res, next) => {
       return res.status(403).render('errors/403', { pageTitle: 'Access denied', layout: 'layouts/faculty' });
     }
     const max = await knex('quizzes').where({ course_id: course.id }).max({ m: 'sort_order' }).first();
+    const passMark = Number(req.body.pass_mark || 60);
+    if (!Number.isFinite(passMark) || passMark < 0 || passMark > 100) {
+      req.flash('error', 'Pass mark must be between 0 and 100.');
+      return res.redirect(`/faculty/courses/${course.slug}`);
+    }
     const [idRaw] = await knex('quizzes').insert({
       course_id: course.id,
       title: req.body.title || 'New quiz',
       description: req.body.description || null,
-      pass_mark: req.body.pass_mark ? Number(req.body.pass_mark) : 60,
+      pass_mark: passMark,
       sort_order: (Number(max.m) || 0) + 1,
     });
     const id = Array.isArray(idRaw) ? idRaw[0] : idRaw;
@@ -335,10 +358,15 @@ router.post('/quizzes/:id', async (req, res, next) => {
   try {
     const { quiz, course, owns } = await loadOwnedQuiz(req);
     if (!quiz || !owns) return res.redirect('/faculty');
+    const passMark = req.body.pass_mark === '' || req.body.pass_mark === undefined ? quiz.pass_mark : Number(req.body.pass_mark);
+    if (!Number.isFinite(passMark) || passMark < 0 || passMark > 100) {
+      req.flash('error', 'Pass mark must be between 0 and 100.');
+      return res.redirect(`/faculty/quizzes/${quiz.id}/edit`);
+    }
     await knex('quizzes').where({ id: quiz.id }).update({
       title: req.body.title || quiz.title,
       description: req.body.description || null,
-      pass_mark: req.body.pass_mark ? Number(req.body.pass_mark) : quiz.pass_mark,
+      pass_mark: passMark,
     });
     req.flash('success', 'Quiz updated.');
     res.redirect(`/faculty/quizzes/${quiz.id}/edit`);
@@ -366,6 +394,10 @@ router.post('/quizzes/:id/questions', async (req, res, next) => {
       return res.redirect(`/faculty/quizzes/${quiz.id}/edit`);
     }
     const correctIdx = Number(req.body.correct || 0); // index into options
+    if (!Number.isInteger(correctIdx) || correctIdx < 0 || correctIdx >= options.length) {
+      req.flash('error', 'Choose one correct answer.');
+      return res.redirect(`/faculty/quizzes/${quiz.id}/edit`);
+    }
     const max = await knex('quiz_questions').where({ quiz_id: quiz.id }).max({ m: 'sort_order' }).first();
     const [qidRaw] = await knex('quiz_questions').insert({
       quiz_id: quiz.id, prompt: req.body.prompt, type: 'single',

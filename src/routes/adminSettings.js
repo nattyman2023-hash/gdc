@@ -6,12 +6,12 @@
  */
 const express = require('express');
 const knex = require('../config/db');
-const { requireRole } = require('../middleware/auth');
+const { requirePermission } = require('../middleware/auth');
 const { sendMail } = require('../lib/mailer');
 
 const router = express.Router();
 
-router.use(requireRole('staff', 'admin'));
+router.use(requirePermission('manage_settings'));
 router.use((req, res, next) => {
   res.locals.layout = 'layouts/admin';
   res.locals.adminActive = 'settings';

@@ -91,15 +91,33 @@ router.get('/pay/success', requireRole('student', 'staff', 'admin'), async (req,
   try {
     const { session_id } = req.query;
     if (session_id) {
+      const { stripe, isConfigured } = await getStripe();
+      if (!isConfigured || !stripe) {
+        req.flash('error', 'Payment verification is temporarily unavailable.');
+        return res.redirect('/portal/billing');
+      }
+      const checkoutSession = await stripe.checkout.sessions.retrieve(String(session_id));
+      if (checkoutSession.payment_status !== 'paid') {
+        req.flash('error', 'Stripe has not confirmed this payment yet.');
+        return res.redirect('/portal/billing');
+      }
+      const paymentBeforeUpdate = await knex('payments')
+        .where({ stripe_session_id: String(session_id), user_id: req.session.user.id })
+        .first();
+      if (!paymentBeforeUpdate) {
+        req.flash('error', 'Payment session not found.');
+        return res.redirect('/portal/billing');
+      }
+      const wasAlreadyPaid = paymentBeforeUpdate.status === 'paid';
       await knex('payments')
-        .where({ stripe_session_id: session_id })
-        .update({ status: 'paid', paid_at: knex.fn.now() });
+        .where({ id: paymentBeforeUpdate.id })
+        .update({ status: 'paid', paid_at: paymentBeforeUpdate.paid_at || knex.fn.now() });
 
       // Send confirmation email
       const payment = await knex('payments')
-        .where({ stripe_session_id: session_id })
+        .where({ id: paymentBeforeUpdate.id })
         .first();
-      if (payment) {
+      if (payment && !wasAlreadyPaid) {
         const user = await knex('users').where({ id: payment.user_id }).first();
         if (user) {
           const html = emailTemplates.paymentConfirmation({

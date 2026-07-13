@@ -8,6 +8,7 @@
 <meta property="og:url" content="<%= typeof appUrl !== 'undefined' ? appUrl : '' %>" />
 <meta property="og:image" content="<%= appUrl || '' %>/img/generated/gdcu-online-learning.webp" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
 <link rel="canonical" href="<%= (appUrl || '') + (currentPath || '/') %>" />
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
 <script src="/js/theme.js"></script>
@@ -57,3 +58,41 @@
   .animate-spin { animation: gdcu-spin 1s linear infinite; }
   @keyframes gdcu-spin { to { transform: rotate(360deg); } }
 </style>
+<script>
+  // Add the server-issued token to static and dynamically-created browser
+  // forms, including legacy admin bulk actions that call form.submit().
+  (function () {
+    var meta = document.querySelector('meta[name="csrf-token"]');
+    var token = meta && meta.content;
+    if (!token) return;
+    function add(form) {
+      if (!form || String(form.method || 'get').toLowerCase() !== 'post') return;
+      if (!form.querySelector('input[name="_csrf"]')) {
+        var input = document.createElement('input');
+        input.type = 'hidden'; input.name = '_csrf'; input.value = token;
+        form.appendChild(input);
+      }
+      // csurf cannot read a multipart body until multer has parsed it. Put a
+      // copy in the query string so profile/media uploads are protected too.
+      if (String(form.enctype || '').toLowerCase() === 'multipart/form-data') {
+        try {
+          var action = new URL(form.action || window.location.href, window.location.origin);
+          action.searchParams.set('_csrf', token);
+          form.action = action.toString();
+        } catch (e) {}
+      }
+    }
+    function scan(root) {
+      if (!root) return;
+      if (root.matches && root.matches('form')) add(root);
+      if (root.querySelectorAll) root.querySelectorAll('form').forEach(add);
+    }
+    document.addEventListener('DOMContentLoaded', function () { scan(document); });
+    document.addEventListener('submit', function (event) { add(event.target); }, true);
+    if (window.MutationObserver) new MutationObserver(function (records) {
+      records.forEach(function (record) { record.addedNodes.forEach(scan); });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    var nativeSubmit = HTMLFormElement.prototype.submit;
+    HTMLFormElement.prototype.submit = function () { add(this); nativeSubmit.call(this); };
+  })();
+</script>

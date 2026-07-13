@@ -2,6 +2,21 @@
  * LMS domain helpers.
  */
 const knex = require('../config/db');
+const programmes = require('./programmes');
+
+/** Return a student's active/completed entitlement for a published course. */
+async function getCourseAccess(userId, courseId, { requirePaid = true } = {}) {
+  const course = await knex('courses').where({ id: courseId, published: true }).first();
+  if (!course) return { allowed: false, reason: 'course_not_found', course: null, enrollment: null, paid: false };
+  const enrollment = await knex('enrollments')
+    .where({ user_id: userId, course_id: course.id })
+    .whereIn('status', ['active', 'completed'])
+    .first();
+  if (!enrollment) return { allowed: false, reason: 'not_enrolled', course, enrollment: null, paid: false };
+  const paid = await programmes.hasPaidTuition(userId, course.program_id);
+  if (requirePaid && !paid) return { allowed: false, reason: 'payment_required', course, enrollment, paid };
+  return { allowed: true, reason: 'allowed', course, enrollment, paid };
+}
 
 /**
  * Total number of published lessons a student could actually complete in a
@@ -218,10 +233,12 @@ async function isLessonAvailable(enrollmentId, lessonId, structure) {
     if (new Date() < latest) return { available: false, reason: 'scheduled_release', next_available: latest };
   }
 
+  const enrollment = await knex('enrollments').where({ id: enrollmentId }).first();
+  const course = enrollment ? await knex('courses').where({ id: enrollment.course_id }).first() : null;
+
   // Block-structured courses use block-level gating.
   if (lesson.block_no) {
-    const bcourse = await knex('courses').where({ id: mod.course_id }).first();
-    if (bcourse && bcourse.drip_feed_enabled) return blockLessonAvailable(enrollmentId, lesson, structure, bcourse);
+    if (course && course.drip_feed_enabled) return blockLessonAvailable(enrollmentId, lesson, structure, course);
     return { available: true, reason: 'drip_disabled' };
   }
 
@@ -231,8 +248,6 @@ async function isLessonAvailable(enrollmentId, lessonId, structure) {
 
   // First lesson is always available
   if (idx === 0) return { available: true, reason: 'first_lesson' };
-
-  const course = await knex('courses').where({ id: mod.course_id }).first();
 
   // If drip feed is disabled, lesson is available
   if (!course || !course.drip_feed_enabled) {
@@ -449,6 +464,6 @@ async function getBlockedCurriculum(enrollmentId, structure, course) {
   });
 }
 
-module.exports = { countLessons, countCompleted, recalcProgress, getCourseStructure,
+module.exports = { getCourseAccess, countLessons, countCompleted, recalcProgress, getCourseStructure,
   isLessonAvailable, isQuizAvailable, completeLessonWithDrip, getNextAvailableLesson,
   getModuleEssayStatus, submitEssay, getFlatLessonList, getBlockedCurriculum, passedQuizIds };

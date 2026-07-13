@@ -18,7 +18,7 @@
       <div class="space-y-2 ml-8">
         <% q.options.forEach(function(o){ %>
         <%
-          const isChosen = q.chosen === o.id;
+          const isChosen = Array.isArray(q.chosen) ? q.chosen.includes(o.id) : q.chosen === o.id;
           let cls = 'border-outline-variant';
           if (o.is_correct) cls = 'border-secondary bg-secondary-fixed/40';
           else if (isChosen && !o.is_correct) cls = 'border-error bg-error-container/40';
@@ -37,6 +37,10 @@
 
   <div class="flex gap-4 mt-8">
     <a href="/portal/quizzes/<%= quiz.id %>" class="bg-primary text-on-primary px-6 py-3 rounded font-bold">Retake Quiz</a>
+    <% if (course) { %>
     <a href="/portal/courses/<%= course.slug %>" class="border border-outline text-primary px-6 py-3 rounded font-bold">Back to course</a>
+    <% } else { %>
+    <a href="/portal/exams" class="border border-outline text-primary px-6 py-3 rounded font-bold">Back to exams</a>
+    <% } %>
   </div>
 </div>

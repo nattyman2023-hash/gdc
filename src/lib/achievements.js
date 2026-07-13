@@ -75,17 +75,14 @@ async function awardBadge(userId, badgeKey) {
   try {
     const badge = await getBadge(badgeKey);
     if (!badge) return null;
-    const existing = await knex('user_achievements')
-      .where({ user_id: userId, badge_id: badge.id })
-      .first();
-    if (existing) return existing;
-    const [id] = await knex('user_achievements').insert({
+    await knex('user_achievements').insert({
       user_id: userId,
       badge_id: badge.id,
       awarded_at: knex.fn.now(),
-    });
-    const achievementId = Array.isArray(id) ? id[0] : id;
-    return { id: achievementId, badge, awarded_at: new Date() };
+    }).onConflict(['user_id', 'badge_id']).ignore();
+    return knex('user_achievements')
+      .where({ user_id: userId, badge_id: badge.id })
+      .first();
   } catch (err) {
     console.error('awardBadge failed:', err.message);
     return null;
@@ -146,39 +143,7 @@ async function checkCourseMilestones(userId) {
 
 /** Call daily (or on login) to check and update study streaks. */
 async function checkStreakMilestones(userId, loginDate) {
-  if (!loginDate) loginDate = new Date();
-  const today = loginDate.toISOString().slice(0, 10);
-
-  // Get the most recent 30 days of lesson completions for this user
-  const thirtyDaysAgo = new Date(loginDate);
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  const completionDates = await knex('lesson_progress')
-    .join('enrollments', 'lesson_progress.enrollment_id', 'enrollments.id')
-    .where('enrollments.user_id', userId)
-    .where('lesson_progress.completed', true)
-    .where('lesson_progress.completed_at', '>=', thirtyDaysAgo)
-    .select(knex.raw("DISTINCT DATE(lesson_progress.completed_at) as d"));
-
-  const dateSet = new Set(completionDates.map((r) => r.d));
-  dateSet.add(today); // count today
-
-  // Calculate longest current streak
-  let streak = 0;
-  let maxStreak = 0;
-  const d = new Date(loginDate);
-  for (let i = 0; i < 60; i++) {
-    const key = d.toISOString().slice(0, 10);
-    if (dateSet.has(key)) {
-      streak++;
-      if (streak > maxStreak) maxStreak = streak;
-    } else {
-      // Allow one gap day (yesterday) before breaking
-      if (i > 1) break;
-      streak = 0;
-    }
-    d.setDate(d.getDate() - 1);
-  }
-
+  const streak = await getCurrentStreak(userId, loginDate || new Date());
   const thresholds = [
     { key: BADGES.STREAK_3,  min: 3 },
     { key: BADGES.STREAK_7,  min: 7 },
@@ -186,10 +151,10 @@ async function checkStreakMilestones(userId, loginDate) {
     { key: BADGES.STREAK_30, min: 30 },
   ];
   for (const t of thresholds) {
-    if (maxStreak >= t.min) await awardBadge(userId, t.key);
+    if (streak >= t.min) await awardBadge(userId, t.key);
   }
 
-  return maxStreak;
+  return streak;
 }
 
 /** Call when a user creates their first forum topic. */
@@ -230,7 +195,17 @@ async function getAllBadgeDefinitions() {
 }
 
 /** Get the current streak for a user. */
-async function getCurrentStreak(userId) {
+function dayKey(value) {
+  return new Date(value).toISOString().slice(0, 10);
+}
+
+function previousDay(day) {
+  const value = new Date(`${day}T00:00:00.000Z`);
+  value.setUTCDate(value.getUTCDate() - 1);
+  return dayKey(value);
+}
+
+async function getCurrentStreak(userId, asOf) {
   const dates = await knex('lesson_progress')
     .join('enrollments', 'lesson_progress.enrollment_id', 'enrollments.id')
     .where('enrollments.user_id', userId)
@@ -240,23 +215,15 @@ async function getCurrentStreak(userId) {
 
   if (!dates.length) return 0;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-
-  // Streak must include today or yesterday to be active
   const dateSet = new Set(dates.map((r) => r.d));
-  if (!dateSet.has(today) && !dateSet.has(yesterday)) return 0;
+  let cursor = dayKey(asOf || new Date());
+  if (!dateSet.has(cursor)) cursor = previousDay(cursor);
+  if (!dateSet.has(cursor)) return 0;
 
   let streak = 0;
-  const d = new Date();
-  for (let i = 0; i < 365; i++) {
-    const key = d.toISOString().slice(0, 10);
-    if (dateSet.has(key)) {
-      streak++;
-    } else {
-      break;
-    }
-    d.setDate(d.getDate() - 1);
+  while (dateSet.has(cursor)) {
+    streak += 1;
+    cursor = previousDay(cursor);
   }
   return streak;
 }

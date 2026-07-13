@@ -5,7 +5,7 @@
  */
 const express = require('express');
 const knex = require('../config/db');
-const { requireRole } = require('../middleware/auth');
+const { requirePermission } = require('../middleware/auth');
 const { slugify } = require('../lib/helpers');
 const { notifyUser } = require('../lib/notify');
 const { isConfigured: zoomConfigured, createMeeting, updateMeeting } = require('../lib/zoom');
@@ -20,7 +20,7 @@ async function notifyAnnouncement(courseId, title) {
 
 const router = express.Router();
 
-router.use(requireRole('staff', 'admin'));
+router.use(requirePermission('manage_content'));
 router.use((req, res, next) => {
   res.locals.layout = 'layouts/admin';
   res.locals.adminActive = '';

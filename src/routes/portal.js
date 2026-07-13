@@ -29,8 +29,15 @@ router.use((req, res, next) => {
 async function findEnrollment(userId, slug) {
   const course = await knex('courses').where({ slug, published: true }).first();
   if (!course) return { course: null, enrollment: null };
-  const enrollment = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
+  const enrollment = await knex('enrollments')
+    .where({ user_id: userId, course_id: course.id })
+    .whereIn('status', ['active', 'completed'])
+    .first();
   return { course, enrollment };
+}
+
+async function sharedModuleIdsForCourse(courseId) {
+  return knex('course_shared_modules').where({ course_id: courseId }).pluck('shared_module_id');
 }
 
 // ─── Dashboard ───────────────────────────────────────────────
@@ -40,6 +47,7 @@ router.get('/', async (req, res, next) => {
     const enrollments = await knex('enrollments')
       .join('courses', 'enrollments.course_id', 'courses.id')
       .where('enrollments.user_id', userId)
+      .whereIn('enrollments.status', ['active', 'completed'])
       .select(
         'enrollments.*',
         'courses.title as course_title',
@@ -72,6 +80,7 @@ router.get('/', async (req, res, next) => {
     achievements.checkStreakMilestones(userId).catch(() => {});
 
     const streak = await achievements.getCurrentStreak(userId);
+    const recentAchievements = (await achievements.getUserAchievements(userId)).slice(0, 3);
 
     res.render('portal/dashboard', {
       pageTitle: 'Student Workspace | GDCU',
@@ -81,6 +90,7 @@ router.get('/', async (req, res, next) => {
       certificates,
       outstanding,
       streak,
+      recentAchievements,
     });
   } catch (err) {
     next(err);
@@ -94,6 +104,7 @@ router.get('/courses', async (req, res, next) => {
     const enrollments = await knex('enrollments')
       .join('courses', 'enrollments.course_id', 'courses.id')
       .where('enrollments.user_id', userId)
+      .whereIn('enrollments.status', ['active', 'completed'])
       .select(
         'enrollments.*',
         'courses.title as course_title',
@@ -118,7 +129,7 @@ router.get('/catalog', async (req, res, next) => {
   try {
     const userId = req.session.user.id;
     const courses = await knex('courses').where({ published: true }).orderBy('sort_order');
-    const enrolledIds = await knex('enrollments').where({ user_id: userId }).pluck('course_id');
+    const enrolledIds = await knex('enrollments').where({ user_id: userId }).whereIn('status', ['active', 'completed']).pluck('course_id');
 
     // Which non-enrolled courses need an application rather than instant
     // enrolment (bachelor/master/doctor, unless already qualified), and which
@@ -157,6 +168,12 @@ router.post('/courses/:id/enroll', async (req, res, next) => {
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/portal' });
 
     const existing = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
+    if (existing && existing.status === 'withdrawn') {
+      await knex('enrollments').where({ id: existing.id }).update({ status: 'active', enrolled_at: knex.fn.now(), updated_at: knex.fn.now() });
+      await programmes.ensureTuitionInvoice(course.program_id, userId, null);
+      req.flash('success', `You are re-enrolled in ${course.title}. Visit Billing & Payments to pay your tuition and unlock your course content.`);
+      return res.redirect(`/portal/courses/${course.slug}`);
+    }
     if (!existing) {
       // Bachelor/Master/Doctorate programmes require an application (+ fee +
       // acceptance) unless this student already holds a qualifying enrollment
@@ -504,6 +521,10 @@ router.post('/courses/:slug/lessons/:lessonId/complete', async (req, res, next) 
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      req.flash('info', 'Please make a tuition payment before studying this course.');
+      return res.redirect(`/portal/courses/${course.slug}`);
+    }
 
     const sharedModuleIds = await knex('course_shared_modules')
       .where({ course_id: course.id })
@@ -551,6 +572,17 @@ router.post('/courses/:slug/lessons/:lessonId/comment', async (req, res, next) =
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
+    const sharedModuleIds = await sharedModuleIdsForCourse(course.id);
+    const lesson = await knex('lessons')
+      .join('modules', 'lessons.module_id', 'modules.id')
+      .where('lessons.id', req.params.lessonId)
+      .andWhere(function () {
+        this.where('modules.course_id', course.id).orWhereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
+      })
+      .select('lessons.id')
+      .first();
+    if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/portal' });
     if (req.body.body && req.body.body.trim()) {
       await knex('lesson_comments').insert({
         lesson_id: req.params.lessonId,
@@ -570,6 +602,17 @@ router.post('/courses/:slug/lessons/:lessonId/note', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
+    const sharedModuleIds = await sharedModuleIdsForCourse(course.id);
+    const lesson = await knex('lessons')
+      .join('modules', 'lessons.module_id', 'modules.id')
+      .where('lessons.id', req.params.lessonId)
+      .andWhere(function () {
+        this.where('modules.course_id', course.id).orWhereIn('modules.shared_module_id', sharedModuleIds.length ? sharedModuleIds : [0]);
+      })
+      .select('lessons.id')
+      .first();
+    if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/portal' });
     const existing = await knex('lesson_notes').where({ lesson_id: req.params.lessonId, user_id: userId }).first();
     if (existing) {
       await knex('lesson_notes').where({ id: existing.id }).update({ body: req.body.body || '', updated_at: knex.fn.now() });
@@ -587,9 +630,11 @@ router.get('/assignments/:id', async (req, res, next) => {
     const userId = req.session.user.id;
     const assignment = await knex('assignments').where({ id: req.params.id, published: true }).first();
     if (!assignment) return res.status(404).render('errors/404', { pageTitle: 'Assignment not found', layout: 'layouts/portal' });
-    const course = await knex('courses').where({ id: assignment.course_id }).first();
-    const enrollment = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
+    const course = await knex('courses').where({ id: assignment.course_id, published: true }).first();
+    if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/portal' });
+    const enrollment = await knex('enrollments').where({ user_id: userId, course_id: course.id }).whereIn('status', ['active', 'completed']).first();
     if (!enrollment) { req.flash('info', 'Enrol in the course to access this assignment.'); return res.redirect('/portal/catalog'); }
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.render('portal/payment-required', { pageTitle: `${course.title} | GDCU`, portalActive: 'my-courses', course });
     const submission = await knex('assignment_submissions').where({ assignment_id: assignment.id, user_id: userId }).first();
     res.render('portal/assignment', { pageTitle: `${assignment.title} | GDCU`, portalActive: 'my-courses', assignment, course, submission });
   } catch (err) { next(err); }
@@ -600,14 +645,25 @@ router.post('/assignments/:id/submit', async (req, res, next) => {
     const userId = req.session.user.id;
     const assignment = await knex('assignments').where({ id: req.params.id, published: true }).first();
     if (!assignment) return res.redirect('/portal');
-    const enrollment = await knex('enrollments').where({ user_id: userId, course_id: assignment.course_id }).first();
+    const course = await knex('courses').where({ id: assignment.course_id, published: true }).first();
+    const enrollment = await knex('enrollments').where({ user_id: userId, course_id: assignment.course_id }).whereIn('status', ['active', 'completed']).first();
     if (!enrollment) return res.redirect('/portal/catalog');
+    if (!course || !(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect('/portal/catalog');
+    if (assignment.due_date && new Date(`${String(assignment.due_date).slice(0, 10)}T23:59:59`) < new Date()) {
+      req.flash('error', 'The deadline for this assignment has passed.');
+      return res.redirect(`/portal/assignments/${assignment.id}`);
+    }
     const existing = await knex('assignment_submissions').where({ assignment_id: assignment.id, user_id: userId }).first();
     if (existing && existing.status === 'graded') {
       req.flash('info', 'This assignment has already been graded and cannot be resubmitted.');
       return res.redirect(`/portal/assignments/${assignment.id}`);
     }
-    const data = { body: req.body.body || null, url: req.body.url || null, status: 'submitted', submitted_at: knex.fn.now() };
+    const body = typeof req.body.body === 'string' ? req.body.body.trim() : '';
+    const url = typeof req.body.url === 'string' ? req.body.url.trim() : '';
+    if (!body && !url) { req.flash('error', 'Please provide written work or a link.'); return res.redirect(`/portal/assignments/${assignment.id}`); }
+    if (body.length > 100000 || url.length > 2048) { req.flash('error', 'Your submission is too large.'); return res.redirect(`/portal/assignments/${assignment.id}`); }
+    if (url) { try { new URL(url); } catch (_) { req.flash('error', 'Please provide a valid URL.'); return res.redirect(`/portal/assignments/${assignment.id}`); } }
+    const data = { body: body || null, url: url || null, status: 'submitted', submitted_at: knex.fn.now() };
     if (existing) {
       await knex('assignment_submissions').where({ id: existing.id }).update(data);
     } else {
@@ -620,10 +676,16 @@ router.post('/assignments/:id/submit', async (req, res, next) => {
 
 // Programmes a student is associated with (accepted application or enrolled course).
 async function studentProgrammeIds(userId) {
-  const fromApps = await knex('applications').where({ student_user_id: userId }).whereNotNull('program_id').pluck('program_id');
+  const fromApps = await knex('applications')
+    .where({ student_user_id: userId })
+    .whereIn('status', ['accepted'])
+    .whereNotNull('program_id')
+    .pluck('program_id');
   const fromCourses = await knex('enrollments')
     .join('courses', 'enrollments.course_id', 'courses.id')
-    .where('enrollments.user_id', userId).whereNotNull('courses.program_id').pluck('courses.program_id');
+    .where('enrollments.user_id', userId)
+    .whereIn('enrollments.status', ['active', 'completed'])
+    .whereNotNull('courses.program_id').pluck('courses.program_id');
   return Array.from(new Set([...fromApps, ...fromCourses]));
 }
 
@@ -631,11 +693,15 @@ async function studentProgrammeIds(userId) {
 async function examAccess(userId, quiz) {
   if (quiz.is_final_exam && (quiz.exam_scope === 'programme' || quiz.exam_scope === 'year')) {
     const progIds = await studentProgrammeIds(userId);
-    return { allowed: !!quiz.program_id && progIds.includes(quiz.program_id), backUrl: '/portal/exams', course: null };
+    const paid = quiz.program_id ? await programmes.hasPaidTuition(userId, quiz.program_id) : false;
+    return { allowed: !!quiz.program_id && progIds.includes(quiz.program_id) && paid, backUrl: '/portal/exams', course: null, paid };
   }
-  const course = quiz.course_id ? await knex('courses').where({ id: quiz.course_id }).first() : null;
-  const enrollment = quiz.course_id ? await knex('enrollments').where({ user_id: userId, course_id: quiz.course_id }).first() : null;
-  return { allowed: !!enrollment, backUrl: course ? `/portal/courses/${course.slug}` : '/portal/catalog', course };
+  const course = quiz.course_id ? await knex('courses').where({ id: quiz.course_id, published: true }).first() : null;
+  const enrollment = quiz.course_id
+    ? await knex('enrollments').where({ user_id: userId, course_id: quiz.course_id }).whereIn('status', ['active', 'completed']).first()
+    : null;
+  const paid = enrollment && course ? await programmes.hasPaidTuition(userId, course.program_id) : false;
+  return { allowed: !!enrollment && paid, backUrl: course ? `/portal/courses/${course.slug}` : '/portal/catalog', course, enrollment, paid };
 }
 
 // ─── Programme / year final exams available to the student ───
@@ -643,11 +709,17 @@ router.get('/exams', async (req, res, next) => {
   try {
     const userId = req.session.user.id;
     const progIds = await studentProgrammeIds(userId);
+    const paidProgIds = [];
+    for (const programId of progIds) {
+      if (await programmes.hasPaidTuition(userId, programId)) paidProgIds.push(programId);
+    }
     let exams = [];
-    if (progIds.length) {
+    if (paidProgIds.length) {
       exams = await knex('quizzes')
         .where('is_final_exam', true).whereIn('exam_scope', ['year', 'programme'])
-        .whereIn('program_id', progIds)
+        .where('quizzes.published', true)
+        .where(function () { this.whereNull('quizzes.available_from').orWhere('quizzes.available_from', '<=', new Date()); })
+        .whereIn('program_id', paidProgIds)
         .leftJoin('programs', 'quizzes.program_id', 'programs.id')
         .select('quizzes.*', 'programs.title as program_title')
         .orderBy('quizzes.exam_scope');
@@ -661,6 +733,22 @@ router.get('/exams', async (req, res, next) => {
 });
 
 // ─── Quiz: take ──────────────────────────────────────────────
+async function ensureActiveQuizAttempt(userId, quizId) {
+  let attempt = await knex('quiz_attempts')
+    .where({ user_id: userId, quiz_id: quizId })
+    .whereNull('submitted_at')
+    .orderBy('started_at', 'desc')
+    .first();
+  if (!attempt) {
+    const [idRaw] = await knex('quiz_attempts').insert({
+      quiz_id: quizId, user_id: userId, score: 0, passed: false, started_at: knex.fn.now(),
+    });
+    const id = Array.isArray(idRaw) ? idRaw[0] : idRaw;
+    attempt = await knex('quiz_attempts').where({ id }).first();
+  }
+  return attempt;
+}
+
 router.get('/quizzes/:id', async (req, res, next) => {
   try {
     const userId = req.session.user.id;
@@ -679,9 +767,8 @@ router.get('/quizzes/:id', async (req, res, next) => {
     }
     // Block-sequence quizzes: the covered lessons must be completed first.
     if (quiz.after_block && access.course) {
-      const enr = await knex('enrollments').where({ user_id: userId, course_id: quiz.course_id }).first();
-      const struct = await getCourseStructure(quiz.course_id, enr.id);
-      const qa = await isQuizAvailable(enr.id, quiz, struct);
+      const struct = await getCourseStructure(quiz.course_id, access.enrollment.id);
+      const qa = await isQuizAvailable(access.enrollment.id, quiz, struct);
       if (!qa.available) {
         req.flash('info', 'Finish the lessons this quiz covers before taking it.');
         return res.redirect(`/portal/courses/${access.course.slug}`);
@@ -692,6 +779,7 @@ router.get('/quizzes/:id', async (req, res, next) => {
     for (const q of questions) {
       q.options = await knex('quiz_options').where({ question_id: q.id }).orderBy('sort_order');
     }
+    const attempt = await ensureActiveQuizAttempt(userId, quiz.id);
 
     res.render('portal/quiz', {
       pageTitle: `${quiz.title} | GDCU`,
@@ -700,6 +788,7 @@ router.get('/quizzes/:id', async (req, res, next) => {
       course: access.course,
       backUrl: access.backUrl,
       questions,
+      attempt,
     });
   } catch (err) {
     next(err);
@@ -716,39 +805,75 @@ router.post('/quizzes/:id/submit', async (req, res, next) => {
     const access = await examAccess(userId, quiz);
     if (!access.allowed) return res.redirect(access.backUrl);
 
-    const questions = await knex('quiz_questions').where({ quiz_id: quiz.id });
-    let correctCount = 0;
-
-    const [attemptIdRaw] = await knex('quiz_attempts').insert({
-      quiz_id: quiz.id, user_id: userId, score: 0, passed: false, started_at: knex.fn.now(),
-    });
-    const attemptId = Array.isArray(attemptIdRaw) ? attemptIdRaw[0] : attemptIdRaw;
-
-    for (const q of questions) {
-      // Form fields named q_<questionId> (radio = single value)
-      const submitted = req.body[`q_${q.id}`];
-      const timedOut = req.body.timed_out === '1';
-      const correctOptions = await knex('quiz_options').where({ question_id: q.id, is_correct: true }).pluck('id');
-
-      let isCorrect = false;
-      let chosenId = null;
-      if (submitted !== undefined && submitted !== '') {
-        chosenId = Number(submitted);
-        isCorrect = correctOptions.includes(chosenId);
+    if (!quiz.published || (quiz.available_from && new Date(quiz.available_from) > new Date())) {
+      req.flash('info', 'This quiz is not available yet.');
+      return res.redirect(access.backUrl);
+    }
+    if (quiz.after_block && access.course) {
+      const struct = await getCourseStructure(quiz.course_id, access.enrollment.id);
+      const qa = await isQuizAvailable(access.enrollment.id, quiz, struct);
+      if (!qa.available) {
+        req.flash('info', 'Finish the lessons this quiz covers before taking it.');
+        return res.redirect(`/portal/courses/${access.course.slug}`);
       }
-      if (isCorrect) correctCount += 1;
-
-      await knex('quiz_answers').insert({
-        attempt_id: attemptId,
-        question_id: q.id,
-        option_id: chosenId,
-        correct: isCorrect,
-      });
+    }
+    if (quiz.is_final_exam && quiz.exam_scope === 'course' && access.course) {
+      const structure = await getCourseStructure(quiz.course_id, access.enrollment.id);
+      const allLessonsComplete = structure.every((m) => m.lessons.every((lesson) => lesson.completed));
+      if (!allLessonsComplete) {
+        req.flash('info', 'Complete all course lessons before taking the final exam.');
+        return res.redirect(`/portal/courses/${access.course.slug}`);
+      }
     }
 
-    const score = questions.length ? Math.round((correctCount / questions.length) * 100) : 0;
-    const passed = score >= quiz.pass_mark;
-    await knex('quiz_attempts').where({ id: attemptId }).update({ score, passed, submitted_at: knex.fn.now() });
+    const attemptId = Number(req.body.attempt_id);
+    const activeAttempt = Number.isInteger(attemptId) && attemptId > 0
+      ? await knex('quiz_attempts').where({ id: attemptId, quiz_id: quiz.id, user_id: userId }).whereNull('submitted_at').first()
+      : null;
+    if (!activeAttempt) {
+      req.flash('error', 'This quiz session has expired. Please start the quiz again.');
+      return res.redirect(`/portal/quizzes/${quiz.id}`);
+    }
+
+    const elapsedMs = Date.now() - new Date(activeAttempt.started_at).getTime();
+    const timedOut = quiz.time_limit_min && Number.isFinite(elapsedMs)
+      ? elapsedMs > Number(quiz.time_limit_min) * 60 * 1000
+      : false;
+
+    const questions = await knex('quiz_questions').where({ quiz_id: quiz.id });
+    const { score, passed } = await knex.transaction(async (trx) => {
+      let correctCount = 0;
+      for (const q of questions) {
+        const raw = req.body[`q_${q.id}`];
+        const submittedIds = (Array.isArray(raw) ? raw : [raw])
+          .filter((value) => value !== undefined && value !== '')
+          .map(Number)
+          .filter(Number.isInteger);
+        const options = await trx('quiz_options').where({ question_id: q.id });
+        const validIds = new Set(options.map((option) => option.id));
+        const chosenIds = submittedIds.filter((id) => validIds.has(id));
+        const correctIds = options.filter((option) => option.is_correct).map((option) => option.id);
+        const sameSet = correctIds.length > 0
+          && chosenIds.length === correctIds.length
+          && correctIds.every((id) => chosenIds.includes(id));
+        const isCorrect = !timedOut && sameSet;
+        if (isCorrect) correctCount += 1;
+
+        const answerIds = q.type === 'multiple' ? (chosenIds.length ? chosenIds : [null]) : [chosenIds[0] || null];
+        for (const optionId of answerIds) {
+          await trx('quiz_answers').insert({
+            attempt_id: activeAttempt.id,
+            question_id: q.id,
+            option_id: optionId,
+            correct: isCorrect,
+          });
+        }
+      }
+      const score = questions.length ? Math.round((correctCount / questions.length) * 100) : 0;
+      const passed = !timedOut && score >= quiz.pass_mark;
+      await trx('quiz_attempts').where({ id: activeAttempt.id }).update({ score, passed, submitted_at: knex.fn.now() });
+      return { score, passed };
+    });
 
     // Check achievement milestones for quiz
     const attempt = { score, passed };
@@ -761,7 +886,7 @@ router.post('/quizzes/:id/submit', async (req, res, next) => {
       achievements.checkCourseMilestones(userId).catch(() => {});
     }
 
-    res.redirect(`/portal/attempts/${attemptId}`);
+    res.redirect(`/portal/attempts/${activeAttempt.id}`);
   } catch (err) {
     next(err);
   }
@@ -778,13 +903,19 @@ router.get('/attempts/:id', async (req, res, next) => {
     const course = await knex('courses').where({ id: quiz.course_id }).first();
     const questions = await knex('quiz_questions').where({ quiz_id: quiz.id }).orderBy('sort_order').orderBy('id');
     const answers = await knex('quiz_answers').where({ attempt_id: attempt.id });
-    const answerByQ = {};
-    answers.forEach((a) => { answerByQ[a.question_id] = a; });
+    const answersByQ = {};
+    answers.forEach((a) => {
+      if (!answersByQ[a.question_id]) answersByQ[a.question_id] = [];
+      answersByQ[a.question_id].push(a);
+    });
 
     for (const q of questions) {
       q.options = await knex('quiz_options').where({ question_id: q.id }).orderBy('sort_order');
-      q.chosen = answerByQ[q.id] ? answerByQ[q.id].option_id : null;
-      q.gotCorrect = answerByQ[q.id] ? !!answerByQ[q.id].correct : false;
+      const questionAnswers = answersByQ[q.id] || [];
+      q.chosen = q.type === 'multiple'
+        ? questionAnswers.filter((a) => a.option_id !== null).map((a) => a.option_id)
+        : (questionAnswers[0] ? questionAnswers[0].option_id : null);
+      q.gotCorrect = questionAnswers.length > 0 && questionAnswers.every((a) => !!a.correct);
     }
 
     res.render('portal/quiz-result', {
@@ -964,6 +1095,11 @@ router.post('/invoices/:id/pay', async (req, res, next) => {
       });
       await knex('invoices').where({ id: invoice.id }).update({ stripe_session_id: checkout.id, updated_at: knex.fn.now() });
       return res.redirect(303, checkout.url);
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+      req.flash('error', 'Online payments are temporarily unavailable. Please contact support.');
+      return res.redirect(`/portal/invoices/${invoice.id}`);
     }
 
     // No Stripe configured (local dev) — record as paid directly.
@@ -1494,10 +1630,14 @@ router.get('/courses/:slug/forums', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      return res.render('portal/payment-required', { pageTitle: `${course.title} | GDCU`, portalActive: 'my-courses', course });
+    }
 
     const forums = await knex('course_forums')
       .where({ course_id: course.id, published: true })
-      .orderBy('sort_order');
+      .orderBy('sort_order')
+      .limit(50);
 
     // Count topics and latest activity per forum
     for (const f of forums) {
@@ -1525,6 +1665,9 @@ router.get('/courses/:slug/forums/:forumId', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      return res.render('portal/payment-required', { pageTitle: `${course.title} | GDCU`, portalActive: 'my-courses', course });
+    }
 
     const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
     if (!forum) return res.status(404).render('errors/404', { pageTitle: 'Forum not found', layout: 'layouts/portal' });
@@ -1534,7 +1677,8 @@ router.get('/courses/:slug/forums/:forumId', async (req, res, next) => {
       .join('users', 'forum_topics.user_id', 'users.id')
       .select('forum_topics.*', 'users.first_name', 'users.last_name')
       .orderBy('pinned', 'desc')
-      .orderBy('updated_at', 'desc');
+      .orderBy('updated_at', 'desc')
+      .limit(100);
 
     // Annotate with reply count, last reply, and unread state
     const viewed = await knex('forum_topic_views').where({ user_id: userId }).pluck('topic_id');
@@ -1565,6 +1709,9 @@ router.get('/courses/:slug/forums/:forumId/topics/:topicId', async (req, res, ne
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) {
+      return res.render('portal/payment-required', { pageTitle: `${course.title} | GDCU`, portalActive: 'my-courses', course });
+    }
 
     const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
     if (!forum) return res.status(404).render('errors/404', { pageTitle: 'Forum not found', layout: 'layouts/portal' });
@@ -1583,7 +1730,8 @@ router.get('/courses/:slug/forums/:forumId/topics/:topicId', async (req, res, ne
       .where({ topic_id: topic.id })
       .join('users', 'forum_replies.user_id', 'users.id')
       .select('forum_replies.*', 'users.first_name', 'users.last_name')
-      .orderBy('created_at', 'asc');
+      .orderBy('created_at', 'asc')
+      .limit(200);
 
     // Mark as viewed by this user
     await knex('forum_topic_views')
@@ -1612,6 +1760,7 @@ router.post('/courses/:slug/forums/:forumId/topics', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
 
     const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
     if (!forum) return res.redirect(`/portal/courses/${course.slug}`);
@@ -1649,6 +1798,7 @@ router.post('/courses/:slug/forums/:forumId/topics/:topicId/replies', async (req
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
 
     const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
     if (!forum) return res.redirect(`/portal/courses/${course.slug}`);
@@ -1693,8 +1843,11 @@ router.post('/courses/:slug/forums/:forumId/topics/:topicId/subscribe', async (r
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
 
-    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: req.params.forumId }).first();
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.redirect(`/portal/courses/${course.slug}/forums`);
+    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: forum.id }).first();
     if (!topic) return res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}`);
 
     const existing = await knex('forum_subscriptions').where({ topic_id: topic.id, user_id: userId }).first();
@@ -1715,10 +1868,14 @@ router.post('/courses/:slug/forums/:forumId/topics/:topicId/moderate', async (re
     if (!['faculty', 'staff', 'admin'].includes(req.session.user.role)) {
       return res.status(403).render('errors/404', { pageTitle: 'Not authorised', layout: 'layouts/portal' });
     }
-    const { course } = await findEnrollment(req.session.user.id, req.params.slug);
+    const userId = req.session.user.id;
+    const { course } = await findEnrollment(userId, req.params.slug);
     if (!course) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
 
-    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: req.params.forumId }).first();
+    const forum = await knex('course_forums').where({ id: req.params.forumId, course_id: course.id, published: true }).first();
+    if (!forum) return res.redirect(`/portal/courses/${course.slug}`);
+    const topic = await knex('forum_topics').where({ id: req.params.topicId, forum_id: forum.id }).first();
     if (!topic) return res.redirect(`/portal/courses/${course.slug}/forums/${req.params.forumId}`);
 
     const update = {};
@@ -1739,6 +1896,7 @@ router.get('/courses/:slug/next-available', async (req, res, next) => {
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.json({ available: false });
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.json({ available: false, reason: 'payment_required' });
 
     const structure = await getCourseStructure(course.id, enrollment.id);
     const flat = [];
@@ -1772,9 +1930,15 @@ router.post('/courses/:slug/modules/:moduleId/essay', async (req, res, next) => 
     const userId = req.session.user.id;
     const { course, enrollment } = await findEnrollment(userId, req.params.slug);
     if (!course || !enrollment) return res.redirect('/portal/catalog');
+    if (!(await programmes.hasPaidTuition(userId, course.program_id))) return res.redirect(`/portal/courses/${course.slug}`);
 
+    const sharedModuleIds = await sharedModuleIdsForCourse(course.id);
     const mod = await knex('modules')
-      .where({ id: req.params.moduleId, course_id: course.id })
+      .where('id', req.params.moduleId)
+      .andWhere(function () {
+        this.where('course_id', course.id);
+        if (sharedModuleIds.length) this.orWhereIn('shared_module_id', sharedModuleIds);
+      })
       .first();
     if (!mod || !mod.essay_required) {
       req.flash('error', 'No essay is required for this module.');
