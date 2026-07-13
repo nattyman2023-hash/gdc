@@ -345,7 +345,7 @@
   %>
   <% yearOrder.forEach(function(y, yi){ var yMods = byYear[y]; var yImg = (yMods.find(function(m){ return m.featured_image; }) || {}).featured_image; %>
     <% if (y) { %>
-    <details class="group/yr mb-4 rounded-lg overflow-hidden border border-outline-variant shadow-sm" <%= yi===0 ? 'open' : '' %>>
+    <details class="group/yr mb-4 rounded-lg overflow-hidden border border-outline-variant shadow-sm" <%= yi===0 || yMods.some(function(m){ return Number(m.id) === Number(openModuleId); }) ? 'open' : '' %>>
       <summary class="list-none select-none cursor-pointer relative h-28 flex items-end text-on-primary">
         <img src="<%= yImg || course.featured_image || '/img/generated/gdcu-online-learning.webp' %>" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='/img/generated/gdcu-online-learning.webp'">
         <div class="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/55 to-primary/20"></div>
@@ -359,7 +359,7 @@
     <div data-sortable-list data-sortable-offset="0" data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
     <% } %>
     <% yMods.forEach(function(mod){ var mi = modules.indexOf(mod); %>
-  <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden" data-sortable-id="<%= mod.id %>">
+  <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden" <%= Number(mod.id) === Number(openModuleId) ? 'open' : '' %> data-sortable-id="<%= mod.id %>">
     <!-- Card summary (the box) -->
     <summary class="list-none select-none cursor-pointer flex items-stretch hover:bg-surface-container-lowest">
       <div class="w-32 sm:w-44 shrink-0 bg-primary-container relative">
@@ -396,7 +396,7 @@
     <!-- Card body (revealed on click) -->
     <div class="border-t border-outline-variant">
     <div class="px-6 py-3 flex items-center justify-end gap-2 bg-surface-container-lowest border-b border-outline-variant flex-wrap">
-      <button onclick="document.getElementById('edit-module-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white">
+      <button type="button" onclick="document.getElementById('edit-module-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white">
         <span class="material-symbols-outlined text-sm">edit</span> Edit module
       </button>
       <a href="/admin/revisions?entity_type=module&entity_id=<%= mod.id %>&return=/admin/courses/<%= course.id %>/modules" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white" title="Version history">
@@ -419,11 +419,11 @@
           <input type="hidden" name="course_id" value="<%= course.id %>"><input type="hidden" name="mode" value="fork">
           <button type="submit" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white"><span class="material-symbols-outlined text-sm">content_copy</span> Duplicate</button>
         </form>
-        <button onclick="document.getElementById('promote-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white" title="Share this module with other courses & programmes via the Module Library">
+        <button type="button" onclick="document.getElementById('promote-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-sm border border-outline-variant rounded px-3 py-1.5 hover:bg-white" title="Share this module with other courses & programmes via the Module Library">
           <span class="material-symbols-outlined text-sm">library_add</span> Share to Library
         </button>
       <% } %>
-      <button onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
+      <button type="button" onclick="document.getElementById('add-lesson-<%= mod.id %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded text-sm font-bold hover:bg-blue-700">
         <span class="material-symbols-outlined text-sm">add</span> Add a Lesson
       </button>
       <% if (mod.lessons.length) { %>
@@ -666,12 +666,12 @@
           <div><p class="font-tagline text-[11px] text-secondary uppercase leading-none">Lesson <%= lesson.block_no %></p><p class="font-bold text-primary text-sm"><%= blkTitle %></p></div>
         </div>
         <div class="flex items-center gap-1.5">
-          <button type="button" onclick="document.getElementById('addpart-<%= mod.id %>-<%= lesson.block_no %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-xs border border-outline-variant bg-white rounded px-2 py-1 hover:bg-surface-container-lowest" title="Add another part to this lesson"><span class="material-symbols-outlined text-sm">add</span> Part</button>
+          <button type="button" onclick="document.getElementById('addpart-<%= mod.id %>-<%= lesson.block_no %>-<%= li %>').classList.toggle('hidden')" class="inline-flex items-center gap-1 text-xs border border-outline-variant bg-white rounded px-2 py-1 hover:bg-surface-container-lowest" title="Add another part to this lesson"><span class="material-symbols-outlined text-sm">add</span> Part</button>
           <a href="/admin/quizzes/create?course_id=<%= course.id %>&module_id=<%= mod.id %>&after_block=<%= lesson.block_no %>&block_title=<%= encodeURIComponent(blkTitle) %>&return=/admin/courses/<%= course.id %>/modules" class="inline-flex items-center gap-1 text-xs bg-indigo-500 text-white rounded px-2 py-1 hover:bg-indigo-600" title="Add a quiz that covers this lesson"><span class="material-symbols-outlined text-sm">quiz</span> Quiz for this lesson</a>
         </div>
       </div>
       <!-- Add a part to THIS lesson (block #/title pre-filled) -->
-      <div id="addpart-<%= mod.id %>-<%= lesson.block_no %>" class="hidden px-6 py-3 bg-blue-50 border-b border-outline-variant">
+      <div id="addpart-<%= mod.id %>-<%= lesson.block_no %>-<%= li %>" class="hidden px-6 py-3 bg-blue-50 border-b border-outline-variant">
         <form method="POST" action="/admin/modules/<%= mod.id %>/lessons" class="space-y-2">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <input type="hidden" name="parent_lesson_id" value="<%= lesson.id %>">
@@ -688,8 +688,8 @@
             <div>
               <label class="block text-xs font-medium mb-1">Video URL</label>
               <div class="flex gap-2">
-                <input type="url" id="part-video-url-<%= mod.id %>-<%= lesson.block_no %>" name="video_url" class="w-full px-2 py-1.5 border rounded text-sm">
-                <button type="button" data-upload-target="#part-video-url-<%= mod.id %>-<%= lesson.block_no %>" data-upload-kind="video" class="inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1.5 bg-white hover:bg-surface-container-lowest">Upload</button>
+                <input type="url" id="part-video-url-<%= mod.id %>-<%= lesson.block_no %>-<%= li %>" name="video_url" class="w-full px-2 py-1.5 border rounded text-sm">
+                <button type="button" data-upload-target="#part-video-url-<%= mod.id %>-<%= lesson.block_no %>-<%= li %>" data-upload-kind="video" class="inline-flex items-center gap-1 text-xs border border-outline-variant rounded px-2 py-1.5 bg-white hover:bg-surface-container-lowest">Upload</button>
               </div>
             </div>
             <div><label class="block text-xs font-medium mb-1">Duration (min)</label><input type="number" name="duration_min" value="10" class="w-full px-2 py-1.5 border rounded text-sm"></div>

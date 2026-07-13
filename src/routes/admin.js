@@ -38,7 +38,10 @@ const router = express.Router();
 
 function moduleReturnPath(courseId, mod) {
   const id = Number(courseId) || Number(mod && mod.course_id);
-  if (id) return `/admin/courses/${id}/modules`;
+  if (id) {
+    const openModule = Number(mod && mod.id);
+    return `/admin/courses/${id}/modules${openModule ? `?open_module=${openModule}` : ''}`;
+  }
   if (mod && mod.shared_module_id) return `/admin/course-library/${mod.shared_module_id}`;
   return '/admin/courses';
 }
@@ -3012,6 +3015,7 @@ router.get('/courses/:id/modules', async (req, res, next) => {
       finalExam,
       assignments,
       allCourses,
+      openModuleId: Number(req.query.open_module) || null,
     });
   } catch (err) { next(err); }
 });
@@ -3105,6 +3109,7 @@ router.post('/courses/:id/modules', async (req, res, next) => {
       if (!courseIds.includes(Number(course.id))) courseIds.push(Number(course.id));
 
       let smId;
+      let moduleId;
       await knex.transaction(async (trx) => {
         // 1. Create the shared_modules library entry.
         [smId] = await trx('shared_modules').insert({
@@ -3117,7 +3122,7 @@ router.post('/courses/:id/modules', async (req, res, next) => {
           published: true,
         });
         // 2. Create the template module row (lessons hang off this).
-        await trx('modules').insert({
+        [moduleId] = await trx('modules').insert({
           course_id: null,
           shared_module_id: smId,
           title,
@@ -3137,12 +3142,12 @@ router.post('/courses/:id/modules', async (req, res, next) => {
       });
 
       req.flash('success', `Shared module "${title}" created and attached to ${courseIds.length} course(s).`);
-      return res.redirect(back);
+      return res.redirect(`/admin/courses/${course.id}/modules?open_module=${moduleId}`);
     }
 
     // ── Dedicated module mode (default — just this course) ──
     const maxSort = await knex('modules').where({ course_id: course.id }).max({ m: 'sort_order' }).first();
-    await knex('modules').insert({
+    const [newModuleId] = await knex('modules').insert({
       course_id: course.id,
       title,
       summary: req.body.summary || null,
@@ -3155,7 +3160,7 @@ router.post('/courses/:id/modules', async (req, res, next) => {
     });
 
     req.flash('success', 'Module added.');
-    res.redirect(back);
+    res.redirect(`/admin/courses/${course.id}/modules?open_module=${newModuleId}`);
   } catch (err) { next(err); }
 });
 
