@@ -169,7 +169,7 @@ router.post('/courses/:id/enroll', async (req, res, next) => {
 
     const existing = await knex('enrollments').where({ user_id: userId, course_id: course.id }).first();
     if (existing && existing.status === 'withdrawn') {
-      await knex('enrollments').where({ id: existing.id }).update({ status: 'active', enrolled_at: knex.fn.now(), updated_at: knex.fn.now() });
+      await knex('enrollments').where({ id: existing.id }).update({ status: 'active', enrolled_at: knex.fn.now() });
       await programmes.ensureTuitionInvoice(course.program_id, userId, null);
       req.flash('success', `You are re-enrolled in ${course.title}. Visit Billing & Payments to pay your tuition and unlock your course content.`);
       return res.redirect(`/portal/courses/${course.slug}`);

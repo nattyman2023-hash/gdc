@@ -26,15 +26,25 @@
     if (g.href) return g.href === '/' ? currentPath === '/' : currentPath.startsWith(g.href);
     return (g.match || []).some((p) => currentPath.startsWith(p));
   }
+  const portalUrl = currentUser
+    ? (currentUser.role === 'student' ? '/portal' : (currentUser.role === 'faculty' ? '/faculty' : '/admin'))
+    : '/login';
+  const portalLabel = currentUser
+    ? (currentUser.role === 'student' ? 'My Portal' : (currentUser.role === 'faculty' ? 'Faculty Portal' : 'Admin Portal'))
+    : 'Student Login';
   const topLink = 'font-body text-sm font-semibold transition-colors';
 %>
 <header id="site-header" class="bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant fixed top-0 w-full z-50 transition-shadow">
-  <nav class="flex justify-between items-center w-full px-margin-mobile lg:px-margin-desktop py-3.5 max-w-container-max mx-auto">
-    <a href="/" class="flex items-center gap-3 shrink-0">
-      <img src="/img/gdcu-logo.png" alt="Global Diaspora Christian University" class="h-14 w-auto object-contain">
+  <nav aria-label="Primary navigation" class="flex justify-between items-center w-full px-margin-mobile lg:px-margin-desktop py-3 max-w-container-max mx-auto gap-5">
+    <a href="/" class="flex items-center gap-3 shrink-0 group" aria-label="GDCU home">
+      <img src="/img/gdcu-logo.png" alt="Global Diaspora Christian University" class="h-12 md:h-14 w-auto object-contain transition-transform group-hover:scale-105">
+      <span class="hidden xl:block leading-tight border-l border-outline-variant pl-3">
+        <span class="block font-headline text-sm font-bold text-primary">Global Diaspora</span>
+        <span class="block font-tagline text-[10px] uppercase tracking-widest text-secondary">Christian University</span>
+      </span>
     </a>
 
-    <div class="hidden lg:flex items-center gap-8">
+    <div class="hidden lg:flex items-center gap-6 xl:gap-8">
       <% groups.forEach(function(g){ %>
         <% if (g.href) { %>
           <a href="<%= g.href %>" class="<%= topLink %> relative py-1 <%= isActive(g) ? 'text-primary' : 'text-on-surface-variant hover:text-primary' %>">
@@ -60,17 +70,27 @@
     </div>
 
     <div class="flex items-center gap-2 shrink-0">
-      <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors" title="Toggle dark mode">
+      <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors" title="Toggle dark mode" aria-label="Toggle dark mode">
         <span class="material-symbols-outlined text-lg">dark_mode</span>
       </button>
       <% if (currentUser) { %>
-        <a href="<%= currentUser.role==='student' ? '/portal' : (currentUser.role==='faculty' ? '/faculty' : '/admin') %>" class="hidden sm:inline font-body text-sm font-medium text-on-surface-variant hover:text-primary">My Portal</a>
-        <form action="/logout" method="post"><button class="font-body text-sm font-medium text-on-surface-variant hover:text-primary">Sign out</button></form>
+        <div class="hidden sm:flex items-center gap-1 border-l border-outline-variant pl-3 ml-1">
+          <a href="<%= portalUrl %>" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 font-body text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" title="Open your portal">
+            <span class="material-symbols-outlined text-base">dashboard</span><span class="hidden xl:inline"><%= portalLabel %></span><span class="xl:hidden">Portal</span>
+          </a>
+          <form action="/logout" method="post" class="inline-flex">
+            <button class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 font-body text-sm font-semibold text-on-surface-variant hover:bg-error-container hover:text-error transition-colors" title="Sign out">
+              <span class="material-symbols-outlined text-base">logout</span><span class="hidden xl:inline">Sign out</span>
+            </button>
+          </form>
+        </div>
       <% } else { %>
-        <a href="/login" class="hidden sm:inline font-body text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Student Login</a>
+        <a href="/login" class="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 font-body text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors"><span class="material-symbols-outlined text-base">login</span>Student Login</a>
       <% } %>
-      <a href="/admissions/apply" class="bg-secondary text-on-secondary px-5 py-2.5 rounded-lg font-body text-sm font-bold shadow-sm inline-flex items-center gap-1.5 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all">Apply Now <span class="material-symbols-outlined text-base">arrow_forward</span></a>
-      <button id="mobile-menu-btn" class="lg:hidden text-primary" aria-label="Open menu"><span class="material-symbols-outlined text-3xl">menu</span></button>
+      <% if (!currentUser) { %>
+        <a href="/admissions/apply" class="bg-secondary text-on-secondary px-4 sm:px-5 py-2.5 rounded-lg font-body text-sm font-bold shadow-sm inline-flex items-center gap-1.5 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all"><span class="hidden sm:inline">Apply Now</span><span class="sm:hidden">Apply</span><span class="material-symbols-outlined text-base">arrow_forward</span></a>
+      <% } %>
+      <button id="mobile-menu-btn" class="lg:hidden rounded-lg p-1.5 text-primary hover:bg-surface-container-low" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false"><span class="material-symbols-outlined text-3xl">menu</span></button>
     </div>
   </nav>
 
@@ -85,6 +105,13 @@
     <% }) %>
     <a class="block font-bold text-primary" href="/careers">Careers</a>
     <a class="block font-bold text-primary" href="/contact">Contact</a>
-    <% if (!currentUser) { %><a class="block font-bold text-secondary border-t border-outline-variant pt-3" href="/login">Student Login</a><% } %>
+    <% if (currentUser) { %>
+      <div class="border-t border-outline-variant pt-3 space-y-1">
+        <a class="flex items-center gap-2 py-2 font-bold text-primary" href="<%= portalUrl %>"><span class="material-symbols-outlined text-base">dashboard</span><%= portalLabel %></a>
+        <form action="/logout" method="post"><button class="flex items-center gap-2 py-2 font-bold text-error"><span class="material-symbols-outlined text-base">logout</span>Sign out</button></form>
+      </div>
+    <% } else { %>
+      <a class="flex items-center gap-2 font-bold text-secondary border-t border-outline-variant pt-3" href="/login"><span class="material-symbols-outlined text-base">login</span>Student Login</a>
+    <% } %>
   </div>
 </header>

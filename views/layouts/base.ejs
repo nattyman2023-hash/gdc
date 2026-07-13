@@ -23,7 +23,10 @@
     (function () {
       var btn = document.getElementById('mobile-menu-btn');
       var menu = document.getElementById('mobile-menu');
-      if (btn && menu) btn.addEventListener('click', function () { menu.classList.toggle('hidden'); });
+      if (btn && menu) btn.addEventListener('click', function () {
+        var isHidden = menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', String(!isHidden));
+      });
     })();
     // Header shadow on scroll
     window.addEventListener('scroll', function () {

@@ -880,9 +880,12 @@ router.get('/students/:id', async (req, res, next) => {
       .select('enrollments.*', 'courses.title as course_title', 'courses.code as course_code');
     const certificates = await knex('certificates').where({ user_id: student.id }).orderBy('issued_at', 'desc');
     const invoices = await knex('invoices').where({ user_id: student.id }).orderBy('due_date');
-    const enrolledIds = enrollments.map((e) => e.course_id);
+    const enrolledIds = enrollments
+      .filter((e) => ['active', 'completed'].includes(e.status))
+      .map((e) => e.course_id);
     const availableCourses = await knex('courses').where({ published: true })
       .whereNotIn('id', enrolledIds.length ? enrolledIds : [0]).orderBy('title').select('id', 'title');
+    const invoicePrograms = await knex('programs').orderBy('sort_order').select('id', 'title', 'tuition', 'tuition_currency');
     const sponsorship = await knex('sponsorships').where({ student_id: student.id }).orderBy('created_at', 'desc').first();
     let contributions = [];
     let raised = 0;
@@ -917,6 +920,7 @@ router.get('/students/:id', async (req, res, next) => {
       formationGroup,
       studentProfile,
       studentProgram,
+      invoicePrograms,
       appUrl: process.env.APP_URL || '',
     });
   } catch (err) {
@@ -928,14 +932,40 @@ router.get('/students/:id', async (req, res, next) => {
 router.post('/students/:id/enroll', async (req, res, next) => {
   try {
     const student = await knex('users').where({ id: req.params.id, role: 'student' }).first();
-    const course = await knex('courses').where({ id: req.body.course_id }).first();
+    const course = await knex('courses').where({ id: req.body.course_id, published: true }).first();
     if (!student || !course) { req.flash('error', 'Select a valid course.'); return res.redirect(`/admin/students/${req.params.id}`); }
     const existing = await knex('enrollments').where({ user_id: student.id, course_id: course.id }).first();
-    if (existing) { req.flash('info', 'Already enrolled in that course.'); return res.redirect(`/admin/students/${student.id}`); }
-    await knex('enrollments').insert({ user_id: student.id, course_id: course.id, status: 'active', progress_pct: 0 });
-    await programmes.ensureTuitionInvoice(course.program_id, student.id, req.session.user.id);
+    const paymentWaived = ['1', 'true', 'on', 'yes'].includes(String(req.body.payment_waived || '').toLowerCase());
+    if (existing && existing.status !== 'withdrawn') {
+      if (paymentWaived && !existing.payment_waived) {
+        await knex('enrollments').where({ id: existing.id }).update({ payment_waived: true });
+        await programmes.ensureTuitionInvoice(course.program_id, student.id, req.session.user.id);
+        req.flash('success', `Payment waived for ${course.title}. The student can access the course and an invoice remains on their account.`);
+      } else {
+        req.flash('info', 'Already enrolled in that course.');
+      }
+      return res.redirect(`/admin/students/${student.id}`);
+    }
+    if (existing && existing.status === 'withdrawn') {
+      await knex('enrollments').where({ id: existing.id }).update({
+        status: 'active',
+        payment_waived: paymentWaived,
+        enrolled_at: knex.fn.now(),
+      });
+    } else {
+      await knex('enrollments').insert({
+        user_id: student.id,
+        course_id: course.id,
+        status: 'active',
+        progress_pct: 0,
+        payment_waived: paymentWaived,
+      });
+    }
+    const invoice = await programmes.ensureTuitionInvoice(course.program_id, student.id, req.session.user.id);
     notifyUser(student.id, { type: 'success', title: 'Enrolled in a new course', body: course.title, link: `/portal/courses/${course.slug}` });
-    req.flash('success', `Enrolled in ${course.title}. A tuition invoice has been raised on their account if one didn't already exist.`);
+    req.flash('success', paymentWaived
+      ? `Enrolled in ${course.title} with payment waived. ${invoice ? 'An invoice remains on their account.' : ''}`
+      : `Enrolled in ${course.title}. ${invoice ? 'A tuition invoice has been raised on their account.' : ''}`);
     res.redirect(`/admin/students/${student.id}`);
   } catch (err) { next(err); }
 });
@@ -957,25 +987,31 @@ router.post('/students/:id/invoices', async (req, res, next) => {
     if (!student) { req.flash('error', 'Student not found.'); return res.redirect('/admin/students'); }
     const description = (req.body.description || '').trim();
     const amount = Number(req.body.amount);
-    if (!description || amount <= 0) {
+    const dueDate = req.body.due_date ? new Date(req.body.due_date) : null;
+    const currency = String(req.body.currency || 'GBP').toUpperCase();
+    if (!description || !Number.isFinite(amount) || amount <= 0 || !['GBP', 'USD', 'EUR', 'KES'].includes(currency) || (dueDate && Number.isNaN(dueDate.getTime()))) {
       req.flash('error', 'Description and a valid amount are required.');
+      return res.redirect(`/admin/students/${student.id}`);
+    }
+    const programId = req.body.program_id ? Number(req.body.program_id) : null;
+    if (programId && !(await knex('programs').where({ id: programId }).first())) {
+      req.flash('error', 'Select a valid programme.');
       return res.redirect(`/admin/students/${student.id}`);
     }
     const [invIdRaw] = await knex('invoices').insert({
       reference: makeReference('INV'),
       user_id: student.id,
-      program_id: req.body.program_id || null,
+      program_id: programId,
       description,
       amount,
-      currency: req.body.currency || 'GBP',
+      currency,
       due_date: req.body.due_date || null,
-      status: 'sent',
+      status: 'draft',
       created_by: req.session.user.id,
     });
     const invId = Array.isArray(invIdRaw) ? invIdRaw[0] : invIdRaw;
-    notifyUser(student.id, { type: 'payment', title: 'New invoice', body: description, link: '/portal/billing' });
-    req.flash('success', `Invoice ${makeReference('INV')} created and sent to ${student.first_name}.`);
-    res.redirect(`/admin/students/${student.id}`);
+    req.flash('success', `Invoice created for ${student.first_name}. Review it and send it when ready.`);
+    res.redirect(`/admin/invoices/${invId}/preview`);
   } catch (err) { next(err); }
 });
 

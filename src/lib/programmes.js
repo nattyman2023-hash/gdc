@@ -77,6 +77,14 @@ async function hasPaidTuition(userId, programId) {
   if (!programId) return true;
   const program = await knex('programs').where({ id: programId }).first();
   if (!program || !program.tuition || Number(program.tuition) <= 0) return true;
+  const waived = await knex('enrollments')
+    .join('courses', 'enrollments.course_id', 'courses.id')
+    .where('enrollments.user_id', userId)
+    .whereIn('enrollments.status', ['active', 'completed'])
+    .where('enrollments.payment_waived', true)
+    .where('courses.program_id', programId)
+    .first('enrollments.id');
+  if (waived) return true;
   const paid = await knex('invoices').where({ user_id: userId, program_id: programId, status: 'paid' }).first();
   return Boolean(paid);
 }
