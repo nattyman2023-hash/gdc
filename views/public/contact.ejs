@@ -10,6 +10,14 @@
           <div><p class="font-bold text-primary">Email</p><p class="text-on-surface-variant">admissions@gdcu.edu</p></div>
         </div>
         <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-secondary text-3xl">location_on</span>
+          <div><p class="font-bold text-primary">Physical location</p><address class="not-italic text-on-surface-variant"><%= siteCompany.addressLine1 %><br><%= siteCompany.addressLine2 %></address></div>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="material-symbols-outlined text-secondary text-3xl">business</span>
+          <div><p class="font-bold text-primary">Company details</p><p class="text-on-surface-variant"><%= siteCompany.legalName %><br>Florida LLC No. <span class="font-mono"><%= siteCompany.companyNumber %></span></p></div>
+        </div>
+        <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-secondary text-3xl">support_agent</span>
           <div><p class="font-bold text-primary">Student Helpdesk</p><p class="text-on-surface-variant">Available to current students via the student portal.</p></div>
         </div>

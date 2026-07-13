@@ -29,6 +29,11 @@
     <div class="space-y-6 md:col-span-2">
       <div class="font-headline text-headline-sm text-on-primary-fixed">Global Diaspora Christian University</div>
       <p class="font-tagline text-tagline text-surface-bright max-w-sm uppercase">Educate. Equip. Empower. Impact the World.</p>
+      <div class="text-sm text-surface-variant leading-relaxed">
+        <p class="font-bold text-on-primary-fixed">Principal office</p>
+        <address class="not-italic"><%= siteCompany.addressLine1 %><br><%= siteCompany.addressLine2 %></address>
+        <p class="mt-2">Florida LLC No. <span class="font-mono text-surface-bright"><%= siteCompany.companyNumber %></span></p>
+      </div>
       <form action="/newsletter" method="post" class="flex max-w-sm gap-2 pt-2">
         <input type="email" name="email" required placeholder="Your email" class="flex-1 px-4 py-2 rounded bg-on-primary-fixed-variant/30 border border-outline-variant/40 text-surface-bright placeholder:text-outline-variant focus:outline-none focus:border-secondary" />
         <button class="bg-secondary text-on-secondary px-4 py-2 rounded font-tagline text-label-sm font-bold hover:opacity-90">Subscribe</button>
