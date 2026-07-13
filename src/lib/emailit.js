@@ -30,7 +30,7 @@ let cache = {
 
 async function refresh() {
   let apiKey = process.env.EMAILIT_API_KEY || null;
-  let smtpFrom = process.env.MAIL_FROM || 'GDCU <no-reply@gdcu.edu>';
+  let smtpFrom = process.env.MAIL_FROM || 'GDCU <admin@gdc.university>';
   let fromEmail = process.env.EMAILIT_FROM_EMAIL || smtpFrom;
   let audienceId = process.env.EMAILIT_AUDIENCE_ID || null;
   let smtpHost = process.env.SMTP_HOST || null;

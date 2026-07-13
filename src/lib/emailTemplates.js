@@ -9,7 +9,7 @@
  */
 
 const APP_URL = process.env.APP_URL || 'https://gdcu.edu';
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || 'support@gdcu.edu';
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || 'admin@gdc.university';
 
 /**
  * Build the HTML email shell (branded wrapper).

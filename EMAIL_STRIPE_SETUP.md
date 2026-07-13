@@ -17,9 +17,9 @@ The platform sends transactional emails (application confirmations, interview in
 ### Step 2: Configure `.env`
 
 ```env
-MAIL_FROM="Global Diaspora Christian University <admissions@gdcu.edu>"
+MAIL_FROM="Global Diaspora Christian University <admin@gdc.university>"
 # Must be an address on a domain whose status is Verified in Emailit.
-EMAILIT_FROM_EMAIL="Global Diaspora Christian University <admissions@gdcu.edu>"
+EMAILIT_FROM_EMAIL="Global Diaspora Christian University <admin@gdc.university>"
 EMAILIT_API_KEY=your-emailit-api-key
 ```
 

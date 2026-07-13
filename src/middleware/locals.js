@@ -30,6 +30,7 @@ module.exports = async function locals(req, res, next) {
   res.locals.siteCompany = {
     legalName: 'Global Diaspora Christian University LLC',
     displayName: 'Global Diaspora Christian University',
+    email: 'admin@gdc.university',
     addressLine1: '7901 4th St N, Suite 300',
     addressLine2: 'St. Petersburg, FL 33702, USA',
     companyNumber: 'L26000360887',
