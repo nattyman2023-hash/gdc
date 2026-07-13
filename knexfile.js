@@ -47,7 +47,6 @@ const mysql = {
     database: process.env.MYSQL_DATABASE,
     charset: 'utf8mb4',
     connectTimeout: 10000,
-    acquireTimeout: 10000,
   },
   pool: { 
     min: 1, 
