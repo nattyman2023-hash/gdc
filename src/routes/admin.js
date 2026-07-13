@@ -36,6 +36,13 @@ async function snapshotQuiz(quizId) {
 
 const router = express.Router();
 
+function moduleReturnPath(courseId, mod) {
+  const id = Number(courseId) || Number(mod && mod.course_id);
+  if (id) return `/admin/courses/${id}/modules`;
+  if (mod && mod.shared_module_id) return `/admin/course-library/${mod.shared_module_id}`;
+  return '/admin/courses';
+}
+
 // ─── Image uploads (media library) ──────────────────────────
 const uploadDir = path.join(__dirname, '..', '..', 'public', 'uploads');
 fs.mkdirSync(uploadDir, { recursive: true });
@@ -2912,10 +2919,16 @@ router.get('/courses/:id/modules', async (req, res, next) => {
       const tmplModules = await knex('modules').whereIn('shared_module_id', sharedModuleIds);
       const bySmId = {};
       tmplModules.forEach((m) => { bySmId[m.shared_module_id] = m; });
-      sharedModules = sharedLinks.map((l) => bySmId[l.shared_module_id]).filter(Boolean).map((m) => ({ ...m, isShared: true }));
+      sharedModules = sharedLinks.map((link) => {
+        const module = bySmId[link.shared_module_id];
+        return module ? { ...module, isShared: true, sort_order: link.sort_order } : null;
+      }).filter(Boolean);
     }
     const dedicatedModules = (await knex('modules').where({ course_id: course.id }).whereNull('shared_module_id').orderBy('sort_order')).map((m) => ({ ...m, isShared: false }));
-    const modules = [...sharedModules, ...dedicatedModules];
+    // Shared and dedicated modules can coexist on one course. Keep their
+    // course-specific sort order together so a drag across the two types is
+    // reflected after the next page load instead of silently snapping back.
+    const modules = [...sharedModules, ...dedicatedModules].sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
 
     for (const m of modules) {
       m.lessons = await knex('lessons').where({ module_id: m.id }).orderBy('sort_order');
@@ -3022,6 +3035,12 @@ router.post('/courses/:id/modules', async (req, res, next) => {
   try {
     const course = await knex('courses').where({ id: req.params.id }).first();
     if (!course) return res.status(404).render('errors/404', { pageTitle: 'Course not found', layout: 'layouts/admin' });
+    const back = `/admin/courses/${course.id}/modules`;
+    const title = String(req.body.title || '').trim();
+    if (!title) {
+      req.flash('error', 'A module title is required.');
+      return res.redirect(back);
+    }
 
     // ── Shared module mode ──────────────────────────────────
     // Creates a shared_modules entry + template module row, then attaches
@@ -3029,15 +3048,15 @@ router.post('/courses/:id/modules', async (req, res, next) => {
     // course_shared_modules junction — so one module can be assigned to
     // multiple courses in a single step.
     if (req.body.shared === '1') {
-      const code = (req.body.code || '').trim();
+      const code = String(req.body.code || '').trim();
       if (!code) {
         req.flash('error', 'A module code is required for a shared module.');
-        return res.redirect(`/admin/courses/${course.id}/modules`);
+        return res.redirect(back);
       }
       const existingCode = await knex('shared_modules').where({ code }).first();
       if (existingCode) {
         req.flash('error', `Code "${code}" is already used in the library. Choose a different code.`);
-        return res.redirect(`/admin/courses/${course.id}/modules`);
+        return res.redirect(back);
       }
 
       // Resolve the selected course IDs (always include the current course).
@@ -3045,48 +3064,54 @@ router.post('/courses/:id/modules', async (req, res, next) => {
       if (!Array.isArray(courseIds)) courseIds = [courseIds];
       courseIds = courseIds.map(Number).filter(Boolean);
       if (!courseIds.includes(course.id)) courseIds.push(course.id);
+      const validCourseIds = await knex('courses').whereIn('id', courseIds).pluck('id');
+      courseIds = [...new Set(validCourseIds.map(Number))];
+      if (!courseIds.includes(Number(course.id))) courseIds.push(Number(course.id));
 
-      // 1. Create the shared_modules library entry.
-      const [smId] = await knex('shared_modules').insert({
-        code,
-        title: req.body.title,
-        description: req.body.summary || req.body.title,
-        summary: req.body.summary || null,
-        year_level: req.body.year_level ? Number(req.body.year_level) : 1,
-        category: req.body.category || null,
-        published: true,
-      });
-      // 2. Create the template module row (lessons hang off this).
-      await knex('modules').insert({
-        course_id: null,
-        shared_module_id: smId,
-        title: req.body.title,
-        summary: req.body.summary || null,
-        sort_order: 0,
-        published: true,
-      });
-      // 3. Attach to every selected course.
-      for (const cid of courseIds) {
-        const maxSort = await knex('course_shared_modules').where({ course_id: cid }).max('sort_order as m').first();
-        await knex('course_shared_modules').insert({
-          course_id: cid,
-          shared_module_id: smId,
-          sort_order: (maxSort.m || 0) + 1,
+      let smId;
+      await knex.transaction(async (trx) => {
+        // 1. Create the shared_modules library entry.
+        [smId] = await trx('shared_modules').insert({
+          code,
+          title,
+          description: req.body.summary || title,
+          summary: req.body.summary || null,
+          year_level: req.body.year_level ? Number(req.body.year_level) : 1,
+          category: req.body.category || null,
+          published: true,
         });
-      }
+        // 2. Create the template module row (lessons hang off this).
+        await trx('modules').insert({
+          course_id: null,
+          shared_module_id: smId,
+          title,
+          summary: req.body.summary || null,
+          sort_order: 0,
+          published: true,
+        });
+        // 3. Attach to every selected course.
+        for (const cid of courseIds) {
+          const maxSort = await trx('course_shared_modules').where({ course_id: cid }).max('sort_order as m').first();
+          await trx('course_shared_modules').insert({
+            course_id: cid,
+            shared_module_id: smId,
+            sort_order: (Number(maxSort.m) || 0) + 1,
+          });
+        }
+      });
 
-      req.flash('success', `Shared module "${req.body.title}" created and attached to ${courseIds.length} course(s).`);
-      return res.redirect(`/admin/courses/${course.id}/modules`);
+      req.flash('success', `Shared module "${title}" created and attached to ${courseIds.length} course(s).`);
+      return res.redirect(back);
     }
 
     // ── Dedicated module mode (default — just this course) ──
     const maxSort = await knex('modules').where({ course_id: course.id }).max({ m: 'sort_order' }).first();
     await knex('modules').insert({
       course_id: course.id,
-      title: req.body.title,
+      title,
       summary: req.body.summary || null,
       featured_image: req.body.featured_image || null,
-      sort_order: (maxSort.m || 0) + 1,
+      sort_order: (Number(maxSort.m) || 0) + 1,
       release_date: req.body.release_date || null,
       prerequisite_module_id: req.body.prerequisite_module_id || null,
       essay_required: req.body.essay_required === '1',
@@ -3094,7 +3119,7 @@ router.post('/courses/:id/modules', async (req, res, next) => {
     });
 
     req.flash('success', 'Module added.');
-    res.redirect(`/admin/courses/${course.id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3102,14 +3127,20 @@ router.post('/modules/:id', async (req, res, next) => {
   try {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const back = moduleReturnPath(req.body.course_id, mod);
+    const title = String(req.body.title || '').trim();
+    if (!title) {
+      req.flash('error', 'A module title is required.');
+      return res.redirect(back);
+    }
 
     await snapshot({ entityType: 'module', entityId: mod.id, courseId: mod.course_id, action: 'update', actorId: req.session.user.id, data: mod });
 
     await knex('modules').where({ id: mod.id }).update({
-      title: req.body.title,
+      title,
       summary: req.body.summary || null,
       featured_image: req.body.featured_image !== undefined ? (req.body.featured_image || null) : mod.featured_image,
-      sort_order: req.body.sort_order || 0,
+      sort_order: req.body.sort_order !== undefined && req.body.sort_order !== '' ? Number(req.body.sort_order) : mod.sort_order,
       release_date: req.body.release_date || null,
       prerequisite_module_id: req.body.prerequisite_module_id || null,
       essay_required: req.body.essay_required === '1',
@@ -3118,7 +3149,7 @@ router.post('/modules/:id', async (req, res, next) => {
     });
 
     req.flash('success', 'Module updated.');
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3126,11 +3157,11 @@ router.post('/modules/:id/delete', async (req, res, next) => {
   try {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
-    const courseId = mod.course_id;
+    const back = moduleReturnPath(req.body.course_id, mod);
     await snapshot({ entityType: 'module', entityId: mod.id, courseId: mod.course_id, action: 'delete', actorId: req.session.user.id, data: mod });
     await knex('modules').where({ id: mod.id }).del();
     req.flash('success', 'Module deleted.');
-    res.redirect(`/admin/courses/${courseId}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3719,24 +3750,52 @@ router.post('/courses/:id/modules/reorder', async (req, res, next) => {
   try {
     let ids = req.body.ids || [];
     if (!Array.isArray(ids)) ids = [ids];
-    ids = ids.map(Number).filter(Boolean);
+    ids = ids.map(Number);
     if (!ids.length) return res.status(400).json({ ok: false, error: 'No ids supplied.' });
-    const courseId = req.params.id;
-    const sharedCount = Number((await knex('course_shared_modules').where({ course_id: courseId }).count({ c: '*' }).first()).c);
-    if (sharedCount > 0) {
-      const mods = await knex('modules').whereIn('id', ids).select('id', 'shared_module_id');
-      const smById = {};
-      mods.forEach((m) => { smById[m.id] = m.shared_module_id; });
-      for (let i = 0; i < ids.length; i++) {
-        const smId = smById[ids[i]];
-        if (smId) await knex('course_shared_modules').where({ course_id: courseId, shared_module_id: smId }).update({ sort_order: i + 1 });
-      }
-    } else {
-      for (let i = 0; i < ids.length; i++) {
-        await knex('modules').where({ id: ids[i], course_id: courseId }).update({ sort_order: i + 1 });
-      }
+    if (ids.some((id) => !Number.isInteger(id) || id <= 0) || new Set(ids).size !== ids.length) {
+      return res.status(400).json({ ok: false, error: 'Invalid module order.' });
     }
-    res.json({ ok: true });
+
+    const courseId = Number(req.params.id);
+    const mods = await knex('modules').whereIn('id', ids).select('id', 'course_id', 'shared_module_id', 'sort_order');
+    const sharedIds = mods.map((mod) => mod.shared_module_id).filter(Boolean);
+    const links = sharedIds.length
+      ? await knex('course_shared_modules').where({ course_id: courseId }).whereIn('shared_module_id', sharedIds).select('shared_module_id', 'sort_order')
+      : [];
+    const modById = {};
+    mods.forEach((mod) => { modById[mod.id] = mod; });
+    const linkBySharedId = {};
+    links.forEach((link) => { linkBySharedId[link.shared_module_id] = link; });
+    const valid = ids.every((id) => {
+      const mod = modById[id];
+      if (!mod) return false;
+      return mod.shared_module_id
+        ? !!linkBySharedId[mod.shared_module_id]
+        : Number(mod.course_id) === courseId;
+    });
+    if (!valid) return res.status(400).json({ ok: false, error: 'One or more modules do not belong to this course.' });
+
+    // Preserve the existing year/order range when reordering within a
+    // sortable list (for example 101, 102, 103), instead of collapsing it to
+    // 1, 2, 3 and moving the modules into a different academic-year section.
+    const currentOrders = ids.map((id) => {
+      const mod = modById[id];
+      return mod.shared_module_id ? linkBySharedId[mod.shared_module_id].sort_order : mod.sort_order;
+    }).map(Number).filter(Number.isFinite);
+    const baseOrder = currentOrders.length ? Math.min(...currentOrders) : 0;
+
+    await knex.transaction(async (trx) => {
+      for (let i = 0; i < ids.length; i++) {
+        const mod = modById[ids[i]];
+        const sortOrder = baseOrder + i;
+        if (mod.shared_module_id) {
+          await trx('course_shared_modules').where({ course_id: courseId, shared_module_id: mod.shared_module_id }).update({ sort_order: sortOrder });
+        } else {
+          await trx('modules').where({ id: mod.id, course_id: courseId }).update({ sort_order: sortOrder });
+        }
+      }
+    });
+    res.json({ ok: true, ids });
   } catch (err) { next(err); }
 });
 
@@ -3770,8 +3829,10 @@ router.post('/modules/:id/block', async (req, res, next) => {
   try {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const courseId = Number(req.body.course_id) || mod.course_id;
+    const back = moduleReturnPath(courseId, mod);
     const title = (req.body.block_title || '').trim();
-    if (!title) { req.flash('error', 'Give the lesson a title.'); return res.redirect(`/admin/courses/${mod.course_id}/modules`); }
+    if (!title) { req.flash('error', 'Give the lesson a title.'); return res.redirect(back); }
 
     const maxBlock = Number((await knex('lessons').where({ module_id: mod.id }).max({ m: 'block_no' }).first()).m) || 0;
     const blockNo = maxBlock + 1;
@@ -3779,37 +3840,49 @@ router.post('/modules/:id/block', async (req, res, next) => {
 
     // Build the parts the user chose (defaults: main reading + study reading + video).
     const parts = [];
-    if (req.body.part_read !== 'off') parts.push({ type: 'reading', title: `Read: ${title}`, dur: 9 });
+    if (req.body.part_read === 'on') parts.push({ type: 'reading', title: `Read: ${title}`, dur: 9 });
     if (req.body.part_study === 'on') parts.push({ type: 'reading', title: `Study: ${title}`, dur: 6 });
     if (req.body.part_video === 'on' || req.body.video_url) parts.push({ type: 'video', title: `Watch: ${title}`, video: req.body.video_url || null, dur: 15 });
     if (req.body.part_audio === 'on') parts.push({ type: 'audio', title: `Listen: ${title}`, dur: 10 });
-    if (!parts.length) parts.push({ type: 'reading', title: `Read: ${title}`, dur: 9 });
-
-    for (const p of parts) {
-      sort += 1;
-      await knex('lessons').insert({
-        module_id: mod.id,
-        title: p.title,
-        type: p.type,
-        video_url: p.video || null,
-        live_provider: req.body.live_provider || null,
-        live_join_url: req.body.live_join_url || null,
-        live_embed_url: req.body.live_embed_url || null,
-        live_passcode: req.body.live_passcode || null,
-        duration_min: p.dur,
-        sort_order: sort,
-        block_no: blockNo,
-        block_title: title,
-      });
+    if (!parts.length) {
+      req.flash('error', 'Select at least one lesson part.');
+      return res.redirect(back);
     }
+
+    await knex.transaction(async (trx) => {
+      for (const p of parts) {
+        sort += 1;
+        await trx('lessons').insert({
+          module_id: mod.id,
+          title: p.title,
+          type: p.type,
+          video_url: p.video || null,
+          live_provider: req.body.live_provider || null,
+          live_join_url: req.body.live_join_url || null,
+          live_embed_url: req.body.live_embed_url || null,
+          live_passcode: req.body.live_passcode || null,
+          duration_min: p.dur,
+          sort_order: sort,
+          block_no: blockNo,
+          block_title: title,
+        });
+      }
+    });
 
     // If they asked for a quiz, send them to the quiz builder pre-scoped to THIS lesson.
     if (req.body.add_quiz === 'on') {
       req.flash('success', `Lesson ${blockNo} “${title}” created. Now add the quiz questions for it.`);
-      return res.redirect(`/admin/quizzes/create?course_id=${mod.course_id}&module_id=${mod.id}&after_block=${blockNo}&block_title=${encodeURIComponent(title)}&return=/admin/courses/${mod.course_id}/modules`);
+      const query = new URLSearchParams({
+        course_id: String(courseId || ''),
+        module_id: String(mod.id),
+        after_block: String(blockNo),
+        block_title: title,
+        return: back,
+      });
+      return res.redirect(`/admin/quizzes/create?${query.toString()}`);
     }
     req.flash('success', `Lesson ${blockNo} “${title}” created with ${parts.length} part(s).`);
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3818,11 +3891,16 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
   try {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
+    const back = moduleReturnPath(req.body.course_id, mod);
+    if (!String(req.body.title || '').trim()) {
+      req.flash('error', 'A lesson title is required.');
+      return res.redirect(back);
+    }
 
     const maxSort = await knex('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
     await knex('lessons').insert({
       module_id: mod.id,
-      title: req.body.title,
+      title: String(req.body.title).trim(),
       type: req.body.type || 'reading',
       content: req.body.content || null,
       video_url: req.body.video_url || null,
@@ -3832,13 +3910,13 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
       live_embed_url: req.body.live_embed_url || null,
       live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
-      sort_order: req.body.sort_order ? Number(req.body.sort_order) : (maxSort.m || 0) + 1,
+      sort_order: req.body.sort_order ? Number(req.body.sort_order) : (Number(maxSort.m) || 0) + 1,
       block_no: req.body.block_no ? Number(req.body.block_no) : null,
       block_title: req.body.block_title || null,
     });
 
     req.flash('success', 'Lesson added.');
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3847,11 +3925,17 @@ router.post('/lessons/:id', async (req, res, next) => {
     const lesson = await knex('lessons').where({ id: req.params.id }).first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
     const mod = await knex('modules').where({ id: lesson.module_id }).first();
+    const back = moduleReturnPath(req.body.course_id, mod);
+    const title = String(req.body.title || '').trim();
+    if (!title) {
+      req.flash('error', 'A lesson title is required.');
+      return res.redirect(back);
+    }
 
     await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod && mod.course_id, action: 'update', actorId: req.session.user.id, data: lesson });
 
     await knex('lessons').where({ id: lesson.id }).update({
-      title: req.body.title,
+      title,
       type: req.body.type || 'reading',
       content: req.body.content || null,
       video_url: req.body.video_url || null,
@@ -3861,7 +3945,7 @@ router.post('/lessons/:id', async (req, res, next) => {
       live_embed_url: req.body.live_embed_url || null,
       live_passcode: req.body.live_passcode || null,
       duration_min: req.body.duration_min || 15,
-      sort_order: req.body.sort_order || 0,
+      sort_order: req.body.sort_order !== undefined && req.body.sort_order !== '' ? Number(req.body.sort_order) : lesson.sort_order,
       block_no: req.body.block_no ? Number(req.body.block_no) : (lesson.block_no || null),
       block_title: req.body.block_title !== undefined && req.body.block_title !== '' ? req.body.block_title : lesson.block_title,
       published: req.body.published === '1' || req.body.published === 'on',
@@ -3869,7 +3953,7 @@ router.post('/lessons/:id', async (req, res, next) => {
     });
 
     req.flash('success', 'Lesson updated.');
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3878,10 +3962,11 @@ router.post('/lessons/:id/delete', async (req, res, next) => {
     const lesson = await knex('lessons').where({ id: req.params.id }).first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
     const mod = await knex('modules').where({ id: lesson.module_id }).first();
+    const back = moduleReturnPath(req.body.course_id, mod);
     await snapshot({ entityType: 'lesson', entityId: lesson.id, courseId: mod && mod.course_id, action: 'delete', actorId: req.session.user.id, data: lesson });
     await knex('lessons').where({ id: lesson.id }).del();
     req.flash('success', 'Lesson deleted.');
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3890,12 +3975,13 @@ router.post('/lessons/:id/duplicate', async (req, res, next) => {
     const lesson = await knex('lessons').where({ id: req.params.id }).first();
     if (!lesson) return res.status(404).render('errors/404', { pageTitle: 'Lesson not found', layout: 'layouts/admin' });
     const mod = await knex('modules').where({ id: lesson.module_id }).first();
+    const back = moduleReturnPath(req.body.course_id, mod);
     const maxSort = await knex('lessons').where({ module_id: lesson.module_id }).max('sort_order as m').first();
     const { id: _oldId, ...fields } = lesson;
     const [newId] = await knex('lessons').insert({
       ...fields,
       title: `${lesson.title} (Copy)`,
-      sort_order: (maxSort.m || 0) + 1,
+      sort_order: (Number(maxSort.m) || 0) + 1,
       published: false, // review before it goes live, same as any new content
     });
     const materials = await knex('lesson_materials').where({ lesson_id: lesson.id });
@@ -3905,7 +3991,7 @@ router.post('/lessons/:id/duplicate', async (req, res, next) => {
     }
     await snapshot({ entityType: 'lesson', entityId: newId, courseId: mod && mod.course_id, action: 'create', actorId: req.session.user.id, data: { ...fields, id: newId } });
     req.flash('success', 'Lesson duplicated as a draft.');
-    res.redirect(`/admin/courses/${mod.course_id}/modules`);
+    res.redirect(back);
   } catch (err) { next(err); }
 });
 
@@ -3918,7 +4004,7 @@ router.post('/modules/:id/lessons/bulk', async (req, res, next) => {
     let ids = req.body.ids || [];
     if (!Array.isArray(ids)) ids = [ids];
     ids = ids.map(Number).filter(Boolean);
-    const back = `/admin/courses/${mod.course_id}/modules`;
+    const back = moduleReturnPath(req.body.course_id, mod);
     if (!ids.length) { req.flash('error', 'Select at least one lesson.'); return res.redirect(back); }
     const action = req.body.action;
     const lessons = await knex('lessons').where({ module_id: mod.id }).whereIn('id', ids);
@@ -3945,12 +4031,35 @@ router.post('/modules/:id/lessons/reorder', async (req, res, next) => {
   try {
     let ids = req.body.ids || [];
     if (!Array.isArray(ids)) ids = [ids];
-    ids = ids.map(Number).filter(Boolean);
+    ids = ids.map(Number);
     if (!ids.length) return res.status(400).json({ ok: false, error: 'No ids supplied.' });
-    for (let i = 0; i < ids.length; i++) {
-      await knex('lessons').where({ id: ids[i], module_id: req.params.id }).update({ sort_order: i + 1 });
+    if (ids.some((id) => !Number.isInteger(id) || id <= 0) || new Set(ids).size !== ids.length) {
+      return res.status(400).json({ ok: false, error: 'Invalid lesson order.' });
     }
-    res.json({ ok: true });
+
+    const lessons = await knex('lessons').where({ module_id: req.params.id }).whereIn('id', ids).select('id');
+    if (lessons.length !== ids.length) return res.status(400).json({ ok: false, error: 'One or more lessons do not belong to this module.' });
+
+    let groups = {};
+    if (req.body.groups) {
+      try { groups = typeof req.body.groups === 'string' ? JSON.parse(req.body.groups) : req.body.groups; } catch (_) { return res.status(400).json({ ok: false, error: 'Invalid lesson groups.' }); }
+    }
+
+    await knex.transaction(async (trx) => {
+      for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const update = { sort_order: i + 1 };
+        const group = groups && groups[id];
+        if (group && Object.prototype.hasOwnProperty.call(group, 'block_no')) {
+          const blockNo = Number(group.block_no);
+          update.block_no = Number.isInteger(blockNo) && blockNo > 0 ? blockNo : null;
+          if (update.block_no && group.block_title) update.block_title = String(group.block_title).trim();
+          else if (!update.block_no) update.block_title = null;
+        }
+        await trx('lessons').where({ id, module_id: req.params.id }).update(update);
+      }
+    });
+    res.json({ ok: true, ids });
   } catch (err) { next(err); }
 });
 

@@ -135,15 +135,15 @@
         </div>
       </div>
 
-      <!-- Shared module fields (hidden by default) -->
+    <!-- Shared module fields (hidden by default) -->
       <div id="mode-shared" class="hidden">
-        <input type="hidden" name="shared" value="1">
+        <input type="hidden" name="shared" value="1" disabled>
         <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-4">
           <p class="text-xs text-indigo-800 mb-3"><span class="material-symbols-outlined text-sm align-middle">info</span> A shared module lives in the Module Library and can be attached to multiple courses. Editing its lessons changes them for every course using it.</p>
           <div class="grid grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium mb-2">Module Code *</label>
-              <input type="text" name="code" placeholder="e.g. CORE-101" class="w-full px-3 py-2 border rounded text-sm font-mono" required>
+              <input type="text" name="code" placeholder="e.g. CORE-101" class="w-full px-3 py-2 border rounded text-sm font-mono">
             </div>
             <div>
               <label class="block text-sm font-medium mb-2">Year Level</label>
@@ -190,17 +190,24 @@
       var dedicatedBtn = document.getElementById('mode-dedicated-btn');
       var sharedInput = document.querySelector('input[name="shared"]');
       var codeInput = document.querySelector('input[name="code"]');
-      var releaseInput = document.querySelector('input[name="release_date"]');
-      var prereqInput = document.querySelector('select[name="prerequisite_module_id"]');
-      var essayInput = document.querySelector('input[name="essay_required"]');
       if (!sharedBtn || !dedicatedBtn) return;
-      // Toggle required attributes based on mode
+
+      function setMode(shared) {
+        if (sharedInput) sharedInput.disabled = !shared;
+        if (codeInput) {
+          codeInput.required = shared;
+          codeInput.disabled = !shared;
+        }
+      }
+
+      // The dedicated mode is the default. Disabled controls are not
+      // submitted, so a normal module cannot accidentally become shared.
+      setMode(false);
       sharedBtn.addEventListener('click', function () {
-        if (codeInput) codeInput.setAttribute('required', 'required');
-        if (releaseInput) releaseInput.removeAttribute('required');
+        setMode(true);
       });
       dedicatedBtn.addEventListener('click', function () {
-        if (codeInput) codeInput.removeAttribute('required');
+        setMode(false);
       });
     })();
   </script>
@@ -346,9 +353,9 @@
           <span class="material-symbols-outlined transition-transform group-open/yr:rotate-180">expand_more</span>
         </div>
       </summary>
-      <div class="p-4 bg-surface-container-low/40 grid gap-0" data-sortable-list data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
+      <div class="p-4 bg-surface-container-low/40 grid gap-0" data-sortable-list data-sortable-offset="<%= modules.indexOf(yMods[0]) %>" data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
     <% } else { %>
-    <div data-sortable-list data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
+    <div data-sortable-list data-sortable-offset="0" data-sortable-url="/admin/courses/<%= course.id %>/modules/reorder">
     <% } %>
     <% yMods.forEach(function(mod){ var mi = modules.indexOf(mod); %>
   <details class="group/mod bg-white rounded-lg shadow mb-4 overflow-hidden" data-sortable-id="<%= mod.id %>">
@@ -361,7 +368,7 @@
         <div class="flex items-center gap-3 min-w-0">
           <span class="drag-handle material-symbols-outlined text-on-surface-variant cursor-grab active:cursor-grabbing shrink-0" title="Drag to reorder" draggable="true">drag_indicator</span>
           <input type="checkbox" name="ids" value="<%= mod.id %>" form="bulk-modules" class="w-4 h-4 shrink-0" title="Select for bulk action">
-          <span class="bg-primary text-on-primary w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-sm"><%= mi + 1 %></span>
+          <span class="bg-primary text-on-primary w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-sm" data-sortable-position><%= mi + 1 %></span>
           <div class="min-w-0">
             <h3 class="font-semibold text-primary truncate">
               <%= mod.title %>
@@ -423,6 +430,7 @@
       <% } %>
       <% var delMsg = mod.isShared ? ('This module is shared by ' + mod.sharedCourseCount + ' courses. Deleting it removes it everywhere, not just from this course. Continue?') : 'Delete this module and all its lessons?'; %>
       <form method="POST" action="/admin/modules/<%= mod.id %>/delete" class="inline" onsubmit="return confirm('<%= delMsg %>');">
+        <input type="hidden" name="course_id" value="<%= course.id %>">
         <button type="submit" class="p-1.5 text-on-surface-variant hover:text-red-600 rounded" title="Delete module"><span class="material-symbols-outlined text-base">delete</span></button>
       </form>
     </div>
@@ -430,6 +438,7 @@
     <!-- Edit Module Form -->
     <div id="edit-module-<%= mod.id %>" class="hidden px-6 py-4 border-b border-outline-variant bg-gray-50">
       <form method="POST" action="/admin/modules/<%= mod.id %>" class="space-y-3">
+        <input type="hidden" name="course_id" value="<%= course.id %>">
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-medium mb-1">Title</label>
@@ -514,6 +523,7 @@
         </div>
       </div>
       <form method="POST" action="/admin/modules/<%= mod.id %>/block" class="space-y-4">
+        <input type="hidden" name="course_id" value="<%= course.id %>">
         <div>
           <label class="block text-xs font-medium mb-1">Lesson title *</label>
           <input type="text" name="block_title" required placeholder="e.g. What Is the Bible?" class="w-full px-3 py-2 border rounded text-sm">
@@ -589,6 +599,7 @@
     <!-- Bulk actions for this module's lessons -->
     <% if (mod.lessons.length) { %>
     <form method="POST" action="/admin/modules/<%= mod.id %>/lessons/bulk" data-bulk id="bulk-lessons-<%= mod.id %>" class="px-6 pt-3">
+      <input type="hidden" name="course_id" value="<%= course.id %>">
       <div data-bulk-bar class="hidden flex flex-wrap items-center gap-2 bg-secondary-fixed border border-secondary rounded-lg p-2.5 mb-2">
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" data-bulk-all title="Select all lessons in this module"> <strong data-bulk-count>0</strong> selected</label>
         <select name="action" data-bulk-action class="px-2 py-1 rounded border border-outline text-sm">
@@ -606,7 +617,7 @@
       <% var lastBlk = null; %>
       <% mod.lessons.forEach(function(lesson, li){ %>
       <% if (lesson.block_no && lesson.block_no !== lastBlk) { lastBlk = lesson.block_no; var blkTitle = lesson.block_title || ('Lesson '+lesson.block_no); %>
-      <div class="px-6 py-2.5 bg-indigo-50/60 border-b border-outline-variant flex items-center justify-between gap-2 flex-wrap">
+      <div class="px-6 py-2.5 bg-indigo-50/60 border-b border-outline-variant flex items-center justify-between gap-2 flex-wrap" data-sortable-group-header="<%= lesson.block_no %>">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-base text-indigo-500">view_agenda</span>
           <div><p class="font-tagline text-[11px] text-secondary uppercase leading-none">Lesson <%= lesson.block_no %></p><p class="font-bold text-primary text-sm"><%= blkTitle %></p></div>
@@ -619,6 +630,7 @@
       <!-- Add a part to THIS lesson (block #/title pre-filled) -->
       <div id="addpart-<%= mod.id %>-<%= lesson.block_no %>" class="hidden px-6 py-3 bg-blue-50 border-b border-outline-variant">
         <form method="POST" action="/admin/modules/<%= mod.id %>/lessons" class="space-y-2">
+          <input type="hidden" name="course_id" value="<%= course.id %>">
           <input type="hidden" name="block_no" value="<%= lesson.block_no %>">
           <input type="hidden" name="block_title" value="<%= blkTitle %>">
           <p class="text-xs text-on-surface-variant">Adding a part to <strong>Lesson <%= lesson.block_no %> — <%= blkTitle %></strong></p>
@@ -641,11 +653,11 @@
         </form>
       </div>
       <% } %>
-      <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>" data-sortable-id="<%= lesson.id %>">
+      <div id="lesson-<%= lesson.id %>" class="px-6 py-3 flex items-center justify-between hover:bg-surface-container-lowest transition-colors <%= lesson.block_no ? 'pl-10' : '' %>" data-sortable-id="<%= lesson.id %>" data-sortable-group="<%= lesson.block_no || '' %>" data-sortable-group-title="<%= lesson.block_title || '' %>">
         <div class="flex items-center gap-3">
           <span class="drag-handle material-symbols-outlined text-on-surface-variant text-base cursor-grab active:cursor-grabbing shrink-0" title="Drag to reorder" draggable="true">drag_indicator</span>
           <input type="checkbox" name="ids" value="<%= lesson.id %>" form="bulk-lessons-<%= mod.id %>" class="w-4 h-4 shrink-0" title="Select for bulk action">
-          <span class="text-xs text-on-surface-variant w-6"><%= li + 1 %>.</span>
+          <span class="text-xs text-on-surface-variant w-6" data-sortable-position><%= li + 1 %>.</span>
           <div>
             <span class="text-sm font-medium"><%= lesson.title %></span>
             <span class="ml-2 px-1.5 py-0.5 rounded text-xs <%= lesson.type === 'video' ? 'bg-red-100 text-red-700' : lesson.type === 'live' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>"><%= lesson.type %></span>
@@ -671,9 +683,11 @@
             <span class="material-symbols-outlined text-sm">history</span>
           </a>
           <form method="POST" action="/admin/lessons/<%= lesson.id %>/duplicate" class="inline">
+            <input type="hidden" name="course_id" value="<%= course.id %>">
             <button type="submit" class="p-1 hover:text-primary rounded" title="Duplicate"><span class="material-symbols-outlined text-sm">content_copy</span></button>
           </form>
           <form method="POST" action="/admin/lessons/<%= lesson.id %>/delete" class="inline" onsubmit="return confirm('Delete this lesson?');">
+            <input type="hidden" name="course_id" value="<%= course.id %>">
             <button type="submit" class="p-1 hover:text-red-600 rounded"><span class="material-symbols-outlined text-sm">delete</span></button>
           </form>
         </div>
@@ -681,6 +695,7 @@
       <!-- Edit Lesson Form -->
       <div id="edit-lesson-<%= lesson.id %>" class="hidden px-6 py-3 bg-gray-50 border-b">
         <form method="POST" action="/admin/lessons/<%= lesson.id %>" class="space-y-2">
+          <input type="hidden" name="course_id" value="<%= course.id %>">
           <div class="grid grid-cols-3 gap-2">
             <div class="col-span-2">
               <label class="block text-xs font-medium mb-1">Title</label>

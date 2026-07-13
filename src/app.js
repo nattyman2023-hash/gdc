@@ -194,9 +194,16 @@ app.use('/admin/faculty', require('./routes/adminFaculty'));
 app.use('/admin/preview', require('./routes/adminPreview'));
 app.use('/', require('./routes/publicPages'));
 
+// Fetch-based builder actions must receive JSON even when a route is missing
+// or throws. Returning an HTML error page here makes the browser display the
+// template/code response as if it were the result of the reorder request.
+function wantsJson(req) {
+  return req.path.startsWith('/api/') || req.get('X-Requested-With') === 'fetch' || req.is('application/json');
+}
+
 // ─── 404 ─────────────────────────────────────────────────────
 app.use((req, res) => {
-  if (req.path.startsWith('/api/')) return res.status(404).json({ error: { code: 'not_found', message: 'API route not found.' } });
+  if (wantsJson(req)) return res.status(404).json({ error: { code: 'not_found', message: 'Route not found.' } });
   res.status(404).render('errors/404', { pageTitle: 'Page not found' });
 });
 
@@ -205,11 +212,11 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console
   console.error(err);
-  // Show the real error to admins (and in dev) so problems can be diagnosed;
-  // everyone else sees only the friendly message.
-  const isAdmin = req.session && req.session.user && req.session.user.role === 'admin';
-  const showDetail = process.env.NODE_ENV !== 'production' || isAdmin;
-  if (req.path.startsWith('/api/')) {
+  // Keep stack traces in the server logs, but never put source paths or
+  // template code into a live browser response. This is especially important
+  // for admin pages, where an error should still be a normal, readable page.
+  const showDetail = process.env.NODE_ENV !== 'production';
+  if (wantsJson(req)) {
     return res.status(err.status || 500).json({ error: {
       code: 'server_error',
       message: showDetail ? (err.message || 'Unexpected server error.') : 'Unexpected server error.',
