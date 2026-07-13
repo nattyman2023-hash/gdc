@@ -7,8 +7,6 @@
     <p class="text-xs text-on-surface-variant mt-2 font-mono">Running commit <%= deployedCommit %> · booted <%= bootedAt %></p>
   </div>
 
-  <%- include('../partials/flash') %>
-
   <form method="POST" action="/admin/settings" class="space-y-6">
     <% groups.forEach(function(group){ %>
     <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -52,6 +50,11 @@
         </div>
         <% }) %>
       </div>
+      <% if (group === 'Email') { %>
+      <div class="px-6 py-3 bg-amber-50 border-t border-amber-200 text-xs text-amber-900">
+        Emailit only accepts a <strong>From Address</strong> whose domain is marked <strong>Verified</strong> in Emailit. If Emailit rejects a message, configured SMTP is tried automatically.
+      </div>
+      <% } %>
     </div>
     <% }) %>
 

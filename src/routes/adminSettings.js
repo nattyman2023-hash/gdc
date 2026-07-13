@@ -8,7 +8,6 @@ const express = require('express');
 const knex = require('../config/db');
 const { requireRole } = require('../middleware/auth');
 const { sendMail } = require('../lib/mailer');
-const emailit = require('../lib/emailit');
 
 const router = express.Router();
 
@@ -22,6 +21,7 @@ router.use((req, res, next) => {
 // ── Which keys appear on the form ───────────────────────────
 const FIELDS = [
   { key: 'EMAILIT_API_KEY',     label: 'Emailit API Key',           group: 'Email',   sensitive: true },
+  { key: 'EMAILIT_FROM_EMAIL',  label: 'Emailit From Address (verified domain)', group: 'Email', sensitive: false },
   { key: 'EMAILIT_AUDIENCE_ID', label: 'Emailit Audience ID',       group: 'Email',   sensitive: false },
   { key: 'SMTP_HOST',           label: 'SMTP Host (fallback)',      group: 'Email',   sensitive: false },
   { key: 'SMTP_PORT',           label: 'SMTP Port',                 group: 'Email',   sensitive: false },
@@ -96,12 +96,17 @@ router.post('/test-email', async (req, res, next) => {
     });
 
     if (result.status === 'sent') {
-      req.flash('success', `Test email sent to ${to} via ${emailit.isConfigured() ? 'Emailit' : 'SMTP'}. Check your inbox.`);
+      const provider = result.provider === 'smtp' ? 'SMTP fallback' : 'Emailit';
+      req.flash('success', `Test email sent to ${to} via ${provider}. Check your inbox.`);
     } else if (result.status === 'logged') {
       req.flash('error', 'No email provider is configured — the test email was only logged to the Email Outbox, not sent. Enter an Emailit API key (or SMTP settings) below, save, then try again.');
     } else {
       const last = await knex('email_log').where({ to_email: to }).orderBy('id', 'desc').first();
-      req.flash('error', `Test email failed to send${last && last.error ? `: ${last.error}` : '.'}`);
+      const detail = last && last.error ? `: ${last.error}` : '.';
+      const hint = last && last.error && /domain.*(not verified|unverified)/i.test(last.error)
+        ? ' Set Emailit From Address to an address on a verified Emailit domain, or verify the current sender domain in Emailit.'
+        : '';
+      req.flash('error', `Test email failed to send${detail}${hint}`);
     }
     res.redirect('/admin/settings');
   } catch (err) { next(err); }

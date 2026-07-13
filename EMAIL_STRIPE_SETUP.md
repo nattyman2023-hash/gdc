@@ -12,12 +12,14 @@ The platform sends transactional emails (application confirmations, interview in
 
 1. Sign up at <https://app.emailit.com>
 2. Verify your sending domain (`gdcu.edu` or `gdc.university`) by adding the SPF, DKIM and DMARC DNS records Emailit gives you — critical for deliverability, without it emails land in spam.
-3. Go to **Workspace → API Keys** and create a key.
+3. Go to **Workspace → API Keys** and create a full-access key, or a sending-scoped key restricted to that verified domain.
 
 ### Step 2: Configure `.env`
 
 ```env
 MAIL_FROM="Global Diaspora Christian University <admissions@gdcu.edu>"
+# Must be an address on a domain whose status is Verified in Emailit.
+EMAILIT_FROM_EMAIL="Global Diaspora Christian University <admissions@gdcu.edu>"
 EMAILIT_API_KEY=your-emailit-api-key
 ```
 
@@ -45,7 +47,7 @@ When set, new leads, applicants and enrolled students are automatically upserted
 
 ### Alternative: generic SMTP (no Emailit account)
 
-If `EMAILIT_API_KEY` is not set, the platform falls back to plain SMTP via `nodemailer` — this works with Emailit's own SMTP relay or any other provider (Brevo, Mailgun, SendGrid, Amazon SES, etc):
+If `EMAILIT_API_KEY` is not set, or an Emailit send fails, the platform uses plain SMTP via `nodemailer`. SMTP values may be entered in Admin → Settings or set in `.env`:
 
 ```env
 SMTP_HOST=smtp.emailit.com
@@ -54,7 +56,7 @@ SMTP_USER=your-smtp-credential-user
 SMTP_PASSWORD=your-smtp-credential-password
 ```
 
-> For Emailit SMTP, create an SMTP-type credential in the dashboard (not your login email/password).
+> For Emailit SMTP, create an SMTP-type credential in the dashboard (not your login email/password). The SMTP sender must also be accepted by your SMTP provider.
 
 ### Email lifecycle events already wired:
 
@@ -155,6 +157,7 @@ This is handy for local development and testing.
 - Check `SMTP_HOST` is correct for your provider
 - Check that `nodemailer` is installed (`npm list nodemailer`)
 - Check server logs for transport errors
+- If Emailit reports `Domain not verified`, verify the exact domain used by `EMAILIT_FROM_EMAIL` in Emailit, or change that setting to an address on a domain already marked Verified. This is a provider requirement and cannot be bypassed by changing the API payload.
 
 ### Stripe webhook not working
 - Ensure `STRIPE_WEBHOOK_SECRET` is set (not `whsec_xxx`)

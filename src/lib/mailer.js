@@ -9,21 +9,29 @@ const knex = require('../config/db');
 const emailit = require('./emailit');
 
 let transporter = null;
-let triedInit = false;
+let transportSignature = null;
 
-function getTransport() {
-  if (triedInit) return transporter;
-  triedInit = true;
-  const host = process.env.SMTP_HOST;
+function senderDomain(from) {
+  const value = String(from || '');
+  const address = (value.match(/<([^>]+)>/) || [null, value])[1];
+  return address && address.includes('@') ? address.split('@').pop().trim().toLowerCase() : 'invalid';
+}
+
+function getTransport(config) {
+  const host = config.smtpHost;
+  const signature = [host, config.smtpPort, config.smtpUser, config.smtpPassword].join('\u0000');
+  if (transportSignature === signature) return transporter;
+  transportSignature = signature;
+  transporter = null;
   if (!host) return null;
   try {
     // eslint-disable-next-line global-require
     const nodemailer = require('nodemailer');
     transporter = nodemailer.createTransport({
       host,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: Number(process.env.SMTP_PORT) === 465,
-      auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD } : undefined,
+      port: config.smtpPort,
+      secure: config.smtpPort === 465,
+      auth: config.smtpUser ? { user: config.smtpUser, pass: config.smtpPassword } : undefined,
     });
   } catch (err) {
     // nodemailer not installed — fall back to logging.
@@ -43,41 +51,53 @@ async function sendMail({ to, toName, subject, html, template, relatedType, rela
     body: html || null, template: template || null,
     related_type: relatedType || null, related_id: relatedId || null,
   };
-  const from = emailit.getFromEmail();
   const recipient = toName ? `"${toName}" <${to}>` : to;
+  const config = await emailit.getMailConfig();
+  let emailitError = null;
 
-  // Must await this — it's what actually loads/refreshes the API key from
-  // the DB settings table. Checking emailit.isConfigured() alone here was
-  // the bug: it read a synchronous flag that the async DB lookup hadn't
-  // necessarily set yet, so Emailit was silently skipped and every email
-  // fell straight through to the (also unconfigured) SMTP/log fallback —
-  // no request to Emailit was ever attempted.
-  if (await emailit.ensureConfigured()) {
+  if (config.emailitConfigured) {
     try {
       // Emailit's "to" is a plain address, not the "Name <email>" form
       // nodemailer/SMTP accepts — send the raw address here.
-      await emailit.sendEmail({ from, to, subject, html });
+      await emailit.sendEmail({ from: config.fromEmail, to, subject, html });
       await knex('email_log').insert({ ...base, status: 'sent' });
-      return { status: 'sent' };
+      return { status: 'sent', provider: 'emailit' };
     } catch (err) {
-      await knex('email_log').insert({ ...base, status: 'failed', error: String(err.message).slice(0, 250) });
-      return { status: 'failed' };
+      // Include the effective domain in the outbox error. This makes a
+      // verified-domain mismatch visible without ever logging the API key.
+      emailitError = new Error(`${err.message} [sender domain: ${senderDomain(config.fromEmail)}]`);
     }
   }
 
-  const t = getTransport();
+  // Emailit can be configured while its sending domain is pending verification
+  // or temporarily unavailable. If SMTP is configured, use it as a real
+  // fallback instead of returning a failed delivery immediately.
+  const t = getTransport(config);
+  let smtpError = null;
+  if (t) {
+    try {
+      await t.sendMail({ from: config.smtpFrom, to: recipient, subject, html });
+      await knex('email_log').insert({ ...base, status: 'sent' });
+      return { status: 'sent', provider: 'smtp' };
+    } catch (err) {
+      smtpError = err;
+    }
+  }
+
   if (!t) {
+    if (emailitError) {
+      await knex('email_log').insert({ ...base, status: 'failed', error: String(emailitError.message).slice(0, 250) });
+      return { status: 'failed' };
+    }
     await knex('email_log').insert({ ...base, status: 'logged' });
     return { status: 'logged' };
   }
-  try {
-    await t.sendMail({ from, to: recipient, subject, html });
-    await knex('email_log').insert({ ...base, status: 'sent' });
-    return { status: 'sent' };
-  } catch (err) {
-    await knex('email_log').insert({ ...base, status: 'failed', error: String(err.message).slice(0, 250) });
-    return { status: 'failed' };
-  }
+
+  const errors = [emailitError && `Emailit: ${emailitError.message}`, smtpError && `SMTP: ${smtpError.message}`]
+    .filter(Boolean)
+    .join('; ');
+  await knex('email_log').insert({ ...base, status: 'failed', error: errors.slice(0, 250) });
+  return { status: 'failed' };
 }
 
 /** Wrap content in a simple branded HTML email shell. */
