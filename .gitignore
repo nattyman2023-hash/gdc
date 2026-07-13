@@ -20,3 +20,10 @@ Thumbs.db
 logs/
 public/sitemap.xml
 _*.js
+
+# Android Studio / Gradle
+android/.gradle/
+android/local.properties
+android/**/build/
+android/.idea/
+*.iml

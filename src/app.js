@@ -133,7 +133,7 @@ app.use(permissionLocals);
 // payload, so that endpoint is deliberately excluded from CSRF/session checks.
 const csrfProtection = csrf();
 app.use((req, res, next) => {
-  if (req.path.startsWith('/webhooks/stripe')) return next();
+  if (req.path.startsWith('/webhooks/stripe') || req.path.startsWith('/api/mobile')) return next();
   return csrfProtection(req, res, next);
 });
 app.use((req, res, next) => {
@@ -178,6 +178,7 @@ app.use('/admissions', require('./routes/admissions'));
 app.use('/news', require('./routes/news'));
 app.use('/', require('./routes/contact'));
 app.use('/', require('./routes/auth'));
+app.use('/api/mobile/v1', require('./routes/mobileApi'));
 app.use('/portal', require('./routes/portal'));
 app.use('/faculty', require('./routes/faculty'));
 app.use('/notifications', require('./routes/notifications'));
@@ -195,6 +196,7 @@ app.use('/', require('./routes/publicPages'));
 
 // ─── 404 ─────────────────────────────────────────────────────
 app.use((req, res) => {
+  if (req.path.startsWith('/api/')) return res.status(404).json({ error: { code: 'not_found', message: 'API route not found.' } });
   res.status(404).render('errors/404', { pageTitle: 'Page not found' });
 });
 
@@ -207,6 +209,12 @@ app.use((err, req, res, next) => {
   // everyone else sees only the friendly message.
   const isAdmin = req.session && req.session.user && req.session.user.role === 'admin';
   const showDetail = process.env.NODE_ENV !== 'production' || isAdmin;
+  if (req.path.startsWith('/api/')) {
+    return res.status(err.status || 500).json({ error: {
+      code: 'server_error',
+      message: showDetail ? (err.message || 'Unexpected server error.') : 'Unexpected server error.',
+    } });
+  }
   res.status(err.status || 500).render('errors/500', {
     pageTitle: 'Something went wrong',
     showDetail,
