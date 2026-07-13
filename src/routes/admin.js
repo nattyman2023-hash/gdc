@@ -3892,27 +3892,70 @@ router.post('/modules/:id/lessons', async (req, res, next) => {
     const mod = await knex('modules').where({ id: req.params.id }).first();
     if (!mod) return res.status(404).render('errors/404', { pageTitle: 'Module not found', layout: 'layouts/admin' });
     const back = moduleReturnPath(req.body.course_id, mod);
-    if (!String(req.body.title || '').trim()) {
+    const title = String(req.body.title || '').trim();
+    if (!title) {
       req.flash('error', 'A lesson title is required.');
       return res.redirect(back);
     }
 
-    const maxSort = await knex('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
-    await knex('lessons').insert({
-      module_id: mod.id,
-      title: String(req.body.title).trim(),
-      type: req.body.type || 'reading',
-      content: req.body.content || null,
-      video_url: req.body.video_url || null,
-      image_url: req.body.image_url || null,
-      live_provider: req.body.live_provider || null,
-      live_join_url: req.body.live_join_url || null,
-      live_embed_url: req.body.live_embed_url || null,
-      live_passcode: req.body.live_passcode || null,
-      duration_min: req.body.duration_min || 15,
-      sort_order: req.body.sort_order ? Number(req.body.sort_order) : (Number(maxSort.m) || 0) + 1,
-      block_no: req.body.block_no ? Number(req.body.block_no) : null,
-      block_title: req.body.block_title || null,
+    // Adding a part from an existing lesson carries its parent lesson ID.
+    // Legacy lessons may not have a block_no yet, so promote that parent to a
+    // new lesson block before inserting the part. This makes older courses
+    // editable in exactly the same way as newly-created lesson blocks.
+    const parentLessonId = Number(req.body.parent_lesson_id) || null;
+    if (parentLessonId) {
+      const parentExists = await knex('lessons')
+        .where({ id: parentLessonId, module_id: mod.id })
+        .first();
+      if (!parentExists) {
+        req.flash('error', 'The lesson selected for this part no longer exists.');
+        return res.redirect(back);
+      }
+    }
+    await knex.transaction(async (trx) => {
+      let parent = null;
+      if (parentLessonId) {
+        parent = await trx('lessons').where({ id: parentLessonId, module_id: mod.id }).first();
+        if (!parent) throw new Error('The lesson selected for this part no longer exists.');
+      }
+
+      const maxSort = await trx('lessons').where({ module_id: mod.id }).max({ m: 'sort_order' }).first();
+      let blockNo = req.body.block_no ? Number(req.body.block_no) : null;
+      let blockTitle = req.body.block_title ? String(req.body.block_title).trim() : null;
+
+      if (parent) {
+        if (parent.block_no) {
+          blockNo = Number(parent.block_no);
+          blockTitle = parent.block_title || parent.title;
+          if (!parent.block_title) {
+            await trx('lessons')
+              .where({ module_id: mod.id, block_no: blockNo })
+              .update({ block_title: blockTitle });
+          }
+        } else {
+          const maxBlock = await trx('lessons').where({ module_id: mod.id }).max({ m: 'block_no' }).first();
+          blockNo = (Number(maxBlock.m) || 0) + 1;
+          blockTitle = parent.title;
+          await trx('lessons').where({ id: parent.id, module_id: mod.id }).update({ block_no: blockNo, block_title: blockTitle });
+        }
+      }
+
+      await trx('lessons').insert({
+        module_id: mod.id,
+        title,
+        type: req.body.type || 'reading',
+        content: req.body.content || null,
+        video_url: req.body.video_url || null,
+        image_url: req.body.image_url || null,
+        live_provider: req.body.live_provider || null,
+        live_join_url: req.body.live_join_url || null,
+        live_embed_url: req.body.live_embed_url || null,
+        live_passcode: req.body.live_passcode || null,
+        duration_min: req.body.duration_min || 15,
+        sort_order: req.body.sort_order ? Number(req.body.sort_order) : (Number(maxSort.m) || 0) + 1,
+        block_no: blockNo,
+        block_title: blockTitle,
+      });
     });
 
     req.flash('success', 'Lesson added.');

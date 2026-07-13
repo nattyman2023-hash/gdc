@@ -106,6 +106,43 @@
       updatePositions();
     }
 
+    function snapshot(item) {
+      return {
+        item: item,
+        originalOrder: order(),
+        originalGroups: groups(),
+        originalChildren: Array.prototype.slice.call(container.children),
+      };
+    }
+
+    function applyTargetGroup(item, target) {
+      var targetGroup = target.getAttribute('data-sortable-group') || '';
+      var targetTitle = target.getAttribute('data-sortable-group-title') || '';
+      if (targetGroup) item.setAttribute('data-sortable-group', targetGroup);
+      else item.removeAttribute('data-sortable-group');
+      if (targetTitle) item.setAttribute('data-sortable-group-title', targetTitle);
+      else item.removeAttribute('data-sortable-group-title');
+    }
+
+    function bundle(item) {
+      var nodes = [item];
+      var next = item.nextElementSibling;
+      while (next && !next.matches(itemSelector) && !next.matches('[data-sortable-group-header]')) {
+        nodes.push(next);
+        next = next.nextElementSibling;
+      }
+      return nodes;
+    }
+
+    function moveBundle(item, target, before) {
+      var itemNodes = bundle(item);
+      var targetNodes = bundle(target);
+      var anchor = before ? targetNodes[0] : targetNodes[targetNodes.length - 1].nextSibling;
+      itemNodes.forEach(function (node) {
+        container.insertBefore(node, anchor);
+      });
+    }
+
     container.addEventListener('dragstart', function (e) {
       var handle = e.target.closest ? e.target.closest('.drag-handle') : null;
       var item = e.target.closest ? e.target.closest(itemSelector) : null;
@@ -114,12 +151,7 @@
         return;
       }
 
-      dragState = {
-        item: item,
-        originalOrder: order(),
-        originalGroups: groups(),
-        originalChildren: Array.prototype.slice.call(container.children),
-      };
+      dragState = snapshot(item);
       setStatus('Reordering…', 'pending');
       e.dataTransfer.effectAllowed = 'move';
       try { e.dataTransfer.setData('text/plain', item.getAttribute('data-sortable-id')); } catch (err) { /* Safari requires a value; ignore if unavailable. */ }
@@ -134,16 +166,11 @@
 
       var rect = target.getBoundingClientRect();
       var before = (e.clientY - rect.top) < rect.height / 2;
-      target.parentNode.insertBefore(dragState.item, before ? target : target.nextSibling);
+      moveBundle(dragState.item, target, before);
 
       // Lessons may be moved between blocks. The receiving block's number and
       // title travel with the part and are persisted with the new sort order.
-      var targetGroup = target.getAttribute('data-sortable-group') || '';
-      var targetTitle = target.getAttribute('data-sortable-group-title') || '';
-      if (targetGroup) dragState.item.setAttribute('data-sortable-group', targetGroup);
-      else dragState.item.removeAttribute('data-sortable-group');
-      if (targetTitle) dragState.item.setAttribute('data-sortable-group-title', targetTitle);
-      else dragState.item.removeAttribute('data-sortable-group-title');
+      applyTargetGroup(dragState.item, target);
       updatePositions();
     });
 
@@ -155,6 +182,32 @@
       var changed = !sameOrder(state.originalOrder, order()) || !sameGroups(state.originalGroups, groups());
       if (changed) submitOrder(state);
       else setStatus('', '');
+    });
+
+    // Native drag-and-drop is not dependable on every touch device or browser.
+    // These controls use the same save endpoint, so ordering remains usable
+    // when dragging is unavailable or difficult.
+    container.addEventListener('click', function (e) {
+      var button = e.target.closest ? e.target.closest('[data-sortable-move]') : null;
+      if (!button || !container.contains(button)) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      var item = button.closest(itemSelector);
+      if (!item || !container.contains(item)) return;
+      var allItems = items();
+      var index = allItems.indexOf(item);
+      var direction = button.getAttribute('data-sortable-move');
+      var targetIndex = direction === 'up' ? index - 1 : index + 1;
+      var target = allItems[targetIndex];
+      if (!target) return;
+
+      var state = snapshot(item);
+      moveBundle(item, target, direction === 'up');
+      applyTargetGroup(item, target);
+      updatePositions();
+      setStatus('Reordering…', 'pending');
+      submitOrder(state);
     });
 
     function submitOrder(state) {
