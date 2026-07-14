@@ -9,6 +9,7 @@
     <p class="font-body text-body-lg text-on-primary max-w-2xl"><%= program.summary %></p>
     <div class="flex flex-wrap gap-x-8 gap-y-2 mt-6 text-on-primary text-sm">
       <% if (program.credential && program.credential !== program.title) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">workspace_premium</span><%= program.credential %></span><% } %>
+      <% if (program.semester_credits) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">school</span><%= program.semester_credits %> semester credits</span><% } %>
       <% if (program.duration) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">schedule</span><%= program.duration %></span><% } %>
       <span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">language</span><%= program.study_mode || 'Online' %></span>
     </div>
@@ -29,7 +30,7 @@
       <div>
         <h3 class="font-headline text-headline-sm text-primary mb-5">What you'll gain</h3>
         <div class="grid sm:grid-cols-2 gap-4">
-          <% ['A Christ-centred academic foundation in your field','Practical skills you can apply immediately in ministry or work','Mentorship from experienced, global faculty','A qualification designed to recognised academic standards'].forEach(function(item){ %>
+          <% ['A Christ-centred academic foundation in your field','Practical skills you can apply immediately in ministry or work','Mentorship from experienced, global faculty','A clearly documented programme with published semester credits'].forEach(function(item){ %>
           <div class="flex items-start gap-3 bg-surface-container-lowest border border-outline-variant rounded-xl p-4">
             <span class="material-symbols-outlined text-secondary mt-0.5" style="font-variation-settings:'FILL' 1;">check_circle</span>
             <span class="font-body text-body-md text-on-surface"><%= item %></span>
@@ -137,6 +138,7 @@
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Credential</span><span class="font-bold text-primary text-right"><%= program.credential || program.level %></span></div>
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Duration</span><span class="font-bold text-primary text-right"><%= program.duration || 'Flexible' %></span></div>
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Study mode</span><span class="font-bold text-primary text-right"><%= program.study_mode || 'Online' %></span></div>
+          <% if (program.semester_credits) { %><div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Credits</span><span class="font-bold text-primary text-right"><%= program.semester_credits %> semester credits</span></div><% } %>
           <div class="flex justify-between"><span class="text-on-surface-variant">Tuition</span><span class="font-bold text-primary text-right"><%= formatMoney(program.tuition, program.tuition_currency) %></span></div>
         </div>
         <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded-lg font-bold mb-3 hover:opacity-90 active:scale-95 transition">Apply for this programme</a>

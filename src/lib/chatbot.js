@@ -18,7 +18,7 @@ const API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const MODEL = process.env.CHATBOT_MODEL || 'claude-sonnet-4-6';
 const isConfigured = Boolean(API_KEY);
 
-const SYSTEM = `You are the friendly admissions assistant for Global Diaspora Christian University (GDCU), a Christ-centred online university serving the global diaspora since 2019.
+const SYSTEM = `You are the friendly admissions assistant for Global Diaspora Christian University (GDCU), a Christ-centred online university. Our founding educational ministry began serving learners in 2019, and Global Diaspora Christian University LLC was organised in Florida in 2026.
 Rules:
 - Answer ONLY using the CONTEXT provided in the user message. Do not invent programmes, prices, dates or policies.
 - If the answer is not in the CONTEXT, say you're not certain and invite them to contact admissions (or use the enquiry form). Never guess.
@@ -30,8 +30,8 @@ Rules:
 /** Assemble the knowledge base as titled chunks with a source URL. */
 async function buildKnowledge() {
   const chunks = [];
-  chunks.push({ title: 'About GDCU', url: '/about', text: 'Global Diaspora Christian University is a Christ-centred online university serving the global diaspora since 2019. Education is borderless (open to students in any nation) and intentionally affordable. Programmes are delivered entirely online.' });
-  chunks.push({ title: 'Accreditation status', url: '/accreditation', text: 'GDCU is NOT yet accredited. It is actively going through the formal accreditation process, backed by rigorous internal quality assurance. We are transparent about this so applicants can make an informed choice.' });
+  chunks.push({ title: 'About GDCU', url: '/about', text: 'Global Diaspora Christian University is a Christ-centred online university. Our founding educational ministry began serving learners in 2019, and Global Diaspora Christian University LLC was organised in Florida in 2026. Education is borderless (open to students in any nation) and intentionally affordable. Programmes are delivered entirely online.' });
+  chunks.push({ title: 'Accreditation status', url: '/accreditation', text: 'GDCU is currently unaccredited. Accreditation is not guaranteed. Students should confirm whether a GDCU qualification will be accepted by employers, other institutions, professional bodies or government authorities before enrolling.' });
   chunks.push({ title: 'How online learning works', url: '/how-it-works', text: 'Students apply, get access to their courses and schedule in the student portal, work through weekly content and live sessions, are assessed via quizzes/assignments/projects with tutor support, and graduate on meeting the requirements.' });
   chunks.push({ title: 'Apply / enquire', url: '/admissions/apply', text: 'Prospective students can apply via the Apply Now page, request information through the enquiry form, or register for an open day. The admissions team replies within about one working day.' });
 

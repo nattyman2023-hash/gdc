@@ -74,6 +74,7 @@ function programData(body) {
     summary: body.summary,
     description: body.description || null,
     duration: body.duration || null,
+    semester_credits: body.semester_credits ? Number(body.semester_credits) : null,
     study_mode: body.study_mode || 'Online',
     tuition: body.tuition ? Number(body.tuition) : null,
     tuition_currency: body.tuition_currency || 'GBP',

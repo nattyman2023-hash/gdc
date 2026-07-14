@@ -301,8 +301,8 @@ const SPECIALISED = {
     { title: 'Innovation & Ministry Leadership', summary: 'Leading innovation in church and mission.', lessons: [
       { title: 'Disruptive Innovation in Ministry', type: 'reading', content: '<p>Apply innovation theory to ministry contexts. Learn to lead change that is both faithful and effective.</p>' },
     ]},
-    { title: 'DMin Project Design', summary: 'Designing the doctoral project.', lessons: [
-      { title: 'Project Proposal', type: 'reading', content: '<p>Design a doctoral ministry project: identify a problem, review literature, design intervention, and plan evaluation.</p>' },
+    { title: 'PhD Dissertation Design', summary: 'Designing the doctoral dissertation.', lessons: [
+      { title: 'Dissertation Proposal', type: 'reading', content: '<p>Design a doctoral dissertation in Christian ministry: identify a research problem, review the literature, select a defensible methodology, and define the original contribution.</p>' },
     ]},
   ],
   'doctorate-practical-theology': [
@@ -329,8 +329,8 @@ const SPECIALISED = {
     { title: 'Supervision & Education', summary: 'Training future chaplains.', lessons: [
       { title: 'Clinical Supervision Theory', type: 'reading', content: '<p>Explore theories of clinical supervision for chaplaincy education and CPE supervision.</p>' },
     ]},
-    { title: 'DMin Chaplaincy Project', summary: 'Doctoral project design.', lessons: [
-      { title: 'Project Proposal', type: 'reading', content: '<p>Design a doctoral project in chaplaincy: identify a practice problem, review literature, and plan intervention.</p>' },
+    { title: 'PhD Dissertation Design in Christian Chaplaincy', summary: 'Designing the doctoral dissertation.', lessons: [
+      { title: 'Dissertation Proposal', type: 'reading', content: '<p>Design a doctoral dissertation in Christian chaplaincy and spiritual care: identify a research problem, review the literature, select a defensible methodology, and define the original contribution.</p>' },
     ]},
   ],
   'doctorate-christian-leadership': [

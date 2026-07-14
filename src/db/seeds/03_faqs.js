@@ -51,7 +51,7 @@ exports.seed = async function (knex) {
       category: 'Accreditation',
       question: 'Are your qualifications recognised?',
       answer:
-        'Global Diaspora Christian University holds accreditation and quality-assurance verification. You can review our current accreditation status and verification references on the Accreditation page.',
+        'Global Diaspora Christian University is currently unaccredited. Accreditation is not guaranteed. Students should confirm whether a GDCU qualification will be accepted by employers, other institutions, professional bodies or government authorities before enrolling.',
       sort_order: 7,
     },
   ]);

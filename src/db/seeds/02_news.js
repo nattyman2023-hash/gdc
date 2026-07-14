@@ -38,9 +38,9 @@ exports.seed = async function (knex) {
       title: 'University Reaches Key Accreditation Milestone',
       category: 'Accreditation',
       excerpt:
-        'GDCU advances its institutional accreditation, strengthening recognition of our qualifications worldwide.',
+        'GDCU continues its institutional quality-assurance and accreditation work, with its current status explained openly for prospective students.',
       body:
-        'Global Diaspora Christian University has reached an important milestone in its accreditation journey, reinforcing the global recognition and quality assurance of its programmes. Verification details are published on our Accreditation page.',
+        'Global Diaspora Christian University continues its accreditation journey and internal quality-assurance work. GDCU is currently unaccredited, and accreditation or recognition of a qualification is not guaranteed. Prospective students should review the current status and confirm whether a qualification will be accepted by employers, other institutions, professional bodies or government authorities before enrolling.',
       author: 'Office of Quality Assurance',
       image_url: '/img/generated/gdcu-news-accreditation-park-v2.webp',
       published: true,
