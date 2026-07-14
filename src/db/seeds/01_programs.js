@@ -672,13 +672,19 @@ exports.seed = async function (knex) {
     },
   ]);
 
-  // Existing programme-level curriculum values in semester credits. The
-  // general-education allocation is intentionally left for academic review.
+  // Programme-level semester credits, aligned with Florida Commission minimums:
+  //   Bachelor's  120 (45 general education — set by the credit-structure seed)
+  //   Master's     30 (above the 24-credit minimum)
+  //   Doctorate    60 (beyond the bachelor's)
+  //   Diploma      60
+  //   Certificate  15
+  // The gen_ed_credits allocation for bachelor's programmes is populated by
+  // the 17_program_credit_structure seed.
   await knex('programs').whereIn('level', ['Undergraduate']).update({ semester_credits: 120 });
-  await knex('programs').whereIn('level', ['Masters']).update({ semester_credits: 60 });
+  await knex('programs').whereIn('level', ['Masters']).update({ semester_credits: 30 });
   await knex('programs').whereIn('level', ['Doctorate']).update({ semester_credits: 60 });
   await knex('programs').whereIn('level', ['Diploma']).update({ semester_credits: 60 });
-  await knex('programs').whereIn('level', ['Certificate']).update({ semester_credits: 30 });
+  await knex('programs').whereIn('level', ['Certificate']).update({ semester_credits: 15 });
 
   // Current degree tuition is published in US dollars.
   await knex('programs').where({ level: 'Undergraduate' }).update({ tuition: 2200, tuition_currency: 'USD' });

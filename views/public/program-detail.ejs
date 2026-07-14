@@ -10,6 +10,7 @@
     <div class="flex flex-wrap gap-x-8 gap-y-2 mt-6 text-on-primary text-sm">
       <% if (program.credential && program.credential !== program.title) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">workspace_premium</span><%= program.credential %></span><% } %>
       <% if (program.semester_credits) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">school</span><%= program.semester_credits %> semester credits</span><% } %>
+      <% if (program.gen_ed_credits) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">menu_book</span><%= program.gen_ed_credits %> GenEd credits</span><% } %>
       <% if (program.duration) { %><span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">schedule</span><%= program.duration %></span><% } %>
       <span class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary-fixed text-lg">language</span><%= program.study_mode || 'Online' %></span>
     </div>
@@ -39,9 +40,45 @@
         </div>
       </div>
 
+      <!-- Credit structure -->
+      <% if (creditStructure && creditStructure.length) { %>
+      <div>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">Credit structure</h3>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+          <table class="w-full text-left">
+            <thead class="bg-surface-container-low text-on-surface-variant text-sm uppercase tracking-wider">
+              <tr>
+                <th class="px-5 py-3 font-tagline">Component</th>
+                <th class="px-5 py-3 font-tagline text-right">Semester credits</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/40">
+              <% creditStructure.forEach(function(row){ %>
+              <tr>
+                <td class="px-5 py-3">
+                  <p class="font-body text-body-md text-on-surface font-medium"><%= row.component %></p>
+                  <% if (row.note) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= row.note %></p><% } %>
+                </td>
+                <td class="px-5 py-3 text-right font-bold text-primary align-top"><%= row.credits %></td>
+              </tr>
+              <% }) %>
+              <tr class="bg-primary-container/40">
+                <td class="px-5 py-3 font-headline text-body-md text-primary font-bold">Total</td>
+                <td class="px-5 py-3 text-right font-headline text-body-lg text-primary font-bold"><%= program.semester_credits %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <% if (creditSummary) { %>
+        <p class="text-on-surface-variant text-sm mt-4 leading-relaxed"><%= creditSummary %></p>
+        <% } %>
+        <p class="text-on-surface-variant text-sm mt-2">One semester credit equals at least 15 hours of instruction plus preparation, or an equivalent amount of properly planned and assessed online learning. <a href="/credit-hour-policy" class="text-secondary font-bold">Read our credit-hour policy</a>.</p>
+      </div>
+      <% } %>
+
       <!-- Curriculum / Modules -->
       <div>
-        <h3 class="font-headline text-headline-sm text-primary mb-5">Curriculum &amp; modules</h3>
+        <h3 class="font-headline text-headline-sm text-primary mb-5">Curriculum & modules</h3>
         <% if (curriculum && curriculum.length && curriculum.some(function(c){ return c.modules.length; })) { %>
           <div class="space-y-4">
             <% curriculum.forEach(function(course){ %>
@@ -82,8 +119,18 @@
                     <ul class="divide-y divide-outline-variant/40 rounded-lg border border-outline-variant/60 px-4 py-1 bg-surface-container-low/50">
                       <% byYear[yr].forEach(function(m){ var clean = (m.title || '').replace(/^Year\s+\d+\s*·\s*/i, ''); %>
                       <li class="py-2.5">
-                        <p class="font-body text-body-md text-on-surface font-medium"><%= clean %></p>
-                        <% if (m.summary) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= truncate(m.summary, 150) %></p><% } %>
+                        <div class="flex items-start justify-between gap-3">
+                          <div class="flex-1">
+                            <p class="font-body text-body-md text-on-surface font-medium"><%= clean %></p>
+                            <% if (m.summary) { %><p class="text-on-surface-variant text-sm mt-0.5"><%= truncate(m.summary, 150) %></p><% } %>
+                          </div>
+                          <% if (m.credits || m.instruction_hours) { %>
+                          <div class="shrink-0 flex flex-col items-end gap-1 text-xs">
+                            <% if (m.credits) { %><span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded font-bold"><span class="material-symbols-outlined text-sm">school</span><%= m.credits %> cr</span><% } %>
+                            <% if (m.instruction_hours) { %><span class="inline-flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-sm">schedule</span><%= m.instruction_hours %> hrs</span><% } %>
+                          </div>
+                          <% } %>
+                        </div>
                       </li>
                       <% }) %>
                     </ul>
@@ -139,6 +186,7 @@
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Duration</span><span class="font-bold text-primary text-right"><%= program.duration || 'Flexible' %></span></div>
           <div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Study mode</span><span class="font-bold text-primary text-right"><%= program.study_mode || 'Online' %></span></div>
           <% if (program.semester_credits) { %><div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">Credits</span><span class="font-bold text-primary text-right"><%= program.semester_credits %> semester credits</span></div><% } %>
+          <% if (program.gen_ed_credits) { %><div class="flex justify-between border-b border-outline-variant/40 pb-3"><span class="text-on-surface-variant">General education</span><span class="font-bold text-primary text-right"><%= program.gen_ed_credits %> credits</span></div><% } %>
           <div class="flex justify-between"><span class="text-on-surface-variant">Tuition</span><span class="font-bold text-primary text-right"><%= formatMoney(program.tuition, program.tuition_currency) %></span></div>
         </div>
         <a href="/admissions/apply?program=<%= program.id %>" class="block text-center bg-primary text-on-primary px-6 py-3 rounded-lg font-bold mb-3 hover:opacity-90 active:scale-95 transition">Apply for this programme</a>

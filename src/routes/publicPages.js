@@ -1,7 +1,8 @@
 /**
- * Public website pages — Privacy Policy, Terms, Statement of Faith, Accessibility.
+ * Public website pages — Privacy Policy, Terms, Statement of Faith, Accessibility, Credit-Hour Policy.
  */
 const express = require('express');
+const knex = require('../config/db');
 const router = express.Router();
 
 /**
@@ -46,6 +47,23 @@ router.get('/accessibility', (req, res) => {
     metaDescription: 'Accessibility statement for Global Diaspora Christian University.',
     currentPath: req.path,
   });
+});
+
+/**
+ * GET /credit-hour-policy — Institutional Credit-Hour Policy
+ */
+router.get('/credit-hour-policy', async (req, res, next) => {
+  try {
+    const setting = await knex('settings').where({ key: 'credit_hour_policy' }).first();
+    res.render('public/credit-hour-policy', {
+      pageTitle: 'Credit-Hour Policy | GDCU',
+      metaDescription: 'How Global Diaspora Christian University defines, measures and documents semester credit hours for online learning.',
+      policyText: setting ? setting.value : null,
+      currentPath: req.path,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

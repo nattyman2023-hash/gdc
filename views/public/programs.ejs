@@ -75,6 +75,9 @@
             <p class="text-on-surface-variant text-body-md mb-6 flex-1 leading-relaxed"><%= truncate(p.summary, 120) %></p>
             <div class="flex items-center justify-between border-t border-outline-variant/50 pt-4 text-sm">
               <span class="text-on-surface-variant inline-flex items-center gap-1"><span class="material-symbols-outlined text-base align-middle">schedule</span> <%= p.duration || 'Flexible' %></span>
+              <% if (p.semester_credits) { %>
+              <span class="text-on-surface-variant inline-flex items-center gap-1"><span class="material-symbols-outlined text-base align-middle">school</span> <%= p.semester_credits %> cr</span>
+              <% } %>
               <span class="font-bold text-primary"><%= formatMoney(p.tuition, p.tuition_currency) %></span>
             </div>
             <span class="mt-4 inline-flex items-center gap-1.5 text-secondary font-bold text-sm group-hover:gap-3 transition-all">Explore programme <span class="material-symbols-outlined text-base">arrow_forward</span></span>

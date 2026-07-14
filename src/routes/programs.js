@@ -73,7 +73,7 @@ router.get('/:slug', async (req, res, next) => {
       });
     }
 
-    const { entryRequirements, careers } = programmeExtras(program);
+    const { entryRequirements, careers, creditStructure, creditSummary } = programmeExtras(program);
 
     res.render('public/program-detail', {
       pageTitle: `${program.title} | GDCU`,
@@ -83,6 +83,8 @@ router.get('/:slug', async (req, res, next) => {
       curriculum,
       entryRequirements,
       careers,
+      creditStructure,
+      creditSummary,
     });
   } catch (err) {
     next(err);

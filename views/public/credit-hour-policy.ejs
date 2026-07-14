@@ -1,0 +1,65 @@
+<%- include('../partials/page-hero', { heroTitle: 'Credit-Hour Policy', heroTagline: 'Academic Standards', heroText: 'How Global Diaspora Christian University defines, measures and documents semester credit hours for online learning.' }) %>
+
+<section class="py-16 lg:py-20 bg-background">
+  <div class="max-w-4xl mx-auto px-margin-mobile lg:px-margin-desktop">
+
+    <% if (policyText) { %>
+      <% var tableOpen = false; %>
+      <% policyText.split('\n').forEach(function(line){ %>
+        <% if (line.startsWith('## ')) { %>
+          <h2 class="font-headline text-headline-md text-primary mt-10 mb-4"><%= line.replace(/^##\s+/, '') %></h2>
+        <% } else if (line.startsWith('# ')) { %>
+          <h1 class="font-display text-headline-lg text-primary mb-6"><%= line.replace(/^#\s+/, '') %></h1>
+        <% } else if (line.startsWith('| ')) { %>
+          <% if (!tableOpen) { tableOpen = true; %>
+          <div class="overflow-x-auto my-6">
+            <table class="w-full text-left border border-outline-variant rounded-lg overflow-hidden">
+              <thead class="bg-surface-container-low">
+                <tr>
+                  <% line.split('|').filter(function(c){ return c.trim(); }).forEach(function(cell){ %>
+                    <th class="px-4 py-3 font-tagline text-sm text-on-surface-variant uppercase tracking-wider border-b border-outline-variant"><%= cell.trim() %></th>
+                  <% }) %>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/40">
+          <% } else { %>
+                <tr>
+                  <% line.split('|').filter(function(c){ return c.trim(); }).forEach(function(cell){ %>
+                    <td class="px-4 py-3 font-body text-body-md text-on-surface"><%= cell.trim() %></td>
+                  <% }) %>
+                </tr>
+          <% } %>
+        <% } else if (line.startsWith('---')) { %>
+          <% if (tableOpen) { tableOpen = false; %>
+              </tbody>
+            </table>
+          </div>
+          <% } %>
+        <% } else if (line.match(/^\d+\.\s+/)) { %>
+          <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-3 pl-4"><%= line %></p>
+        <% } else if (line.startsWith('- ')) { %>
+          <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-2 flex items-start gap-2"><span class="text-secondary mt-1">•</span><span><%= line.replace(/^-\s+/, '') %></span></p>
+        <% } else if (line.trim()) { %>
+          <p class="font-body text-body-md text-on-surface-variant leading-relaxed mb-4"><%= line %></p>
+        <% } %>
+      <% }) %>
+      <% if (tableOpen) { tableOpen = false; %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    <% } else { %>
+      <p class="font-body text-body-md text-on-surface-variant">The credit-hour policy is being finalised. Please check back shortly or <a href="/contact" class="text-secondary font-bold">contact us</a> for more information.</p>
+    <% } %>
+
+    <div class="mt-12 bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+      <h3 class="font-headline text-headline-sm text-primary mb-3">Questions about credits?</h3>
+      <p class="text-on-surface-variant text-body-md mb-4">If you'd like to understand how a specific programme's credits are structured, our admissions team can walk you through the curriculum table and credit allocations.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/programs" class="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition">View programmes</a>
+        <a href="/contact" class="inline-flex items-center gap-2 border-2 border-secondary text-primary px-6 py-2.5 rounded-lg font-bold hover:bg-secondary-fixed transition-colors">Talk to admissions</a>
+      </div>
+    </div>
+
+  </div>
+</section>
