@@ -30,8 +30,12 @@
       <input name="description" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" placeholder="e.g. Tuition instalment 1 of 4" />
     </div>
     <div>
-      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Amount (£) *</label>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Amount *</label>
       <input name="amount" type="number" step="0.01" min="0" required class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary" />
+    </div>
+    <div>
+      <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Currency</label>
+      <select name="currency" class="w-full px-3 py-2 rounded border border-outline outline-none focus:border-primary"><option selected>USD</option><option>GBP</option><option>EUR</option><option>KES</option></select>
     </div>
     <div>
       <label class="block font-tagline text-label-sm text-on-surface-variant uppercase mb-1">Due date</label>

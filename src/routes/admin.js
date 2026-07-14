@@ -1034,7 +1034,7 @@ router.post('/students/:id/invoices', async (req, res, next) => {
     const description = (req.body.description || '').trim();
     const amount = Number(req.body.amount);
     const dueDate = req.body.due_date ? new Date(req.body.due_date) : null;
-    const currency = String(req.body.currency || 'GBP').toUpperCase();
+    const currency = String(req.body.currency || 'USD').toUpperCase();
     if (!description || !Number.isFinite(amount) || amount <= 0 || !['GBP', 'USD', 'EUR', 'KES'].includes(currency) || (dueDate && Number.isNaN(dueDate.getTime()))) {
       req.flash('error', 'Description and a valid amount are required.');
       return res.redirect(`/admin/students/${student.id}`);
@@ -1142,7 +1142,7 @@ router.post(
         program_id: req.body.program_id || null,
         description: req.body.description.trim(),
         amount: Number(req.body.amount),
-        currency: req.body.currency || 'GBP',
+        currency: req.body.currency || 'USD',
         due_date: req.body.due_date || null,
         status: 'draft',
         created_by: req.session.user.id,

@@ -679,4 +679,9 @@ exports.seed = async function (knex) {
   await knex('programs').whereIn('level', ['Doctorate']).update({ semester_credits: 60 });
   await knex('programs').whereIn('level', ['Diploma']).update({ semester_credits: 60 });
   await knex('programs').whereIn('level', ['Certificate']).update({ semester_credits: 30 });
+
+  // Current degree tuition is published in US dollars.
+  await knex('programs').where({ level: 'Undergraduate' }).update({ tuition: 2200, tuition_currency: 'USD' });
+  await knex('programs').where({ level: 'Masters' }).update({ tuition: 2000, tuition_currency: 'USD' });
+  await knex('programs').where({ level: 'Doctorate' }).update({ tuition: 3000, tuition_currency: 'USD' });
 };
